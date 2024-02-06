@@ -1,0 +1,1436 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>La divergenza di Kullback-Leibler &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VMXNE4BCDL"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="application/vnd.jupyter.widget-state+json">{"state": {"fda5d45d37ea426a82a2b3f762bf56b1": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "fb46fe2b2f20491f96a7d59b0671fe75": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "5dc11c3429b74cfbbc30febb0f3a24ce": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_fda5d45d37ea426a82a2b3f762bf56b1", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_fb46fe2b2f20491f96a7d59b0671fe75", "tabbable": null, "tooltip": null, "value": 2000.0}}, "7deb8ae2fe00479e8aebc7027622e98d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "27792ab1c94a43c4a1ec3ab5a99471d8": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "5c4390252df848e181434d57c7fb338e": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_7deb8ae2fe00479e8aebc7027622e98d", "placeholder": "\u200b", "style": "IPY_MODEL_27792ab1c94a43c4a1ec3ab5a99471d8", "tabbable": null, "tooltip": null, "value": "Running chain 0: 100%"}}, "6d977fd0b049481a966e3daa9bb0acd7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f2638573ff8b4ad5857794d9a3054b7e": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "14e7176c64ad4df48c3858f5ae82fae4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_6d977fd0b049481a966e3daa9bb0acd7", "placeholder": "\u200b", "style": "IPY_MODEL_f2638573ff8b4ad5857794d9a3054b7e", "tabbable": null, "tooltip": null, "value": " 2000/2000 [00:02&lt;00:00, 982.05it/s]"}}, "d7ebe813ef4e4cdfa0b50f7c8d715e76": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "0d93d8975d1a4667a5c3337ca0a47be9": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_5c4390252df848e181434d57c7fb338e", "IPY_MODEL_5dc11c3429b74cfbbc30febb0f3a24ce", "IPY_MODEL_14e7176c64ad4df48c3858f5ae82fae4"], "layout": "IPY_MODEL_d7ebe813ef4e4cdfa0b50f7c8d715e76", "tabbable": null, "tooltip": null}}, "7e367c3ac84c4eaea56a82598e12b48a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a3586419ffc648a68a8a6fe88c0ac516": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "59e9b688676546e9970e36fda176fd1e": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_7e367c3ac84c4eaea56a82598e12b48a", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_a3586419ffc648a68a8a6fe88c0ac516", "tabbable": null, "tooltip": null, "value": 2000.0}}, "bc96201a1f434430b0bef7504be5ce01": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "87b04386a60f4303841acd4e1785e925": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "ce59310c5b7943379058632406dada64": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_bc96201a1f434430b0bef7504be5ce01", "placeholder": "\u200b", "style": "IPY_MODEL_87b04386a60f4303841acd4e1785e925", "tabbable": null, "tooltip": null, "value": "Running chain 1: 100%"}}, "e18cb7455cdb467fb0dceea158d2d5f8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f6127d08a7064afeacf9934edb39c3a7": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "07808c87c1b740b89057f34eabe568e3": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_e18cb7455cdb467fb0dceea158d2d5f8", "placeholder": "\u200b", "style": "IPY_MODEL_f6127d08a7064afeacf9934edb39c3a7", "tabbable": null, "tooltip": null, "value": " 2000/2000 [00:02&lt;00:00, 986.86it/s]"}}, "8bd6c1f9275a4e15ac6b173ecad231b7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "71be5e3ac6d64ea3b40d85d1f85ae101": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_ce59310c5b7943379058632406dada64", "IPY_MODEL_59e9b688676546e9970e36fda176fd1e", "IPY_MODEL_07808c87c1b740b89057f34eabe568e3"], "layout": "IPY_MODEL_8bd6c1f9275a4e15ac6b173ecad231b7", "tabbable": null, "tooltip": null}}, "0fab89fc9bab4b7cb9eb5571d7edb884": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "76ffa553beb14269be0f1f6025bbd2d4": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "663fde19c8304a6e94ee09bc1d38ad2a": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_0fab89fc9bab4b7cb9eb5571d7edb884", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_76ffa553beb14269be0f1f6025bbd2d4", "tabbable": null, "tooltip": null, "value": 2000.0}}, "fe8ebda13d654681b8c98a1687c55e64": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "7d968e1cf2184b8f9f1affea4ffba8dd": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "5b6f19b88dc44ebca7d6d52a260d15a6": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_fe8ebda13d654681b8c98a1687c55e64", "placeholder": "\u200b", "style": "IPY_MODEL_7d968e1cf2184b8f9f1affea4ffba8dd", "tabbable": null, "tooltip": null, "value": "Running chain 2: 100%"}}, "c518c0f4a2c84922b5f1025c7ccacdc6": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "bfffb1bfb6cf4c9e9ab85350ffc4a634": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "9b1c4d6b995f4993ad98b8aca7410b45": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_c518c0f4a2c84922b5f1025c7ccacdc6", "placeholder": "\u200b", "style": "IPY_MODEL_bfffb1bfb6cf4c9e9ab85350ffc4a634", "tabbable": null, "tooltip": null, "value": " 2000/2000 [00:02&lt;00:00, 989.02it/s]"}}, "65dc452c6a8e4257b816d30e0af7ea9a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "4c356fcce9fe454b813bf355be6ef406": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_5b6f19b88dc44ebca7d6d52a260d15a6", "IPY_MODEL_663fde19c8304a6e94ee09bc1d38ad2a", "IPY_MODEL_9b1c4d6b995f4993ad98b8aca7410b45"], "layout": "IPY_MODEL_65dc452c6a8e4257b816d30e0af7ea9a", "tabbable": null, "tooltip": null}}, "8085422f6a0443788c76e333b40074c3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "b6a10dc76dfb49918a8f1e41b8372f6b": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "deac6e2ab30045b2a07b4fc19bade7c2": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_8085422f6a0443788c76e333b40074c3", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_b6a10dc76dfb49918a8f1e41b8372f6b", "tabbable": null, "tooltip": null, "value": 2000.0}}, "95c8e69eb01245dd8172e9b5b5e0778c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "db70bd8a73454239910af38c38fccd43": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "ff87144153b64a23a2d68c459e123297": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_95c8e69eb01245dd8172e9b5b5e0778c", "placeholder": "\u200b", "style": "IPY_MODEL_db70bd8a73454239910af38c38fccd43", "tabbable": null, "tooltip": null, "value": "Running chain 3: 100%"}}, "57febfde67ce4727bcbfb0c877a727ce": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "27d0126eba8c400b93524853b73f432a": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "b6f67f39e4e141909612b46fb94b1a01": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_57febfde67ce4727bcbfb0c877a727ce", "placeholder": "\u200b", "style": "IPY_MODEL_27d0126eba8c400b93524853b73f432a", "tabbable": null, "tooltip": null, "value": " 2000/2000 [00:02&lt;00:00, 991.26it/s]"}}, "0334a60f76b94dc3a3ca1689990d2a2a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3e579aa2b5004713b80a12b4d64b152f": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_ff87144153b64a23a2d68c459e123297", "IPY_MODEL_deac6e2ab30045b2a07b4fc19bade7c2", "IPY_MODEL_b6f67f39e4e141909612b46fb94b1a01"], "layout": "IPY_MODEL_0334a60f76b94dc3a3ca1689990d2a2a", "tabbable": null, "tooltip": null}}}, "version_major": 2, "version_minor": 0}</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@1.0.6/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/31_kl';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4psy/chapter_4/31_kl.html" />
+    <link rel="shortcut icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Validazione Incrociata Leave-One-Out" href="32_loo.html" />
+    <link rel="prev" title="Entropia" href="30_entropy.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_illusion.html">Incertezza inferenziale e variabilità dei risultati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01a_models.html">Modelli scientifici</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_jax.html">Usare JAX per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_prediction.html">La predizione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_poisson_model.html">Modello di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_poisson_sim.html">Modello di Poisson: derivazione analitica e MCMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_freq.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_normal_normal_model.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_one_mean.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_one_mean_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_multiple_groups.html">Gruppi multipli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_entropy.html">Entropia</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="hssm.html">Drift Diffusion Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_1.html">Il modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_2.html">Analisi bayesiana del modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_params_recovery.html">Analisi di simulazione per la stima dei parametri nel modello di regressione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_3.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_4.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_5.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_7.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_simpson.html">Paradosso di Simpson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_logistic_reg.html">Modello di regressione logistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_binomial_reg.html">Regressione binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_covid.html">Inferenza controfattuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_counterfactual.html">Analisi causale con PyMC</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_stab.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_s_m_errors.html">Crisi della replicabilità</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambiente virtuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a52_reglin_2.html">Regressione lineare con Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a53_reglin_4.html">Posterior Predictive Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/31_kl.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/31_kl.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>La divergenza di Kullback-Leibler</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-divergenza-dipende-dalla-direzione">La Divergenza Dipende dalla Direzione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">La Divergenza Dipende dalla Direzione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler">Confronto di Modelli Utilizzando la Divergenza di Kullback-Leibler</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-predittiva-posteriori">Distribuzione Predittiva Posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#misurare-la-somiglianza-tra-distribuzioni">Misurare la Somiglianza tra Distribuzioni</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confrontare-piu-modelli">Confrontare Più Modelli</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-densita-logaritmica-predittiva-attesa">La Densità Logaritmica Predittiva Attesa</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sfide-nella-stima-dell-elpd">Sfide nella Stima dell’ELPD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Un Esempio Empirico</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-secondo-esempio-empirico">Un Secondo Esempio Empirico</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#una-singola-osservazione">Una Singola Osservazione</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estensione-a-tutte-le-osservazioni">Estensione a Tutte le Osservazioni</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e Considerazioni Finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/kl.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="la-divergenza-di-kullback-leibler">
+<span id="kl-notebook"></span><h1>La divergenza di Kullback-Leibler<a class="headerlink" href="#la-divergenza-di-kullback-leibler" title="Permalink to this heading">#</a></h1>
+<div class="admonition-obiettivi-di-apprendimento admonition">
+<p class="admonition-title">Obiettivi di apprendimento</p>
+<p>Dopo aver completato questo capitolo, acquisirete le competenze per:</p>
+<ul class="simple">
+<li><p>comprendere il concetto di divervenza di Kullback-Leibler (KL);</p></li>
+<li><p>calcolare la divergenza KL dall’entropia;</p></li>
+<li><p>comprendere il concetto della Densità Logaritmica Predittiva Prevista (ELPD);</p></li>
+<li><p>mettere in relazione il concetto di entropia con la ELPD;</p></li>
+<li><p>calcolare la ELPD con PyMC.</p></li>
+</ul>
+</div>
+<p><strong>Distribuzioni di Probabilità e la Necessità di Approssimazioni</strong></p>
+<p>Immaginate di avere una ricetta complessa, con molti ingredienti e passaggi. Questa ricetta rappresenta una distribuzione di probabilità complessa, chiamata <span class="math notranslate nohighlight">\(p\)</span>. A volte, questa ricetta è troppo complicata per essere seguita esattamente. Quindi, usiamo una versione più semplice, una ricetta “approssimativa”, chiamata <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<p>In statistica e machine learning, spesso incontriamo situazioni simili. La distribuzione <span class="math notranslate nohighlight">\(p\)</span> potrebbe essere troppo complessa o sconosciuta, quindi usiamo <span class="math notranslate nohighlight">\(q\)</span> come una versione semplificata. Però, ci chiediamo: quanto è “buona” questa versione semplificata rispetto all’originale?</p>
+<p><strong>La Divergenza di Kullback-Leibler</strong></p>
+<p>Per valutare quanto bene la nostra ricetta approssimativa <span class="math notranslate nohighlight">\(q\)</span> si avvicina alla ricetta originale <span class="math notranslate nohighlight">\(p\)</span>, usiamo qualcosa chiamato <em>Divergenza di Kullback-Leibler</em> (<span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>). Questo è come confrontare il gusto dei piatti preparati con le due ricette diverse.</p>
+<p>Se la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> è zero, significa che le due ricette producono esattamente lo stesso piatto. Valori maggiori di zero indicano differenze maggiori tra i piatti. Quindi, un valore basso di <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> significa che la nostra ricetta approssimativa è molto vicina all’originale.</p>
+<p>Un altro strumento importante è l’<em>Expected Log Predictive Density</em> (elpd), che è come valutare quanto bene una ricetta si adatta ai gusti di diversi ospiti. L’elpd guarda quanto bene una ricetta (modello statistico) si adatta ai dati (gusti degli ospiti), bilanciando la semplicità della ricetta con la sua capacità di soddisfare tutti.</p>
+<p>Un modello che si adatta perfettamente ai dati ma è troppo complicato potrebbe non essere pratico, proprio come una ricetta troppo elaborata. Allo stesso modo, una ricetta troppo semplice potrebbe non soddisfare tutti i gusti. L’elpd ci aiuta a trovare il giusto equilibrio.</p>
+<p>In questo capitolo, ci concentreremo sulla Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> e l’elpd. Esploreremo come questi strumenti ci aiutano a valutare e confrontare modelli statistici, specialmente in contesti bayesiani. Comprendendo bene <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> e elpd, potrete scegliere e analizzare modelli statistici più efficacemente, adattandoli ai dati specifici che avete.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+<span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="kn">import</span> <span class="n">tsaplots</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">pymc.sampling_jax</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">quad</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Cos’è la Divergenza di Kullback-Leibler?</strong></p>
+<p>La Divergenza di Kullback-Leibler (<span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>), chiamata anche entropia relativa, è come un metro di misura che ci dice quanta informazione perdiamo quando sostituiamo una distribuzione di probabilità complessa o sconosciuta (chiamata <span class="math notranslate nohighlight">\(p\)</span>) con una più semplice (chiamata <span class="math notranslate nohighlight">\(q\)</span>).</p>
+<p><strong>Definizione Matematica della Divergenza KL</strong></p>
+<p>Matematicamente, la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> si definisce come la somma di tutte le differenze tra le probabilità logaritmiche di ogni evento in <span class="math notranslate nohighlight">\(p\)</span> e <span class="math notranslate nohighlight">\(q\)</span>, moltiplicate per le probabilità di quegli eventi in <span class="math notranslate nohighlight">\(p\)</span>. Ecco la formula:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{KL}(p \mid\mid q) = \sum_{i=1}^n p_i (\log p_i - \log q_i),
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\(i\)</span> rappresenta ciascun possibile evento nelle distribuzioni. Questa somma ci dà una valutazione della “distanza” media tra <span class="math notranslate nohighlight">\(p\)</span> e <span class="math notranslate nohighlight">\(q\)</span> in termini di probabilità logaritmiche.</p>
+<p><strong>Divergenza KL e Entropia</strong></p>
+<p>Possiamo anche vedere la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> in termini di entropia, che è una misura di incertezza o imprevedibilità. Qui, confrontiamo due cose:</p>
+<ol class="arabic">
+<li><p><strong>Entropia Incrociata (<span class="math notranslate nohighlight">\(h(p, q)\)</span>)</strong>: Rappresenta quanto è “disordinata” o imprevedibile la distribuzione <span class="math notranslate nohighlight">\(q\)</span> quando la valutiamo con le probabilità di <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+   h(p, q) = -\sum_{i=1}^n p_i \log q_i.
+   \]</div>
+</li>
+<li><p><strong>Entropia di <span class="math notranslate nohighlight">\(p\)</span> (<span class="math notranslate nohighlight">\(h(p)\)</span>)</strong>: Questa è l’incertezza intrinseca nella distribuzione vera <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+   h(p) = -\sum_{i=1}^n p_i \log p_i.
+   \]</div>
+</li>
+</ol>
+<p>Allora, la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> è la differenza tra queste due entropie:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{KL}(p \mid\mid q) = h(p, q) - h(p).
+\]</div>
+<p><strong>Significato Pratico della Divergenza KL</strong></p>
+<p>In pratica, la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> ci dice quanto siamo “fuori strada” usando <span class="math notranslate nohighlight">\(q\)</span> invece di <span class="math notranslate nohighlight">\(p\)</span>. Se la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> è bassa, significa che <span class="math notranslate nohighlight">\(q\)</span> è una buona approssimazione di <span class="math notranslate nohighlight">\(p\)</span> e perdiamo poca informazione nel processo. Se è alta, significa che stiamo perdendo molte informazioni importanti, e <span class="math notranslate nohighlight">\(q\)</span> potrebbe non essere una buona scelta per approssimare <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<section id="un-esempio-empirico">
+<h2>Un Esempio Empirico<a class="headerlink" href="#un-esempio-empirico" title="Permalink to this heading">#</a></h2>
+<p>Per comprendere meglio questi concetti, esaminiamo ora un esempio numerico, dove definiremo due distribuzioni di probabilità discrete, <span class="math notranslate nohighlight">\(p\)</span> e <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcoliamo l’entropia di <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h_p</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Entropia di p: &quot;</span><span class="p">,</span> <span class="n">h_p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entropia di p:  1.0296530140645737
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcoliamo l’entropia incrociata tra <span class="math notranslate nohighlight">\(p\)</span> e <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h_pq</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Entropia incrociata tra p e q: &quot;</span><span class="p">,</span> <span class="n">h_pq</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entropia incrociata tra p e q:  1.372238457997479
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcoliamo la divergenza di Kullback-Leibler da <span class="math notranslate nohighlight">\(p\)</span> a <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kl_pq</span> <span class="o">=</span> <span class="n">h_pq</span> <span class="o">-</span> <span class="n">h_p</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divergenza KL da p a q: &quot;</span><span class="p">,</span> <span class="n">kl_pq</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Divergenza KL da p a q:  0.34258544393290524
+</pre></div>
+</div>
+</div>
+</div>
+<p>Lo stesso risultato si ottiene applicando la formula della Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.3425854439329054
+</pre></div>
+</div>
+</div>
+</div>
+<p>Se invece <span class="math notranslate nohighlight">\(q\)</span> è molto simile a <span class="math notranslate nohighlight">\(p\)</span>, la differenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> è molto minore.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.007041377136023895
+</pre></div>
+</div>
+</div>
+</div>
+<p>Consideriamo un secondo esempio. Sia <span class="math notranslate nohighlight">\(p\)</span> una distribuzione binomiale di parametri <span class="math notranslate nohighlight">\(\theta = 0.2\)</span> e <span class="math notranslate nohighlight">\(n = 5\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the parameters</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="c1"># Compute the probability mass function</span>
+<span class="n">true_py</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">true_py</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.4096 0.4096 0.1536 0.0256 0.0016]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Sia <span class="math notranslate nohighlight">\(q_1\)</span> una approssimazione a <span class="math notranslate nohighlight">\(p\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.46</span><span class="p">,</span> <span class="mf">0.42</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.46 0.42 0.1  0.01 0.01]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Sia <span class="math notranslate nohighlight">\(q_2\)</span> una distribuzione uniforme:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q2</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.2, 0.2, 0.2, 0.2, 0.2]
+</pre></div>
+</div>
+</div>
+</div>
+<p>La divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> di <span class="math notranslate nohighlight">\(q_1\)</span> da <span class="math notranslate nohighlight">\(p\)</span> è</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kl_pq1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">true_py</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">true_py</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divergenza KL di q1 da p: &quot;</span><span class="p">,</span> <span class="n">kl_pq1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Divergenza KL di q1 da p:  0.02925199033345885
+</pre></div>
+</div>
+</div>
+</div>
+<p>La divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> di <span class="math notranslate nohighlight">\(q_2\)</span> da <span class="math notranslate nohighlight">\(p\)</span> è:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kl_pq2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">true_py</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">true_py</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q2</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Divergenza KL di q2 da p: &quot;</span><span class="p">,</span> <span class="n">kl_pq2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Divergenza KL di q2 da p:  0.4863577787141543
+</pre></div>
+</div>
+</div>
+</div>
+<p>È chiaro che perdiamo una quantità maggiore di informazioni se, per descrivere la distribuzione binomiale <span class="math notranslate nohighlight">\(p\)</span>, usiamo la distribuzione uniforme <span class="math notranslate nohighlight">\(q_2\)</span> anziché <span class="math notranslate nohighlight">\(q_1\)</span>.</p>
+</section>
+<section id="la-divergenza-dipende-dalla-direzione">
+<h2>La Divergenza Dipende dalla Direzione<a class="headerlink" href="#la-divergenza-dipende-dalla-direzione" title="Permalink to this heading">#</a></h2>
+<p>La Divergenza <span class="math notranslate nohighlight">\( \mathbb{KL} \)</span> può essere vista come una misura di “distanza” tra due distribuzioni di probabilità, ma è importante sottolineare che non è una vera e propria distanza in senso matematico poiché non è simmetrica. Questa asimmetria riflette il fatto che sostituire <span class="math notranslate nohighlight">\(p\)</span> con <span class="math notranslate nohighlight">\(q\)</span> non è equivalente a sostituire <span class="math notranslate nohighlight">\(q\)</span> con <span class="math notranslate nohighlight">\(p\)</span> in termini di perdita di informazione.</p>
+<p>La relazione tra la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>, l’entropia <span class="math notranslate nohighlight">\(h(p)\)</span> e l’entropia incrociata <span class="math notranslate nohighlight">\(h(p, q)\)</span> è cruciale per comprendere come la <span class="math notranslate nohighlight">\( \mathbb{KL} \)</span> quantifichi la perdita di informazione. L’entropia di <span class="math notranslate nohighlight">\(p\)</span> rappresenta l’incertezza intrinseca nella distribuzione vera, mentre l’entropia incrociata tra <span class="math notranslate nohighlight">\(p\)</span> e <span class="math notranslate nohighlight">\(q\)</span> rappresenta l’incertezza quando si utilizza la distribuzione approssimata <span class="math notranslate nohighlight">\(q\)</span> per rappresentare <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>Illustriamo numericamente questi concetti per due distribuzioni <span class="math notranslate nohighlight">\(p = \{0.01, 0.99\}\)</span> e <span class="math notranslate nohighlight">\(q = \{0.7, 0.3\}\)</span>.</p>
+</section>
+<section id="id1">
+<h2>La Divergenza Dipende dalla Direzione<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<p>La Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> è spesso paragonata a una “distanza” tra due distribuzioni di probabilità, ma è fondamentale capire che non è simmetrica. Questo significa che la misura di quanto <span class="math notranslate nohighlight">\(p\)</span> è diversa da <span class="math notranslate nohighlight">\(q\)</span> non è la stessa di quanto <span class="math notranslate nohighlight">\(q\)</span> è diversa da <span class="math notranslate nohighlight">\(p\)</span>. Questa asimmetria riflette la differenza nella perdita di informazione quando si sostituisce una distribuzione con l’altra.</p>
+<p>Per comprendere meglio la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>, è utile considerare l’entropia e l’entropia incrociata. Facciamo un esempio numerico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Definire le distribuzioni p e q</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">])</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+
+<span class="c1"># Calcolo dell&#39;entropia di p</span>
+<span class="n">h_p</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+<span class="c1"># Calcolo dell&#39;entropia incrociata da p a q</span>
+<span class="n">h_pq</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+
+<span class="c1"># Calcolo della divergenza KL da p a q</span>
+<span class="n">kl_pq</span> <span class="o">=</span> <span class="n">h_pq</span> <span class="o">-</span> <span class="n">h_p</span>
+
+<span class="c1"># Calcolo dell&#39;entropia di q</span>
+<span class="n">h_q</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+
+<span class="c1"># Calcolo dell&#39;entropia incrociata da q a p</span>
+<span class="n">h_qp</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+<span class="c1"># Calcolo della divergenza KL da q a p</span>
+<span class="n">kl_qp</span> <span class="o">=</span> <span class="n">h_qp</span> <span class="o">-</span> <span class="n">h_q</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entropia di p: </span><span class="si">{</span><span class="n">h_p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entropia incrociata da p a q: </span><span class="si">{</span><span class="n">h_pq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Divergenza KL da p a q: </span><span class="si">{</span><span class="n">kl_pq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Entropia di q: </span><span class="si">{</span><span class="n">h_q</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entropia incrociata da q a p: </span><span class="si">{</span><span class="n">h_qp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Divergenza KL da q a p: </span><span class="si">{</span><span class="n">kl_qp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entropia di p: 0.056001534354847345
+Entropia incrociata da p a q: 1.1954998257220641
+Divergenza KL da p a q: 1.1394982913672167
+
+Entropia di q: 0.6108643020548935
+Entropia incrociata da q a p: 3.226634230947714
+Divergenza KL da q a p: 2.6157699288928207
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p><strong>Entropia di <span class="math notranslate nohighlight">\(p\)</span> (<span class="math notranslate nohighlight">\(h(p)\)</span>)</strong>: Misura l’incertezza o la variabilità all’interno della distribuzione vera <span class="math notranslate nohighlight">\(p\)</span>. Nel nostro esempio, l’entropia di <span class="math notranslate nohighlight">\(p\)</span> è 0.056.</p></li>
+<li><p><strong>Entropia Incrociata da <span class="math notranslate nohighlight">\(p\)</span> a <span class="math notranslate nohighlight">\(q\)</span> (<span class="math notranslate nohighlight">\(h(p, q)\)</span>)</strong>: Misura l’incertezza quando si usa <span class="math notranslate nohighlight">\(q\)</span> per rappresentare <span class="math notranslate nohighlight">\(p\)</span>. Nel nostro esempio, è 1.195.</p></li>
+</ul>
+<p>La Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> da <span class="math notranslate nohighlight">\(p\)</span> a <span class="math notranslate nohighlight">\(q\)</span> si calcola come la differenza tra l’entropia incrociata e l’entropia di <span class="math notranslate nohighlight">\(p\)</span>, che nel nostro caso è 1.139. Questo valore indica la perdita di informazione quando si utilizza <span class="math notranslate nohighlight">\(q\)</span> per approssimare <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>Quando invertiamo le distribuzioni e calcoliamo la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> da <span class="math notranslate nohighlight">\(q\)</span> a <span class="math notranslate nohighlight">\(p\)</span>, otteniamo un risultato diverso. L’entropia di <span class="math notranslate nohighlight">\(q\)</span> è 0.611 e l’entropia incrociata da <span class="math notranslate nohighlight">\(q\)</span> a <span class="math notranslate nohighlight">\(p\)</span> è 3.227. La Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> risultante da <span class="math notranslate nohighlight">\(q\)</span> a <span class="math notranslate nohighlight">\(p\)</span> è 2.616, molto più grande rispetto a quella da <span class="math notranslate nohighlight">\(p\)</span> a <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<p>Questi risultati dimostrano chiaramente che la Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> è asimmetrica. La quantità di informazione che si perde nel sostituire <span class="math notranslate nohighlight">\(p\)</span> con <span class="math notranslate nohighlight">\(q\)</span> non è la stessa che si perde sostituendo <span class="math notranslate nohighlight">\(q\)</span> con <span class="math notranslate nohighlight">\(p\)</span>. Questa asimmetria è una caratteristica cruciale della Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> e sottolinea l’importanza di considerare attentamente quale distribuzione si sta utilizzando come approssimazione dell’altra.</p>
+</section>
+<section id="confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler">
+<h2>Confronto di Modelli Utilizzando la Divergenza di Kullback-Leibler<a class="headerlink" href="#confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler" title="Permalink to this heading">#</a></h2>
+<p>La Divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> è uno strumento essenziale per confrontare diversi modelli statistici. Questo metodo misura la differenza tra la distribuzione di probabilità teorizzata da un modello, che chiamiamo <span class="math notranslate nohighlight">\(p_{\mathcal{M}}\)</span>, e la distribuzione di probabilità che ha effettivamente generato i dati, denominata <span class="math notranslate nohighlight">\(p_t\)</span>.</p>
+<section id="distribuzione-predittiva-posteriori">
+<h3>Distribuzione Predittiva Posteriori<a class="headerlink" href="#distribuzione-predittiva-posteriori" title="Permalink to this heading">#</a></h3>
+<p>Abbiamo introdotto il concetto di distribuzione predittiva posteriori, definita come:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\tilde{y} \mid y) = \int_\Theta p(\tilde{y} \mid \theta) p(\theta \mid y) \, \mathrm{d}\theta .
+\]</div>
+<p>Questa formula rappresenta la previsione del tipo di dati che il modello <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> potrebbe generare. Questa previsione è basata sulle nostre conoscenze precedenti, espresse come <span class="math notranslate nohighlight">\(p(\theta)\)</span>, e sui dati osservati, <span class="math notranslate nohighlight">\(y\)</span>.</p>
+</section>
+<section id="misurare-la-somiglianza-tra-distribuzioni">
+<h3>Misurare la Somiglianza tra Distribuzioni<a class="headerlink" href="#misurare-la-somiglianza-tra-distribuzioni" title="Permalink to this heading">#</a></h3>
+<p>L’obiettivo è valutare quanto la distribuzione <span class="math notranslate nohighlight">\(q_{\mathcal{M}} = p(\tilde{y} \mid y)\)</span> si avvicini alla distribuzione del modello generatore reale <span class="math notranslate nohighlight">\(p_t(\tilde{y})\)</span>. In altre parole, cerchiamo di quantificare la similitudine tra i dati prodotti dal modello teorico <span class="math notranslate nohighlight">\(q_{\mathcal{M}}\)</span> e quelli generati dal modello reale <span class="math notranslate nohighlight">\(p_t\)</span>. Questo viene fatto attraverso la Divergenza di Kullback-Leibler:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{KL}(p_t \mid\mid q_{\mathcal{M}}).
+\]</div>
+</section>
+<section id="confrontare-piu-modelli">
+<h3>Confrontare Più Modelli<a class="headerlink" href="#confrontare-piu-modelli" title="Permalink to this heading">#</a></h3>
+<p>Supponiamo di avere una serie di <span class="math notranslate nohighlight">\(k\)</span> modelli distinti <span class="math notranslate nohighlight">\(\{q_{\mathcal{M}_1}, q_{\mathcal{M}_2}, \ldots, q_{\mathcal{M}_k}\}\)</span>. Se conoscessimo <span class="math notranslate nohighlight">\(p_t\)</span>, potremmo calcolare la Divergenza KL per ogni modello in questo modo:</p>
+<div class="math notranslate nohighlight" id="equation-eq-kl-mod-comp">
+<span class="eqno">(65)<a class="headerlink" href="#equation-eq-kl-mod-comp" title="Permalink to this equation">#</a></span>\[\begin{split}
+\begin{align*}
+\mathbb{KL} (p_t \mid\mid q_{\mathcal{M}_1}) &amp;= \mathbb{E} (\log p_t) - \mathbb{E} (\log q_{\mathcal{M}_1}), \\
+\mathbb{KL} (p_t \mid\mid q_{\mathcal{M}_2}) &amp;= \mathbb{E} (\log p_t) - \mathbb{E} (\log q_{\mathcal{M}_2}), \\
+&amp;\vdots \\
+\mathbb{KL} (p_t \mid\mid q_{\mathcal{M}_k}) &amp;= \mathbb{E} (\log p_t) - \mathbb{E} (\log q_{\mathcal{M}_k}).
+\end{align*}
+\end{split}\]</div>
+<p>In pratica, però, <span class="math notranslate nohighlight">\(p_t\)</span> è sconosciuta. Fortunatamente, <span class="math notranslate nohighlight">\(p_t\)</span> rimane costante in tutte le equazioni, permettendoci di confrontare i modelli focalizzandoci sul secondo termine della Divergenza KL, che è indipendente da <span class="math notranslate nohighlight">\(p_t\)</span>. Per un modello generico <span class="math notranslate nohighlight">\(\mathcal{M}\)</span>, questo termine è:</p>
+<div class="math notranslate nohighlight" id="equation-eq-kl-div-cont-t2">
+<span class="eqno">(66)<a class="headerlink" href="#equation-eq-kl-div-cont-t2" title="Permalink to this equation">#</a></span>\[
+\mathbb{E} \log p_{\mathcal{M}}(y) = \int_{-\infty}^{+\infty} p_t(y) \log p_{\mathcal{M}}(y) \, \mathrm{d}y .
+\]</div>
+<p>In questo modo, possiamo costruire un metodo per confrontare i modelli senza dover conoscere il modello generatore effettivo dei dati.</p>
+<p>In conclusione, l’eq. <a class="reference internal" href="#equation-eq-kl-div-cont-t2">(66)</a> calcola la densità logaritmica media della distribuzione <span class="math notranslate nohighlight">\(p_{\mathcal{M}}(y)\)</span> basata sulla distribuzione reale <span class="math notranslate nohighlight">\(p_t(y)\)</span>. Ciò indica quanto accuratamente il modello <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> rappresenta i dati reali generati da <span class="math notranslate nohighlight">\(p_t\)</span>.</p>
+</section>
+</section>
+<section id="la-densita-logaritmica-predittiva-attesa">
+<h2>La Densità Logaritmica Predittiva Attesa<a class="headerlink" href="#la-densita-logaritmica-predittiva-attesa" title="Permalink to this heading">#</a></h2>
+<p>La <em>Densità Logaritmica Predittiva Attesa</em> (<em>Expected Log Predictive Density</em>, ELPD) è una misura fondamentale per valutare la capacità di un modello di fare previsioni accurate. L’ELPD si concentra sulle previsioni future piuttosto che sull’adattamento ai dati già osservati. Riformuliamo l’eq. <a class="reference internal" href="#equation-eq-kl-div-cont-t2">(66)</a> per esprimere l’ELPD:</p>
+<div class="math notranslate nohighlight" id="equation-eq-elpd">
+<span class="eqno">(67)<a class="headerlink" href="#equation-eq-elpd" title="Permalink to this equation">#</a></span>\[
+\begin{equation}
+elpd = \int_{\tilde{y}} p_{t}(\tilde{y}) \log p(\tilde{y} \mid y) \, \mathrm{d}\tilde{y} .
+\end{equation}
+\]</div>
+<p>Questa equazione ci aiuta a capire tre aspetti fondamentali:</p>
+<ol class="arabic simple">
+<li><p><strong>Focalizzazione sui Dati Futuri</strong>: L’ELPD utilizza <span class="math notranslate nohighlight">\(\tilde{y}\)</span> per rappresentare i dati futuri, potenzialmente osservabili. Questo è diverso dall’equazione precedente, dove <span class="math notranslate nohighlight">\(y\)</span> rappresentava i dati già osservati.</p></li>
+<li><p><strong>Uso della Distribuzione Predittiva Posteriori</strong>: Qui, <span class="math notranslate nohighlight">\(p(\tilde{y} \mid y)\)</span> è la distribuzione predittiva posteriori, che stima le previsioni future del modello basandosi sulle osservazioni passate <span class="math notranslate nohighlight">\(y\)</span>. Questo si differenzia dall’eq. <a class="reference internal" href="#equation-eq-kl-div-cont-t2">(66)</a>, che considerava il modello probabilistico basato sui dati osservati.</p></li>
+<li><p><strong>Rilevanza di <span class="math notranslate nohighlight">\(p_t\)</span></strong>: In entrambe le equazioni, <span class="math notranslate nohighlight">\(p_t\)</span> è la distribuzione “vera” dei dati. Nell’equazione della divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>, <span class="math notranslate nohighlight">\(p_t\)</span> serve a valutare l’adattamento del modello ai dati osservati; nell’ELPD, invece, pesa la qualità delle previsioni future del modello.</p></li>
+</ol>
+<p>In conclusione, mentre la formula della divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span> misura l’adattamento del modello ai dati attuali, l’ELPD valuta quanto bene il modello può prevedere nuovi dati. Entrambe si collegano al concetto di divergenza <span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>, ma in contesti diversi: la prima per l’adattamento ai dati, la seconda per la capacità predittiva.</p>
+<section id="sfide-nella-stima-dell-elpd">
+<h3>Sfide nella Stima dell’ELPD<a class="headerlink" href="#sfide-nella-stima-dell-elpd" title="Permalink to this heading">#</a></h3>
+<p>Una sfida principale nella stima dell’ELPD è che la vera distribuzione di probabilità dei dati, <span class="math notranslate nohighlight">\(p_t\)</span>, è in genere sconosciuta. Questo rende impossibile calcolare l’ELPD esattamente. Tuttavia, possiamo avvicinarci a una stima affidabile utilizzando tecniche specifiche.</p>
+<p>Anche se non possiamo formulare analiticamente in modo preciso la distribuzione predittiva posteriori <span class="math notranslate nohighlight">\(p(\tilde{y} \mid y)\)</span>, possiamo approssimarla con metodi di simulazione. Tuttavia, l’ELPD include il termine <span class="math notranslate nohighlight">\(p_t(\tilde{y})\)</span>, rappresentante la distribuzione dei futuri dati potenziali secondo il modello “vero”. Poiché questa distribuzione è tipicamente ignota, l’ELPD può essere solo stimata, non calcolata direttamente. Il prossimo argomento di discussione sarà come stimare efficacemente l’ELPD basandoci su un campione di osservazioni.</p>
+</section>
+<section id="id2">
+<h3>Un Esempio Empirico<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p>Per comprenderne meglio il funzionamento dell’ELPD, esaminiamo un esempio tratto dal testo <a class="reference external" href="https://vasishth.github.io/bayescogsci/book/expected-log-predictive-density-of-a-model.html">Bayesian Data Analysis for Cognitive Science</a>, in cui questa quantità viene calcolata sia in forma esatta che approssimata.</p>
+<p>Supponiamo di avere un campione di <span class="math notranslate nohighlight">\(n\)</span> osservazioni e di conoscere il vero processo generativo dei dati, rappresentato dalla distribuzione <span class="math notranslate nohighlight">\(p_t(y) = Beta(1, 3).\)</span> Da questo campione, generato in modo artificiale, ad esempio tramite</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+
+<span class="c1"># Number of samples</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
+
+<span class="c1"># Draw samples from a Beta distribution</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_data</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.21810354 0.05532253 0.13545025 0.42102514 0.14728608 0.11052926]
+</pre></div>
+</div>
+</div>
+</div>
+<p>abbiamo adattato un modello bayesiano <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> e ottenuto la distribuzione a posteriori per i parametri del modello descritta da <span class="math notranslate nohighlight">\(p(y^{rep} \mid y) \sim Beta(2, 2).\)</span></p>
+<p>L’ELPD si calcola con l’integrazione:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{ELPD} = \int_{y^{rep}}p_{t}(y^{rep})\log p(y^{rep} \mid y) \,\operatorname {d}\!y^{rep}.
+\]</div>
+<p>Svolgendo i calcoli otteniamo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># True distribution</span>
+<span class="k">def</span> <span class="nf">p_t</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Predictive distribution</span>
+<span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Integration</span>
+<span class="k">def</span> <span class="nf">integrand</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">p_t</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+<span class="c1"># Perform numerical integration</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span><span class="n">integrand</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.37490719743844486
+</pre></div>
+</div>
+</div>
+</div>
+<p>In pratica, non conoscendo <span class="math notranslate nohighlight">\(p_t(y)\)</span>, approssimiamo l’ELPD usando l’eq. <a class="reference internal" href="#equation-eq-elpd">(67)</a>:</p>
+<div class="math notranslate nohighlight" id="equation-eq-empirical-elpd">
+<span class="eqno">(68)<a class="headerlink" href="#equation-eq-empirical-elpd" title="Permalink to this equation">#</a></span>\[
+\frac{1}{n} \sum_{i=1}^n \log p(y_i \mid y).
+\]</div>
+<p>Questo metodo è un’approssimazione Monte Carlo basata sui dati osservati, usando <span class="math notranslate nohighlight">\(\{y_1, y_2, \ldots, y_n\}\)</span> come rappresentazione empirica di possibili futuri dati.</p>
+<p>Esaminiamo in dettaglio le componenti dell’eq. <a class="reference internal" href="#equation-eq-empirical-elpd">(68)</a>:</p>
+<ol class="arabic simple">
+<li><p><strong>Densità Logaritmica Predittiva <span class="math notranslate nohighlight">\( \log p(y_i \mid y) \)</span> per un dato <span class="math notranslate nohighlight">\( y_i \)</span></strong>: Questa misura valuta quanto efficacemente il modello predice un singolo dato <span class="math notranslate nohighlight">\(y_i\)</span>, data la distribuzione osservata <span class="math notranslate nohighlight">\(y\)</span>. Valori più alti indicano una migliore performance predittiva.</p></li>
+<li><p><strong>Media della Densità Logaritmica Predittiva</strong>: La media di questi valori logaritmici predittivi fornisce una stima complessiva dell’efficacia predittiva del modello sull’intero set di dati.</p></li>
+</ol>
+<p>Nel caso dell’esempio in discussione, usando l’eq. <a class="reference internal" href="#equation-eq-empirical-elpd">(68)</a> otteniamo un valore approssimato a quello trovato in precedenza:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">/</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">y_data</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.3721938430299501
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’ELPD funge da misura complessiva dell’efficacia di un modello nel prevedere dati non ancora osservati. Un valore elevato dell’ELPD suggerisce una maggiore efficacia del modello in termini di previsioni accurate. Tuttavia, è essenziale riconoscere che l’ELPD è una stima basata sui dati attualmente disponibili; la sua affidabilità può essere compromessa se i dati futuri si discostano significativamente da quelli su cui si basa la stima.</p>
+</section>
+<section id="un-secondo-esempio-empirico">
+<h3>Un Secondo Esempio Empirico<a class="headerlink" href="#un-secondo-esempio-empirico" title="Permalink to this heading">#</a></h3>
+<p>Generiamo un set di dati artificiali seguendo una distribuzione normale con una media (<code class="docutils literal notranslate"><span class="pre">loc</span></code>) di 5 e una deviazione standard (<code class="docutils literal notranslate"><span class="pre">scale</span></code>) di 2. Scegliamo una dimensione (<code class="docutils literal notranslate"><span class="pre">size</span></code>) del campione di 100.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>  <span class="c1"># Scegli un valore per il seed</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[ 5.99342831  4.7234714   6.29537708  8.04605971  4.53169325  4.53172609
+  8.15842563  6.53486946  4.06105123  6.08512009  4.07316461  4.06854049
+  5.48392454  1.17343951  1.55016433  3.87542494  2.97433776  5.62849467
+  3.18395185  2.1753926   7.93129754  4.5484474   5.13505641  2.15050363
+  3.91123455  5.22184518  2.69801285  5.75139604  3.79872262  4.4166125
+  3.79658678  8.70455637  4.97300555  2.88457814  6.64508982  2.5583127
+  5.41772719  1.08065975  2.3436279   5.39372247  6.47693316  5.34273656
+  4.76870344  4.39779261  2.04295602  3.56031158  4.07872246  7.11424445
+  5.68723658  1.47391969  5.64816794  4.22983544  3.646156    6.22335258
+  7.06199904  6.86256024  3.32156495  4.38157525  5.66252686  6.95109025
+  4.04165152  4.62868205  2.78733005  2.60758675  6.62505164  7.71248006
+  4.85597976  7.0070658   5.72327205  3.70976049  5.72279121  8.07607313
+  4.92834792  8.12928731 -0.23949021  6.64380501  5.17409414  4.4019853
+  5.18352155  1.02486217  4.56065622  5.71422514  7.95578809  3.96345956
+  3.38301279  3.99648591  6.83080424  5.65750222  3.94047959  6.02653487
+  5.1941551   6.93728998  3.59589381  4.34467571  4.21578369  2.0729701
+  5.59224055  5.52211054  5.01022691  4.53082573]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizziamo PyMC per adattare un modello normale ai dati. Stimiamo la media (<code class="docutils literal notranslate"><span class="pre">mu</span></code>) e la deviazione standard (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>) del modello attraverso il campionamento.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># Sampling from the posterior</span>
+    <span class="n">trace</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sampling_jax</span><span class="o">.</span><span class="n">sample_numpyro_nuts</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="c1"># Generating posterior predictive samples</span>
+    <span class="n">ppc</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample_posterior_predictive</span><span class="p">(</span>
+        <span class="n">trace</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.984745
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "0d93d8975d1a4667a5c3337ca0a47be9"}</script><script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "71be5e3ac6d64ea3b40d85d1f85ae101"}</script><script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "4c356fcce9fe454b813bf355be6ef406"}</script><script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "3e579aa2b5004713b80a12b4d64b152f"}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.439326
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.096191
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling: [y]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [4000/4000 00:00&lt;00:00]
+    </div>
+    </div></div>
+</details>
+</div>
+<section id="una-singola-osservazione">
+<h4>Una Singola Osservazione<a class="headerlink" href="#una-singola-osservazione" title="Permalink to this heading">#</a></h4>
+<p>Generiamo la distribuzione predittiva a posteriori per la variabile <code class="docutils literal notranslate"><span class="pre">y</span></code> e visualizziamo questa distribuzione per la prima osservazione (<code class="docutils literal notranslate"><span class="pre">y_i</span></code>) del campione.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">post_pred</span> <span class="o">=</span> <span class="n">ppc</span><span class="o">.</span><span class="n">posterior_predictive</span>
+<span class="n">y_i_post_pred</span> <span class="o">=</span> <span class="n">post_pred</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">y_i_post_pred</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Posterior Predictive Check for the First Observation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;Observed Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Posterior Predictive&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5006c7f0a36f3ae2e9e6ab9be2664b8ac9a5d99a64a5d4d297d09994a37799ae.png" src="../_images/5006c7f0a36f3ae2e9e6ab9be2664b8ac9a5d99a64a5d4d297d09994a37799ae.png" />
+</div>
+</div>
+<p>Per la prima osservazione, calcoliamo il valore della funzione di densità di probabilità (PDF) utilizzando ogni coppia di parametri <code class="docutils literal notranslate"><span class="pre">mu</span></code> e <code class="docutils literal notranslate"><span class="pre">sigma</span></code> dalla distribuzione posteriore. Convertiamo poi questi valori della PDF in logaritmi e calcoliamo la media di questi logaritmi. Questo fornisce una stima empirica della ELPD per la prima osservazione.</p>
+<p>Selezione della prima osservazione:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_i</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y_i</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.993428306022466
+</pre></div>
+</div>
+</div>
+</div>
+<p>Estrazione dei parametri dal campione posteriore:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu_samples</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">mu_samples</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([4.85398596, 4.86925368, 4.62383343, 4.74811871, 4.71457429,
+       4.64867163, 4.75994337, 4.81945631, 4.74023418, 4.99098035])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_samples</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">sigma_samples</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1.96789396, 1.83169259, 1.82185026, 1.87838966, 1.78448892,
+       1.85198357, 1.80105186, 1.84882554, 1.75368592, 1.88197941])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcolo della densità di probabilità per ogni coppia di parametri:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdf_values</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y_i</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mu_samples</span><span class="p">,</span> <span class="n">sigma_samples</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">pdf_values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.17143822373394588,
+ 0.1804115641030991,
+ 0.16507374048200024,
+ 0.17048367578501775,
+ 0.1729307225882919]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcolo del logaritmo delle densità:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log_pdf_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pdf_values</span><span class="p">)</span>
+<span class="n">log_pdf_values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-1.76353229, -1.71251457, -1.80136299, -1.76911573, -1.75486421])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcolo della media dei valori logaritmici:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_log_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">log_pdf_values</span><span class="p">)</span>
+<span class="n">mean_log_density</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1.7457771077058792
+</pre></div>
+</div>
+</div>
+</div>
+<p>Questo calcolo ci fornisce una stima empirica della media della densità logaritmica predittiva (ELPD) per la prima osservazione del campione.</p>
+</section>
+<section id="estensione-a-tutte-le-osservazioni">
+<h4>Estensione a Tutte le Osservazioni<a class="headerlink" href="#estensione-a-tutte-le-osservazioni" title="Permalink to this heading">#</a></h4>
+<p>Ripetiamo il processo per ogni osservazione nel set di dati. Calcoliamo la densità logaritmica predittiva per ogni osservazione utilizzando lo stesso metodo usato per la prima osservazione. Infine, calcoliamo la media di tutte queste densità logaritmiche predittive. Questo valore rappresenta la stima della ELPD per l’intero set di dati.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcolo della densità logaritmica predittiva per ogni osservazione</span>
+<span class="n">all_log_densities</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">y_i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="n">pdf_values</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y_i</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mu_samples</span><span class="p">,</span> <span class="n">sigma_samples</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">log_pdf_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pdf_values</span><span class="p">)</span>
+    <span class="n">mean_log_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">log_pdf_values</span><span class="p">)</span>
+    <span class="n">all_log_densities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_log_density</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcolo della media su tutte le osservazioni</span>
+<span class="n">overall_mean_log_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_log_densities</span><span class="p">)</span>
+<span class="n">overall_mean_log_density</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.0206051942248195
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="commenti-e-considerazioni-finali">
+<h2>Commenti e Considerazioni Finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Permalink to this heading">#</a></h2>
+<p>Nel corso di questo capitolo, abbiamo esplorato in profondità il concetto della Densità Logaritmica Predittiva Prevista (ELPD), una metrica fondamentale nell’ambito dell’analisi statistica bayesiana. L’ELPD si distingue non solo come strumento per valutare le prestazioni di un modello statistico, ma assume un ruolo cruciale nel confronto tra diversi modelli.</p>
+<p>L’adozione dell’ELPD come criterio di confronto offre una prospettiva oggettiva e basata sui dati per determinare quale modello sia più aderente e rappresentativo rispetto alle informazioni a nostra disposizione. In un panorama scientifico e applicativo di crescente complessità, dove le alternative di modellazione si moltiplicano e divergono, l’ELPD emerge come un faro guida per orientare la scelta verso il modello più appropriato. Questa metrica si rivela particolarmente utile sia nel confronto tra modelli di diversa complessità, sia nella selezione tra vari approcci modellistici, fornendo una valutazione quantitativa e imparziale della loro capacità predittiva.</p>
+<p>In sintesi, l’ELPD rappresenta uno strumento imprescindibile nell’arsenale dell’analista dei dati moderno. Il suo impiego in fase di scelta e valutazione dei modelli contribuisce in modo significativo a chiarire e guidare le decisioni analitiche, portando a risultati più robusti e modelli statistici maggiormente efficaci. In definitiva, l’ELPD non solo facilita la comprensione delle performance dei modelli, ma promuove anche una maggiore fiducia nelle previsioni che essi generano, un aspetto fondamentale in qualsiasi campo di applicazione statistica.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 06 2024
+
+Python implementation: CPython
+Python version       : 3.11.7
+IPython version      : 8.19.0
+
+numpy      : 1.26.2
+statsmodels: 0.14.1
+pandas     : 2.1.4
+seaborn    : 0.13.0
+matplotlib : 3.8.2
+pymc       : 5.10.3
+scipy      : 1.11.4
+arviz      : 0.17.0
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="30_entropy.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Entropia</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="32_loo.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Validazione Incrociata Leave-One-Out</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-divergenza-dipende-dalla-direzione">La Divergenza Dipende dalla Direzione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">La Divergenza Dipende dalla Direzione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler">Confronto di Modelli Utilizzando la Divergenza di Kullback-Leibler</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-predittiva-posteriori">Distribuzione Predittiva Posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#misurare-la-somiglianza-tra-distribuzioni">Misurare la Somiglianza tra Distribuzioni</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confrontare-piu-modelli">Confrontare Più Modelli</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-densita-logaritmica-predittiva-attesa">La Densità Logaritmica Predittiva Attesa</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sfide-nella-stima-dell-elpd">Sfide nella Stima dell’ELPD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Un Esempio Empirico</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-secondo-esempio-empirico">Un Secondo Esempio Empirico</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#una-singola-osservazione">Una Singola Osservazione</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estensione-a-tutte-le-osservazioni">Estensione a Tutte le Osservazioni</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e Considerazioni Finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
