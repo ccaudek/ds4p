@@ -1,8 +1,9 @@
 <div align="center">
 
+![](https://img.shields.io/badge/psicometria-B000286-blue)
 <a target="_blank" rel="noopener noreferrer" href="https://ccaudek.github.io/ds4psy">![Jupyter Book Badge](https://jupyterbook.org/badge.svg)</a>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/ccaudek/ds4psy">![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)</a>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/ccaudek/ds4psy">![GitHub last update](https://img.shields.io/github/last-commit/ccaudek/ds4psy?color=blue&label=last%20update)</a>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/ccaudek/ds4psy">![GitHub last update](https://img.shields.io/github/last-commit/ccaudek/ds4p?color=blue&label=last%20update)</a>
 
 </div>
 
