@@ -199,6 +199,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
@@ -308,7 +309,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -565,7 +567,7 @@ document.write(`
 <p>Nel contesto di questa metodologia avanzata, in questo e nei successivi capitoli esploreremo i modelli a un parametro. Questi modelli rappresentano una classe di distribuzioni campionarie identificate da un unico parametro sconosciuto. In particolare, ci concentreremo sull’inferenza bayesiana applicata a due tipi di modelli a un parametro: il modello binomiale e il modello di Poisson. Oltre ad essere utili strumenti statistici, questi modelli forniscono anche un ambiente semplice all’interno del quale è possibile apprendere le basi dell’analisi dei dati bayesiana, incluse le distribuzioni a priori coniugate, le distribuzioni predittive e le regioni di confidenza.</p>
 <section id="campionatore-no-u-turn">
 <h2>Campionatore No-U-Turn<a class="headerlink" href="#campionatore-no-u-turn" title="Permalink to this heading">#</a></h2>
-<p>L’algoritmo Metropolis, che abbiamo esaminato in precedenza, offre un metodo per generare campioni da distribuzioni di probabilità attraverso la creazione di una catena di Markov, con la distribuzione desiderata come distribuzione di equilibrio (o stazionaria). Tuttavia, per modelli complessi, tale algoritmo può risultare inefficiente e richiedere un tempo considerevole per convergere verso una distribuzione stazionaria. Per affrontare questa sfida, sono stati sviluppati algoritmi Monte Carlo a catena di Markov (MCMC) più efficienti, tra cui il campionatore No-U-Turn (NUTS), gli algoritmi Metropolis-Hastings, il campionatore Gibbs e il campionatore Hamiltonian Monte Carlo. Questi algoritmi sono stati implementati in vari PPL, tra cui <a class="reference external" href="https://peerj.com/articles/cs-1516.pdf">PyMC</a> e Stan <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id104" title="Bob Carpenter, Andrew Gelman, Matthew D Hoffman, Daniel Lee, Ben Goodrich, Michael Betancourt, Marcus Brubaker, Jiqiang Guo, Peter Li, and Allen Riddell. Stan: a probabilistic programming language. Journal of statistical software, 76(1):1–32, 2017.">CGH+17</a>]</span>.</p>
+<p>L’algoritmo Metropolis, che abbiamo esaminato in precedenza, offre un metodo per generare campioni da distribuzioni di probabilità attraverso la creazione di una catena di Markov, con la distribuzione desiderata come distribuzione di equilibrio (o stazionaria). Tuttavia, per modelli complessi, tale algoritmo può risultare inefficiente e richiedere un tempo considerevole per convergere verso una distribuzione stazionaria. Per affrontare questa sfida, sono stati sviluppati algoritmi Monte Carlo a catena di Markov (MCMC) più efficienti, tra cui il campionatore No-U-Turn (NUTS), gli algoritmi Metropolis-Hastings, il campionatore Gibbs e il campionatore Hamiltonian Monte Carlo. Questi algoritmi sono stati implementati in vari PPL, tra cui <a class="reference external" href="https://peerj.com/articles/cs-1516.pdf">PyMC</a> e Stan <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id105" title="Bob Carpenter, Andrew Gelman, Matthew D Hoffman, Daniel Lee, Ben Goodrich, Michael Betancourt, Marcus Brubaker, Jiqiang Guo, Peter Li, and Allen Riddell. Stan: a probabilistic programming language. Journal of statistical software, 76(1):1–32, 2017.">CGH+17</a>]</span>.</p>
 <p>Nel presente capitolo useremo PyMC per condurre l’inferenza sulle proporzioni binomiali.</p>
 </section>
 <section id="preparazione-del-notebook">
@@ -579,6 +581,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">preliz</span> <span class="k">as</span> <span class="nn">pz</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
@@ -593,8 +596,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
+<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -664,10 +669,48 @@ document.write(`
 </style>
 </div><div class="output text_html">
     <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:14&lt;00:00 Sampling 4 chains, 0 divergences]
+      <progress value='0' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      0.00% [0/8000 00:00&lt;? Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 15 seconds.
+    </div><div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">trace_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:827,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, nuts_sampler_kwargs, callback, mp_ctx, model, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">823</span> <span class="n">t_sampling</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_start</span>
+<span class="g g-Whitespace">    </span><span class="mi">825</span> <span class="c1"># Packaging, validating and returning the result was extracted</span>
+<span class="g g-Whitespace">    </span><span class="mi">826</span> <span class="c1"># into a function to make it easier to test and refactor.</span>
+<span class="ne">--&gt; </span><span class="mi">827</span> <span class="k">return</span> <span class="n">_sample_return</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">828</span>     <span class="n">run</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">829</span>     <span class="n">traces</span><span class="o">=</span><span class="n">traces</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">830</span>     <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">831</span>     <span class="n">t_sampling</span><span class="o">=</span><span class="n">t_sampling</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">832</span>     <span class="n">discard_tuned_samples</span><span class="o">=</span><span class="n">discard_tuned_samples</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">833</span>     <span class="n">compute_convergence_checks</span><span class="o">=</span><span class="n">compute_convergence_checks</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">834</span>     <span class="n">return_inferencedata</span><span class="o">=</span><span class="n">return_inferencedata</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">835</span>     <span class="n">keep_warning_stat</span><span class="o">=</span><span class="n">keep_warning_stat</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">836</span>     <span class="n">idata_kwargs</span><span class="o">=</span><span class="n">idata_kwargs</span> <span class="ow">or</span> <span class="p">{},</span>
+<span class="g g-Whitespace">    </span><span class="mi">837</span>     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">838</span> <span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:858,</span> in <span class="ni">_sample_return</span><span class="nt">(run, traces, tune, t_sampling, discard_tuned_samples, compute_convergence_checks, return_inferencedata, keep_warning_stat, idata_kwargs, model)</span>
+<span class="g g-Whitespace">    </span><span class="mi">856</span> <span class="c1"># Pick and slice chains to keep the maximum number of samples</span>
+<span class="g g-Whitespace">    </span><span class="mi">857</span> <span class="k">if</span> <span class="n">discard_tuned_samples</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">858</span>     <span class="n">traces</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">_choose_chains</span><span class="p">(</span><span class="n">traces</span><span class="p">,</span> <span class="n">tune</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">859</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">860</span>     <span class="n">traces</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">_choose_chains</span><span class="p">(</span><span class="n">traces</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/backends/base.py:601,</span> in <span class="ni">_choose_chains</span><span class="nt">(traces, tune)</span>
+<span class="g g-Whitespace">    </span><span class="mi">599</span> <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span> <span class="o">-</span> <span class="n">tune</span><span class="p">)</span> <span class="k">for</span> <span class="n">trace</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">600</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lengths</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">601</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not enough samples to build a trace.&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">603</span> <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">604</span> <span class="n">l_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lengths</span><span class="p">)[</span><span class="n">idxs</span><span class="p">]</span>
+
+<span class="ne">ValueError</span>: Not enough samples to build a trace.
 </pre></div>
 </div>
 </div>
@@ -702,7 +745,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f500795a501582e8b87e388e5a30650656e8a12edc54212c898922a0e9f6726b.png" src="../_images/f500795a501582e8b87e388e5a30650656e8a12edc54212c898922a0e9f6726b.png" />
+<img alt="../_images/411dfddd60d2167ea6744d37a83ffc47d1f0bacd30700855d60ef2f7f6c6221e.png" src="../_images/411dfddd60d2167ea6744d37a83ffc47d1f0bacd30700855d60ef2f7f6c6221e.png" />
 </div>
 </div>
 <p>Il grafico delle tracce illustra che la moda della distribuzione a posteriori della variabile <span class="math notranslate nohighlight">\(c\)</span> corrisponde al risultato che prevedevamo.</p>
@@ -722,19 +765,12 @@ y &amp;\sim \text{Bin}(n, \theta).
 <p>Nel caso presente abbiamo deciso di rappresentare la nostra incertezza a priori rispetto al parametro <span class="math notranslate nohighlight">\( \theta \)</span> mediante una Beta(4, 6).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-
-<span class="n">prior_density</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">prior_density</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Parameter Value&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Prior Density&quot;</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pz</span><span class="o">.</span><span class="n">Beta</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">plot_pdf</span><span class="p">(</span><span class="n">pointinterval</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b7967d6e8a53ff9c0ca5136450c3d7ffdeb960f397b230886b3064cbe02790db.png" src="../_images/b7967d6e8a53ff9c0ca5136450c3d7ffdeb960f397b230886b3064cbe02790db.png" />
+<img alt="../_images/48ba80f7d8d7b23de5df9b827568f822b63272cd34701aba626808de3078fbe9.png" src="../_images/48ba80f7d8d7b23de5df9b827568f822b63272cd34701aba626808de3078fbe9.png" />
 </div>
 </div>
 <p>Per questa distribuzione a priori e il modello di campionamento sopra indicato, la regola di Bayes fornisce</p>
@@ -860,7 +896,7 @@ p(Y = y \mid \theta) = \theta^y (1-\theta)^{1-y}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/12c5588ed28bd0aa9387da23095755f75efa2b8aa4a2a13c756cc661f282973c.svg" src="../_images/12c5588ed28bd0aa9387da23095755f75efa2b8aa4a2a13c756cc661f282973c.svg" /></div>
+<img alt="../_images/0370d275c38850d69d7da4dc24abb98737ceb4b3e8ec9b53673a4a2f7b87550d.svg" src="../_images/0370d275c38850d69d7da4dc24abb98737ceb4b3e8ec9b53673a4a2f7b87550d.svg" /></div>
 </div>
 </section>
 <section id="contenitori-di-dati">
@@ -886,7 +922,7 @@ p(Y = y \mid \theta) = \theta^y (1-\theta)^{1-y}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/06ed77f7363ee604482803d11b0d1830f52348fa909ccf10aae09e9f74a2de9a.svg" src="../_images/06ed77f7363ee604482803d11b0d1830f52348fa909ccf10aae09e9f74a2de9a.svg" /></div>
+<img alt="../_images/1a403e11fc686c93d8c66cb99a2aad24ca6a512789838f27518563a4b6f1d27a.svg" src="../_images/1a403e11fc686c93d8c66cb99a2aad24ca6a512789838f27518563a4b6f1d27a.svg" /></div>
 </div>
 </section>
 <section id="inferenza">
@@ -960,131 +996,33 @@ p(Y = y \mid \theta) = \theta^y (1-\theta)^{1-y}
 </summary>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+Initializing NUTS using jitter+adapt_diag...
+Multiprocess sampling (4 chains in 4 jobs)
+NUTS: [theta]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [theta]
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">bb_model</span><span class="p">:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">tune</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:802,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, nuts_sampler_kwargs, callback, mp_ctx, model, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">800</span> <span class="n">_print_step_hierarchy</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">801</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">802</span>     <span class="n">_mp_sample</span><span class="p">(</span><span class="o">**</span><span class="n">sample_args</span><span class="p">,</span> <span class="o">**</span><span class="n">parallel_args</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">803</span> <span class="k">except</span> <span class="n">pickle</span><span class="o">.</span><span class="n">PickleError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">804</span>     <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not pickle model, sampling singlethreaded.&quot;</span><span class="p">)</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:1177,</span> in <span class="ni">_mp_sample</span><span class="nt">(draws, tune, step, chains, cores, random_seed, start, progressbar, traces, model, callback, mp_ctx, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1174</span> <span class="c1"># We did draws += tune in pm.sample</span>
-<span class="g g-Whitespace">   </span><span class="mi">1175</span> <span class="n">draws</span> <span class="o">-=</span> <span class="n">tune</span>
-<span class="ne">-&gt; </span><span class="mi">1177</span> <span class="n">sampler</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">ParallelSampler</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1178</span>     <span class="n">draws</span><span class="o">=</span><span class="n">draws</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1179</span>     <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1180</span>     <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1181</span>     <span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1182</span>     <span class="n">seeds</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1183</span>     <span class="n">start_points</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1184</span>     <span class="n">step_method</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1185</span>     <span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1186</span>     <span class="n">mp_ctx</span><span class="o">=</span><span class="n">mp_ctx</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1187</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1188</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1189</span>     <span class="k">try</span><span class="p">:</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:402,</span> in <span class="ni">ParallelSampler.__init__</span><span class="nt">(self, draws, tune, chains, cores, seeds, start_points, step_method, progressbar, mp_ctx)</span>
-<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">if</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">get_start_method</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;fork&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">step_method_pickled</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">step_method</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">402</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span> <span class="o">=</span> <span class="p">[</span>
-<span class="g g-Whitespace">    </span><span class="mi">403</span>     <span class="n">ProcessAdapter</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">404</span>         <span class="n">draws</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">405</span>         <span class="n">tune</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">406</span>         <span class="n">step_method</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">407</span>         <span class="n">step_method_pickled</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">408</span>         <span class="n">chain</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">409</span>         <span class="n">seed</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span>         <span class="n">start</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span>         <span class="n">mp_ctx</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="p">)</span>
-<span class="nn">    413     for chain, seed, start</span> in <span class="ni">zip(range</span><span class="nt">(chains), seeds, start_points)</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">416</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finished</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ProcessAdapter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:403,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
-<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">if</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">get_start_method</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;fork&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">step_method_pickled</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">step_method</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">402</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span> <span class="o">=</span> <span class="p">[</span>
-<span class="ne">--&gt; </span><span class="mi">403</span>     <span class="n">ProcessAdapter</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">404</span>         <span class="n">draws</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">405</span>         <span class="n">tune</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">406</span>         <span class="n">step_method</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">407</span>         <span class="n">step_method_pickled</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">408</span>         <span class="n">chain</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">409</span>         <span class="n">seed</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span>         <span class="n">start</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span>         <span class="n">mp_ctx</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="p">)</span>
-<span class="nn">    413     for chain, seed, start</span> in <span class="ni">zip(range</span><span class="nt">(chains), seeds, start_points)</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">416</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finished</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ProcessAdapter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:259,</span> in <span class="ni">ProcessAdapter.__init__</span><span class="nt">(self, draws, tune, step_method, step_method_pickled, chain, seed, start, mp_ctx)</span>
-<span class="g g-Whitespace">    </span><span class="mi">242</span>     <span class="n">step_method_send</span> <span class="o">=</span> <span class="n">step_method</span>
-<span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">245</span>     <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">246</span>     <span class="n">name</span><span class="o">=</span><span class="n">process_name</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">259</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span> <span class="c1"># Close the remote pipe, so that we get notified if the other</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span> <span class="c1"># end is closed.</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span> <span class="n">remote_conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/multiprocessing/process.py:121,</span> in <span class="ni">BaseProcess.start</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">118</span> <span class="k">assert</span> <span class="ow">not</span> <span class="n">_current_process</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;daemon&#39;</span><span class="p">),</span> \
-<span class="g g-Whitespace">    </span><span class="mi">119</span>        <span class="s1">&#39;daemonic processes are not allowed to have children&#39;</span>
-<span class="g g-Whitespace">    </span><span class="mi">120</span> <span class="n">_cleanup</span><span class="p">()</span>
-<span class="ne">--&gt; </span><span class="mi">121</span> <span class="bp">self</span><span class="o">.</span><span class="n">_popen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Popen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sentinel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_popen</span><span class="o">.</span><span class="n">sentinel</span>
-<span class="g g-Whitespace">    </span><span class="mi">123</span> <span class="c1"># Avoid a refcycle if the target function holds an indirect</span>
-<span class="g g-Whitespace">    </span><span class="mi">124</span> <span class="c1"># reference to the process object (see bpo-30775)</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/multiprocessing/context.py:300,</span> in <span class="ni">ForkServerProcess._Popen</span><span class="nt">(process_obj)</span>
-<span class="g g-Whitespace">    </span><span class="mi">297</span> <span class="nd">@staticmethod</span>
-<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">def</span> <span class="nf">_Popen</span><span class="p">(</span><span class="n">process_obj</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="kn">from</span> <span class="nn">.popen_forkserver</span> <span class="kn">import</span> <span class="n">Popen</span>
-<span class="ne">--&gt; </span><span class="mi">300</span>     <span class="k">return</span> <span class="n">Popen</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/multiprocessing/popen_forkserver.py:35,</span> in <span class="ni">Popen.__init__</span><span class="nt">(self, process_obj)</span>
-<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_obj</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_fds</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="ne">---&gt; </span><span class="mi">35</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/multiprocessing/popen_fork.py:19,</span> in <span class="ni">Popen.__init__</span><span class="nt">(self, process_obj)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalizer</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">---&gt; </span><span class="mi">19</span> <span class="bp">self</span><span class="o">.</span><span class="n">_launch</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
-
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/multiprocessing/popen_forkserver.py:58,</span> in <span class="ni">Popen._launch</span><span class="nt">(self, process_obj)</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalizer</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">close_fds</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span>                                <span class="p">(</span><span class="n">_parent_w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel</span><span class="p">))</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">,</span> <span class="n">closefd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">58</span>     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">getbuffer</span><span class="p">())</span>
-<span class="g g-Whitespace">     </span><span class="mi">59</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">forkserver</span><span class="o">.</span><span class="n">read_signed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sentinel</span><span class="p">)</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [8000/8000 00:01&lt;00:00 Sampling 4 chains, 0 divergences]
+    </div>
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 51 seconds.
 </pre></div>
 </div>
 </div>
@@ -1108,7 +1046,7 @@ p(Y = y \mid \theta) = \theta^y (1-\theta)^{1-y}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3cd6b1aa61c6d55bd26d4c62e097ac2e05ed30d326961677b0bf252d4f193125.png" src="../_images/3cd6b1aa61c6d55bd26d4c62e097ac2e05ed30d326961677b0bf252d4f193125.png" />
+<img alt="../_images/3ad8c4f29d8d4df4b1f2c17383b72e5d0fd74473bdd818a317aac418d197be29.png" src="../_images/3ad8c4f29d8d4df4b1f2c17383b72e5d0fd74473bdd818a317aac418d197be29.png" />
 </div>
 </div>
 </section>
@@ -1153,7 +1091,7 @@ Metropolis: [theta]
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [8000/8000 00:01&lt;00:00 Sampling 4 chains, 0 divergences]
     </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 38 seconds.
+    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 49 seconds.
 </pre></div>
 </div>
 </div>
@@ -1167,7 +1105,7 @@ Metropolis: [theta]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b770fd7e68d10567a6282851e45ae77dd401bb94ccf607c2ce29644985b8c853.png" src="../_images/b770fd7e68d10567a6282851e45ae77dd401bb94ccf607c2ce29644985b8c853.png" />
+<img alt="../_images/47b1c554a5f2f577a56d530dd624902bfded9f84b19d77fea9f3b0f21ea74ae4.png" src="../_images/47b1c554a5f2f577a56d530dd624902bfded9f84b19d77fea9f3b0f21ea74ae4.png" />
 </div>
 </div>
 <p>Un tracciato della catena di Markov illustra questa esplorazione rappresentando il valore <span class="math notranslate nohighlight">\(\theta\)</span> sulle ordinate e l’indice progressivo di in ogni iterazione sull’ascissa. Il trace plot è estremamente utile per valutare la convergenza di un algoritmo MCMC e se è necessario escludere un periodo di campioni iniziali (noto come burn-in). Per produrre la traccia chiamiamo semplicemente <code class="docutils literal notranslate"><span class="pre">az.plot_trace()</span></code> con la variabile <code class="docutils literal notranslate"><span class="pre">idata</span></code>:</p>
@@ -1180,7 +1118,7 @@ Metropolis: [theta]
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3cf0053af04c564d70117b7f79466742b3e9e11bd992773a8825b8bf89433f88.png" src="../_images/3cf0053af04c564d70117b7f79466742b3e9e11bd992773a8825b8bf89433f88.png" />
+<img alt="../_images/2dfe73c438ddc42b59c411acfd2ebff61adf01c6436f9a6b87c34bd011e5e37e.png" src="../_images/2dfe73c438ddc42b59c411acfd2ebff61adf01c6436f9a6b87c34bd011e5e37e.png" />
 </div>
 </div>
 <p>Per combinare catene e iterazioni, utilizziamo la funzione <code class="docutils literal notranslate"><span class="pre">arviz.extract()</span></code>. Creiamo un oggetto <code class="docutils literal notranslate"><span class="pre">DataArray</span></code> di Xarray chiamato <code class="docutils literal notranslate"><span class="pre">post</span></code>.</p>
@@ -1562,15 +1500,15 @@ Coordinates:
   * chain    (sample) int64 0 0 0 0 0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3 3 3 3 3
   * draw     (sample) int64 0 1 2 3 4 5 6 7 ... 992 993 994 995 996 997 998 999
 Data variables:
-    theta    (sample) float64 0.2324 0.1455 0.1455 ... 0.1458 0.2254 0.1976
+    theta    (sample) float64 0.1323 0.1873 0.1866 ... 0.1662 0.1662 0.1662
 Attributes:
-    created_at:                 2024-02-06T12:59:43.097374
+    created_at:                 2024-02-08T20:52:49.520463
     arviz_version:              0.17.0
     inference_library:          pymc
     inference_library_version:  5.10.3
-    sampling_time:              37.882932901382446
-    tuning_steps:               1000</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-646f5912-7b9c-43be-b4bf-fdac182fbe72' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-646f5912-7b9c-43be-b4bf-fdac182fbe72' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>sample</span>: 4000</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-20b19871-f4a8-484c-9049-ae0305ac236e' class='xr-section-summary-in' type='checkbox'  checked><label for='section-20b19871-f4a8-484c-9049-ae0305ac236e' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>sample</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>MultiIndex</div><input id='attrs-1a971547-939e-43fd-a105-ac45bcbf3040' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-1a971547-939e-43fd-a105-ac45bcbf3040' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-42317003-3199-47b0-b907-c102b16cef2f' class='xr-var-data-in' type='checkbox'><label for='data-42317003-3199-47b0-b907-c102b16cef2f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([(0, 0), (0, 1), (0, 2), ..., (3, 997), (3, 998), (3, 999)], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>chain</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3</div><input id='attrs-c2762681-816e-4c01-b68c-7395c4646b99' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-c2762681-816e-4c01-b68c-7395c4646b99' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-aae98326-9812-4a6a-8c8d-327be0f81d77' class='xr-var-data-in' type='checkbox'><label for='data-aae98326-9812-4a6a-8c8d-327be0f81d77' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>draw</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 ... 995 996 997 998 999</div><input id='attrs-ba27b239-8645-41f8-8ecf-00d05f716fc9' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-ba27b239-8645-41f8-8ecf-00d05f716fc9' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1b690d8f-f1f4-4726-b7ce-55c1fb1f2ebb' class='xr-var-data-in' type='checkbox'><label for='data-1b690d8f-f1f4-4726-b7ce-55c1fb1f2ebb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([  0,   1,   2, ..., 997, 998, 999])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-14aae6a6-b9ee-45a1-b9ed-1ea553c7624b' class='xr-section-summary-in' type='checkbox'  checked><label for='section-14aae6a6-b9ee-45a1-b9ed-1ea553c7624b' class='xr-section-summary' >Data variables: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>theta</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.2324 0.1455 ... 0.2254 0.1976</div><input id='attrs-0ef2a7c4-97ea-405b-910a-7c681f1c959b' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-0ef2a7c4-97ea-405b-910a-7c681f1c959b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3844231d-7d49-4b58-ad07-45704d6aced3' class='xr-var-data-in' type='checkbox'><label for='data-3844231d-7d49-4b58-ad07-45704d6aced3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0.23244194, 0.14548853, 0.14548853, ..., 0.14576562, 0.22544406,
-       0.19762152])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-5b3b7bce-495e-442e-90d5-368c1ceab8a7' class='xr-section-summary-in' type='checkbox'  ><label for='section-5b3b7bce-495e-442e-90d5-368c1ceab8a7' class='xr-section-summary' >Indexes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>sample<br>chain<br>draw</div></div><div class='xr-index-preview'>PandasMultiIndex</div><div></div><input id='index-d38d6c92-4a94-4958-bda8-17b87bdf23ed' class='xr-index-data-in' type='checkbox'/><label for='index-d38d6c92-4a94-4958-bda8-17b87bdf23ed' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(MultiIndex([(0,   0),
+    sampling_time:              49.48812222480774
+    tuning_steps:               1000</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-1aa9223a-7053-4efc-a13b-529dad724984' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-1aa9223a-7053-4efc-a13b-529dad724984' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>sample</span>: 4000</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-de2c2202-6a20-4dcb-8fcb-019e0483a264' class='xr-section-summary-in' type='checkbox'  checked><label for='section-de2c2202-6a20-4dcb-8fcb-019e0483a264' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>sample</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>MultiIndex</div><input id='attrs-4b1c8c32-5af4-45aa-a0c6-b680a3841ffa' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-4b1c8c32-5af4-45aa-a0c6-b680a3841ffa' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2d198f46-4837-4755-afab-84c690d43fdf' class='xr-var-data-in' type='checkbox'><label for='data-2d198f46-4837-4755-afab-84c690d43fdf' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([(0, 0), (0, 1), (0, 2), ..., (3, 997), (3, 998), (3, 999)], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>chain</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3</div><input id='attrs-5634d09b-04d6-42bf-ab38-b2f375c518b9' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-5634d09b-04d6-42bf-ab38-b2f375c518b9' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-44f28c72-0927-41d6-a119-5cc47f1eb0ea' class='xr-var-data-in' type='checkbox'><label for='data-44f28c72-0927-41d6-a119-5cc47f1eb0ea' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>draw</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 ... 995 996 997 998 999</div><input id='attrs-781dec51-e789-461b-a301-dd84f89e69f6' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-781dec51-e789-461b-a301-dd84f89e69f6' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-970e1ca9-4bda-4c77-ac52-dcb378cc61f2' class='xr-var-data-in' type='checkbox'><label for='data-970e1ca9-4bda-4c77-ac52-dcb378cc61f2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([  0,   1,   2, ..., 997, 998, 999])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-77754cb9-3b9f-4ee1-b679-637743a3a3c6' class='xr-section-summary-in' type='checkbox'  checked><label for='section-77754cb9-3b9f-4ee1-b679-637743a3a3c6' class='xr-section-summary' >Data variables: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>theta</span></div><div class='xr-var-dims'>(sample)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.1323 0.1873 ... 0.1662 0.1662</div><input id='attrs-f156875f-8dc8-48a7-9383-d70f2181c31f' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-f156875f-8dc8-48a7-9383-d70f2181c31f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0d08b825-d344-41a6-a740-4b23d4f48df1' class='xr-var-data-in' type='checkbox'><label for='data-0d08b825-d344-41a6-a740-4b23d4f48df1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0.13234441, 0.1873298 , 0.18656009, ..., 0.16618408, 0.16618408,
+       0.16618408])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-d18c0b51-355f-4184-8b30-841307fbf881' class='xr-section-summary-in' type='checkbox'  ><label for='section-d18c0b51-355f-4184-8b30-841307fbf881' class='xr-section-summary' >Indexes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>sample<br>chain<br>draw</div></div><div class='xr-index-preview'>PandasMultiIndex</div><div></div><input id='index-cef3fd92-e76f-4c6c-b4ad-dc5e15dd6c80' class='xr-index-data-in' type='checkbox'/><label for='index-cef3fd92-e76f-4c6c-b4ad-dc5e15dd6c80' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(MultiIndex([(0,   0),
             (0,   1),
             (0,   2),
             (0,   3),
@@ -1591,7 +1529,7 @@ Attributes:
             (3, 997),
             (3, 998),
             (3, 999)],
-           name=&#x27;sample&#x27;, length=4000))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-0454eb7d-27ad-4c04-b630-ed90f853de2f' class='xr-section-summary-in' type='checkbox'  checked><label for='section-0454eb7d-27ad-4c04-b630-ed90f853de2f' class='xr-section-summary' >Attributes: <span>(6)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>created_at :</span></dt><dd>2024-02-06T12:59:43.097374</dd><dt><span>arviz_version :</span></dt><dd>0.17.0</dd><dt><span>inference_library :</span></dt><dd>pymc</dd><dt><span>inference_library_version :</span></dt><dd>5.10.3</dd><dt><span>sampling_time :</span></dt><dd>37.882932901382446</dd><dt><span>tuning_steps :</span></dt><dd>1000</dd></dl></div></li></ul></div></div></div></div>
+           name=&#x27;sample&#x27;, length=4000))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-eb738ca2-5fdb-48c8-8011-ccb04f8e7b3f' class='xr-section-summary-in' type='checkbox'  checked><label for='section-eb738ca2-5fdb-48c8-8011-ccb04f8e7b3f' class='xr-section-summary' >Attributes: <span>(6)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>created_at :</span></dt><dd>2024-02-08T20:52:49.520463</dd><dt><span>arviz_version :</span></dt><dd>0.17.0</dd><dt><span>inference_library :</span></dt><dd>pymc</dd><dt><span>inference_library_version :</span></dt><dd>5.10.3</dd><dt><span>sampling_time :</span></dt><dd>49.48812222480774</dd><dt><span>tuning_steps :</span></dt><dd>1000</dd></dl></div></li></ul></div></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1626,7 +1564,7 @@ Attributes:
 <span class="c1"># Plot the analytic prior and posterior beta distributions</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">x</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha_prior</span><span class="p">,</span> <span class="n">beta_prior</span><span class="p">),</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;A priori&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C2&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha_prior</span><span class="p">,</span> <span class="n">beta_prior</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;A priori&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C2&quot;</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">x</span><span class="p">,</span>
@@ -1646,7 +1584,7 @@ Attributes:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Densità&#39;)
 </pre></div>
 </div>
-<img alt="../_images/19db2dec3c2915220677cbda7e12a6e8c0cc6e99c4ce3fe7bab03a170dda8597.png" src="../_images/19db2dec3c2915220677cbda7e12a6e8c0cc6e99c4ce3fe7bab03a170dda8597.png" />
+<img alt="../_images/64dc1e11370f4d182ff38d00687a41e6d903b2b054f51bc738309e3692c13819.png" src="../_images/64dc1e11370f4d182ff38d00687a41e6d903b2b054f51bc738309e3692c13819.png" />
 </div>
 </div>
 <p>Si può osservare la coerenza tra le due soluzioni: l’istogramma segue da vicino la distribuzione a posteriori calcolata analiticamente, come da previsione.</p>

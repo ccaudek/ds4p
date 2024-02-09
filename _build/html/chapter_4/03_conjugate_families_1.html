@@ -309,7 +309,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -562,8 +563,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
+<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -603,7 +606,7 @@ document.write(`
 </div>
 <section id="esempio-1">
 <h3>Esempio 1<a class="headerlink" href="#esempio-1" title="Permalink to this heading">#</a></h3>
-<p>Uno studio ha esaminato un totale di 980 nascite, tra le quali 437 sono state femmine <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id111" title="Andrew Gelman, John B Carlin, Hal S Stern, and Donald B Rubin. Bayesian data analysis. Chapman and Hall/CRC, 1995.">GCSR95</a>]</span>. Per determinare la distribuzione a posteriori della proporzione di femmine, indicata con <span class="math notranslate nohighlight">\( \theta \)</span>, si è assunta una distribuzione a priori uniforme. Questo implica l’uso di una distribuzione Beta come prior, specificatamente <span class="math notranslate nohighlight">\( Beta(\alpha = 1, \beta = 1) \)</span>, che è equivalente a una distribuzione uniforme.</p>
+<p>Uno studio ha esaminato un totale di 980 nascite, tra le quali 437 sono state femmine <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id112" title="Andrew Gelman, John B Carlin, Hal S Stern, and Donald B Rubin. Bayesian data analysis. Chapman and Hall/CRC, 1995.">GCSR95</a>]</span>. Per determinare la distribuzione a posteriori della proporzione di femmine, indicata con <span class="math notranslate nohighlight">\( \theta \)</span>, si è assunta una distribuzione a priori uniforme. Questo implica l’uso di una distribuzione Beta come prior, specificatamente <span class="math notranslate nohighlight">\( Beta(\alpha = 1, \beta = 1) \)</span>, che è equivalente a una distribuzione uniforme.</p>
 <p>I dati specifici del problema sono: <span class="math notranslate nohighlight">\( y = 437 \)</span> femmine su <span class="math notranslate nohighlight">\( n = 980 \)</span> nascite totali. Applicando il teorema delle famiglie coniugate beta-binomiali, possiamo aggiornare i parametri della distribuzione Beta a priori con i dati osservati. La distribuzione a posteriori sarà quindi anch’essa una distribuzione Beta, ma con parametri aggiornati: <span class="math notranslate nohighlight">\( \alpha' = \alpha + y = 1 + 437 = 438 \)</span> e <span class="math notranslate nohighlight">\( \beta' = \beta + n - y = 1 + 980 - 437 = 544 \)</span>. Quindi, la distribuzione a posteriori della proporzione di femmine <span class="math notranslate nohighlight">\( \theta \)</span> è descritta dalla distribuzione <span class="math notranslate nohighlight">\( Beta(438, 544) \)</span>.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
@@ -651,7 +654,7 @@ document.write(`
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/cc5b58f314252ebaa7f1720716fa971b063f07146fd7265f5a2ed4749c24e2a7.png" src="../_images/cc5b58f314252ebaa7f1720716fa971b063f07146fd7265f5a2ed4749c24e2a7.png" />
+<img alt="../_images/0997b8b8c939c962422d75a8e267c0345a0014993c559da25f6373d3ab1e9f54.png" src="../_images/0997b8b8c939c962422d75a8e267c0345a0014993c559da25f6373d3ab1e9f54.png" />
 </div>
 </div>
 </section>
@@ -706,7 +709,7 @@ document.write(`
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/f96abd7317797b4b1bab054340c9aa6ea6fa607c8accb75cac37d4055af8b5e9.png" src="../_images/f96abd7317797b4b1bab054340c9aa6ea6fa607c8accb75cac37d4055af8b5e9.png" />
+<img alt="../_images/5dbb4487a379a742f999ee4517b1e2ef7dc7906c615aaff0a7dd0a7f4c839732.png" src="../_images/5dbb4487a379a742f999ee4517b1e2ef7dc7906c615aaff0a7dd0a7f4c839732.png" />
 </div>
 </div>
 </section>
@@ -794,7 +797,7 @@ dtype: float64
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/f4cd9e83467147bee14f4a56549cf0e789a8a60891889db64480d430c040547f.png" src="../_images/f4cd9e83467147bee14f4a56549cf0e789a8a60891889db64480d430c040547f.png" />
+<img alt="../_images/62711d37bfe419908d2168727c7b8624ba432eaf6222723ea36cabdc2afcc353.png" src="../_images/62711d37bfe419908d2168727c7b8624ba432eaf6222723ea36cabdc2afcc353.png" />
 </div>
 </div>
 <p>Tuttavia, in questo caso la nostra incertezza a priori sul valore del parametro è minore, come indicato dall’intervallo di credibilità ordine 0.94.</p>
@@ -907,11 +910,11 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_2673/1990880785.py:16: RuntimeWarning: divide by zero encountered in log
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_72096/1990880785.py:16: RuntimeWarning: divide by zero encountered in log
   log_likelihood = y * np.log(theta) + (n - y) * np.log(1 - theta)
 </pre></div>
 </div>
-<img alt="../_images/aafec70549b2ab019494ca84e4074fed3abcadc80c022e5532ba1f8c9f0e0559.png" src="../_images/aafec70549b2ab019494ca84e4074fed3abcadc80c022e5532ba1f8c9f0e0559.png" />
+<img alt="../_images/b5deb985ab70f9c07bd58a291ba3459d5fb2d29884c7754893d911d90e7ffa96.png" src="../_images/b5deb985ab70f9c07bd58a291ba3459d5fb2d29884c7754893d911d90e7ffa96.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -931,12 +934,12 @@ dtype: float64
 </section>
 <section id="la-ricerca-sull-obbedienza-di-milgram">
 <h3>La ricerca sull’obbedienza di Milgram<a class="headerlink" href="#la-ricerca-sull-obbedienza-di-milgram" title="Permalink to this heading">#</a></h3>
-<p>Consideriamo un altro esempio relativo alla ricerca di Stanley Milgram discussa da <span id="id2">Johnson <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id92" title="Alicia A. Johnson, Miles Ott, and Mine Dogucu. Bayes Rules! An Introduction to Bayesian Modeling with R. CRC Press, 2022.">JOD22</a>]</span>. Nel 1963, Stanley Milgram presentò una ricerca sulla propensione delle persone a obbedire agli ordini di figure di autorità, anche quando tali ordini possono danneggiare altre persone <span id="id3">Milgram [<a class="reference internal" href="../references/bibliography.html#id91" title="Stanley Milgram. Behavioral study of obedience. The Journal of Abnormal and Social Psychology, 67(4):371-378, 1963.">Mil63</a>]</span>. Nell’articolo, Milgram descrive lo studio come</p>
+<p>Consideriamo un altro esempio relativo alla ricerca di Stanley Milgram discussa da <span id="id2">Johnson <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id93" title="Alicia A. Johnson, Miles Ott, and Mine Dogucu. Bayes Rules! An Introduction to Bayesian Modeling with R. CRC Press, 2022.">JOD22</a>]</span>. Nel 1963, Stanley Milgram presentò una ricerca sulla propensione delle persone a obbedire agli ordini di figure di autorità, anche quando tali ordini possono danneggiare altre persone <span id="id3">Milgram [<a class="reference internal" href="../references/bibliography.html#id92" title="Stanley Milgram. Behavioral study of obedience. The Journal of Abnormal and Social Psychology, 67(4):371-378, 1963.">Mil63</a>]</span>. Nell’articolo, Milgram descrive lo studio come</p>
 <blockquote>
 <div><p>consist[ing] of ordering a naive subject to administer electric shock to a victim. A simulated shock generator is used, with 30 clearly marked voltage levels that range from IS to 450 volts. The instrument bears verbal designations that range from Slight Shock to Danger: Severe Shock. The responses of the victim, who is a trained confederate of the experimenter, are standardized. The orders to administer shocks are given to the naive subject in the context of a “learning experiment” ostensibly set up to study the effects of punishment on memory. As the experiment proceeds the naive subject is commanded to administer increasingly more intense shocks to the victim, even to the point of reaching the level marked Danger: Severe Shock.</p>
 </div></blockquote>
 <p>All’insaputa del partecipante, gli shock elettrici erano falsi e l’attore stava solo fingendo di provare il dolore dello shock.</p>
-<p><span id="id4">Johnson <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id92" title="Alicia A. Johnson, Miles Ott, and Mine Dogucu. Bayes Rules! An Introduction to Bayesian Modeling with R. CRC Press, 2022.">JOD22</a>]</span> fanno inferenza sui risultati dello studio di Milgram mediante il modello Beta-Binomiale. Il parametro di interesse è la probabilità <span class="math notranslate nohighlight">\(\theta\)</span> che una persona obbedisca all’autorità, anche se ciò comporta il rischio di recare danno ad altri, in questo caso somministrando lo shock più severo. Gli autori ipotizzano che, prima di raccogliere dati, le credenze di Milgram riguardo a <span class="math notranslate nohighlight">\(\theta\)</span> possano essere rappresentate mediante una distribuzione Beta con parametri <span class="math notranslate nohighlight">\(\alpha=1\)</span> e <span class="math notranslate nohighlight">\(\beta=10\)</span>.</p>
+<p><span id="id4">Johnson <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id93" title="Alicia A. Johnson, Miles Ott, and Mine Dogucu. Bayes Rules! An Introduction to Bayesian Modeling with R. CRC Press, 2022.">JOD22</a>]</span> fanno inferenza sui risultati dello studio di Milgram mediante il modello Beta-Binomiale. Il parametro di interesse è la probabilità <span class="math notranslate nohighlight">\(\theta\)</span> che una persona obbedisca all’autorità, anche se ciò comporta il rischio di recare danno ad altri, in questo caso somministrando lo shock più severo. Gli autori ipotizzano che, prima di raccogliere dati, le credenze di Milgram riguardo a <span class="math notranslate nohighlight">\(\theta\)</span> possano essere rappresentate mediante una distribuzione Beta con parametri <span class="math notranslate nohighlight">\(\alpha=1\)</span> e <span class="math notranslate nohighlight">\(\beta=10\)</span>.</p>
 <p>Sia <span class="math notranslate nohighlight">\(y = 26\)</span> il numero di soggetti, su un totale di 40 partecipanti, che hanno accettato di infliggere lo shock più severo. Poiché si assume che ciascun partecipante si comporti in modo indipendente dagli altri, la dipendenza di <span class="math notranslate nohighlight">\(y\)</span> da <span class="math notranslate nohighlight">\(\theta\)</span> può essere modellata mediante la distribuzione binomiale. Di conseguenza, si giunge al seguente modello bayesiano Beta-Binomiale:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -984,11 +987,11 @@ y \mid \theta &amp; \sim \text{Bin}(n = 40, \theta) \notag\\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_2673/431063134.py:16: RuntimeWarning: divide by zero encountered in log
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_72096/431063134.py:16: RuntimeWarning: divide by zero encountered in log
   log_likelihood = y * np.log(theta) + (n - y) * np.log(1 - theta)
 </pre></div>
 </div>
-<img alt="../_images/d249371ac5de98f7df47fee09bc0772f29cc7469542ee86ac99033985ebfebc3.png" src="../_images/d249371ac5de98f7df47fee09bc0772f29cc7469542ee86ac99033985ebfebc3.png" />
+<img alt="../_images/dd145fd00e9f02c8537dbd37e07c9d07f4f46f05ef6b7ccd7f718db956bd7aca.png" src="../_images/dd145fd00e9f02c8537dbd37e07c9d07f4f46f05ef6b7ccd7f718db956bd7aca.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1030,7 +1033,7 @@ y \mid \theta &amp; \sim \text{Bin}(n = 40, \theta) \notag\\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Feb 07 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Feb 08 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
@@ -1047,8 +1050,8 @@ Architecture: 64bit
 pandas    : 2.1.4
 numpy     : 1.26.2
 seaborn   : 0.13.0
-matplotlib: 3.8.2
 scipy     : 1.11.4
+matplotlib: 3.8.2
 arviz     : 0.17.0
 
 Watermark: 2.4.3

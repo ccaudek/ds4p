@@ -199,6 +199,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
@@ -308,7 +309,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -551,7 +553,6 @@ conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> <
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="kn">import</span> <span class="nn">pymc.sampling_jax</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
@@ -570,8 +571,10 @@ conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> <
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
+<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -629,7 +632,7 @@ y &amp;\sim Bin(n, \theta) \notag\\
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/12c5588ed28bd0aa9387da23095755f75efa2b8aa4a2a13c756cc661f282973c.svg" src="../_images/12c5588ed28bd0aa9387da23095755f75efa2b8aa4a2a13c756cc661f282973c.svg" /></div>
+<img alt="../_images/0370d275c38850d69d7da4dc24abb98737ceb4b3e8ec9b53673a4a2f7b87550d.svg" src="../_images/0370d275c38850d69d7da4dc24abb98737ceb4b3e8ec9b53673a4a2f7b87550d.svg" /></div>
 </div>
 </section>
 <section id="esecuzione-del-campionamento">
@@ -779,7 +782,7 @@ y &amp;\sim Bin(n, \theta) \notag\\
 </div>
 </details>
 </div>
-<p>Sul mio computer questo richiede circa 27 s.</p>
+<p>Sul mio computer questo richiede circa 40 s.</p>
 <p>Ripetiamo ora il campionamento, facendo ricorso al campionatore JAX. Per quel che riguarda il codice, useremo l’istruzione <code class="docutils literal notranslate"><span class="pre">pm.sampling_jax.sample_numpyro_nuts()</span></code>.</p>
 <div class="cell tag_hide-output docutils container">
 <div class="cell_input above-output-prompt docutils container">
@@ -795,24 +798,13 @@ y &amp;\sim Bin(n, \theta) \notag\\
 </summary>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
-Compilation time = 0:00:00.423410
+Compilation time = 0:00:00.365280
 Sampling...
-Compiling.. :   0%|          | 0/2000 [00:00&lt;?, ?it/s]
-
-
-
-
-
-
-Running chain 0:   0%|          | 0/2000 [00:01&lt;?, ?it/s]
-
-Running chain 0: 100%|██████████| 2000/2000 [00:01&lt;00:00, 1634.45it/s]
-Running chain 1: 100%|██████████| 2000/2000 [00:01&lt;00:00, 1635.36it/s]
-Running chain 2: 100%|██████████| 2000/2000 [00:01&lt;00:00, 1637.21it/s]
-Running chain 3: 100%|██████████| 2000/2000 [00:01&lt;00:00, 1638.84it/s]
-Sampling time = 0:00:01.692861
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ab7046f41701476495e2398296f6bdd0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "504d2258bb6b44809996a188a4e49049", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "00665850f3f04586b4e2ebcffc242b46", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2725e5391b39480f8db3e4082a2a2961", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.160837
 Transforming variables...
-Transformation time = 0:00:00.064262
+Transformation time = 0:00:00.034646
 </pre></div>
 </div>
 </div>
@@ -822,16 +814,12 @@ Transformation time = 0:00:00.064262
 <p>Una volta ottenuto l’oggetto <code class="docutils literal notranslate"><span class="pre">idata</span></code>, questo può essere manipolato come abbiamo fatto in precedenza. Per esempio, per produrre la traccia e la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> chiamiamo <code class="docutils literal notranslate"><span class="pre">az.plot_trace()</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">idata2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">idata2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[&lt;Axes: title={&#39;center&#39;: &#39;theta&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;theta&#39;}&gt;]], dtype=object)
-</pre></div>
-</div>
-<img alt="../_images/7a6bd064e932e1bd0974822ac6d488a9d6989a4e465da517bd31454f3a20ef3a.png" src="../_images/7a6bd064e932e1bd0974822ac6d488a9d6989a4e465da517bd31454f3a20ef3a.png" />
+<img alt="../_images/4218217f313c6193a49ba76442062611b95b68cc2f781754c1fceda0ef669f2c.png" src="../_images/4218217f313c6193a49ba76442062611b95b68cc2f781754c1fceda0ef669f2c.png" />
 </div>
 </div>
 <p>Per un sommario della distribuzione a posteriori usiamo <code class="docutils literal notranslate"><span class="pre">az.summary()</span></code>.</p>
@@ -876,12 +864,12 @@ Transformation time = 0:00:00.064262
       <th>theta</th>
       <td>0.163</td>
       <td>0.035</td>
-      <td>0.094</td>
-      <td>0.222</td>
+      <td>0.101</td>
+      <td>0.23</td>
       <td>0.001</td>
       <td>0.001</td>
-      <td>1574.0</td>
-      <td>1664.0</td>
+      <td>1433.0</td>
+      <td>2043.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -895,12 +883,12 @@ Transformation time = 0:00:00.064262
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
-<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p jax
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p jax -m
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Jan 23 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Feb 09 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
@@ -908,12 +896,19 @@ IPython version      : 8.19.0
 
 jax: 0.4.23
 
-numpy     : 1.26.2
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.3.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
 scipy     : 1.11.4
-pymc      : 5.10.3
-matplotlib: 3.8.2
 arviz     : 0.17.0
-seaborn   : 0.13.0
+pymc      : 5.10.3
+numpy     : 1.26.2
+matplotlib: 3.8.2
 
 Watermark: 2.4.3
 </pre></div>

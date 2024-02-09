@@ -309,7 +309,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -547,7 +548,7 @@ document.write(`
 <span id="cap-subj-prop"></span><h1>Pensare ad una proporzione in termini soggettivi<a class="headerlink" href="#pensare-ad-una-proporzione-in-termini-soggettivi" title="Permalink to this heading">#</a></h1>
 <p>Questo capitolo ha l’obiettivo di chiarire il concetto di aggiornamento bayesiano, introdotto nel capitolo precedente, attraverso l’uso di un esempio numerico in una situazione particolarmente semplice. In particolare, esamineremo come sia possibile aggiornare le nostre credenze riguardo alla probabilità (<span class="math notranslate nohighlight">\(\theta\)</span>) di un evento specifico.</p>
 <p>Cominceremo affrontando la questione della rappresentazione delle credenze iniziali, cioè le opinioni che abbiamo prima di osservare i dati, mediante l’uso di una distribuzione a priori. Successivamente, spiegheremo i calcoli necessari per ottenere la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span>. Questa distribuzione riflette la nostra credenza aggiornata su <span class="math notranslate nohighlight">\(\theta\)</span> dopo aver osservato i dati. La distribuzione a posteriori si ottiene moltiplicando la distribuzione a priori per la verosimiglianza e quindi normalizzando il risultato mediante una costante.</p>
-<p>Nel corso di questo capitolo, ci concentreremo sul caso più semplice, ovvero il modello binomiale. Inizieremo esaminando il contesto in cui la distribuzione a priori è discreta e successivamente esploreremo il caso in cui questa assume una forma continua. Per una trattazione più approfondita, è possibile fare riferimento al settimo capitolo del libro di <span id="id1">Albert and Hu [<a class="reference internal" href="../references/bibliography.html#id64" title="Jim Albert and Jingchen Hu. Probability and Bayesian Modeling. Chapman and Hall/CRC, 2019.">AH19</a>]</span>.</p>
+<p>Nel corso di questo capitolo, ci concentreremo sul caso più semplice, ovvero il modello binomiale. Inizieremo esaminando il contesto in cui la distribuzione a priori è discreta e successivamente esploreremo il caso in cui questa assume una forma continua. Per una trattazione più approfondita, è possibile fare riferimento al settimo capitolo del libro di <span id="id1">Albert and Hu [<a class="reference internal" href="../references/bibliography.html#id65" title="Jim Albert and Jingchen Hu. Probability and Bayesian Modeling. Chapman and Hall/CRC, 2019.">AH19</a>]</span>.</p>
 <section id="preparazione-del-notebook">
 <h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -555,10 +556,9 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">preliz</span> <span class="k">as</span> <span class="nn">pz</span>
 </pre></div>
 </div>
 </div>
@@ -568,8 +568,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
+<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -577,8 +579,8 @@ document.write(`
 </section>
 <section id="flusso-di-lavoro">
 <h2>Flusso di lavoro<a class="headerlink" href="#flusso-di-lavoro" title="Permalink to this heading">#</a></h2>
-<p>Proseguiamo con l’esempio di <span id="id2">McElreath [<a class="reference internal" href="../references/bibliography.html#id114" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> discusso nel precedente capitolo. Supponiamo di volere stimare la proporzione della superficie terrestre coperta d’acqua. Usiamo il metodo proposto da <span id="id3">McElreath [<a class="reference internal" href="../references/bibliography.html#id114" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>: lanciamo in aria il mappamondo e registriamo se la superficie sotto il nostro indice destro è terra o acqua. In 9 lanci otteniamo “acqua” 6 volte e “terra” 3 volte. Questi sono i dati dell’esperimento casuale.</p>
-<p>Prima di procedere, ricordiamo il flusso di lavoro proposto da <span id="id4">McElreath [<a class="reference internal" href="../references/bibliography.html#id114" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>:</p>
+<p>Proseguiamo con l’esempio di <span id="id2">McElreath [<a class="reference internal" href="../references/bibliography.html#id115" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> discusso nel precedente capitolo. Supponiamo di volere stimare la proporzione della superficie terrestre coperta d’acqua. Usiamo il metodo proposto da <span id="id3">McElreath [<a class="reference internal" href="../references/bibliography.html#id115" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>: lanciamo in aria il mappamondo e registriamo se la superficie sotto il nostro indice destro è terra o acqua. In 9 lanci otteniamo “acqua” 6 volte e “terra” 3 volte. Questi sono i dati dell’esperimento casuale.</p>
+<p>Prima di procedere, ricordiamo il flusso di lavoro proposto da <span id="id4">McElreath [<a class="reference internal" href="../references/bibliography.html#id115" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>:</p>
 <section id="definire-un-modello-generativo-del-campione">
 <h3>1. Definire un Modello Generativo del Campione<a class="headerlink" href="#definire-un-modello-generativo-del-campione" title="Permalink to this heading">#</a></h3>
 <p>Un modello generativo descrive come i tuoi dati sono stati generati. In questo caso, consideriamo ogni lancio del globo come una prova di Bernoulli con due esiti possibili: acqua (A) o terra (T). Sia <span class="math notranslate nohighlight">\( \theta \)</span> la probabilità di osservare acqua in ogni lancio. Il modello assume che ogni lancio sia indipendente e identicamente distribuito. Il processo generativo può essere descritto come:</p>
@@ -613,13 +615,13 @@ L(p) = {9 \choose 6} \theta^6 (1-\theta)^3.
 <section id="analizzare-il-campione-riassumere">
 <h3>5. Analizzare il Campione, Riassumere<a class="headerlink" href="#analizzare-il-campione-riassumere" title="Permalink to this heading">#</a></h3>
 <p>Infine, analizziamo i dati reali. Questo comporta il calcolo della distribuzione a posteriori (in generale, utilizzando metodi computazionali come il Markov Chain Monte Carlo, MCMC) e riassumerla per fare inferenza su <span class="math notranslate nohighlight">\( \theta \)</span>. Possiamo riassumere la distribuzione a posteriori utilizzando misure come la media, la mediana e gli intervalli di credibilità.</p>
-<p>In questo capitolo mostreremo come sia possibile generare la distribuzione a posteriori con metodi numerici. Nei capitoli successivi esploreremo gli altri passi del flusso di lavoro proposto da <span id="id5">McElreath [<a class="reference internal" href="../references/bibliography.html#id114" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>.</p>
+<p>In questo capitolo mostreremo come sia possibile generare la distribuzione a posteriori con metodi numerici. Nei capitoli successivi esploreremo gli altri passi del flusso di lavoro proposto da <span id="id5">McElreath [<a class="reference internal" href="../references/bibliography.html#id115" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>.</p>
 </section>
 </section>
 <section id="aggiornamento-bayesiano-con-una-distribuzione-a-priori-discreta">
 <h2>Aggiornamento bayesiano con una distribuzione a priori discreta<a class="headerlink" href="#aggiornamento-bayesiano-con-una-distribuzione-a-priori-discreta" title="Permalink to this heading">#</a></h2>
 <p>L’aggiornamento bayesiano è un processo fondamentale nell’ambito della statistica bayesiana, in cui le nostre conoscenze e convinzioni precedenti (priori) vengono aggiornate in base a nuove evidenze o dati, portando a una conoscenza aggiornata (posteriore).</p>
-<p>L’esempio presente  considera il problema di determinare la distribuzione a posteriori del parametro sconosciuto <span class="math notranslate nohighlight">\(\theta\)</span> (probabilità di “acqua”) [per una versione leggermente diversa di questo problema, si veda <span id="id6">Albert and Hu [<a class="reference internal" href="../references/bibliography.html#id64" title="Jim Albert and Jingchen Hu. Probability and Bayesian Modeling. Chapman and Hall/CRC, 2019.">AH19</a>]</span>]. In assenza di informazioni specifiche su <span class="math notranslate nohighlight">\(\theta\)</span>, potremmo essere tentati di assegnare a <span class="math notranslate nohighlight">\(\theta\)</span> un valore arbitrario, come 0.5, ma questo non riflette adeguatamente la nostra incertezza. Invece, è più appropriato considerare un insieme di valori possibili per <span class="math notranslate nohighlight">\(\theta\)</span>, ciascuno con un certo grado di credibilità.</p>
+<p>L’esempio presente  considera il problema di determinare la distribuzione a posteriori del parametro sconosciuto <span class="math notranslate nohighlight">\(\theta\)</span> (probabilità di “acqua”) [per una versione leggermente diversa di questo problema, si veda <span id="id6">Albert and Hu [<a class="reference internal" href="../references/bibliography.html#id65" title="Jim Albert and Jingchen Hu. Probability and Bayesian Modeling. Chapman and Hall/CRC, 2019.">AH19</a>]</span>]. In assenza di informazioni specifiche su <span class="math notranslate nohighlight">\(\theta\)</span>, potremmo essere tentati di assegnare a <span class="math notranslate nohighlight">\(\theta\)</span> un valore arbitrario, come 0.5, ma questo non riflette adeguatamente la nostra incertezza. Invece, è più appropriato considerare un insieme di valori possibili per <span class="math notranslate nohighlight">\(\theta\)</span>, ciascuno con un certo grado di credibilità.</p>
 <p>Per rappresentare questa incertezza, possiamo utilizzare una distribuzione a priori discreta. Questa distribuzione assegna una probabilità a ciascun valore plausibile di <span class="math notranslate nohighlight">\(\theta\)</span>, permettendoci di esprimere in modo chiaro e completo la nostra opinione iniziale su questi valori.</p>
 <p>Ad esempio, se consideriamo undici valori potenziali per <span class="math notranslate nohighlight">\(\theta\)</span>, potremmo assegnare una probabilità a priori a ciascuno di questi valori. Questi valori potrebbero essere, per esempio, 0, 0.1, 0.2, …, fino a 1. La distribuzione a priori potrebbe essere uniforme, dove ogni valore ha la stessa probabilità, oppure potrebbe essere non uniforme, riflettendo credenze specifiche su alcuni valori di <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
 <p>Una volta osservati i dati (ad esempio, 6 volte “acqua” e 3 volte “terra”), queste informazioni vengono incorporate nella distribuzione a priori per aggiornarla in una distribuzione a posteriori. Questo si fa tramite il teorema di Bayes, che combina la probabilità a priori di <span class="math notranslate nohighlight">\(\theta\)</span> con la verosimiglianza dei dati osservati per ottenere la probabilità a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
@@ -666,7 +668,7 @@ L(p) = {9 \choose 6} \theta^6 (1-\theta)^3.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c226f1323391977e281b6680bb58a14f1b0f794595fc9a673268a99847b2bb65.png" src="../_images/c226f1323391977e281b6680bb58a14f1b0f794595fc9a673268a99847b2bb65.png" />
+<img alt="../_images/5da118b6deec143b47d3220bf0c9e9541339b8f72d6fe3df554a8c6370dbbc9b.png" src="../_images/5da118b6deec143b47d3220bf0c9e9541339b8f72d6fe3df554a8c6370dbbc9b.png" />
 </div>
 </div>
 <p>Se, al contrario, riteniamo che i valori centrali nella distribuzione di <span class="math notranslate nohighlight">\(\theta\)</span> siano più credibili rispetto a quelli situati agli estremi, possiamo esprimere questa opinione soggettiva mediante la seguente distribuzione di massa di probabilità.</p>
@@ -681,7 +683,7 @@ L(p) = {9 \choose 6} \theta^6 (1-\theta)^3.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4d8f6736c60dbf744d0b67853e9e39f545982bd59ec9de3bbb9ba1cadc5ad2f3.png" src="../_images/4d8f6736c60dbf744d0b67853e9e39f545982bd59ec9de3bbb9ba1cadc5ad2f3.png" />
+<img alt="../_images/45d358c9ea14996de5b1cd6f61fdaaa17115a887a324dbbc45e5d63213e4fee8.png" src="../_images/45d358c9ea14996de5b1cd6f61fdaaa17115a887a324dbbc45e5d63213e4fee8.png" />
 </div>
 </div>
 <p>La prima distribuzione di probabilità rappresenta una distribuzione discreta uniforme poiché assegna la stessa probabilità a ciascun elemento dell’insieme discreto su cui è definita, ossia i valori <span class="math notranslate nohighlight">\({0, 0.1, 0.2, \dots, 1.0}\)</span>. La seconda distribuzione di probabilità, pur essendo discreta, segue un andamento non uniforme: si presume che <span class="math notranslate nohighlight">\(\theta\)</span> abbia una probabilità maggiore di assumere un valore dall’insieme <span class="math notranslate nohighlight">\({0.4, 0.5, 0.6, 0.7}\)</span> rispetto all’insieme <span class="math notranslate nohighlight">\({0.1, 0.2, 0.3, 0.8, 0.9, 1.0}\)</span>.</p>
@@ -720,7 +722,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/185724c8cd0bc4874e2b5d28feb880ee26cbeb6202b2821fb87e4e58a7317992.png" src="../_images/185724c8cd0bc4874e2b5d28feb880ee26cbeb6202b2821fb87e4e58a7317992.png" />
+<img alt="../_images/32f575be8b48eb2148373503fcb50d5032c451c729bd23f153acdac1a10f0fa9.png" src="../_images/32f575be8b48eb2148373503fcb50d5032c451c729bd23f153acdac1a10f0fa9.png" />
 </div>
 </div>
 <p>Per calcolare la distribuzione a posteriori, eseguiamo una moltiplicazione elemento per elemento tra il vettore contenente i valori della distribuzione a priori e il vettore contenente i valori della funzione di verosimiglianza. Usando Python, il risultato si trova nel modo seguente.</p>
@@ -806,7 +808,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/87aa0c2ca15f54b0c8cd2a09c929cb5d26c5abf6093b889ba84d1ec1901b2458.png" src="../_images/87aa0c2ca15f54b0c8cd2a09c929cb5d26c5abf6093b889ba84d1ec1901b2458.png" />
+<img alt="../_images/994f66dd1d0db2e06c4694357fddfe8b9f94720d2505c1dff2fde14240a20426.png" src="../_images/994f66dd1d0db2e06c4694357fddfe8b9f94720d2505c1dff2fde14240a20426.png" />
 </div>
 </div>
 <p>Una volta trovata la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span>, possiamo calcolare altre quantità di interesse. Ad esempio, la moda a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> può essere individuata direttamente dal grafico precedente e risulta pari a 0.6. Per calcolare invece la media a posteriori, ci avvaliamo della formula del valore atteso delle variabili casuali.</p>
@@ -840,28 +842,64 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 <section id="aggiornamento-bayesiano-con-una-distribuzione-a-priori-continua">
 <h2>Aggiornamento bayesiano con una distribuzione a priori continua<a class="headerlink" href="#aggiornamento-bayesiano-con-una-distribuzione-a-priori-continua" title="Permalink to this heading">#</a></h2>
 <p>A fini didattici, abbiamo esaminato il caso di una distribuzione a priori discreta. Tuttavia, è importante notare che l’impiego di una distribuzione a priori continua, come la distribuzione Beta, risulta più appropriato in quanto permette di rappresentare un’ampia gamma di possibili valori per il parametro non noto <span class="math notranslate nohighlight">\(\theta\)</span>, senza essere vincolati a un insieme discreto di valori. Inoltre, la distribuzione Beta presenta l’ulteriore vantaggio di avere un dominio definito nell’intervallo [0, 1], che corrisponde alla gamma dei possibili valori per la proporzione <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
-<p>Per esempio, consideriamo la distribuzione Beta(2, 2), caratterizzata da una simmetria nella sua forma. Per valutare la distribuzione Beta in corrispondenza di punti specifici, come ad esempio 0.5, 0.8 e 1.2, possiamo fare affidamento sulla funzione <code class="docutils literal notranslate"><span class="pre">beta.pdf</span></code>. A titolo illustrativo, la densità di probabilità della distribuzione Beta(2, 2) nel caso del valore 0.5 risulta essere 1.5, suggerendo che i valori di <span class="math notranslate nohighlight">\(\theta\)</span> vicini a 0.5 appaiono più plausibili rispetto a quelli intorno a 0.8, dove la funzione assume un valore di 0.96. È importante sottolineare che la densità di probabilità della distribuzione Beta(2, 2) relativa al valore 1.2 è pari a 0, poiché tale valore esula dall’intervallo di definizione della distribuzione (0 e 1).</p>
-<p>La distribuzione Beta(2, 2) è illustrata nella figura qui di seguito.</p>
+<p>Per esempio, consideriamo la distribuzione Beta(2, 2), caratterizzata da una simmetria nella sua forma. Per valutare la distribuzione Beta in corrispondenza di punti specifici, come ad esempio 0.5, 0.8 e 1.2, possiamo fare affidamento sulla funzione <code class="docutils literal notranslate"><span class="pre">beta.pdf</span></code>. A titolo illustrativo, la densità di probabilità della distribuzione Beta(2, 2) nel caso del valore 0.5 risulta essere 1.5, suggerendo che i valori di <span class="math notranslate nohighlight">\(\theta\)</span> vicini a 0.5 appaiono più plausibili rispetto a quelli intorno a 0.8, dove la funzione assume un valore di 0.96. È importante sottolineare che la densità di probabilità della distribuzione Beta(2, 2) relativa al valore 1.2 è pari a 0, poiché tale valore esula dall’intervallo di definizione della distribuzione (0 e 1). La distribuzione Beta(2, 2) è illustrata nella figura qui di seguito.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pz</span><span class="o">.</span><span class="n">Beta</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">plot_pdf</span><span class="p">(</span><span class="n">pointinterval</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2675146f7ce0e486840dda114d2bf16e8a8a29b30619198776fea2dcd4cd6bd6.png" src="../_images/2675146f7ce0e486840dda114d2bf16e8a8a29b30619198776fea2dcd4cd6bd6.png" />
+<img alt="../_images/7faf056036b83ab7b558c385d9bcf1ac4697ee10d1d475f383e40e0ad0cdbe06.png" src="../_images/7faf056036b83ab7b558c385d9bcf1ac4697ee10d1d475f383e40e0ad0cdbe06.png" />
 </div>
 </div>
-<p>Nel seguente esempio, useremo la funzione <code class="docutils literal notranslate"><span class="pre">beta.pdf()</span></code> per generare una distribuzione a priori discretizzata. Supponiamo – solo allo scopo di illustrare la procedura – che le nostre credenze a priori siano rappresentate da una Beta(2, 5).</p>
+<p>Supponiamo – solo allo scopo di illustrare la procedura – che le nostre credenze a priori siano rappresentate da una Beta(2, 5).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pz</span><span class="o">.</span><span class="n">Beta</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">plot_pdf</span><span class="p">(</span><span class="n">pointinterval</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f59cceb2efd1d91e1ed2fc868c0e71607f3f4f835af8d69e60621981a90f7476.png" src="../_images/f59cceb2efd1d91e1ed2fc868c0e71607f3f4f835af8d69e60621981a90f7476.png" />
+<img alt="../_images/8020f8c19369e8e11b226cedded690fade57e4d68ec7c317bc98633cd2902fda.png" src="../_images/8020f8c19369e8e11b226cedded690fade57e4d68ec7c317bc98633cd2902fda.png" />
+</div>
+</div>
+<p>Nel seguente esempio, useremo la funzione <code class="docutils literal notranslate"><span class="pre">beta.pdf()</span></code> per generare una distribuzione a priori discretizzata.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.     1.9683 2.4576 2.1609 1.5552 0.9375 0.4608 0.1701 0.0384 0.0027
+ 0.    ]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/360e1db1cb2a54b3354166865758483482309e4b650ba34bd0b51c3839dcef87.png" src="../_images/360e1db1cb2a54b3354166865758483482309e4b650ba34bd0b51c3839dcef87.png" />
+</div>
+</div>
+<p>Ora però usiamo un numero maggiore di valori <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.    0.001 0.002 ... 0.998 0.999 1.   ]
+</pre></div>
+</div>
 </div>
 </div>
 <p>Calcoliamo la distribuzione a priori normalizzata.</p>
@@ -869,6 +907,25 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prior</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> 
 <span class="n">prior</span> <span class="o">=</span> <span class="n">prior</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">prior</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prior</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.00000000e+00 2.98802546e-05 5.95215869e-05 ... 4.79041198e-13
+ 2.99700749e-14 0.00000000e+00]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">sum</span><span class="p">(</span><span class="n">prior</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.0000000000000002
 </pre></div>
 </div>
 </div>
@@ -878,6 +935,13 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lk</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
 <span class="n">lk</span> <span class="o">=</span> <span class="n">lk</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lk</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lk</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.00000000e+00 8.37482519e-19 5.34380847e-17 ... 6.63976213e-09
+ 8.34972583e-10 0.00000000e+00]
 </pre></div>
 </div>
 </div>
@@ -897,7 +961,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.0
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.0000000000000002
 </pre></div>
 </div>
 </div>
@@ -915,7 +979,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a820e90e7ef45a22cbe30d63e8d03bebb4ced9338c5b90dd3456eeedfeec4eb7.png" src="../_images/a820e90e7ef45a22cbe30d63e8d03bebb4ced9338c5b90dd3456eeedfeec4eb7.png" />
+<img alt="../_images/0c3b39cee22842f67bdc95ef1e6bc784a2a3727c454c226727fd2656e7c43ea9.png" src="../_images/0c3b39cee22842f67bdc95ef1e6bc784a2a3727c454c226727fd2656e7c43ea9.png" />
 </div>
 </div>
 <p>Possiamo calcolare la media e la deviazione standard della distribuzione a posteriori come abbiamo fatto in precedenza.</p>
@@ -927,7 +991,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5000000000000001
 </pre></div>
 </div>
 </div>
@@ -940,7 +1004,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.1212678125181665
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.12126781251816628
 </pre></div>
 </div>
 </div>
@@ -976,11 +1040,11 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_2666/3061577581.py:12: UserWarning: The figure layout has changed to tight
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_84696/3061577581.py:12: UserWarning: The figure layout has changed to tight
   plt.tight_layout()
 </pre></div>
 </div>
-<img alt="../_images/6944727eeeb273dd2810841234d257c5bb91369b33504c462f453fe243b1a2b5.png" src="../_images/6944727eeeb273dd2810841234d257c5bb91369b33504c462f453fe243b1a2b5.png" />
+<img alt="../_images/3497e00b30166630a1b5150b1c4e5b9b34709bd760e4bc2384c2ff7aa7521302.png" src="../_images/3497e00b30166630a1b5150b1c4e5b9b34709bd760e4bc2384c2ff7aa7521302.png" />
 </div>
 </div>
 <p>Sfruttando il campione estratto dalla distribuzione a posteriori, è possibile calcolare diverse quantità di interesse. Ad esempio, la stima della media a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> si ottiene semplicemente calcolando la media dei valori così ottenuti.</p>
@@ -991,7 +1055,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5006384384384385
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5007509
 </pre></div>
 </div>
 </div>
@@ -1004,7 +1068,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.12250538495215305
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.12250230711782534
 </pre></div>
 </div>
 </div>
@@ -1012,12 +1076,12 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 <p>La moda a posteriori si può calcolare nel modo seguente.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span><span class="p">[</span><span class="n">post</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="n">post</span><span class="p">)]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">post</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="n">post</span><span class="p">)])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.4994995])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.5]
 </pre></div>
 </div>
 </div>
@@ -1030,7 +1094,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4774774774774775
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.464
 </pre></div>
 </div>
 </div>
@@ -1043,7 +1107,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4994994994994995
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5
 </pre></div>
 </div>
 </div>
@@ -1056,7 +1120,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4999999999999997
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.49842895507812507
 </pre></div>
 </div>
 </div>
@@ -1069,7 +1133,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5011
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4973
 </pre></div>
 </div>
 </div>
@@ -1082,7 +1146,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.2116
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.2093
 </pre></div>
 </div>
 </div>
@@ -1095,7 +1159,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.25323323, 0.74574575])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.253, 0.748])
 </pre></div>
 </div>
 </div>
@@ -1109,7 +1173,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.27327327, 0.72672673])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.277, 0.732])
 </pre></div>
 </div>
 </div>
@@ -1118,7 +1182,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </section>
 <section id="qual-e-il-modo-migliore-per-stimare-il-parametro-theta">
 <h2>Qual è il modo migliore per stimare il parametro <span class="math notranslate nohighlight">\(\theta\)</span>?<a class="headerlink" href="#qual-e-il-modo-migliore-per-stimare-il-parametro-theta" title="Permalink to this heading">#</a></h2>
-<p>Nonostante abbiamo discusso in precedenza dei diversi metodi di stima puntuale e intervallare per riassumere la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span>, la migliore stima del parametro che stiamo cercando di inferire è rappresentata dall’intera distribuzione a posteriori. Per citare le parole di  <span id="id7">McElreath [<a class="reference internal" href="../references/bibliography.html#id114" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>:</p>
+<p>Nonostante abbiamo discusso in precedenza dei diversi metodi di stima puntuale e intervallare per riassumere la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span>, la migliore stima del parametro che stiamo cercando di inferire è rappresentata dall’intera distribuzione a posteriori. Per citare le parole di  <span id="id7">McElreath [<a class="reference internal" href="../references/bibliography.html#id115" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>:</p>
 <blockquote>
 <div><p>That an arbitrary interval contains an arbitrary value is not meaningful. Use the whole distribution.</p>
 </div></blockquote>
@@ -1138,7 +1202,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 <section id="commenti-e-considerazioni-finali">
 <h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Permalink to this heading">#</a></h2>
 <p>In questo capitolo, abbiamo esplorato l’aggiornamento bayesiano all’interno del quadro di una distribuzione a priori di natura discreta, con una breve menzione riguardante il caso di distribuzioni a priori continue. Quando affrontiamo scenari in cui la distribuzione a priori è continua, l’elaborazione della distribuzione a posteriori implica generalmente la risoluzione di un integrale che, nella maggior parte dei casi, non ammette una soluzione analitica. Tuttavia, esistono eccezioni notevoli, come nel contesto dell’inferenza relativa a proporzioni, dove la distribuzione a priori è modellizzata come una distribuzione Beta e la funzione di verosimiglianza segue una distribuzione binomiale. In queste circostanze particolari, è possibile derivare analiticamente la distribuzione a posteriori. L’analisi dettagliata di questo caso sarà l’oggetto del capitolo successivo.</p>
-<p>Il punto importante della presente discussione risiede nell’approccio adottato per affrontare una questione di ricerca particolare, ossia quella relativa alla quantità di superficie terrestre coperta da acqua. Abbiamo illustrato come sia possibile mettere in pratica alcuni degli step del flusso di lavoro proposto da <span id="id9">McElreath [<a class="reference internal" href="../references/bibliography.html#id114" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>. In particolare, in questo capitolo, abbiamo esaminato come sia possibile implementare i punti 1, 2, 3 e 5 del flusso di lavoro bayesiano.</p>
+<p>Il punto importante della presente discussione risiede nell’approccio adottato per affrontare una questione di ricerca particolare, ossia quella relativa alla quantità di superficie terrestre coperta da acqua. Abbiamo illustrato come sia possibile mettere in pratica alcuni degli step del flusso di lavoro proposto da <span id="id9">McElreath [<a class="reference internal" href="../references/bibliography.html#id115" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>. In particolare, in questo capitolo, abbiamo esaminato come sia possibile implementare i punti 1, 2, 3 e 5 del flusso di lavoro bayesiano.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -1147,7 +1211,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Feb 07 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Feb 09 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
@@ -1161,12 +1225,12 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-seaborn   : 0.13.0
-matplotlib: 3.8.2
+numpy     : 1.26.2
 arviz     : 0.17.0
 pandas    : 2.1.4
 scipy     : 1.11.4
-numpy     : 1.26.2
+preliz    : 0.3.7
+matplotlib: 3.8.2
 
 Watermark: 2.4.3
 </pre></div>

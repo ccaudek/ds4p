@@ -199,6 +199,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
@@ -308,7 +309,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -568,8 +570,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
+<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;axes&quot;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -580,7 +584,7 @@ document.write(`
 <p>I priori coniugati Normali di una Normale non richiedono l’approssimazione numerica ottenuta mediante metodi MCMC. Tuttavia, per fare un esercizio e per verificare che i risultati ottenuti con MCMC corrispondano a quelli trovati per via analitica, ripetiamo l’esercizio descritto nel capitolo <a class="reference internal" href="04_conjugate_families_2.html#distr-coniugate-2-notebook"><span class="std std-ref">Distribuzioni coniugate (2)</span></a> usando prima l’algoritmo di Metropolis e poi PyMC.</p>
 <section id="un-esempio-concreto">
 <h3>Un esempio concreto<a class="headerlink" href="#un-esempio-concreto" title="Permalink to this heading">#</a></h3>
-<p>Useremo gli stessi dati usati in precedenza, ovvero il campione di 30 valori BDI-II ottenuti dai soggetti clinici esaminati da <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id63" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
+<p>Useremo gli stessi dati usati in precedenza, ovvero il campione di 30 valori BDI-II ottenuti dai soggetti clinici esaminati da <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id64" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -738,30 +742,45 @@ document.write(`
 <span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">loglike</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">mu</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">logpost</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">mu</span><span class="p">:</span> <span class="n">loglike</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="n">logprior</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
 
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/numpy/core/fromnumeric.py:3645,</span> in <span class="ni">std</span><span class="nt">(a, axis, dtype, out, ddof, keepdims, where)</span>
-<span class="g g-Whitespace">   </span><span class="mi">3642</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">3643</span>         <span class="k">return</span> <span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="n">ddof</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">3645</span> <span class="k">return</span> <span class="n">_methods</span><span class="o">.</span><span class="n">_std</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="n">ddof</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3646</span>                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/scipy/stats/_distn_infrastructure.py:2032,</span> in <span class="ni">rv_continuous.logpdf</span><span class="nt">(self, x, *args, **kwds)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2030</span> <span class="n">putmask</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">cond0</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">badvalue</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2031</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">cond</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">2032</span>     <span class="n">goodargs</span> <span class="o">=</span> <span class="n">argsreduce</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="o">*</span><span class="p">((</span><span class="n">x</span><span class="p">,)</span><span class="o">+</span><span class="n">args</span><span class="o">+</span><span class="p">(</span><span class="n">scale</span><span class="p">,)))</span>
+<span class="g g-Whitespace">   </span><span class="mi">2033</span>     <span class="n">scale</span><span class="p">,</span> <span class="n">goodargs</span> <span class="o">=</span> <span class="n">goodargs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">goodargs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">2034</span>     <span class="n">place</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">cond</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logpdf</span><span class="p">(</span><span class="o">*</span><span class="n">goodargs</span><span class="p">)</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span>
 
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/numpy/core/_methods.py:206,</span> in <span class="ni">_std</span><span class="nt">(a, axis, dtype, out, ddof, keepdims, where)</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="k">def</span> <span class="nf">_std</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">205</span>          <span class="n">where</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">206</span>     <span class="n">ret</span> <span class="o">=</span> <span class="n">_var</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="n">ddof</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span>                <span class="n">keepdims</span><span class="o">=</span><span class="n">keepdims</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">mu</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>         <span class="n">ret</span> <span class="o">=</span> <span class="n">um</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">ret</span><span class="p">)</span>
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/scipy/stats/_distn_infrastructure.py:603,</span> in <span class="ni">argsreduce</span><span class="nt">(cond, *args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">599</span>     <span class="n">newargs</span> <span class="o">=</span> <span class="p">[</span><span class="n">newargs</span><span class="p">,</span> <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">601</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">cond</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">602</span>     <span class="c1"># broadcast arrays with cond</span>
+<span class="ne">--&gt; </span><span class="mi">603</span>     <span class="o">*</span><span class="n">newargs</span><span class="p">,</span> <span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="o">*</span><span class="n">newargs</span><span class="p">,</span> <span class="n">cond</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">604</span>     <span class="k">return</span> <span class="p">[</span><span class="n">arg</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">newargs</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">606</span> <span class="n">s</span> <span class="o">=</span> <span class="n">cond</span><span class="o">.</span><span class="n">shape</span>
 
-<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/numpy/core/_methods.py:152,</span> in <span class="ni">_var</span><span class="nt">(a, axis, dtype, out, ddof, keepdims, where)</span>
-<span class="g g-Whitespace">    </span><span class="mi">147</span>     <span class="n">dtype</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;f8&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">149</span> <span class="c1"># Compute the mean.</span>
-<span class="g g-Whitespace">    </span><span class="mi">150</span> <span class="c1"># Note that if dtype is not of inexact type then arraymean will</span>
-<span class="g g-Whitespace">    </span><span class="mi">151</span> <span class="c1"># not be either.</span>
-<span class="ne">--&gt; </span><span class="mi">152</span> <span class="n">arrmean</span> <span class="o">=</span> <span class="n">umr_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">153</span> <span class="c1"># The shape of rcount has to match arrmean to not change the shape of out</span>
-<span class="g g-Whitespace">    </span><span class="mi">154</span> <span class="c1"># in broadcasting. Otherwise, it cannot be stored back to arrmean.</span>
-<span class="g g-Whitespace">    </span><span class="mi">155</span> <span class="k">if</span> <span class="n">rcount</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">156</span>     <span class="c1"># fast-path for default case when where is True</span>
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/numpy/lib/stride_tricks.py:546,</span> in <span class="ni">broadcast_arrays</span><span class="nt">(subok, *args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">542</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">shape</span> <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">543</span>     <span class="c1"># Common case where nothing needs to be broadcasted.</span>
+<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="k">return</span> <span class="n">args</span>
+<span class="ne">--&gt; </span><span class="mi">546</span> <span class="k">return</span> <span class="p">[</span><span class="n">_broadcast_to</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">subok</span><span class="o">=</span><span class="n">subok</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">547</span>         <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/numpy/lib/stride_tricks.py:546,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">542</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">shape</span> <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">543</span>     <span class="c1"># Common case where nothing needs to be broadcasted.</span>
+<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="k">return</span> <span class="n">args</span>
+<span class="ne">--&gt; </span><span class="mi">546</span> <span class="k">return</span> <span class="p">[</span><span class="n">_broadcast_to</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">subok</span><span class="o">=</span><span class="n">subok</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">547</span>         <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/numpy/lib/stride_tricks.py:349,</span> in <span class="ni">_broadcast_to</span><span class="nt">(array, shape, subok, readonly)</span>
+<span class="g g-Whitespace">    </span><span class="mi">346</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;all elements of broadcast shape must be non-&#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">347</span>                      <span class="s1">&#39;negative&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">348</span> <span class="n">extras</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="ne">--&gt; </span><span class="mi">349</span> <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nditer</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">350</span>     <span class="p">(</span><span class="n">array</span><span class="p">,),</span> <span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;multi_index&#39;</span><span class="p">,</span> <span class="s1">&#39;refs_ok&#39;</span><span class="p">,</span> <span class="s1">&#39;zerosize_ok&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extras</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">351</span>     <span class="n">op_flags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;readonly&#39;</span><span class="p">],</span> <span class="n">itershape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">352</span> <span class="k">with</span> <span class="n">it</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">353</span>     <span class="c1"># never really has writebackifcopy semantics</span>
+<span class="g g-Whitespace">    </span><span class="mi">354</span>     <span class="n">broadcast</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">itviews</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
@@ -777,7 +796,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4201
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.41642
 </pre></div>
 </div>
 </div>
@@ -791,7 +810,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4e2671f236cbf9bcaae259d51b5bcae4c2188e39667a0b7364ba6f095dcb9463.png" src="../_images/4e2671f236cbf9bcaae259d51b5bcae4c2188e39667a0b7364ba6f095dcb9463.png" />
+<img alt="../_images/2b5aa3c95c02ba2d9331c6c5450115c9cfb6442e23e1429e4ca714868e0e5868.png" src="../_images/2b5aa3c95c02ba2d9331c6c5450115c9cfb6442e23e1429e4ca714868e0e5868.png" />
 </div>
 </div>
 <p>Se applichiamo un “thinning” con un intervallo di 5, l’autocorrelazione si riduce quasi a zero.</p>
@@ -803,7 +822,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7d6232427bc4594a9de449f67f8e38c7548cea2453bfb0c38f34b4a41b10997f.png" src="../_images/7d6232427bc4594a9de449f67f8e38c7548cea2453bfb0c38f34b4a41b10997f.png" />
+<img alt="../_images/fb0dbeeb1d7b88765fd34b566f25c766135f1e1232b13a0377a400864e628c72.png" src="../_images/fb0dbeeb1d7b88765fd34b566f25c766135f1e1232b13a0377a400864e628c72.png" />
 </div>
 </div>
 <p>Esaminiamo la stima della distribuzione a posteriori dopo un burn-in di 40000 passi.</p>
@@ -815,7 +834,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a4b37fc838f5e78e1aee0caaaa074d8c77e997044a7345e5b34940faf9991d54.png" src="../_images/a4b37fc838f5e78e1aee0caaaa074d8c77e997044a7345e5b34940faf9991d54.png" />
+<img alt="../_images/f152f3abdddbd82ef374e8d8f4ac89ab9a6243ad8870ca51f40009c11368a51a.png" src="../_images/f152f3abdddbd82ef374e8d8f4ac89ab9a6243ad8870ca51f40009c11368a51a.png" />
 </div>
 </div>
 <p>Calcoliamo l’intervallo a densità posteriore più alta del 94% per il parametro <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
@@ -826,7 +845,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([28.60847741, 32.9412985 ])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([28.69895955, 32.99782389])
 </pre></div>
 </div>
 </div>
@@ -888,13 +907,13 @@ Y_i &amp;\sim \mathcal{N}(\mu, \sigma) \notag\\
 </summary>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
-Compilation time = 0:00:01.598335
+Compilation time = 0:00:02.217106
 Sampling...
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e52a18bbfca64c13ac69d19ff1489d2e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "faf998c80c2c4bc6a50c1d730c50949a", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "0e7bd7b1609c48619a1ee2ebeba7d1df", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "cafd818906574d6f9205556fb512e691", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.363118
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "145d52ceb0e04500adaddd29d751de63", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "413941b7416d4aeab6262cce77ec326f", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "01542b51a57042cc8c01c886421e1666", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "41548931dc2641188348ac5eddc70563", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.392301
 Transforming variables...
-Transformation time = 0:00:00.061482
+Transformation time = 0:00:00.098916
 </pre></div>
 </div>
 </div>
@@ -909,7 +928,7 @@ Transformation time = 0:00:00.061482
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/19ddd92dad622434862007dd3089ced14d1c8eefa3ae9e2e7ddecbfc3a3924bd.png" src="../_images/19ddd92dad622434862007dd3089ced14d1c8eefa3ae9e2e7ddecbfc3a3924bd.png" />
+<img alt="../_images/1c0f4b00dfb2f6b2b364ff287634f68c1657df864fba90ee7d9784fbf52d85b5.png" src="../_images/1c0f4b00dfb2f6b2b364ff287634f68c1657df864fba90ee7d9784fbf52d85b5.png" />
 </div>
 </div>
 <p>Esaminiamo l’autocorrelazione.</p>
@@ -921,7 +940,7 @@ Transformation time = 0:00:00.061482
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/042c818345ff6a87b0c314503db5239a1e3822fb0ca2849714f8afa9b50d1924.png" src="../_images/042c818345ff6a87b0c314503db5239a1e3822fb0ca2849714f8afa9b50d1924.png" />
+<img alt="../_images/a7598ccda76ee81746dc7eadf7ad5d5afb282f1b0aa1d2a0ded495a537d24b3e.png" src="../_images/a7598ccda76ee81746dc7eadf7ad5d5afb282f1b0aa1d2a0ded495a537d24b3e.png" />
 </div>
 </div>
 <p>Una sintesi della distribuzione a posteriori dei parametri si ottiene nel modo seguente.</p>
@@ -964,14 +983,14 @@ Transformation time = 0:00:00.061482
   <tbody>
     <tr>
       <th>mu</th>
-      <td>30.88</td>
+      <td>30.91</td>
       <td>1.17</td>
-      <td>28.77</td>
-      <td>33.21</td>
+      <td>28.71</td>
+      <td>33.12</td>
       <td>0.03</td>
       <td>0.02</td>
-      <td>1515.36</td>
-      <td>1761.55</td>
+      <td>1554.14</td>
+      <td>1870.92</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1355,7 +1374,7 @@ Dimensions:  (hdi: 2)
 Coordinates:
   * hdi      (hdi) &lt;U6 &#x27;lower&#x27; &#x27;higher&#x27;
 Data variables:
-    mu       (hdi) float64 28.77 33.21</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-ddd02644-efba-4aa9-9e53-34e793398642' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-ddd02644-efba-4aa9-9e53-34e793398642' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>hdi</span>: 2</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-c852e9ae-874e-40b3-a1d8-24ee0e667e92' class='xr-section-summary-in' type='checkbox'  checked><label for='section-c852e9ae-874e-40b3-a1d8-24ee0e667e92' class='xr-section-summary' >Coordinates: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>hdi</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>&lt;U6</div><div class='xr-var-preview xr-preview'>&#x27;lower&#x27; &#x27;higher&#x27;</div><input id='attrs-1d1d558a-36a3-41b1-8b3b-b372d527c19c' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-1d1d558a-36a3-41b1-8b3b-b372d527c19c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3e868d99-ae50-451b-848b-33246ef45b8e' class='xr-var-data-in' type='checkbox'><label for='data-3e868d99-ae50-451b-848b-33246ef45b8e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>hdi_prob :</span></dt><dd>0.94</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;&lt;U6&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-ba4d3380-cf7f-40d4-b61d-300a6cccaa7e' class='xr-section-summary-in' type='checkbox'  checked><label for='section-ba4d3380-cf7f-40d4-b61d-300a6cccaa7e' class='xr-section-summary' >Data variables: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>mu</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>28.77 33.21</div><input id='attrs-82f2817e-d33c-4ef2-8d45-ff1097e9f884' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-82f2817e-d33c-4ef2-8d45-ff1097e9f884' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0606b8fe-c420-4f5f-9fce-7d8edcdb2031' class='xr-var-data-in' type='checkbox'><label for='data-0606b8fe-c420-4f5f-9fce-7d8edcdb2031' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([28.76836403, 33.20718712])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-29012feb-d44f-4a5e-811f-8c81bb6c83dc' class='xr-section-summary-in' type='checkbox'  ><label for='section-29012feb-d44f-4a5e-811f-8c81bb6c83dc' class='xr-section-summary' >Indexes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>hdi</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-449e0e0d-621f-420b-81e6-cd87f32e6cf7' class='xr-index-data-in' type='checkbox'/><label for='index-449e0e0d-621f-420b-81e6-cd87f32e6cf7' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;object&#x27;, name=&#x27;hdi&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-d67b91c8-c525-4af3-959f-3646bffbeccd' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-d67b91c8-c525-4af3-959f-3646bffbeccd' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+    mu       (hdi) float64 28.71 33.12</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-d95a418e-62a7-4179-90bc-d46ec0d1e5b1' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-d95a418e-62a7-4179-90bc-d46ec0d1e5b1' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>hdi</span>: 2</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-e29f8b69-370f-462f-94fb-4931c1efb679' class='xr-section-summary-in' type='checkbox'  checked><label for='section-e29f8b69-370f-462f-94fb-4931c1efb679' class='xr-section-summary' >Coordinates: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>hdi</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>&lt;U6</div><div class='xr-var-preview xr-preview'>&#x27;lower&#x27; &#x27;higher&#x27;</div><input id='attrs-16160959-4dc6-4862-99d6-eb754b8cf4dc' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-16160959-4dc6-4862-99d6-eb754b8cf4dc' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9d02faf3-44ce-417d-b6a5-d9292f0d5954' class='xr-var-data-in' type='checkbox'><label for='data-9d02faf3-44ce-417d-b6a5-d9292f0d5954' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>hdi_prob :</span></dt><dd>0.94</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;&lt;U6&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-f688f85e-370b-4da8-85cf-ab0c28a6cb90' class='xr-section-summary-in' type='checkbox'  checked><label for='section-f688f85e-370b-4da8-85cf-ab0c28a6cb90' class='xr-section-summary' >Data variables: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>mu</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>28.71 33.12</div><input id='attrs-4128bc60-4e9f-434b-ba36-d3c306c8e68e' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-4128bc60-4e9f-434b-ba36-d3c306c8e68e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-24086f01-b398-4f62-a893-7150aec2ddc5' class='xr-var-data-in' type='checkbox'><label for='data-24086f01-b398-4f62-a893-7150aec2ddc5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([28.70682782, 33.12452832])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-b9f204ce-f1dd-4ab2-aa82-a51db8b9f53e' class='xr-section-summary-in' type='checkbox'  ><label for='section-b9f204ce-f1dd-4ab2-aa82-a51db8b9f53e' class='xr-section-summary' >Indexes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>hdi</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-f950fcca-d534-439a-af46-f57bdc435bdf' class='xr-index-data-in' type='checkbox'/><label for='index-f950fcca-d534-439a-af46-f57bdc435bdf' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;object&#x27;, name=&#x27;hdi&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-82987e52-8c45-4313-872b-6339657f89a7' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-82987e52-8c45-4313-872b-6339657f89a7' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <p>Le stime così trovate sono molto simili ai quantili di ordine 0.03 e 0.97 della distribuzione a posteriori di <span class="math notranslate nohighlight">\(\mu\)</span> ottenuta per via analitica e a quelle ottenute con l’algoritmo di Metropolis che abbiamo implementato in precedenza.</p>
 <div class="cell docutils container">
@@ -1389,7 +1408,7 @@ Data variables:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0a1315f3a1a42aedff1b2a1ad8c97058f15e507c8be1741d666d1bb5bef4a68e.png" src="../_images/0a1315f3a1a42aedff1b2a1ad8c97058f15e507c8be1741d666d1bb5bef4a68e.png" />
+<img alt="../_images/a49946cdbf22c288ac63a4d7b6dede926f329d666eb2b311d5191bd6adb1a70e.png" src="../_images/a49946cdbf22c288ac63a4d7b6dede926f329d666eb2b311d5191bd6adb1a70e.png" />
 </div>
 </div>
 <p>In questo secondo scenario, più realistico, la struttura del modello è la seguente:</p>
@@ -1429,13 +1448,13 @@ Y_i &amp;\sim \mathcal{N}(\mu, \sigma) \notag\\
 </summary>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
-Compilation time = 0:00:00.551084
+Compilation time = 0:00:01.108275
 Sampling...
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3e76f8753ef74a40b6861d4412326dad", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2d9dbfc2a58f445e8882700967dd378e", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e165397989a24ea891e4611f9c75495b", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e5e7d6375fc44e1f8d743304aa3f5554", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.499946
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "edc173795b374d94828133591baf0217", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "b67de7d2c01a4914ad818113d6c5ac78", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "37101b0cb09e479a8976eb2090532a84", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a46b861da1fc4f72ab97fce31eb65d8e", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.595522
 Transforming variables...
-Transformation time = 0:00:00.056222
+Transformation time = 0:00:00.079795
 </pre></div>
 </div>
 </div>
@@ -1451,7 +1470,7 @@ Transformation time = 0:00:00.056222
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/13d73eba60ec1813297b876fd079a3fe42e562f8ece22ddb58ad1f20b0a939fd.png" src="../_images/13d73eba60ec1813297b876fd079a3fe42e562f8ece22ddb58ad1f20b0a939fd.png" />
+<img alt="../_images/ec2ca70b29208f196694ccee045aed4f36861d61a5880791796c6bc6b9b34b38.png" src="../_images/ec2ca70b29208f196694ccee045aed4f36861d61a5880791796c6bc6b9b34b38.png" />
 </div>
 </div>
 <p>Una sintesi della distribuzione a posteriori dei parametri si ottiene nel modo seguente.</p>
@@ -1494,26 +1513,26 @@ Transformation time = 0:00:00.056222
   <tbody>
     <tr>
       <th>mu</th>
-      <td>30.85</td>
-      <td>1.21</td>
-      <td>28.65</td>
-      <td>33.13</td>
+      <td>30.88</td>
+      <td>1.23</td>
+      <td>28.54</td>
+      <td>33.20</td>
       <td>0.02</td>
-      <td>0.01</td>
-      <td>3633.69</td>
-      <td>2764.31</td>
+      <td>0.02</td>
+      <td>2644.88</td>
+      <td>2325.17</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>sigma</th>
-      <td>6.87</td>
-      <td>0.96</td>
-      <td>5.21</td>
-      <td>8.66</td>
+      <td>6.82</td>
+      <td>0.92</td>
+      <td>5.17</td>
+      <td>8.49</td>
       <td>0.02</td>
       <td>0.01</td>
-      <td>3242.81</td>
-      <td>2220.17</td>
+      <td>2942.94</td>
+      <td>2360.61</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1896,8 +1915,8 @@ Dimensions:  (hdi: 2)
 Coordinates:
   * hdi      (hdi) &lt;U6 &#x27;lower&#x27; &#x27;higher&#x27;
 Data variables:
-    mu       (hdi) float64 28.65 33.13
-    sigma    (hdi) float64 5.214 8.66</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-05717c21-ac71-4ca1-a7e0-f17b2c493402' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-05717c21-ac71-4ca1-a7e0-f17b2c493402' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>hdi</span>: 2</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-d05696c3-1849-4f53-a7dd-7b076df4445b' class='xr-section-summary-in' type='checkbox'  checked><label for='section-d05696c3-1849-4f53-a7dd-7b076df4445b' class='xr-section-summary' >Coordinates: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>hdi</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>&lt;U6</div><div class='xr-var-preview xr-preview'>&#x27;lower&#x27; &#x27;higher&#x27;</div><input id='attrs-4e86a001-dec1-4b28-b4a1-2bb1f5ae5071' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-4e86a001-dec1-4b28-b4a1-2bb1f5ae5071' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f54cf730-1326-423f-8199-e0293b6167b1' class='xr-var-data-in' type='checkbox'><label for='data-f54cf730-1326-423f-8199-e0293b6167b1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>hdi_prob :</span></dt><dd>0.94</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;&lt;U6&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-e035081f-76c9-46e2-9a00-e180f6107d33' class='xr-section-summary-in' type='checkbox'  checked><label for='section-e035081f-76c9-46e2-9a00-e180f6107d33' class='xr-section-summary' >Data variables: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>mu</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>28.65 33.13</div><input id='attrs-8817ed1f-874c-43d5-bcd4-610895ecae54' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-8817ed1f-874c-43d5-bcd4-610895ecae54' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5e788a94-244c-499b-a73a-de65364ce7eb' class='xr-var-data-in' type='checkbox'><label for='data-5e788a94-244c-499b-a73a-de65364ce7eb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([28.64866446, 33.13141651])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sigma</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>5.214 8.66</div><input id='attrs-8e178c9d-0df4-48c7-9ee9-8ca34c53315f' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-8e178c9d-0df4-48c7-9ee9-8ca34c53315f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-8a102111-58cb-4c6d-b65f-c99dca44ff30' class='xr-var-data-in' type='checkbox'><label for='data-8a102111-58cb-4c6d-b65f-c99dca44ff30' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([5.21391321, 8.66034241])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-aecb8719-04f1-47f2-8034-3147fc98536f' class='xr-section-summary-in' type='checkbox'  ><label for='section-aecb8719-04f1-47f2-8034-3147fc98536f' class='xr-section-summary' >Indexes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>hdi</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-43c12514-c684-49f2-b906-e130aa28fcbb' class='xr-index-data-in' type='checkbox'/><label for='index-43c12514-c684-49f2-b906-e130aa28fcbb' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;object&#x27;, name=&#x27;hdi&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-d1cad3ab-c0f1-40c5-b2b9-ff6ba5211fba' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-d1cad3ab-c0f1-40c5-b2b9-ff6ba5211fba' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+    mu       (hdi) float64 28.54 33.2
+    sigma    (hdi) float64 5.165 8.487</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-6a2ff263-3063-4942-9a1a-2eccd4330acd' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-6a2ff263-3063-4942-9a1a-2eccd4330acd' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>hdi</span>: 2</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-b654ebcc-8a23-4a54-aaa1-58658ec5ea87' class='xr-section-summary-in' type='checkbox'  checked><label for='section-b654ebcc-8a23-4a54-aaa1-58658ec5ea87' class='xr-section-summary' >Coordinates: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>hdi</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>&lt;U6</div><div class='xr-var-preview xr-preview'>&#x27;lower&#x27; &#x27;higher&#x27;</div><input id='attrs-e8cc82af-f1fd-4bfa-a309-dcebc7563098' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-e8cc82af-f1fd-4bfa-a309-dcebc7563098' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-47cbb2c4-86e5-4dab-bff7-11a24cf3913c' class='xr-var-data-in' type='checkbox'><label for='data-47cbb2c4-86e5-4dab-bff7-11a24cf3913c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>hdi_prob :</span></dt><dd>0.94</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;&lt;U6&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-341a34de-0a5d-48ec-98ab-0577d544e310' class='xr-section-summary-in' type='checkbox'  checked><label for='section-341a34de-0a5d-48ec-98ab-0577d544e310' class='xr-section-summary' >Data variables: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>mu</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>28.54 33.2</div><input id='attrs-3ef88051-0842-4ff2-b9bb-76a8198c80db' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-3ef88051-0842-4ff2-b9bb-76a8198c80db' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-64ea82ce-d59f-43dc-8b8c-389df34666dc' class='xr-var-data-in' type='checkbox'><label for='data-64ea82ce-d59f-43dc-8b8c-389df34666dc' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([28.54262345, 33.19565776])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>sigma</span></div><div class='xr-var-dims'>(hdi)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>5.165 8.487</div><input id='attrs-aa4c8fca-c974-4786-9a05-8083b7325af4' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-aa4c8fca-c974-4786-9a05-8083b7325af4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-8e457cb7-20bb-4453-a743-1ab3421afa5c' class='xr-var-data-in' type='checkbox'><label for='data-8e457cb7-20bb-4453-a743-1ab3421afa5c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([5.16517485, 8.48657989])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-5d540b97-e571-46b4-a940-2b693818c51f' class='xr-section-summary-in' type='checkbox'  ><label for='section-5d540b97-e571-46b4-a940-2b693818c51f' class='xr-section-summary' >Indexes: <span>(1)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>hdi</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-a34e7782-1dc1-4673-8d0a-24412f767d86' class='xr-index-data-in' type='checkbox'/><label for='index-a34e7782-1dc1-4673-8d0a-24412f767d86' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([&#x27;lower&#x27;, &#x27;higher&#x27;], dtype=&#x27;object&#x27;, name=&#x27;hdi&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-78f49ab6-1d8a-465a-bec6-bd205eb5e32f' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-78f49ab6-1d8a-465a-bec6-bd205eb5e32f' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <p>I risultati sono molto simili a quelli ottenuti in precedenza.</p>
 </section>
@@ -1913,7 +1932,7 @@ Data variables:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Feb 04 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Feb 09 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
@@ -1927,13 +1946,13 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
+matplotlib: 3.8.2
+seaborn   : 0.13.0
+arviz     : 0.17.0
 scipy     : 1.11.4
 pandas    : 2.1.4
 pymc      : 5.10.3
-arviz     : 0.17.0
 numpy     : 1.26.2
-seaborn   : 0.13.0
-matplotlib: 3.8.2
 
 Watermark: 2.4.3
 </pre></div>

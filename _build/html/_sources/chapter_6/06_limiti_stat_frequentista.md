@@ -48,7 +48,7 @@ Una delle critiche più frequenti alla logica di verifica delle ipotesi statisti
 
 Consideriamo il seguente problema. Eseguiamo un $t$-test per due campioni indipendenti e sottoponiamo a verifica l'ipotesi nulla dell'eguaglianza delle due medie. Sia $\alpha = 0.05$. Otteniamo un valore-$p$ di $0.04$. Qual è la probabilità che i due campioni siano tratti da distribuzioni con la stessa media?
 
-\(a\) $19/20; \quad$ (b) $1/19; \quad$ (c) $1/20; \quad$ (d) $95/100; \quad$ (e) sconosciuta.
+(a) $19/20; \quad$ (b) $1/19; \quad$ (c) $1/20; \quad$ (d) $95/100; \quad$ (e) sconosciuta.
 
 La risposta corretta è: (e) sconosciuta. La statistica frequentista definisce le probabilità dei dati condizionatamente alle ipotesi (assunte come vere). Non consente di stabilire la probabilità di un'ipotesi.
 
