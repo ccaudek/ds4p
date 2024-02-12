@@ -1,53 +1,65 @@
 (sec-regr-intro)=
+
 # Il modello di regressione lineare
 
-In precedenza abbiamo visto come stimare i parametri di un modello bayesiano nel quale le osservazioni sono indipendenti e identicamente distribuite secondo una densità gaussiana,
+Nel contesto dell'inferenza bayesiana, abbiamo esaminato come stimare i parametri di un modello bayesiano caratterizzato da osservazioni indipendenti e identicamente distribuite (i.i.d.) secondo una distribuzione gaussiana, specificamente:
 
 $$
-\begin{equation}
-y_i \stackrel{i.i.d.}{\sim} \mathcal{N}(\mu, \sigma), \quad i = 1, \dots, n.
-\end{equation}
+y_i \stackrel{i.i.d.}{\sim} \mathcal{N}(\mu, \sigma^2), \quad i = 1, \dots, n.
 $$ (eq-normalsamplingmodel)
 
-Il modello dell'eq. {eq}`eq-normalsamplingmodel` assume che ogni $y_i$ sia la realizzazione di una v.c. distribuita come $\mathcal{N}(\mu, \sigma^2)$. Da un punto di vista bayesiano, questo modello può essere implementato imponendo delle distribuzioni a priori ai parametri $\mu$ e $\sigma$ e generando la verosimiglianza in base ai dati osservati. Per esempio, possiamo usare le seguenti distribuzioni a priori.
+Questo modello presuppone che ciascuna osservazione $y_i$ sia generata da una variabile casuale (v.c.) che segue una distribuzione normale con media $\mu$ e varianza $\sigma^2$. Dall'ottica bayesiana, per implementare tale modello si introducono distribuzioni a priori per i parametri $\mu$ e $\sigma$, e si determina la verosimiglianza dei dati osservati. Esempi di distribuzioni a priori per questi parametri includono:
+
 
 $$
+
 \begin{align}
-y_i \mid \mu, \sigma & \stackrel{iid}{\sim} \mathcal{N}(\mu, \sigma^2)\notag\\
-\mu & \sim \mathcal{N}(\mu_0, \tau^2) \notag\\
-\sigma & \sim \mbox{Cauchy}(x_0, \gamma) \notag
+\mu & \sim \mathcal{N}(\mu_0, \tau^2), \\
+\sigma & \sim \text{Cauchy}(x_0, \gamma).
 \end{align}
-$$
-
-Con queste informazioni, possono poi essere trovate le distribuzioni a posteriori dei parametri {cite:p}`gelman2020regression`. Esploreremo ora un'estensione del modello bayesiano che ci consentirà di descrivere la *relazione lineare* tra due variabili (si veda l'appendice {ref}`lin-fun-appendix`).
-
-Il ricercatore spesso si trova ad osservare un'altra variabile, chiamiamola $x$, che risulta associata ad ogni risposta $y_i$. Come possiamo estendere il modello dell'equazione {eq}`eq-normalsamplingmodel` per studiare la relazione tra $y_i$ e $x_i$? La risposta a questa domanda è fornita dal modello di regressione lineare.
-
-L'equazione {eq}`eq-normalsamplingmodel` rappresenta un modello statistico che assume che tutte le osservazioni $y_i$ abbiano una media comune $\mu$. Tuttavia, se vogliamo considerare anche una nuova variabile $x_i$ che assume valori diversi per ogni $y_i$, dobbiamo modificare quel modello. In particolare, invece della media comune $\mu$, introduciamo una media $\mu_i$ specifica per ciascuna osservazione $y_i$.
 
 $$
-y_i \mid \mu_i, \sigma \stackrel{ind}{\sim} \mathcal{N}(\mu_i, \sigma), \quad i = 1, \dots, n.
-$$ (eq-normalsamplinglinearmodel)
 
-Per modellare la relazione tra il predittore $x_i$ e la risposta $y_i$, il modello di regressione assume che la media della distribuzione da cui abbiamo estratto $y_i$, ovvero $\mu_i$, sia una funzione lineare del predittore $x_i$, ovvero
+Attraverso queste scelte priori, si possono dedurre le distribuzioni a posteriori dei parametri $\mu$ e $\sigma$, seguendo ad esempio le indicazioni di {cite:p}`gelman2020regression` per la regressione.
+
+Il passo successivo coinvolge l'estensione di questo modello per esaminare le relazioni lineari tra due variabili, ampliando il nostro ambito alla modellazione della connessione tra una variabile risposta $y_i$ e un predittore $x_i$. Questo approfondimento ci porta a considerare il modello di regressione lineare.
+
+Originariamente, il modello gaussiano assumeva una media comune $\mu$ per tutte le osservazioni $y_i$. Tuttavia, introducendo una variabile $x_i$ associata a ciascun $y_i$, modifichiamo il modello per contemplare una media $\mu_i$ specifica per ogni osservazione, che dipende linearmente da $x_i$, come segue:
+
 
 $$
+
+y_i \mid \mu_i, \sigma \stackrel{ind}{\sim} \mathcal{N}(\mu_i, \sigma^2), \quad i = 1, \dots, n.
+
+$$
+
+Nel modello di regressione lineare, $\mu_i$ è espresso come funzione lineare di $x_i$:
+
+
+$$
+
 \mu_i = \beta_0 + \beta_1 x_i,
-$$ (eq-regmodel)
-
-dove $\beta_0$ e $\beta_1$ sono i parametri incogniti rappresentanti l'intercetta e la pendenza della retta di regressione, rispettivamente.
-
-Sostituendo la relazione lineare dell'eq. {eq}`eq-regmodel` nell'eq. {eq}`eq-normalsamplinglinearmodel`, otteniamo il modello di regressione lineare:
 
 $$
-y_i \mid \beta_0, \beta_ 1, \sigma \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_ 1 x_i, \sigma), \quad i = 1, \dots, n.
-$$ (eq-linearmodel)
 
-Questa nuova equazione, chiamata *modello di regressione lineare*, ci permette di studiare la relazione tra $y_i$ e $x_i$ considerando $\mu_i$ come una funzione lineare di $x_i$. L'eq. {eq}`eq-linearmodel` afferma che ciascuna osservazione $y_i$ è estratta casualmente dalla distribuzione $\mathcal{N}(\mu_i, \sigma)$, dove $\mu_i$ è la media associata alla $i$-esima osservazione e $\sigma$ è la deviazione standard comune a tutte le osservazioni.  In altre parole, il modello di regressione suppone che esista una relazione lineare tra $x_i$ e $\mu_i$ e che ogni valore di $y_i$ sia una realizzazione di una variabile casuale con media $\mu_i$ e deviazione standard $\sigma$. 
+dove $\beta_0$ rappresenta l'intercetta e $\beta_1$ la pendenza della retta di regressione.
 
-Nell'eq. {eq}`eq-linearmodel`, $x_i$ è considerata una costante nota e $\beta_0$ e $\beta_1$ sono variabili casuali, che vengono stimate tramite l'inferenza bayesiana. Questo procedimento consiste nell'assegnare una distribuzione a priori a $\beta_0$ e a $\beta_1$, trovare la verosimiglianza dei dati e calcolare la distribuzione a posteriori dei parametri $\beta_0$ e $\beta_1$. La costante $\beta_0$ rappresenta il valore atteso di $y_i$ quando $x_i=0$, mentre la costante $\beta_1$ rappresenta l'incremento atteso di $y_i$ quando $x_i$ aumenta di un'unità.
+Aggiungendo questa funzione lineare al nostro modello, otteniamo:
 
-Va sottolineato che il modello fornisce una stima del valore atteso $\mu_i$ e non del valore effettivo di ciascuna osservazione $y_i$. In altre parole, la relazione lineare tra $\mu_i$ e $x_i$ non può essere utilizzata per prevedere il valore esatto di $y_i$ per un dato valore di $x_i$, ma solo per fornire una stima del valore atteso di $y_i$ per quel dato valore di $x_i$.
+
+$$
+
+y_i \mid \beta_0, \beta_1, \sigma \stackrel{ind}{\sim} \mathcal{N}(\beta_0 + \beta_1 x_i, \sigma^2), \quad i = 1, \dots, n.
+
+$$
+(eq-linearmodel)
+
+Questo modello di regressione lineare consente di analizzare la relazione tra $y_i$ e $x_i$, interpretando $\mu_i$ come funzione lineare di $x_i$. In termini pratici, ogni osservazione $y_i$ è vista come estratta da una distribuzione gaussiana con media $\mu_i$ (dipendente da $x_i$) e varianza $\sigma^2$ comune.
+
+In questo contesto, $x_i$ è considerato un valore noto e fisso, mentre $\beta_0$ e $\beta_1$ sono stimati attraverso l'inferenza bayesiana, che implica l'attribuzione di distribuzioni a priori a questi parametri, la valutazione della verosimiglianza dei dati osservati, e il calcolo delle distribuzioni a posteriori di $\beta_0$ e $\beta_1$.
+
+È importante sottolineare che il modello fornisce stime dei valori attesi $\mu_i$, piuttosto che prevedere i valori specifici di ogni $y_i$. La relazione lineare tra $\mu_i$ e $x_i$ serve a stimare il valore medio di $y_i$ per un dato $x_i$, anziché predire il valore esatto di $y_i$ per quel $x_i$. Questa distinzione è fondamentale per interpretare correttamente i risultati del modello di regressione lineare nel quadro dell'inferenza statistica bayesiana.
+
 
 <!-- In questo modello, ogni osservazione $Y_i$ è estratta a caso da una distribuzione Normale con media $\beta_0 + \beta_1 x_i,$ dove $\beta_0$ è l'intercetta e $\beta_1$ è la pendenza della retta di regressione. La deviazione standard $\sigma$ rappresenta la varianza comune a tutte le osservazioni. Questo modello è chiamato "lineare" perché la relazione tra $\mathbb{E}(Y_i) = \mu_i$ e $x_i$ è lineare e "bivariato" perché coinvolge solo due variabili, $Y$ e $x$. -->
 
@@ -70,3 +82,4 @@ In sintesi, {cite:t}`McElreath_rethinking` riflette sul fatto che i modelli scie
 ## Commenti e considerazioni finali
 
 Il modello di regressione lineare bivariato viene utilizzato per studiare l'associazione lineare tra due variabili $x$ e $y$, e per determinare la direzione e l'entità di tale legame. Inoltre, questo modello statistico consente di fare previsioni sul valore atteso della variabile dipendente $y$ sulla base del valore assunto dalla variabile indipendente $x$.
+$$
