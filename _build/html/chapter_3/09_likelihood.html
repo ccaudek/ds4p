@@ -312,6 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -519,8 +520,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#concetto-di-verosimiglianza-e-sua-formalizzazione-matematica">Concetto di Verosimiglianza e Sua Formalizzazione Matematica</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-nel-contesto-del-modello-binomiale-un-esempio-approfondito">Verosimiglianza nel Contesto del Modello Binomiale: Un Esempio Approfondito</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione">Il Principio della Verosimiglianza e la sua Formalizzazione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-nel-contesto-del-modello-binomiale">Verosimiglianza nel Contesto del Modello Binomiale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale">Verosimiglianza Congiunta di <span class="math notranslate nohighlight">\( n \)</span> Campioni IID da una Distribuzione Binomiale</a></li>
@@ -535,6 +536,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
             </nav>
         </div>
@@ -549,8 +551,8 @@ document.write(`
   <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/225_likelihood.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="la-verosimiglianza">
 <span id="notebook-likelihood"></span><h1>La verosimiglianza<a class="headerlink" href="#la-verosimiglianza" title="Permalink to this heading">#</a></h1>
-<p>La funzione di verosimiglianza rappresenta un elemento chiave nell’ambito dell’inferenza statistica, fungendo da collegamento essenziale tra i dati empirici e i parametri intrinseci di un modello statistico specifico. Questo concetto riveste un’importanza capitale non solo nell’ambito dell’analisi statistica ma anche nella pratica applicativa del Teorema di Bayes, rappresentando un fulcro metodologico per l’elaborazione di inferenze statistiche rigorose.</p>
-<p>Nel corso di questo capitolo, ci dedicheremo all’esplorazione approfondita della funzione di verosimiglianza, evidenziando il suo ruolo di interfaccia tra le osservazioni empiriche disponibili e i parametri modello che aspiriamo a stimare. Attraverso l’analisi di casi studio pertinenti, dimostreremo le modalità di calcolo della verosimiglianza e il suo impiego nel contesto dell’inferenza statistica.</p>
+<p>Oltre agli approcci frequentisti e bayesiani, l’inferenza statistica include un terzo metodo fondamentale: la verosimiglianza. Questo approccio permette ai ricercatori di misurare l’evidenza relativa nel confronto tra due modelli o ipotesi, similmente alla metodologia bayesiana. Tuttavia, si distingue per il suo rifiuto di integrare informazioni a priori nelle analisi statistiche.</p>
+<p>Il fulcro di questo capitolo è la funzione di verosimiglianza, un concetto cardine che attraversa tutti e tre gli approcci statistici, agendo come ponte tra i dati osservati e i parametri di un dato modello statistico. La sua importanza risiede nella capacità di fornire una base solida per l’interpretazione e la quantificazione dell’adattamento dei dati ai modelli teorici, rendendola uno strumento indispensabile nell’arsenale dell’inferenza statistica.</p>
 <div class="admonition-obiettivi-di-apprendimento admonition">
 <p class="admonition-title">Obiettivi di apprendimento</p>
 <p>Dopo aver completato questo capitolo, sarete in grado di:</p>
@@ -590,34 +592,32 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="concetto-di-verosimiglianza-e-sua-formalizzazione-matematica">
-<h2>Concetto di Verosimiglianza e Sua Formalizzazione Matematica<a class="headerlink" href="#concetto-di-verosimiglianza-e-sua-formalizzazione-matematica" title="Permalink to this heading">#</a></h2>
-<p>La funzione di verosimiglianza è una struttura matematica utilizzata per quantificare la congruenza tra un insieme di dati osservati <span class="math notranslate nohighlight">\( y \)</span> e un modello statistico parametrizzato da <span class="math notranslate nohighlight">\( \theta \)</span>. Essa è formalmente definita come proporzionale alla probabilità condizionale dei dati <span class="math notranslate nohighlight">\( y \)</span> dato il vettore dei parametri <span class="math notranslate nohighlight">\( \theta \)</span>:</p>
+<section id="il-principio-della-verosimiglianza-e-la-sua-formalizzazione">
+<h2>Il Principio della Verosimiglianza e la sua Formalizzazione<a class="headerlink" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione" title="Permalink to this heading">#</a></h2>
+<p>La funzione di verosimiglianza rappresenta un concetto chiave nell’inferenza statistica, fungendo da mezzo per quantificare quanto bene un modello parametrico, definito da parametri <span class="math notranslate nohighlight">\( \theta \)</span>, si adatti a un insieme di dati osservati <span class="math notranslate nohighlight">\( y \)</span>. La definizione matematica pone la verosimiglianza come direttamente proporzionale alla probabilità condizionata dei dati osservati dati i parametri:</p>
 <div class="math notranslate nohighlight" id="equation-eq-likelihood-def">
 <span class="eqno">(51)<a class="headerlink" href="#equation-eq-likelihood-def" title="Permalink to this equation">#</a></span>\[
-\begin{equation}
 L(\theta | y) \propto p(y | \theta).
-\end{equation}
 \]</div>
-<p>In questa espressione, <span class="math notranslate nohighlight">\( L(\theta | y) \)</span> rappresenta la funzione di verosimiglianza, mentre <span class="math notranslate nohighlight">\( p(y | \theta) \)</span> è la densità (o funzione di massa nel caso discreto) di probabilità dei dati <span class="math notranslate nohighlight">\( y \)</span> condizionata dai parametri <span class="math notranslate nohighlight">\( \theta \)</span>.</p>
-<p>La costante di proporzionalità, spesso omessa, è irrilevante nel contesto dell’ottimizzazione della funzione di verosimiglianza. Ciò è dovuto al fatto che tale costante non dipende dai parametri <span class="math notranslate nohighlight">\( \theta \)</span> e, quindi, non influisce sull’identificazione del valore di <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza la funzione.</p>
-<p>Immaginiamo di avere una moneta e di voler valutare se è equilibrata. Dopo 10 lanci, osserviamo 7 facce. Utilizziamo la distribuzione binomiale per modellare questa situazione. La funzione di massa di probabilità (FMP) della distribuzione binomiale è data da:</p>
+<p>Qui, <span class="math notranslate nohighlight">\( L(\theta | y) \)</span> indica la funzione di verosimiglianza e <span class="math notranslate nohighlight">\( p(y | \theta) \)</span> denota la densità di probabilità (o funzione di massa di probabilità per dati discreti) di osservare i dati <span class="math notranslate nohighlight">\( y \)</span> dato il set di parametri <span class="math notranslate nohighlight">\( \theta \)</span>.</p>
+<p>La costante di proporzionalità in questa relazione è tipicamente trascurata in quanto non influisce sull’analisi di ottimizzazione della verosimiglianza; essa non varia con i parametri <span class="math notranslate nohighlight">\( \theta \)</span> e, di conseguenza, non modifica il valore di <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza la funzione di verosimiglianza.</p>
+<p>Per illustrare con un esempio, consideriamo il caso di una moneta lanciata 10 volte, risultando in 7 teste. Questo scenario può essere modellato utilizzando la distribuzione binomiale, la cui funzione di massa di probabilità è espressa come:</p>
 <div class="math notranslate nohighlight">
 \[
-p(y | n, p) = \binom{n}{y} \cdot p^y \cdot (1 - p)^{(n - y)},
+p(y | n, p) = \binom{n}{y} p^y (1 - p)^{(n - y)},
 \]</div>
-<p>dove <span class="math notranslate nohighlight">\( n \)</span> è il numero totale di tentativi, <span class="math notranslate nohighlight">\( y \)</span> è il numero di successi, e <span class="math notranslate nohighlight">\( p \)</span> è la probabilità di successo.</p>
-<p>Se vogliamo calcolare la verosimiglianza di osservare 7 facce in 10 lanci con una moneta equilibrata (<span class="math notranslate nohighlight">\( p = 0.5 \)</span>), la formula diventa:</p>
+<p>dove <span class="math notranslate nohighlight">\( n \)</span> rappresenta il numero totale di lanci, <span class="math notranslate nohighlight">\( y \)</span> il numero di teste osservate, e <span class="math notranslate nohighlight">\( p \)</span> la probabilità di osservare una testa in un singolo lancio.</p>
+<p>La verosimiglianza di ottenere 7 teste in 10 lanci con una moneta non distorta (<span class="math notranslate nohighlight">\( p = 0.5 \)</span>) si calcola come:</p>
 <div class="math notranslate nohighlight">
 \[
-L(p = 0.5 | y = 7, n = 10) \propto \binom{10}{7} \cdot 0.5^7 \cdot (1 - 0.5)^{3}.
+L(p = 0.5 | y = 7, n = 10) \propto \binom{10}{7} \cdot 0.5^7 \cdot (1 - 0.5)^3.
 \]</div>
-<p>Questo calcolo ci permette di quantificare quanto sia verosimile osservare 7 facce in 10 lanci, supponendo che la moneta sia equilibrata. Calcolando la verosimiglianza per diversi valori di <span class="math notranslate nohighlight">\( p \)</span>, possiamo individuare il valore che massimizza questa funzione e, quindi, ottenere una stima più precisa della “vera” probabilità di ottenere una faccia con questa moneta.</p>
-<p>È importante notare che la funzione di verosimiglianza e la funzione di probabilità o densità possono essere rappresentate dalla stessa formula matematica, ma la loro interpretazione e applicazione sono differenti. Mentre la funzione di probabilità si concentra sul calcolo della probabilità dei dati <span class="math notranslate nohighlight">\( y \)</span> dati i parametri <span class="math notranslate nohighlight">\( \theta \)</span>, la funzione di verosimiglianza è utilizzata per determinare la plausibilità di differenti valori del parametro <span class="math notranslate nohighlight">\( \theta \)</span> alla luce dei dati osservati <span class="math notranslate nohighlight">\( y \)</span>.</p>
-<p>In sintesi, la funzione di verosimiglianza è uno strumento fondamentale nell’inferenza statistica. Essa fornisce un criterio per valutare e confrontare la plausibilità di diversi valori del parametro <span class="math notranslate nohighlight">\( \theta \)</span>, e serve come base per metodi di stima puntuali o intervallari dei parametri del modello.</p>
+<p>Questo calcolo ci permette di valutare la verosimiglianza di osservare tale esito assumendo che la moneta sia equilibrata. Analizzando la verosimiglianza per vari valori di <span class="math notranslate nohighlight">\( p \)</span>, si può identificare il valore che la massimizza, fornendo così una stima accurata della probabilità di ottenere una testa con la moneta in questione.</p>
+<p>Va sottolineato che, sebbene la funzione di verosimiglianza e la funzione di probabilità condividano la stessa forma matematica, differiscono significativamente in termini di interpretazione e scopo. Mentre la funzione di probabilità calcola la probabilità di osservare i dati <span class="math notranslate nohighlight">\( y \)</span> dati certi parametri <span class="math notranslate nohighlight">\( \theta \)</span>, la funzione di verosimiglianza valuta la plausibilità dei diversi valori dei parametri <span class="math notranslate nohighlight">\( \theta \)</span> alla luce dei dati osservati.</p>
+<p>In conclusione, la funzione di verosimiglianza è essenziale per l’inferenza statistica, offrendo un meccanismo per valutare e comparare la plausibilità di differenti set di parametri <span class="math notranslate nohighlight">\( \theta \)</span>. Essa costituisce la base per la stima di parametri tramite metodi puntuali o intervallari, facilitando una comprensione più profonda del modello e dei dati analizzati.</p>
 </section>
-<section id="verosimiglianza-nel-contesto-del-modello-binomiale-un-esempio-approfondito">
-<h2>Verosimiglianza nel Contesto del Modello Binomiale: Un Esempio Approfondito<a class="headerlink" href="#verosimiglianza-nel-contesto-del-modello-binomiale-un-esempio-approfondito" title="Permalink to this heading">#</a></h2>
+<section id="verosimiglianza-nel-contesto-del-modello-binomiale">
+<h2>Verosimiglianza nel Contesto del Modello Binomiale<a class="headerlink" href="#verosimiglianza-nel-contesto-del-modello-binomiale" title="Permalink to this heading">#</a></h2>
 <p>Esploriamo ulteriormente l’importanza della funzione di verosimiglianza mediante un esempio concreto basato sulla distribuzione binomiale. Immaginiamo di effettuare un esperimento composto da <span class="math notranslate nohighlight">\( n \)</span> prove indipendenti, ciascuna con due possibili esiti: successo o fallimento (ad esempio, lanci di una moneta). Supponiamo di aver registrato <span class="math notranslate nohighlight">\( y \)</span> successi e <span class="math notranslate nohighlight">\( n - y \)</span> fallimenti. In questo contesto, la funzione di massa di probabilità (FMP) binomiale che governa la probabilità di osservare esattamente <span class="math notranslate nohighlight">\( y \)</span> successi è:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -634,7 +634,7 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 \[
 \mathcal{L}(\theta \mid y) = \theta^y (1 - \theta)^{n - y}.
 \]</div>
-<p>Per illustrare con un esempio applicativo, facciamo riferimento allo studio di <span id="id1">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id65" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>. In questo studio, su un campione di 30 pazienti affetti da depressione clinica, 23 mostravano aspettative negativamente distorte riguardo al loro futuro stato d’animo. Pertanto, nel contesto di questi dati, la funzione di verosimiglianza è definita dalla distribuzione binomiale con un parametro <span class="math notranslate nohighlight">\( \theta \)</span> ignoto nell’intervallo [0, 1]. Avendo osservato <span class="math notranslate nohighlight">\( y = 23 \)</span> successi in <span class="math notranslate nohighlight">\( n = 30 \)</span> prove, la funzione di verosimiglianza assume la forma:</p>
+<p>Per illustrare con un esempio applicativo, facciamo riferimento allo studio di <span id="id1">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id66" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>. In questo studio, su un campione di 30 pazienti affetti da depressione clinica, 23 mostravano aspettative negativamente distorte riguardo al loro futuro stato d’animo. Pertanto, nel contesto di questi dati, la funzione di verosimiglianza è definita dalla distribuzione binomiale con un parametro <span class="math notranslate nohighlight">\( \theta \)</span> ignoto nell’intervallo [0, 1]. Avendo osservato <span class="math notranslate nohighlight">\( y = 23 \)</span> successi in <span class="math notranslate nohighlight">\( n = 30 \)</span> prove, la funzione di verosimiglianza assume la forma:</p>
 <div class="math notranslate nohighlight" id="equation-eq-likebino23">
 <span class="eqno">(52)<a class="headerlink" href="#equation-eq-likebino23" title="Permalink to this equation">#</a></span>\[
 \begin{equation}
@@ -974,7 +974,7 @@ f(y \mid \theta) = \prod_{i=1}^{n} f(y_i \mid \theta),
 \]</div>
 <p>dove <span class="math notranslate nohighlight">\( f(\cdot) \)</span> rappresenta la funzione di densità di probabilità gaussiana parametrizzata da <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma \)</span>.</p>
 <p>Mantenendo i dati osservati <span class="math notranslate nohighlight">\( y \)</span> costanti, la funzione di verosimiglianza per il campione diventa equivalente all’equazione (eq-gaussian-sim-like).</p>
-<p>Per illustrare questo concetto concretamente, prendiamo in esame un esempio che utilizza i punteggi BDI-II (Beck Depression Inventory II) di trenta partecipanti in uno studio clinico, come descritto in <span id="id2">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id65" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
+<p>Per illustrare questo concetto concretamente, prendiamo in esame un esempio che utilizza i punteggi BDI-II (Beck Depression Inventory II) di trenta partecipanti in uno studio clinico, come descritto in <span id="id2">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id66" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span>
@@ -1179,6 +1179,9 @@ f(y \mid \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \mid \mu, \sigma = 6.50).
 <li><p>Rispondere a domande che implicano una adeguata comprensione del concetto di funzione di verosimiglianza.</p></li>
 </ul>
 </div>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Permalink to this heading">#</a></h2>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
@@ -1287,8 +1290,8 @@ Watermark: 2.4.3
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#concetto-di-verosimiglianza-e-sua-formalizzazione-matematica">Concetto di Verosimiglianza e Sua Formalizzazione Matematica</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-nel-contesto-del-modello-binomiale-un-esempio-approfondito">Verosimiglianza nel Contesto del Modello Binomiale: Un Esempio Approfondito</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione">Il Principio della Verosimiglianza e la sua Formalizzazione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-nel-contesto-del-modello-binomiale">Verosimiglianza nel Contesto del Modello Binomiale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale">Verosimiglianza Congiunta di <span class="math notranslate nohighlight">\( n \)</span> Campioni IID da una Distribuzione Binomiale</a></li>
@@ -1303,6 +1306,7 @@ Watermark: 2.4.3
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
   </nav></div>
 

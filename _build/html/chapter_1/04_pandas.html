@@ -571,6 +571,18 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_4189/4073940448.py:1: DeprecationWarning: 
+Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
+(to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
+but was not found to be installed on your system.
+If this would cause problems for you,
+please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
+        
+  import pandas as pd
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="series">
@@ -1469,7 +1481,7 @@ dtype: object
 </div>
 </div>
 </div>
-<p>L’attributo <code class="docutils literal notranslate"><span class="pre">.shape</span></code> ritorna il numero di righe e di colonne del DataFrame. Nel caso presente, ci sono 344 righe e 8 colonne.</p>
+<p>Le dimensioni del Data Frame si ottengono con l’attributo <code class="docutils literal notranslate"><span class="pre">.shape</span></code>, che ritorna il numero di righe e di colonne. Nel caso presente, ci sono 344 righe e 8 colonne.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
@@ -1684,13 +1696,17 @@ dtype: int64
 </section>
 <section id="rinominare-le-colonne">
 <h2>Rinominare le colonne<a class="headerlink" href="#rinominare-le-colonne" title="Permalink to this heading">#</a></h2>
-<p>È possibile rinominare tutte le colonne passando al metodo <code class="docutils literal notranslate"><span class="pre">.rename()</span></code> un dizionario che specifica quali colonne devono essere mappate a cosa. Nella cella seguente faccio prima una copia del DataFrame con il metodo <code class="docutils literal notranslate"><span class="pre">copy()</span></code> e poi rinomino <code class="docutils literal notranslate"><span class="pre">sex</span></code> che diventa <code class="docutils literal notranslate"><span class="pre">gender</span></code> e <code class="docutils literal notranslate"><span class="pre">year</span></code> che diventa <code class="docutils literal notranslate"><span class="pre">year_of_the_study</span></code>:</p>
+<p>È possibile rinominare tutte le colonne passando al metodo <code class="docutils literal notranslate"><span class="pre">.rename()</span></code> un dizionario che specifica quali colonne devono essere mappate a cosa. Nella cella seguente facciamo prima una copia del DataFrame con il metodo <code class="docutils literal notranslate"><span class="pre">copy()</span></code> e poi rinominiamo <code class="docutils literal notranslate"><span class="pre">sex</span></code> che diventa <code class="docutils literal notranslate"><span class="pre">gender</span></code> e <code class="docutils literal notranslate"><span class="pre">year</span></code> che diventa <code class="docutils literal notranslate"><span class="pre">year_of_the_study</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
 <span class="c1"># rename(columns={&quot;OLD_NAME&quot;: &quot;NEW_NAME&quot;})</span>
-<span class="n">df1</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="s2">&quot;gender&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;year_of_the_study&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="s2">&quot;gender&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;year_of_the_study&quot;</span>
+    <span class="p">},</span> 
+           <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">df1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1848,7 +1864,7 @@ Name: bill_length_mm, Length: 344, dtype: float64
 </div>
 </div>
 </div>
-<p>Se tra parentesi quadre indichiamo una lista di colonne come <code class="docutils literal notranslate"><span class="pre">df[['bill_length_mm','species']]</span></code> otteniamo un nuovo DataFrame costituito da queste colonne:</p>
+<p>Se tra parentesi quadre indichiamo una lista di colonne, come nel caso di <code class="docutils literal notranslate"><span class="pre">df[['bill_length_mm','species']]</span></code>, otteniamo un nuovo DataFrame costituito unicamente dalle colonne selezionate:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;bill_length_mm&quot;</span><span class="p">,</span> <span class="s2">&quot;species&quot;</span><span class="p">]]</span>
@@ -3027,48 +3043,48 @@ Name: island, Length: 344, dtype: bool
   </thead>
   <tbody>
     <tr>
-      <th>115</th>
+      <th>133</th>
       <td>Adelie</td>
-      <td>Biscoe</td>
-      <td>42.7</td>
-      <td>18.3</td>
-      <td>196.0</td>
-      <td>4075.0</td>
+      <td>Dream</td>
+      <td>37.5</td>
+      <td>18.5</td>
+      <td>199.0</td>
+      <td>4475.0</td>
       <td>male</td>
       <td>2009</td>
     </tr>
     <tr>
-      <th>16</th>
-      <td>Adelie</td>
-      <td>Torgersen</td>
-      <td>38.7</td>
-      <td>19.0</td>
-      <td>195.0</td>
-      <td>3450.0</td>
-      <td>female</td>
-      <td>2007</td>
-    </tr>
-    <tr>
-      <th>138</th>
-      <td>Adelie</td>
+      <th>306</th>
+      <td>Chinstrap</td>
       <td>Dream</td>
-      <td>37.0</td>
-      <td>16.5</td>
-      <td>185.0</td>
-      <td>3400.0</td>
-      <td>female</td>
-      <td>2009</td>
-    </tr>
-    <tr>
-      <th>76</th>
-      <td>Adelie</td>
-      <td>Torgersen</td>
       <td>40.9</td>
-      <td>16.8</td>
-      <td>191.0</td>
-      <td>3700.0</td>
+      <td>16.6</td>
+      <td>187.0</td>
+      <td>3200.0</td>
       <td>female</td>
       <td>2008</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>Adelie</td>
+      <td>Dream</td>
+      <td>36.3</td>
+      <td>19.5</td>
+      <td>190.0</td>
+      <td>3800.0</td>
+      <td>male</td>
+      <td>2008</td>
+    </tr>
+    <tr>
+      <th>336</th>
+      <td>Chinstrap</td>
+      <td>Dream</td>
+      <td>51.9</td>
+      <td>19.5</td>
+      <td>206.0</td>
+      <td>3950.0</td>
+      <td>male</td>
+      <td>2009</td>
     </tr>
   </tbody>
 </table>
@@ -3106,24 +3122,24 @@ Name: island, Length: 344, dtype: bool
   </thead>
   <tbody>
     <tr>
-      <th>108</th>
-      <td>38.1</td>
-      <td>17.0</td>
+      <th>123</th>
+      <td>41.4</td>
+      <td>18.5</td>
     </tr>
     <tr>
-      <th>319</th>
-      <td>45.5</td>
-      <td>17.0</td>
+      <th>307</th>
+      <td>54.2</td>
+      <td>20.8</td>
     </tr>
     <tr>
-      <th>145</th>
+      <th>128</th>
       <td>39.0</td>
-      <td>18.7</td>
+      <td>17.1</td>
     </tr>
     <tr>
-      <th>254</th>
-      <td>47.2</td>
-      <td>15.5</td>
+      <th>117</th>
+      <td>37.3</td>
+      <td>20.5</td>
     </tr>
   </tbody>
 </table>
@@ -4040,11 +4056,11 @@ Name: island, Length: 344, dtype: bool
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 06 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Feb 16 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
-IPython version      : 8.19.0
+IPython version      : 8.21.0
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
@@ -4054,8 +4070,8 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-numpy : 1.26.2
-pandas: 2.1.4
+numpy : 1.26.4
+pandas: 2.2.0
 
 Watermark: 2.4.3
 </pre></div>

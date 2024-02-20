@@ -519,7 +519,16 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standardizzazione-della-media-campionaria">Standardizzazione della media campionaria</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-test-di-ipotesi-nel-contesto-frequentista">Il Test di Ipotesi nel Contesto Frequentista</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilita">Probabilità</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilita-e-valori-p">Probabilità e Valori-p</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standardizzazione-della-media-campionaria">Standardizzazione della Media Campionaria</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-in-r">Simulazione in R</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-con-il-risultato-teorico">Confronto con il Risultato Teorico</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni-pratiche">Applicazioni pratiche</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ipotesi-statistiche">Ipotesi statistiche</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#i-passi-di-un-test-di-ipotesi">I passi di un test di ipotesi</a></li>
@@ -557,6 +566,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approccio-bayesiano">Approccio Bayesiano</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#malintesi-sul-valore-p">Malintesi sul valore-p</a></li>
 </ul>
             </nav>
         </div>
@@ -578,28 +588,131 @@ document.write(`
 <h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span><span class="p">,</span> <span class="n">geom</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">comb</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">import</span><span class="w"> </span><span class="n">numpy</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">np</span>
+<span class="n">import</span><span class="w"> </span><span class="n">scipy.stats</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">stats</span>
+<span class="n">from</span><span class="w"> </span><span class="n">scipy.stats</span><span class="w"> </span><span class="n">import</span><span class="w"> </span><span class="n">binom</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span>
+<span class="n">from</span><span class="w"> </span><span class="n">scipy.special</span><span class="w"> </span><span class="n">import</span><span class="w"> </span><span class="n">comb</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span> <span class="ow">in</span> <span class="n">parse</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">srcfile</span> <span class="o">=</span> <span class="n">src</span><span class="p">):</span> <span class="o">&lt;</span><span class="n">text</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span> <span class="n">simbolo</span> <span class="n">inatteso</span>
+<span class="mi">1</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">numpy</span>
+           <span class="o">^</span>
+<span class="ne">Traceback</span>:
 </pre></div>
 </div>
 </div>
 </div>
 </section>
+<section id="il-test-di-ipotesi-nel-contesto-frequentista">
+<h2>Il Test di Ipotesi nel Contesto Frequentista<a class="headerlink" href="#il-test-di-ipotesi-nel-contesto-frequentista" title="Permalink to this heading">#</a></h2>
+<p>I metodi bayesiani e frequentisti non sono semplicemente due approcci diversi per rispondere alla stessa domanda, ma piuttosto pongono domande fondamentalmente diverse. Pertanto, è essenziale iniziare con una comprensione dei valori-p.</p>
+<p>L’American Statistical Association (ASA) definisce il valore-p come:</p>
+<blockquote>
+<div><p>the probability under a specified statistical model that a statistical summary of the data (e.g., the sample mean difference between two compared groups) would be equal to or more extreme than its observed value (Wasserstein e Lazar 2016).</p>
+</div></blockquote>
+<p>Questa definizione, però, può risultare difficile da comprendere. Ciò è principalmente dovuto al fatto che contiene almeno un concetto non ben definito (“probabilità”) e un concetto complesso (“modello statistico specificato”). Per ottenere una vera comprensione di ciò che rappresenta un valore-p, è necessario esaminare con attenzione entrambi questi concetti. Nel farlo, acquisiremo anche una migliore comprensione di altri concetti che sono fondamentali per l’inferenza frequentista. Una solida comprensione dell’inferenza frequentista, a sua volta, ci aiuterà a cogliere la distinzione tra inferenza frequentista e inferenza bayesiana.</p>
+<section id="probabilita">
+<h3>Probabilità<a class="headerlink" href="#probabilita" title="Permalink to this heading">#</a></h3>
+<p>La probabilità è comunemente considerata come un concetto matematico, ma è anche un concetto profondamente filosofico.</p>
+<p>Per esempio, possiamo parlare della probabilità di ottenere testa in un lancio di moneta come 0.5, dove questo valore si riferisce alla frequenza relativa a lungo termine di ottenere testa. In altre parole, se lanciassimo una moneta molte volte, ci aspetteremmo che circa la metà dei lanci produca testa.</p>
+<p>Tuttavia, quando applichiamo il concetto di probabilità a scenari come il verdetto di un processo penale, la sua interpretazione diventa più complessa. Potremmo dire, ad esempio, di essere “sicuri al 90%” (probabilità di 0.9) che l’imputato abbia commesso il crimine. Ma cosa significa esattamente essere “sicuri al 90%”? È sensato interpretarlo come una frequenza relativa? Se no, in che altro modo potremmo interpretarlo? Potremmo considerarlo come una forma di credenza o convinzione nella verità di una proposizione, o come un grado di supporto basato sulle prove disponibili. Ad esempio, potremmo affermare che le prove supportano l’ipotesi che l’accusato abbia commesso il crimine con una probabilità di 9 a 1.</p>
+<p>Una distinzione fondamentale tra l’approccio frequentista e quello bayesiano è proprio nell’interpretazione della probabilità: la prima si basa sulla frequenza relativa a lungo termine, mentre la seconda sulla “certezza soggettiva”.</p>
+</section>
+<section id="probabilita-e-valori-p">
+<h3>Probabilità e Valori-p<a class="headerlink" href="#probabilita-e-valori-p" title="Permalink to this heading">#</a></h3>
+<p>Una volta chiarito che la probabilità può assumere significati diversi a seconda del contesto, possiamo interrogarci su quale nozione di probabilità sia implicata nella definizione del valore-p fornita dall’ASA. La visione comune suggerisce che si riferisca alle frequenze relative. Ma frequenze relative di cosa e ripetizioni di cosa?</p>
+<p>Potremmo riformulare la definizione dell’ASA in questo modo:</p>
+<blockquote>
+<div><p>the p value refers to the relative frequency of obtaining a statistical summary of the data as large or larger than the observed value over hypothetical repeats of an experiment described by a specified statistical model.</p>
+</div></blockquote>
+<p>Quindi, l’approccio frequentista può essere descritto come il metodo per stimare il valore di un parametro attraverso esperimenti ipotetici, confrontando i nostri dati con i risultati di tali esperimenti per giudicare se i nostri dati sono sorprendenti o meno.</p>
+<p>Nel prosieguo di questo capitolo, esploreremo come questo processo possa essere applicato alla media campionaria.</p>
+</section>
 <section id="standardizzazione-della-media-campionaria">
-<h2>Standardizzazione della media campionaria<a class="headerlink" href="#standardizzazione-della-media-campionaria" title="Permalink to this heading">#</a></h2>
-<p>In precedenza abbiamo esaminato la costruzione della distribuzione campionaria di una statistica di test. Ad esempio, consideriamo la media campionaria come stima della media della popolazione. Nel caso semplice in cui la popolazione segue una distribuzione normale, la distribuzione campionaria della statistica <span class="math notranslate nohighlight">\(\bar{X}\)</span> sarà distribuita secondo una distribuzione normale con media <span class="math notranslate nohighlight">\(\mu\)</span> e deviazione standard <span class="math notranslate nohighlight">\(\sigma/\sqrt{n}\)</span>, dove <span class="math notranslate nohighlight">\(\sigma\)</span> è la deviazione standard della popolazione e <span class="math notranslate nohighlight">\(n\)</span> è la dimensione del campione.</p>
-<p>Supponiamo per semplicità che la deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span> sia nota. Nonostante questa conoscenza, il parametro <span class="math notranslate nohighlight">\(\mu\)</span> rimane sconosciuto. La procedura di test di ipotesi statistiche si basa su un “Gedankenexperiment”, dove si ipotizza che la media sconosciuta <span class="math notranslate nohighlight">\(\mu\)</span> della popolazione assuma il valore noto <span class="math notranslate nohighlight">\(\mu_0\)</span>. Costruendo la distribuzione campionaria di <span class="math notranslate nohighlight">\(\bar{X}\)</span> sulla base di questa ipotesi, ci chiediamo quanto “lontana” si trovi <span class="math notranslate nohighlight">\(\bar{X}\)</span> dal valore atteso sotto l’ipotesi <span class="math notranslate nohighlight">\(\mu_0\)</span>. In altre parole, cerchiamo di valutare quanto <span class="math notranslate nohighlight">\(\bar{X}\)</span> si discosti da <span class="math notranslate nohighlight">\(\mu_0\)</span>, poiché sappiamo che l’aspettazione di <span class="math notranslate nohighlight">\(\bar{X}\)</span> è uguale a <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
-<p>Al fine di quantificare la “distanza” tra la media campionaria <span class="math notranslate nohighlight">\(\bar{X}\)</span> e <span class="math notranslate nohighlight">\(\mu_0\)</span>, il framework frequentista utilizza la standardizzazione di <span class="math notranslate nohighlight">\(\bar{X}\)</span> all’interno della distribuzione campionaria costruita assumendo <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span>. Questo processo coinvolge la creazione di una variabile detta <span class="math notranslate nohighlight">\(Z\)</span>, definita come:</p>
+<h3>Standardizzazione della Media Campionaria<a class="headerlink" href="#standardizzazione-della-media-campionaria" title="Permalink to this heading">#</a></h3>
+<p>Per comprendere il concetto dei valori p e l’applicazione dei test di ipotesi, è utile ricorrere a simulazioni. Queste permettono di replicare le condizioni sperimentali ipotetiche e osservare la variabilità dei risultati.</p>
+<p>Quando consideriamo la media campionaria come stima della media di una popolazione, assumiamo che questa popolazione segua una distribuzione normale. Vogliamo quindi esplorare la distribuzione della media campionaria (<span class="math notranslate nohighlight">\(\bar{X}\)</span>), che descrive la variazione di <span class="math notranslate nohighlight">\(\bar{X}\)</span> attraverso infiniti campioni di dimensione <span class="math notranslate nohighlight">\(n\)</span>. Abbiamo già dimostrato che, se la popolazione è normalmente distribuita, anche la distribuzione campionaria di <span class="math notranslate nohighlight">\(\bar{X}\)</span> seguirà una distribuzione normale, con media <span class="math notranslate nohighlight">\(\mu\)</span> (la media della popolazione) e deviazione standard <span class="math notranslate nohighlight">\(\frac{\sigma}{\sqrt{n}}\)</span> (con <span class="math notranslate nohighlight">\(\sigma\)</span> deviazione standard della popolazione e <span class="math notranslate nohighlight">\(n\)</span> dimensione del campione).</p>
+<p>Supponendo di conoscere <span class="math notranslate nohighlight">\(\sigma\)</span> ma non <span class="math notranslate nohighlight">\(\mu\)</span>, utilizziamo i test di ipotesi per indagare quanto la media campionaria osservata si discosti da un valore ipotetico <span class="math notranslate nohighlight">\(\mu_0\)</span>, assumendo per <span class="math notranslate nohighlight">\(\mu\)</span> questo valore specifico. Questo processo ci permette di valutare la plausibilità di <span class="math notranslate nohighlight">\(\mu_0\)</span> come vera media della popolazione.</p>
+<p>Per valutare quanto la media campionaria osservata si discosti dall’ipotesi nulla che propone <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span>, standardizziamo <span class="math notranslate nohighlight">\(\bar{X}\)</span> usando la formula:</p>
 <div class="math notranslate nohighlight">
 \[
-Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}}.
+Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}}
 \]</div>
-<p>Questa standardizzazione permette di ottenere una variabile normale standardizzata <span class="math notranslate nohighlight">\(Z\)</span>, con media 0 e deviazione standard 1, rappresentata come <span class="math notranslate nohighlight">\(Z \sim \mathcal{N}(0, 1)\)</span>.</p>
-<p>Consideriamo il fatto che questo sia un “Gedankenexperiment”. La “distanza” tra <span class="math notranslate nohighlight">\(\bar{X}\)</span> e <span class="math notranslate nohighlight">\(\mu_0\)</span> viene interpretata come segue: se <span class="math notranslate nohighlight">\(Z\)</span> è piccolo, indicando che <span class="math notranslate nohighlight">\(\bar{X}\)</span> è simile a <span class="math notranslate nohighlight">\(\mu_0\)</span>, allora i dati empirici del campione osservato sono coerenti con l’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span>. Al contrario, se <span class="math notranslate nohighlight">\(Z\)</span> è grande, indicando che <span class="math notranslate nohighlight">\(\bar{X}\)</span> è “significativamente distante” da <span class="math notranslate nohighlight">\(\mu_0\)</span>, i dati empirici del campione osservato risultano incompatibili con l’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span>. Di conseguenza, l’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span> viene ritenuta poco plausibile e viene respinta.</p>
-<p>Per determinare la soglia oltre la quale l’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span> viene rigettata, utilizziamo il seguente criterio. Identifichiamo un insieme di valori possibili di <span class="math notranslate nohighlight">\(\bar{X}\)</span> che, all’interno della distribuzione campionaria di <span class="math notranslate nohighlight">\(\bar{X}\)</span> costruita assumendo <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span>, sono molto distanti da <span class="math notranslate nohighlight">\(\mathbb{E}(\bar{X}) = \mu_0\)</span>. Decidiamo che i valori che portano al rigetto dell’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span> corrispondano al 5% dei valori di <span class="math notranslate nohighlight">\(\bar{X}\)</span> più estremi. Pertanto, determiniamo i valori <span class="math notranslate nohighlight">\(z_c\)</span> che lasciano un’area pari a 0.05/2 in ciascuna coda della distribuzione <span class="math notranslate nohighlight">\(Z\)</span>. Questi valori corrispondono a -1.96 e 1.96. Se la statistica di test <span class="math notranslate nohighlight">\(Z\)</span> assume un valore inferiore a -1.96 o superiore a 1.96, concludiamo il “Gedankenexperiment” affermando che la distanza tra <span class="math notranslate nohighlight">\(\bar{X}\)</span> e <span class="math notranslate nohighlight">\(\mu_0\)</span> è così “significativa” che l’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span> non può essere ritenuta plausibile. Di conseguenza, respingiamo l’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span> e accettiamo l’ipotesi alternativa <span class="math notranslate nohighlight">\(\mu \neq \mu_0\)</span>.</p>
-<p>Nel contesto frequentista, l’ipotesi <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span> è definita come “ipotesi nulla” e viene indicata con <span class="math notranslate nohighlight">\(H_0\)</span>. Il valore <span class="math notranslate nohighlight">\(z_c\)</span> rappresenta il “valore critico per il rigetto dell’ipotesi nulla”, mentre il valore del 5% viene chiamato “livello di significatività” e viene denotato come <span class="math notranslate nohighlight">\(\alpha\)</span>. Di solito, il valore di <span class="math notranslate nohighlight">\(\alpha\)</span> è impostato a 0.05, ma può anche assumere valori come 0.01 o 0.001.</p>
+<p>Questa trasformazione produce una variabile <span class="math notranslate nohighlight">\(Z\)</span> che segue una distribuzione normale standard <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>. Valori estremi di <span class="math notranslate nohighlight">\(Z\)</span> (sia molto grandi che molto piccoli) suggeriscono che la media campionaria osservata è incompatibile con <span class="math notranslate nohighlight">\(\mu_0\)</span>, portando al rigetto dell’ipotesi nulla.</p>
+<section id="simulazione-in-r">
+<h4>Simulazione in R<a class="headerlink" href="#simulazione-in-r" title="Permalink to this heading">#</a></h4>
+<p>Per illustrare questo concetto attraverso la simulazione, consideriamo un esempio numerico. Supponiamo che <span class="math notranslate nohighlight">\(\mu_0 = 100\)</span>, <span class="math notranslate nohighlight">\(\sigma = 15\)</span>, e <span class="math notranslate nohighlight">\(n = 30\)</span>. Vogliamo calcolare il valore-p per l’evento <span class="math notranslate nohighlight">\(\bar{X} &gt; 120\)</span>.</p>
+<p>La simulazione in R può essere eseguita come segue:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Per rendere la simulazione riproducibile</span>
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
+<span class="n">mu_0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span>
+<span class="n">sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">15</span>
+<span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">30</span>
+<span class="n">n_sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span><span class="w"> </span><span class="c1"># Numero di simulazioni</span>
+
+<span class="c1"># Generiamo n_sim medie campionarie da una N(mu_0, sigma/sqrt(n))</span>
+<span class="n">sample_means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rnorm</span><span class="p">(</span><span class="n">n_sim</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu_0</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sigma</span><span class="o">/</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="c1"># Calcoliamo il valore-p come la proporzione di medie campionarie &gt; 120</span>
+<span class="n">p_value</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">sample_means</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">105</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">n_sim</span>
+
+<span class="c1"># Stampiamo il valore-p</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">p_value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.0339
+</pre></div>
+</div>
+</div>
+</div>
+<p>Questo script R simula la distribuzione campionaria di <span class="math notranslate nohighlight">\(\bar{X}\)</span> sotto l’ipotesi nulla che <span class="math notranslate nohighlight">\(\mu = \mu_0\)</span> e calcola il valore-p per l’evento <span class="math notranslate nohighlight">\(\bar{X} &gt; 120\)</span>. Il valore-p indica la probabilità di osservare un valore così estremo (o più) dato che l’ipotesi nulla è vera.</p>
+</section>
+<section id="confronto-con-il-risultato-teorico">
+<h4>Confronto con il Risultato Teorico<a class="headerlink" href="#confronto-con-il-risultato-teorico" title="Permalink to this heading">#</a></h4>
+<p>Il risultato della simulazione può essere confrontato con il calcolo teorico del valore-p usando la distribuzione normale standard. Il valore <span class="math notranslate nohighlight">\(Z\)</span> per <span class="math notranslate nohighlight">\(\bar{X} = 120\)</span> è calcolato come:</p>
+<div class="math notranslate nohighlight">
+\[
+Z = \frac{105 - 100}{15/\sqrt{30}}
+\]</div>
+<p>Possiamo usare la funzione <code class="docutils literal notranslate"><span class="pre">pnorm</span></code> in R per trovare l’area sotto la curva normale standard a destra di questo valore <span class="math notranslate nohighlight">\(Z\)</span>, che corrisponde al valore-p teorico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Z</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="m">105</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="m">15</span><span class="o">/</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">30</span><span class="p">))</span>
+<span class="n">Z</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">1.82574185835055</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">pnorm</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">0.0339445774309145</div></div>
+</div>
+<p>Oppure, in maniera equivalente</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">pnorm</span><span class="p">(</span><span class="m">105</span><span class="p">,</span><span class="w"> </span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="m">15</span><span class="o">/</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">30</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">0.0339445774309145</div></div>
+</div>
+<p>Il calcolo teorico mostra che il valore <span class="math notranslate nohighlight">\(Z\)</span> per una media campionaria di 105 è 1.82. Questo valore indica una deviazione dalla media ipotizzata sotto l’ipotesi nulla (<span class="math notranslate nohighlight">\(\mu_0 = 100\)</span>) che può essere quantificata da una “sorpresa” indicata dal valore-p, laddove valori-p piccoli indicano una maggiore sorpresa. Il valore-p ottenuto, ovvero 0.0339, indica un elevato grado di sorpresa: come indicato nella simulazione, un valore di 105 o maggiore si ottiene solo nel 3.4% dei casi in cui ripetiamo l’esperimento casuale che abbiamo descritto. Ciò suggerisce che un tale risultato è altamente improbabile se l’ipotesi nulla fosse vera.</p>
+</section>
+</section>
 </section>
 <section id="applicazioni-pratiche">
 <h2>Applicazioni pratiche<a class="headerlink" href="#applicazioni-pratiche" title="Permalink to this heading">#</a></h2>
@@ -641,19 +754,19 @@ H_0: \theta \in \Theta_0 \subset \Theta,
 </section>
 <section id="un-esempio-motivante">
 <h2>Un esempio motivante<a class="headerlink" href="#un-esempio-motivante" title="Permalink to this heading">#</a></h2>
-<p>Per esplorare il concetto di significatività statistica, possiamo prendere in considerazione uno studio svolto da <span id="id1">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> sul ruolo della musica nella trasmissione di messaggi sociali ai bambini. La musica è una forma d’arte presente in molte attività quotidiane e può trasmettere informazioni relative alla cultura e all’appartenenza sociale. Gli autori dello studio hanno voluto indagare se i bambini di soli 5 mesi avessero una preferenza per individui sconosciuti che cantavano loro una canzone familiare rispetto ad altri individui sconosciuti che cantavano una canzone simile, ma con una diversa melodia.</p>
-<p>Dalle analisi condotte da <span id="id2">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> è emerso che la preferenza dei bambini si manifestava solo quando la canzone veniva cantata dai loro genitori durante la fase di familiarizzazione, ma non quando la stessa canzone veniva cantata da un estraneo. Secondo gli autori, questo dimostra che il significato sociale è un elemento chiave nella preferenza dei bambini, oltre alla familiarità con la canzone.</p>
+<p>Per esplorare il concetto di significatività statistica, possiamo prendere in considerazione uno studio svolto da <span id="id1">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> sul ruolo della musica nella trasmissione di messaggi sociali ai bambini. La musica è una forma d’arte presente in molte attività quotidiane e può trasmettere informazioni relative alla cultura e all’appartenenza sociale. Gli autori dello studio hanno voluto indagare se i bambini di soli 5 mesi avessero una preferenza per individui sconosciuti che cantavano loro una canzone familiare rispetto ad altri individui sconosciuti che cantavano una canzone simile, ma con una diversa melodia.</p>
+<p>Dalle analisi condotte da <span id="id2">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> è emerso che la preferenza dei bambini si manifestava solo quando la canzone veniva cantata dai loro genitori durante la fase di familiarizzazione, ma non quando la stessa canzone veniva cantata da un estraneo. Secondo gli autori, questo dimostra che il significato sociale è un elemento chiave nella preferenza dei bambini, oltre alla familiarità con la canzone.</p>
 <section id="domanda-della-ricerca-e-ipotesi-statistiche">
 <h3>Domanda della ricerca e ipotesi statistiche<a class="headerlink" href="#domanda-della-ricerca-e-ipotesi-statistiche" title="Permalink to this heading">#</a></h3>
-<p>La ricerca condotta da <span id="id3">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> si è concentrata sullo studio dell’influenza della musica sui messaggi sociali trasmessi ai bambini molto piccoli. Tuttavia, come molte altre ipotesi psicologiche, l’ipotesi principale non può essere valutata direttamente in termini quantitativi. Pertanto, i ricercatori devono formulare ipotesi statistiche, che, sebbene non coincidano con l’ipotesi della ricerca, possono essere esaminate in termini probabilistici.</p>
-<p>Per chiarire questo punto, consideriamo l’esperimento condotto sui bambini da <span id="id4">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>. Dopo la fase di familiarizzazione con la canzone di prova, i bambini partecipanti sono stati sottoposti a un test in laboratorio, durante il quale sono stati mostrati due video. Nel primo video, un estraneo cantava la canzone di prova, mentre nel secondo video, un altro individuo cantava una canzone simile ma non familiare ai bambini. I ricercatori hanno misurato il tempo in cui i bambini fissavano ciascun video. Nel primo esperimento, la variabile dipendente era la media delle proporzioni di tempo che i bambini fissavano il video “familiare” rispetto al tempo di fissazione totale. Poiché l’ipotesi principale non può essere valutata direttamente, i ricercatori hanno formulato ipotesi statistiche che possono essere esaminate in termini probabilistici.</p>
-<p>Poiché nei tipici esperimenti psicologici, come nel caso della ricerca di <span id="id5">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>, l’ipotesi della ricerca non può essere valutata direttamente, è necessario stabilire una connessione tra l’ipotesi della ricerca e l’ipotesi statistica. Nel caso specifico, ci sono tre possibili scenari da considerare:</p>
+<p>La ricerca condotta da <span id="id3">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> si è concentrata sullo studio dell’influenza della musica sui messaggi sociali trasmessi ai bambini molto piccoli. Tuttavia, come molte altre ipotesi psicologiche, l’ipotesi principale non può essere valutata direttamente in termini quantitativi. Pertanto, i ricercatori devono formulare ipotesi statistiche, che, sebbene non coincidano con l’ipotesi della ricerca, possono essere esaminate in termini probabilistici.</p>
+<p>Per chiarire questo punto, consideriamo l’esperimento condotto sui bambini da <span id="id4">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>. Dopo la fase di familiarizzazione con la canzone di prova, i bambini partecipanti sono stati sottoposti a un test in laboratorio, durante il quale sono stati mostrati due video. Nel primo video, un estraneo cantava la canzone di prova, mentre nel secondo video, un altro individuo cantava una canzone simile ma non familiare ai bambini. I ricercatori hanno misurato il tempo in cui i bambini fissavano ciascun video. Nel primo esperimento, la variabile dipendente era la media delle proporzioni di tempo che i bambini fissavano il video “familiare” rispetto al tempo di fissazione totale. Poiché l’ipotesi principale non può essere valutata direttamente, i ricercatori hanno formulato ipotesi statistiche che possono essere esaminate in termini probabilistici.</p>
+<p>Poiché nei tipici esperimenti psicologici, come nel caso della ricerca di <span id="id5">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>, l’ipotesi della ricerca non può essere valutata direttamente, è necessario stabilire una connessione tra l’ipotesi della ricerca e l’ipotesi statistica. Nel caso specifico, ci sono tre possibili scenari da considerare:</p>
 <ol class="arabic simple">
 <li><p>Nel caso in cui i bambini non mostrino alcuna preferenza tra i due tipi di video-registrazione, la media delle proporzioni di tempo di fissazione per la popolazione sarà uguale a <span class="math notranslate nohighlight">\(\mu = 0.5\)</span>, in quanto i tempi di fissazione saranno uguali in media per le due video-registrazioni.</p></li>
 <li><p>Se invece gli autori della ricerca hanno ragione, i bambini mostreranno una preferenza per il video con la canzone familiare rispetto a quello con la canzone non familiare. In questo caso, l’ipotesi statistica sarà <span class="math notranslate nohighlight">\(\mu &gt; 0.5\)</span>, dove <span class="math notranslate nohighlight">\(\mu = 0.5\)</span> rappresenta il livello di probabilità casuale.</p></li>
 <li><p>Infine, una terza possibilità è che i bambini siano maggiormente attratti da una melodia non familiare, contrariamente a quanto suggerito dagli autori della ricerca. In tal caso, l’ipotesi statistica diventa <span class="math notranslate nohighlight">\(\mu &lt; 0.5\)</span>.</p></li>
 </ol>
-<p>Le tre ipotesi precedenti sono esempi di ipotesi statistiche, che sono delle affermazioni riguardanti i valori di un parametro di un modello statistico. Nel caso dell’esperimento di <span id="id6">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>, il modello statistico riguarda la distribuzione delle proporzioni dei tempi di fissazione di una popolazione virtuale di infiniti bambini di sei mesi di età. Ogni bambino avrà una proporzione di tempi di fissazione diversa dagli altri bambini. Il modello statistico descritto dai ricercatori rappresenta la distribuzione dei possibili valori della proporzione del tempo di fissazione nei confronti del video “familiare”. I dati raccolti dagli sperimentatori corrispondono alla media della proporzione del tempo di fissazione del video “familiare” e possono essere messi in relazione con il modello statistico.</p>
+<p>Le tre ipotesi precedenti sono esempi di ipotesi statistiche, che sono delle affermazioni riguardanti i valori di un parametro di un modello statistico. Nel caso dell’esperimento di <span id="id6">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>, il modello statistico riguarda la distribuzione delle proporzioni dei tempi di fissazione di una popolazione virtuale di infiniti bambini di sei mesi di età. Ogni bambino avrà una proporzione di tempi di fissazione diversa dagli altri bambini. Il modello statistico descritto dai ricercatori rappresenta la distribuzione dei possibili valori della proporzione del tempo di fissazione nei confronti del video “familiare”. I dati raccolti dagli sperimentatori corrispondono alla media della proporzione del tempo di fissazione del video “familiare” e possono essere messi in relazione con il modello statistico.</p>
 </section>
 <section id="id7">
 <h3>Domanda della ricerca e ipotesi statistiche<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
@@ -695,11 +808,11 @@ H_0: \theta \in \Theta_0 \subset \Theta,
 </section>
 <section id="come-si-costruisce-un-test-di-ipotesi">
 <h2>Come si costruisce un test di ipotesi?<a class="headerlink" href="#come-si-costruisce-un-test-di-ipotesi" title="Permalink to this heading">#</a></h2>
-<p>Ritorniamo all’esempio relativo allo studio di <span id="id8">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>. In questo caso, sulla base all’ipotesi della ricerca, l’ipotesi nulla può essere formulata come <span class="math notranslate nohighlight">\(H_0: \mu \leq 0.5\)</span>. Esaminando un campione di 32 bambini di età media pari a 5.6 mesi, <span id="id9">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> hanno scoperto che, in media, i bambini dirigevano lo sguardo verso il video “familiare” nel 59% del tempo totale di fissazione. Dunque, la media campionaria è <span class="math notranslate nohighlight">\(\bar{X} = 0.59\)</span> Questo è il valore campionario rilevante per il test dell’ipotesi nulla.</p>
+<p>Ritorniamo all’esempio relativo allo studio di <span id="id8">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span>. In questo caso, sulla base all’ipotesi della ricerca, l’ipotesi nulla può essere formulata come <span class="math notranslate nohighlight">\(H_0: \mu \leq 0.5\)</span>. Esaminando un campione di 32 bambini di età media pari a 5.6 mesi, <span id="id9">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> hanno scoperto che, in media, i bambini dirigevano lo sguardo verso il video “familiare” nel 59% del tempo totale di fissazione. Dunque, la media campionaria è <span class="math notranslate nohighlight">\(\bar{X} = 0.59\)</span> Questo è il valore campionario rilevante per il test dell’ipotesi nulla.</p>
 <p>Ingenuamente, potremmo pensare che, per decidere se <span class="math notranslate nohighlight">\(H_0\)</span> sia falsa o meno, sia sufficiente confrontare la proporzione calcolata nel campione con il valore <span class="math notranslate nohighlight">\(\pi\)</span> specificato dall’ipotesi nulla. Nel caso presente, l’ipotesi nulla non specifica un unico valore <span class="math notranslate nohighlight">\(\mu\)</span> ma bensì un intervallo di valori: <span class="math notranslate nohighlight">\([0, 0.5]\)</span>. I dati campionari specificano un valore <span class="math notranslate nohighlight">\(\bar{X} = 0.56\)</span>, ovvero un valore che non è incluso nell’intervallo specificato da <span class="math notranslate nohighlight">\(H_0\)</span>. Questo è incoraggiante. Se invece avessimo osservato <span class="math notranslate nohighlight">\(\bar{X} = 0.41\)</span>, per esempio, allora non ci sarebbe stato nient’altro da dire: se i dati osservati sono compatibili con <span class="math notranslate nohighlight">\(H_0\)</span> non c’è bisogno di eseguire alcun test statistico – abbiamo già trovato la risposta alla domanda della ricerca.</p>
 <section id="la-variabilita-campionaria">
 <h3>La variabilità campionaria<a class="headerlink" href="#la-variabilita-campionaria" title="Permalink to this heading">#</a></h3>
-<p>Nel caso dell’esperimento di <span id="id10">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> che stiamo discutendo, <span class="math notranslate nohighlight">\(\bar{X}\)</span> non cade nell’intervallo specificato da <span class="math notranslate nohighlight">\(H_0\)</span>. Sulla base del valore osservato <span class="math notranslate nohighlight">\(\bar{X} = 0.59\)</span> possiamo dunque concludere che <span class="math notranslate nohighlight">\(H_0\)</span> è falsa? Non così presto. Non è sufficiente trovare una differenza <span class="math notranslate nohighlight">\(\bar{X} - \mu\)</span> nella direzione giusta (cioè positiva, nel nostro caso). È anche necessario tenere in considerazione il fenomeno della <em>variabilità campionaria</em>.</p>
+<p>Nel caso dell’esperimento di <span id="id10">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> che stiamo discutendo, <span class="math notranslate nohighlight">\(\bar{X}\)</span> non cade nell’intervallo specificato da <span class="math notranslate nohighlight">\(H_0\)</span>. Sulla base del valore osservato <span class="math notranslate nohighlight">\(\bar{X} = 0.59\)</span> possiamo dunque concludere che <span class="math notranslate nohighlight">\(H_0\)</span> è falsa? Non così presto. Non è sufficiente trovare una differenza <span class="math notranslate nohighlight">\(\bar{X} - \mu\)</span> nella direzione giusta (cioè positiva, nel nostro caso). È anche necessario tenere in considerazione il fenomeno della <em>variabilità campionaria</em>.</p>
 <p>Infatti, la media <span class="math notranslate nohighlight">\(\bar{X}\)</span> osservata in ogni singolo campione di ampiezza <span class="math notranslate nohighlight">\(n=32\)</span> è una variabile aleatoria: in ciascun possibile campione di ampiezza 32 i bambini si comportano in maniera diversa e, di conseguenza, <span class="math notranslate nohighlight">\(\bar{X}\)</span> assumerà un valore diverso da campione a campione. Le statistiche campionarie – nel nostro caso la media <span class="math notranslate nohighlight">\(\bar{X}\)</span> – sono di necessità diverse dai parametri. Ciò a cui noi siamo interessati è la media della popolazione, ovvero <span class="math notranslate nohighlight">\(\mu\)</span>, ma sfortunatamente conosciamo solo una sua realizzazione campionaria, ovvero <span class="math notranslate nohighlight">\(\bar{X}\)</span>.</p>
 <p>Risulta dunque chiaro che la nostra decisione rispetto ad <span class="math notranslate nohighlight">\(H_0\)</span> non può essere unicamente basata sulla differenza tra <span class="math notranslate nohighlight">\(\bar{X} - \mu\)</span>. Infatti, è ragionevole pensare che, indipendentemente dal fatto che l’ipotesi nulla sia vera o meno, in alcuni campioni la differenza <span class="math notranslate nohighlight">\(\bar{X} - \mu\)</span> sarà positive mentre in altri campioni sarà negativa. Dobbiamo dunque trovare una procedura che riduca la possibilità di rifiutare <span class="math notranslate nohighlight">\(H_0\)</span> <em>per effetto del caso soltanto</em>. Possiamo (e dobbiamo) fare di meglio che considerare unicamente la differenza <span class="math notranslate nohighlight">\(\bar{X} - \mu\)</span>.</p>
 </section>
@@ -717,8 +830,8 @@ T = \frac{\bar{X} - \mu}{\frac{s}{\sqrt{n}}},
 <p>dove <span class="math notranslate nohighlight">\(\bar{X}\)</span> è la media del campione (nel nostro caso, 0.56), <span class="math notranslate nohighlight">\(s\)</span> è la deviazione standard del campione (gli autori riportano <span class="math notranslate nohighlight">\(s\)</span> = 0.179) e <span class="math notranslate nohighlight">\(n\)</span> è l’ampiezza del campione (ovvero, <span class="math notranslate nohighlight">\(n\)</span> = 32). Per il caso presente otteniamo:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.56</span> <span class="o">-</span> <span class="mf">0.50</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.179</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="bp">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="m">0.56</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">0.50</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="m">0.179</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">np.sqrt</span><span class="p">(</span><span class="m">32</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="bp">T</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -768,8 +881,8 @@ T = \frac{\bar{X} - \mu}{\frac{s}{\sqrt{n}}},
 <p>Per l’esempio in discussione, la statistica <span class="math notranslate nohighlight">\(T\)</span> calcolata sopra si distribuisce come <span class="math notranslate nohighlight">\(t\)</span> di Student con <span class="math notranslate nohighlight">\(\nu = 31\)</span> gradi di libertà. Il valore-p corrisponde dunque all’area sottesa ad una <span class="math notranslate nohighlight">\(t_{31}\)</span> nell’intervallo <span class="math notranslate nohighlight">\([1.896, +\infty]\)</span> (test unidirezionale destro), ovvero</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">stats.t.cdf</span><span class="p">(</span><span class="bp">T</span><span class="p">,</span><span class="w"> </span><span class="m">31</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -779,7 +892,7 @@ T = \frac{\bar{X} - \mu}{\frac{s}{\sqrt{n}}},
 </div>
 </div>
 </div>
-<p>Dato che il valore-p è minore di <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span>, <span id="id11">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id128" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> rifiutano <span class="math notranslate nohighlight">\(H_0\)</span> (cioè che la proporzione media del tempo di fissazione dei bambini nei confronti del video “familiare” sia 0.5, o minore) e concludono che i bambini mostrano una preferenza per il video familiare.</p>
+<p>Dato che il valore-p è minore di <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span>, <span id="id11">Mehr <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id129" title="S. A. Mehr, L. A. Song, and E. S. Spelke. For 5-month-old infants, melodies are social. Psychological Science, 27(4):486-501, 2016.">MSS16</a>]</span> rifiutano <span class="math notranslate nohighlight">\(H_0\)</span> (cioè che la proporzione media del tempo di fissazione dei bambini nei confronti del video “familiare” sia 0.5, o minore) e concludono che i bambini mostrano una preferenza per il video familiare.</p>
 </section>
 </section>
 <section id="potenza-del-test">
@@ -798,9 +911,9 @@ T = \frac{\bar{X} - \mu}{\frac{s}{\sqrt{n}}},
 </section>
 <section id="la-storia-del-test-dell-ipotesi-nulla-di-fisher-e-le-sue-contraddizioni">
 <h2>La Storia del Test dell’Ipotesi Nulla di Fisher e le Sue Contraddizioni<a class="headerlink" href="#la-storia-del-test-dell-ipotesi-nulla-di-fisher-e-le-sue-contraddizioni" title="Permalink to this heading">#</a></h2>
-<p>Concludiamo l’analisi della procedura dei test di ipotesi statistici esaminando l’evento che ha ispirato Ronald A. Fisher a sviluppare la sua teoria dell’inferenza statistica, focalizzata sul test dell’ipotesi nulla. Questo episodio è descritto dettagliatamente da <span id="id12">Etz <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id21" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span>. L’aneddoto riguarda un tè che Fisher aveva offerto alla sua collega, la Dott.ssa Muriel Bristol. Durante la preparazione della bevanda, la Dr.ssa Bristol contestò il metodo adottato da Fisher, asserendo che il tè avrebbe avuto un gusto migliore se il latte fosse stato versato prima dell’acqua bollente. Per verificare l’affermazione della Dr.ssa Bristol, Fisher ideò un esperimento di discriminazione sensoriale. Nei test condotti, la Dr.ssa Bristol fu in grado di individuare correttamente il processo di preparazione del tè in cinque occasioni su sei.</p>
+<p>Concludiamo l’analisi della procedura dei test di ipotesi statistici esaminando l’evento che ha ispirato Ronald A. Fisher a sviluppare la sua teoria dell’inferenza statistica, focalizzata sul test dell’ipotesi nulla. Questo episodio è descritto dettagliatamente da <span id="id12">Etz <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id22" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span>. L’aneddoto riguarda un tè che Fisher aveva offerto alla sua collega, la Dott.ssa Muriel Bristol. Durante la preparazione della bevanda, la Dr.ssa Bristol contestò il metodo adottato da Fisher, asserendo che il tè avrebbe avuto un gusto migliore se il latte fosse stato versato prima dell’acqua bollente. Per verificare l’affermazione della Dr.ssa Bristol, Fisher ideò un esperimento di discriminazione sensoriale. Nei test condotti, la Dr.ssa Bristol fu in grado di individuare correttamente il processo di preparazione del tè in cinque occasioni su sei.</p>
 <p>Questo risultato pose Fisher di fronte a un interrogativo: la sua collega stava semplicemente facendo una supposizione fortunata, oppure era effettivamente in grado di discernere tra le due diverse modalità di preparazione? Per risolvere questa questione, Fisher elaborò la sua metodologia per il test dell’ipotesi nulla. Utilizzò un valore-<span class="math notranslate nohighlight">\(p\)</span> calcolato sulla base della probabilità dell’evento osservato, nonché di qualsiasi altro evento più estremo che potrebbe verificarsi sotto l’ipotesi nulla.</p>
-<p>Tuttavia, è stato fatto notare che l’approccio di Fisher al test dell’ipotesi nulla può essere insufficiente e portare a conclusioni errate <span id="id13">[<a class="reference internal" href="../references/bibliography.html#id21" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span>. Una delle questioni fondamentali riguarda la definizione di un evento “più estremo” rispetto a quello osservato. Ad esempio, se Fisher avesse preparato esattamente sei tè e la Dr. Bristol ne avesse identificati correttamente cinque, il valore-<span class="math notranslate nohighlight">\(p\)</span> calcolato sarebbe stato 0.109, che non è statisticamente significativo. In questo scenario, secondo la logica di Fisher, non si dovrebbe respingere l’ipotesi nulla che la Dr. Bristol stesse semplicemente indovinando.</p>
+<p>Tuttavia, è stato fatto notare che l’approccio di Fisher al test dell’ipotesi nulla può essere insufficiente e portare a conclusioni errate <span id="id13">[<a class="reference internal" href="../references/bibliography.html#id22" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span>. Una delle questioni fondamentali riguarda la definizione di un evento “più estremo” rispetto a quello osservato. Ad esempio, se Fisher avesse preparato esattamente sei tè e la Dr. Bristol ne avesse identificati correttamente cinque, il valore-<span class="math notranslate nohighlight">\(p\)</span> calcolato sarebbe stato 0.109, che non è statisticamente significativo. In questo scenario, secondo la logica di Fisher, non si dovrebbe respingere l’ipotesi nulla che la Dr. Bristol stesse semplicemente indovinando.</p>
 <p>Tuttavia, se Fisher avesse continuato a servire tè fino a quando la Dr. Bristol non avesse raggiunto cinque risposte corrette (un risultato che, per coincidenza, si è verificato dopo sei tentativi), il valore-<span class="math notranslate nohighlight">\(p\)</span> calcolato sarebbe stato 0.031, che è statisticamente significativo. In quest’ultimo caso, l’ipotesi nulla sarebbe stata respinta.</p>
 <p>Quello che emerge è che, <em>nonostante i dati osservati nei due scenari siano identici</em>, giungiamo a conclusioni diverse a causa delle diverse modalità di campionamento impiegate. Questa variabilità è problematica poiché il valore-<span class="math notranslate nohighlight">\(p\)</span>, e quindi la nostra valutazione delle capacità discriminative della Dr.ssa Bristol, dipendono non solo dai dati effettivamente raccolti, ma anche dal disegno sperimentale adottato. Questa constatazione mette in discussione la robustezza del test dell’ipotesi nulla come strumento fondamentale per l’inferenza scientifica.</p>
 <p>Per risolvere il problema discusso in precedenza, utilizzeremo due specifiche distribuzioni statistiche: la distribuzione binomiale e la distribuzione geometrica negativa. L’analisi sarà condotta utilizzando Python come strumento di calcolo.</p>
@@ -826,22 +939,22 @@ P(X = k) = \binom{k+n-1}{k} \times (1-p)^{k} \times p^n
 <p>Questo approccio ci permette di calcolare un valore-<span class="math notranslate nohighlight">\(p\)</span> che tiene conto del numero di fallimenti prima del quinto successo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parametri</span>
-<span class="n">n_binomial</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># Numero fisso di tentativi per la distribuzione binomiale</span>
-<span class="n">n_success</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Numero di successi desiderato</span>
-<span class="n">p</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Probabilità di successo (indovinare la tazza di tè)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parametri</span>
+<span class="n">n_binomial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="w">  </span><span class="c1"># Numero fisso di tentativi per la distribuzione binomiale</span>
+<span class="n">n_success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="w">  </span><span class="c1"># Numero di successi desiderato</span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="w">  </span><span class="c1"># Probabilità di successo (indovinare la tazza di tè)</span>
 
 <span class="c1"># Calcolo del p-value per la distribuzione binomiale</span>
-<span class="n">p_value_binomial</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">binom</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">n_success</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_binomial</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="n">p_value_binomial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">binom.cdf</span><span class="p">(</span><span class="n">n_success</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">n_binomial</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
 
 <span class="c1"># Calcolo del p-value per la distribuzione geometrica negativa</span>
-<span class="n">p_value_geom_corrected</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_binomial</span> <span class="o">-</span> <span class="n">n_success</span><span class="p">):</span>  <span class="c1"># Numero di fallimenti prima del 5° successo</span>
-    <span class="n">p_value_geom_corrected</span> <span class="o">+=</span> <span class="p">(</span>
-        <span class="n">comb</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="n">n_success</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">**</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">**</span><span class="n">n_success</span><span class="p">)</span>
-    <span class="p">)</span>
+<span class="n">p_value_geom_corrected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>
+<span class="n">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">range</span><span class="p">(</span><span class="n">n_binomial</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">n_success</span><span class="p">)</span><span class="o">:</span><span class="w">  </span><span class="c1"># Numero di fallimenti prima del 5° successo</span>
+<span class="w">    </span><span class="n">p_value_geom_corrected</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="nf">comb</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n_success</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="o">**</span><span class="n">n_success</span><span class="p">)</span>
+<span class="w">    </span><span class="p">)</span>
 
-<span class="n">p_value_binomial</span><span class="p">,</span> <span class="n">p_value_geom_corrected</span>
+<span class="n">p_value_binomial</span><span class="p">,</span><span class="w"> </span><span class="n">p_value_geom_corrected</span>
 </pre></div>
 </div>
 </div>
@@ -860,27 +973,52 @@ P(X = k) = \binom{k+n-1}{k} \times (1-p)^{k} \times p^n
 </section>
 <section id="approccio-bayesiano">
 <h3>Approccio Bayesiano<a class="headerlink" href="#approccio-bayesiano" title="Permalink to this heading">#</a></h3>
-<p>Nel loro lavoro, <span id="id14">Etz <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id21" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span> propongono un’alternativa bayesiana per risolvere il problema esaminato da Fisher. Questa soluzione bayesiana evita le contraddizioni che emergono quando si cercano di definire “risultati più estremi” che non sono stati osservati. L’approccio bayesiano si focalizza esclusivamente sui dati effettivamente raccolti e utilizza queste osservazioni per aggiornare le probabilità iniziali (o “a priori”) associate a diverse ipotesi. Il processo si basa sulla regola di Bayes e si sviluppa in tre fasi principali:</p>
+<p>Nel loro lavoro, <span id="id14">Etz <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id22" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span> propongono un’alternativa bayesiana per risolvere il problema esaminato da Fisher. Questa soluzione bayesiana evita le contraddizioni che emergono quando si cercano di definire “risultati più estremi” che non sono stati osservati. L’approccio bayesiano si focalizza esclusivamente sui dati effettivamente raccolti e utilizza queste osservazioni per aggiornare le probabilità iniziali (o “a priori”) associate a diverse ipotesi. Il processo si basa sulla regola di Bayes e si sviluppa in tre fasi principali:</p>
 <ol class="arabic simple">
 <li><p><strong>Stabilire Probabilità a Priori</strong>: Iniziamo assegnando una distribuzione di probabilità a priori a tutti i possibili tassi di successo che la Dr. Bristol potrebbe avere. Questo include una probabilità specifica per l’ipotesi nulla, che suggerisce che la Dr. Bristol stia semplicemente indovinando (con un tasso di successo del 50%).</p></li>
 <li><p><strong>Aggiornare le Probabilità con Dati Osservati</strong>: Utilizziamo i dati raccolti nell’esperimento per aggiornare le nostre probabilità a priori. Questo aggiornamento è fatto utilizzando la regola di Bayes.</p></li>
 <li><p><strong>Calcolare il Fattore di Bayes</strong>: Questa metrica ci dice quanto i dati osservati influenzano le probabilità delle diverse ipotesi. Un Fattore di Bayes molto maggiore di 1 indicherebbe un forte supporto per l’ipotesi alternativa rispetto all’ipotesi nulla.</p></li>
 </ol>
 <p>Nel caso specifico, il Fattore di Bayes calcolato è risultato essere circa 147.33, un valore notevolmente alto. Questo suggerisce che i dati osservati sono molto più compatibili con l’ipotesi che la Dr.ssa Bristol possa effettivamente distinguere tra le diverse preparazioni del tè, piuttosto che con l’ipotesi che stia indovinando.</p>
-<p><span id="id15">Etz <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id21" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span> concludono che l’approccio bayesiano offre un quadro più robusto e coerente per il test delle ipotesi. A differenza del metodo frequentista, esso non dipende dalla definizione di “risultati più estremi” non osservati e si concentra invece esclusivamente sui dati effettivamente raccolti. Questa focalizzazione, in generale, rende l’approccio bayesiano una soluzione più solida per valutare le ipotesi scientifiche.</p>
+<p><span id="id15">Etz <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id22" title="Alexander Etz, Quentin F Gronau, Fabian Dablander, Peter A Edelsbrunner, and Beth Baribault. How to become a bayesian in eight easy steps: an annotated reading list. Psychonomic bulletin &amp; review, 25(1):219–234, 2018.">EGD+18</a>]</span> concludono che l’approccio bayesiano offre un quadro più robusto e coerente per il test delle ipotesi. A differenza del metodo frequentista, esso non dipende dalla definizione di “risultati più estremi” non osservati e si concentra invece esclusivamente sui dati effettivamente raccolti. Questa focalizzazione, in generale, rende l’approccio bayesiano una soluzione più solida per valutare le ipotesi scientifiche.</p>
+</section>
+</section>
+<section id="malintesi-sul-valore-p">
+<h2>Malintesi sul valore-p<a class="headerlink" href="#malintesi-sul-valore-p" title="Permalink to this heading">#</a></h2>
+<p>Sono diffusi molti malintesi sul valore-p. Ne esaminiamo qui quelli più comuni.</p>
+<p><strong>Malinteso 1:</strong> Un valore p non significativo significa che l’ipotesi nulla è vera.</p>
+<p>Il malinteso che un valore p non significativo (p &gt; 0.05) implichi l’assenza di effetto o la verità dell’ipotesi nulla è diffuso e porta a conclusioni errate. La chiave per evitare questo errore sta nel comprendere che i valori p riflettono la probabilità dei dati osservati sotto l’ipotesi nulla, e non la probabilità dell’ipotesi stessa. Un valore p elevato non dimostra che l’ipotesi nulla sia vera, ma indica semplicemente che i dati osservati non sono sufficientemente insoliti da rifiutare l’ipotesi nulla con un livello di confidenza predefinito.</p>
+<p>Risultati non significativi possono verificarsi anche quando esiste un effetto reale, ma i dati non sono abbastanza estremi da superare la soglia di significatività statistica.</p>
+<p>Invece di concludere affrettatamente l’assenza di effetto da un valore p non significativo, dovremmo riconoscere l’ambiguità e considerare altre possibilità. Dichiarazioni come “non c’era differenza” dovrebbero essere riformulate in termini di assenza di differenza statisticamente significativa, lasciando aperta la questione dell’esistenza di un effetto reale.</p>
+<p>L’approccio bayesiano offre una prospettiva diversa che può essere particolarmente utile per interpretare risultati non significativi. A differenza dei valori p, che si limitano a valutare la probabilità dei dati sotto l’ipotesi nulla, l’inferenza bayesiana permette di calcolare direttamente la probabilità delle ipotesi date i dati.</p>
+<p>L’approccio bayesiano, quindi, non si limita a rifiutare o non rifiutare l’ipotesi nulla, ma quantifica la forza dell’evidenza a favore di un’ipotesi rispetto all’altra, fornendo una conclusione più informativa rispetto al semplice “non posso rifiutare l’ipotesi nulla”.</p>
+<p><strong>Malintesto 2:</strong> Un valore p significativo significa che l’ipotesi nulla è falsa.</p>
+<p>Come spiegato in precedenza, il valore-p quantifica la “sorpresa” suscitata dai dati, alla luce dell’ipotesi nulla. Non ci dice niente sull’ipotesi che abbiamo assunto per quantificare la “sorpresa”.</p>
+<p><strong>Malinteso 3:</strong> Un valore p significativo significa che è stato scoperto un effetto importante.</p>
+<p>La distinzione tra “significatività statistica” e “rilevanza pratica” è fondamentale: mentre la prima indica semplicemente che un risultato è improbabile sotto l’ipotesi nulla, la seconda valuta l’effetto nel contesto di applicazioni reali e le sue implicazioni.</p>
+<p>Un effetto statisticamente significativo non garantisce che l’effetto abbia un impatto pratico notevole o utile.</p>
+<p>Inoltre, al di là della significatività pratica, l’abitudine di molti psicologi di escludere i predittori che non risultano “statisticamente significativi” è un grossolano errore: la significatività statistica non può essere usata come un metodo per la selezione di variabili in un modello statistico.</p>
+<p>Un p &lt; 0.05 indica che, se l’ipotesi nulla è vera, abbiamo osservato dati che dovrebbero essere considerati sorprendenti. Tuttavia, solo perché i dati sono sorprendenti, non significa che dobbiamo preoccuparcene. È principalmente l’etichetta verbale “significativo” che causa confusione qui: in un contesto frequentista, un effetto “significativo” è un effetto “sorprendente” alla luce di <span class="math notranslate nohighlight">\(H_0\)</span>,  non è necessariamente un effetto “importante”.</p>
+<p><strong>Malinteso 4:</strong> Se avete osservato un risultato significativo, la probabilità che abbiate commesso un errore di Tipo 1 (un falso positivo) è del 5%.</p>
+<p>Il malinteso che la presenza di un risultato significativo (per esempio, p &lt; 0.05) indichi una probabilità del 5% di aver commesso un errore di Tipo 1 (falso positivo) riflette una comprensione errata della statistica frequentista. La probabilità del 5% si riferisce al tasso di errore di Tipo 1, che è la proporzione di volte che potremmo aspettarci di rifiutare erroneamente l’ipotesi nulla se questa fosse vera, su molteplici ripetizioni dell’esperimento sotto le stesse condizioni. In altre parole, se potessimo ripetere lo stesso studio infinite volte, osserveremmo risultati falsamente positivi nel 5% di questi studi, assumendo che l’ipotesi nulla sia effettivamente vera in ogni caso.</p>
+<p>Tuttavia, una volta che abbiamo raccolto i dati e ottenuto un risultato significativo in un unico studio, non possiamo dire che “la probabilità che questo particolare risultato sia un errore di Tipo 1 è del 5%”. In realtà, in quel momento specifico, l’evento (commettere un errore di Tipo 1) è già accaduto o non è accaduto; la probabilità associata a quel singolo risultato non è più applicabile nel modo in cui potremmo aspettarci intuitivamente. Il risultato è, per così dire, una realtà fissa: o abbiamo rilevato un effetto che in realtà non esiste (errore di Tipo 1), oppure abbiamo correttamente identificato un effetto reale. Senza ulteriori esperimenti o dati, non possiamo determinare con certezza in quale di queste categorie cade il nostro risultato.</p>
+<p>In breve, il tasso del 5% di errore di Tipo 1 non si applica retroattivamente a un singolo risultato ottenuto, ma piuttosto descrive il comportamento a lungo termine di un test statistico sotto ripetute campionature. Questa distinzione è cruciale per una corretta interpretazione dei risultati degli esperimenti e sottolinea l’importanza di non sovrastimare la certezza di un singolo risultato statistico significativo.</p>
+<p><strong>Malinteso 5:</strong> Uno meno il valore p è la probabilità che l’effetto si replichi quando ripetuto.</p>
+<p>Il concetto che 1 meno il valore p rappresenti la probabilità di replicazione di un effetto è un malinteso diffuso. In realtà, la probabilità di replicazione di un effetto non può essere direttamente calcolata dal valore p di un singolo studio a causa della complessità dei fattori coinvolti, tra cui la vera differenza media tra i gruppi. La potenza statistica di un test, che dipende dalla dimensione dell’effetto, dalla dimensione del campione e dal livello di significatività α, fornisce una stima della probabilità di rilevare un effetto significativo se questo effetto esiste davvero. Tuttavia, osservare un effetto significativo in un unico studio (ad esempio, p = 0.03) non significa che vi sia una probabilità del 97% che tale effetto si replichi in studi futuri. La possibilità di replicare un risultato dipende dalla presenza di un vero effetto e dalla potenza statistica del test originale.</p>
+<p>In sintesi, la replicabilità di un effetto è influenzata da molti fattori e non può essere inferita semplicemente dal valore p di un singolo risultato. La comprensione e l’interpretazione corrette della replicabilità richiedono un’analisi dettagliata della potenza statistica e della dimensione dell’effetto, oltre che della consistenza dei risultati attraverso studi multipli.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
-<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%load_ext watermark</span>
+<span class="o">%</span><span class="n">watermark</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="o">-</span><span class="n">iv</span><span class="w"> </span><span class="o">-</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="n">m</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 06 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 13 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
-IPython version      : 8.19.0
+IPython version      : 8.21.0
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
@@ -890,15 +1028,14 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-scipy: 1.11.4
-numpy: 1.26.2
+scipy: 1.12.0
+numpy: 1.26.4
 
 Watermark: 2.4.3
 </pre></div>
 </div>
 </div>
 </div>
-</section>
 </section>
 </section>
 
@@ -911,16 +1048,16 @@ Watermark: 2.4.3
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "r"
         },
         kernelOptions: {
-            name: "python3",
+            name: "ir",
             path: "./chapter_6"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ir'</script>
 
                 </article>
               
@@ -967,7 +1104,16 @@ Watermark: 2.4.3
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standardizzazione-della-media-campionaria">Standardizzazione della media campionaria</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-test-di-ipotesi-nel-contesto-frequentista">Il Test di Ipotesi nel Contesto Frequentista</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilita">Probabilità</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilita-e-valori-p">Probabilità e Valori-p</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standardizzazione-della-media-campionaria">Standardizzazione della Media Campionaria</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-in-r">Simulazione in R</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-con-il-risultato-teorico">Confronto con il Risultato Teorico</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni-pratiche">Applicazioni pratiche</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ipotesi-statistiche">Ipotesi statistiche</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#i-passi-di-un-test-di-ipotesi">I passi di un test di ipotesi</a></li>
@@ -1005,6 +1151,7 @@ Watermark: 2.4.3
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approccio-bayesiano">Approccio Bayesiano</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#malintesi-sul-valore-p">Malintesi sul valore-p</a></li>
 </ul>
   </nav></div>
 

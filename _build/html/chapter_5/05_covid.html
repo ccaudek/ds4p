@@ -312,6 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -538,7 +539,7 @@ document.write(`
 <section class="tex2jax_ignore mathjax_ignore" id="inferenza-controfattuale">
 <span id="counterfactual-inference-covid-notebook"></span><h1>Inferenza controfattuale<a class="headerlink" href="#inferenza-controfattuale" title="Permalink to this heading">#</a></h1>
 <p>Il ragionamento causale e il pensiero controfattuale sono argomenti davvero interessanti, ma anche complessi. Tuttavia, possiamo progredire nella comprensione di queste idee attraverso esempi relativamente semplici. Questo notebook si concentra sui concetti e sull’implementazione pratica del ragionamento causale Bayesiano utilizzando PyMC.</p>
-<p>Per fare questo useremo un esempio importante ma triste relativo al calcolo delle morti in eccesso dovute al COVID-19. A tal proposito, le idee presentate in questo notebook si sovrappongono fortemente a quelle proposte da <span id="id1">Brodersen <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id25" title="Kay H Brodersen, Fabian Gallusser, Jim Koehler, Nicolas Remy, and Steven L Scott. Inferring causal impact using bayesian structural time-series models. Annals of Applied Statistics, 9:247–274, 2015.">BGK+15</a>]</span>. In pratica, cercheremo di stimare il numero di ‘morti in eccesso’ dall’inizio della pandemia di COVID-19, utilizzando dati provenienti dall’Inghilterra e dal Galles. Le morti in eccesso sono definite come:</p>
+<p>Per fare questo useremo un esempio importante ma triste relativo al calcolo delle morti in eccesso dovute al COVID-19. A tal proposito, le idee presentate in questo notebook si sovrappongono fortemente a quelle proposte da <span id="id1">Brodersen <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id26" title="Kay H Brodersen, Fabian Gallusser, Jim Koehler, Nicolas Remy, and Steven L Scott. Inferring causal impact using bayesian structural time-series models. Annals of Applied Statistics, 9:247–274, 2015.">BGK+15</a>]</span>. In pratica, cercheremo di stimare il numero di ‘morti in eccesso’ dall’inizio della pandemia di COVID-19, utilizzando dati provenienti dall’Inghilterra e dal Galles. Le morti in eccesso sono definite come:</p>
 <div class="math notranslate nohighlight">
 \[
 \text{Morti in eccesso} = \text{Morti osservate} - \text{Morti attese (controfattuali)}
@@ -571,7 +572,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_57585/2583963012.py:3: DeprecationWarning: 
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_21095/2583963012.py:3: DeprecationWarning: 
 Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
 (to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
 but was not found to be installed on your system.
@@ -590,12 +591,11 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
-<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">12345</span>
+<span class="c1"># Initialize random number generator</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
-<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;axes&quot;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -942,7 +942,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e9297ad2cda178cfa0ae6e0535dc736af5ad2d8cb23fd069fb9bcc1da2df76e3.png" src="../_images/e9297ad2cda178cfa0ae6e0535dc736af5ad2d8cb23fd069fb9bcc1da2df76e3.png" />
+<img alt="../_images/976d03e49d06d3f2d91408fad58e5c904d857c3b2fda7414b285a47624a48c5e.png" src="../_images/976d03e49d06d3f2d91408fad58e5c904d857c3b2fda7414b285a47624a48c5e.png" />
 </div>
 </div>
 <p>Esaminiamo i dati relativi al periodo pre-COVID-19. La serie temporale evidenzia una tendenza generale all’incremento del numero di decessi nel corso del tempo, oltre a un marcato effetto stagionale. Quest’ultimo è attribuibile alle fluttuazioni della temperatura.</p>
@@ -954,7 +954,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f75200ff722d33f61dc8c212f870d5df0902d7dd9ecf428fe0dbcb598e346995.png" src="../_images/f75200ff722d33f61dc8c212f870d5df0902d7dd9ecf428fe0dbcb598e346995.png" />
+<img alt="../_images/9ce24f1742297b001125c33a11886a3d5695de4ef1babf2f441fc1b920699125.png" src="../_images/9ce24f1742297b001125c33a11886a3d5695de4ef1babf2f441fc1b920699125.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -968,7 +968,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b2cd54199d6454ce3c6e7f8fcad56c615ab5a8ce8961a6f25904d7cd0c8049da.png" src="../_images/b2cd54199d6454ce3c6e7f8fcad56c615ab5a8ce8961a6f25904d7cd0c8049da.png" />
+<img alt="../_images/2db10bfbf41644b58fd2dd890f49c416b2161600fdcb0a70aebef49b189199f2.png" src="../_images/2db10bfbf41644b58fd2dd890f49c416b2161600fdcb0a70aebef49b189199f2.png" />
 </div>
 </div>
 <p>Per una descrizione più accurata, l’effetto della temperatura potrebbe essere modellato attraverso una funzione quadratica. Tuttavia, per semplicità, opteremo per una rappresentazione lineare. Nei dati relativi al periodo pre-COVID-19, un aumento di un grado nella temperatura è associato a una diminuzione media di 764 decessi.</p>
