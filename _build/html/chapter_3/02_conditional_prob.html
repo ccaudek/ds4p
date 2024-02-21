@@ -250,7 +250,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/12_jax.html">Usare JAX per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/12_jax.html">Usare JAX e Nutpie per un campionamento più veloce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_prediction.html">La predizione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
@@ -312,6 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -534,6 +535,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-teorema-della-probabilita-totale">Il teorema della probabilità totale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-indipendendenza-stocastica">L’indipendendenza stocastica</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
             </nav>
         </div>
@@ -548,27 +550,30 @@ document.write(`
   <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/115_conditional_prob.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="probabilita-condizionata">
 <span id="cond-prob-notebook"></span><h1>Probabilità condizionata<a class="headerlink" href="#probabilita-condizionata" title="Permalink to this heading">#</a></h1>
-<p>L’inferenza bayesiana si basa sul principio del condizionamento come strumento centrale. Questo approccio statistico sfrutta le probabilità per esprimere i gradi di credenza o incertezza relativi a diversi risultati o ipotesi. Nella pratica bayesiana, si inizia con una probabilità nota come probabilità a priori, rappresentata dalla notazione <span class="math notranslate nohighlight">\( P(A) \)</span>. Questa probabilità riflette la nostra credenza iniziale riguardo all’ipotesi <span class="math notranslate nohighlight">\( A \)</span>, formulata prima di ricevere nuove evidenze o dati. Tale credenza a priori deriva da conoscenze o ipotesi già esistenti.</p>
-<p>Il cuore dei metodi bayesiani risiede nel processo di aggiornamento di questa credenza a fronte di nuove informazioni. Al ricevimento di nuove prove, indicate con <span class="math notranslate nohighlight">\( E \)</span>, l’analisi bayesiana adotta il condizionamento per rivedere la credenza a priori. Questo porta alla formulazione di una probabilità a posteriori, simboleggiata come <span class="math notranslate nohighlight">\( P(A \mid E) \)</span>, che incarna la credenza aggiornata sull’ipotesi <span class="math notranslate nohighlight">\( A \)</span> dopo aver considerato la nuova evidenza <span class="math notranslate nohighlight">\( E \)</span>.</p>
-<p>La formula che governa questo aggiornamento di credenze nell’analisi bayesiana è il <a class="reference internal" href="03_bayes_theorem.html#bayes-theorem-notebook"><span class="std std-ref">Il teorema di Bayes</span></a>:</p>
+<p>Un principio fondamentale nel campo della probabilità è il concetto di condizionamento. Il condizionamento si verifica quando, all’interno di un esperimento aleatorio, le probabilità vengono calcolate focalizzandosi esclusivamente su un sottoinsieme specifico dei risultati possibili. In pratica, questo significa che la probabilità viene determinata tenendo conto solo di quei risultati che rientrano in un certo criterio o condizione predefinita.</p>
+<p>Nell’ambito dell’inferenza bayesiana, il condizionamento emerge come uno strumento essenziale. L’inferenza bayesiana è un approccio statistico che sfrutta proprio il condizionamento per rivedere e aggiornare le credenze o le incertezze relative a determinate ipotesi, basandosi sull’introduzione di nuove informazioni.</p>
+<p>Il processo inizia stabilendo una probabilità iniziale, denominata probabilità a priori (<span class="math notranslate nohighlight">\(P(A)\)</span>), che esprime la nostra convinzione o supposizione iniziale riguardo all’ipotesi <span class="math notranslate nohighlight">\(A\)</span>, prima di ricevere qualsiasi dato aggiuntivo. Questa probabilità a priori si fonda su conoscenze già acquisite o su supposizioni precedentemente formulate.</p>
+<p>Il cuore dell’inferenza bayesiana si trova nell’aggiornamento di questa credenza iniziale in risposta all’acquisizione di nuove informazioni, rappresentate dalla variabile <span class="math notranslate nohighlight">\(E\)</span>. L’aggiornamento avviene mediante il condizionamento, culminando nella determinazione di una probabilità a posteriori (<span class="math notranslate nohighlight">\(P(A | E)\)</span>). Questa nuova probabilità rappresenta la nostra credenza aggiornata sull’ipotesi <span class="math notranslate nohighlight">\(A\)</span> dopo aver preso in esame l’evidenza <span class="math notranslate nohighlight">\(E\)</span> appena acquisita. In questo modo, l’inferenza bayesiana permette di affinare le nostre supposizioni e le nostre previsioni su determinati fenomeni, incorporando sistematicamente nuove prove nel nostro quadro di conoscenza.</p>
+<p>La formula di Bayes governa questo processo di aggiornamento:</p>
 <div class="math notranslate nohighlight">
 \[
-P(A \mid E) = \frac{P(E \mid A) \times P(A)}{P(E)}
+P(A | E) = \frac{P(E | A) \times P(A)}{P(E)}
 \]</div>
-<p>Questa formula include:</p>
+<p>In questa formula, troviamo:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\( P(A \mid E) \)</span>: la probabilità a posteriori, ovvero la probabilità dell’ipotesi <span class="math notranslate nohighlight">\( A \)</span> alla luce della prova <span class="math notranslate nohighlight">\( E \)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\( P(E \mid A) \)</span>: la verosimiglianza, cioè la probabilità di osservare la prova <span class="math notranslate nohighlight">\( E \)</span> assumendo che l’ipotesi <span class="math notranslate nohighlight">\( A \)</span> sia vera.</p></li>
-<li><p><span class="math notranslate nohighlight">\( P(A) \)</span>: la probabilità a priori, il livello iniziale di credenza nell’ipotesi <span class="math notranslate nohighlight">\( A \)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\( P(E) \)</span>: la probabilità di osservare la prova <span class="math notranslate nohighlight">\( E \)</span>, considerando tutte le ipotesi possibili.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(A | E)\)</span>: la probabilità a posteriori, che è la probabilità dell’ipotesi <span class="math notranslate nohighlight">\(A\)</span> date le nuove prove <span class="math notranslate nohighlight">\(E\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(E | A)\)</span>: la verosimiglianza, ovvero la probabilità di osservare le prove <span class="math notranslate nohighlight">\(E\)</span> se l’ipotesi <span class="math notranslate nohighlight">\(A\)</span> fosse vera.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(A)\)</span>: la probabilità a priori, che indica il nostro livello di convinzione iniziale nell’ipotesi <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(E)\)</span>: la probabilità di osservare le prove <span class="math notranslate nohighlight">\(E\)</span>, tenendo conto di tutte le ipotesi possibili.</p></li>
 </ul>
-<p>In questo capitolo, approfondiremo alcuni concetti fondamentali per comprendere meglio l’aggiornamento bayesiano:</p>
+<p>In questo capitolo esploreremo alcuni concetti chiave per una comprensione approfondita dell’aggiornamento bayesiano:</p>
 <ul class="simple">
-<li><p><strong>Probabilità Congiunta</strong>: Indica la probabilità che due eventi si verifichino insieme, anche in momenti diversi. Per esempio, potrebbe essere la probabilità di estrarre una pallina rossa seguita da una pallina verde da un’urna.</p></li>
-<li><p><strong>Probabilità Marginale</strong>: È la probabilità di un singolo evento, valutata indipendentemente da altri eventi. Ad esempio, si potrebbe calcolare la probabilità di estrarre una pallina verde da un’urna.</p></li>
-<li><p><strong>Probabilità Condizionata</strong>: Rappresenta la probabilità che un evento avvenga, dato che un altro evento correlato si è già verificato. Per esempio, conoscendo l’estrazione di una pallina verde, potremmo voler sapere la probabilità di estrarre una seconda pallina verde dalla stessa urna.</p></li>
+<li><p><strong>Probabilità Congiunta</strong>: Questa è la probabilità che due eventi avvengano insieme. Per esempio, potrebbe riferirsi alla probabilità di estrarre una pallina rossa e poi una verde da un’urna in sequenza.</p></li>
+<li><p><strong>Probabilità Marginale</strong>: Si tratta della probabilità di verificarsi di un singolo evento, considerato a prescindere da altri eventi. Ad esempio, potremmo voler calcolare la probabilità di estrarre una pallina verde da un’urna, senza considerare altri eventi.</p></li>
+<li><p><strong>Probabilità Condizionata</strong>: Indica la probabilità che un evento si verifichi, dato che un altro evento correlato è già accaduto. Un esempio potrebbe essere la probabilità di estrarre una seconda pallina verde, sapendo che la prima estratta era verde.</p></li>
 </ul>
-<p>Inoltre, esamineremo i principali teoremi legati alla probabilità condizionata. Iniziamo con l’analisi di un famoso problema della teoria delle probabilità: il paradosso di Monty Hall.</p>
+<p>Questi concetti sono fondamentali per navigare nel processo di inferenza bayesiana e per comprendere come le probabilità si aggiornano in risposta a nuove informazioni. Inoltre, esamineremo i principali teoremi legati alla probabilità condizionata.</p>
+<p>Iniziamo esplorando il celebre problema della teoria delle probabilità noto come il paradosso di Monty Hall. Questo paradosso illustra in modo controintuitivo, rispetto alla percezione comune, come l’acquisizione di nuove informazioni richieda un aggiustamento significativo delle probabilità precedentemente stabilite. Il paradosso dimostra che, quando vengono introdotte nuove informazioni in un contesto decisionale, le probabilità iniziali associate a diversi esiti possibili devono essere aggiornate, spesso in maniera che può sembrare sorprendente o non immediatamente ovvia. Questa situazione evidenzia l’importanza del condizionamento nel calcolo delle probabilità e fornisce un esempio pratico di come l’inferenza bayesiana applichi questo principio per rivedere le credenze alla luce di nuovi dati o informazioni.</p>
 <section id="preparazione-del-notebook">
 <h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -617,8 +622,8 @@ P(A \mid E) = \frac{P(E \mid A) \times P(A)}{P(E)}
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.3333
-0.6667
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.3234
+0.6766
 </pre></div>
 </div>
 </div>
@@ -1087,22 +1092,33 @@ P(A \cap B \cap C) &amp;= P(A) P(B) P(C). \notag
 <section id="commenti-e-considerazioni-finali">
 <h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Permalink to this heading">#</a></h2>
 <p>La probabilità condizionata riveste un ruolo fondamentale poiché ci permette di definire in modo preciso il concetto di indipendenza statistica. Uno degli aspetti cruciali dell’analisi statistica riguarda la valutazione dell’associazione tra due variabili. Nel capitolo attuale, ci siamo concentrati sul concetto di indipendenza, che indica l’assenza di relazione tra le variabili. Tuttavia, in futuro, esploreremo come fare inferenze sulla correlazione tra variabili, ovvero come determinare se le variabili sono associate tra loro o se esiste una relazione statistica credibile tra di esse. Questo approfondimento ci permetterà di studiare le connessioni tra variabili e comprendere meglio i fenomeni osservati nei dati.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
-<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m 
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 06 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Feb 21 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
-IPython version      : 8.19.0
+IPython version      : 8.21.0
 
-numpy : 1.26.2
-pandas: 2.1.4
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.3.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
+numpy : 1.26.4
+pandas: 2.2.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -1192,6 +1208,7 @@ Watermark: 2.4.3
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-teorema-della-probabilita-totale">Il teorema della probabilità totale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-indipendendenza-stocastica">L’indipendendenza stocastica</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
   </nav></div>
 

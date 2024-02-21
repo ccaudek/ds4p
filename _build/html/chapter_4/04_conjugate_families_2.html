@@ -250,7 +250,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
 <li class="toctree-l2"><a class="reference internal" href="11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="12_jax.html">Usare JAX per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_jax.html">Usare JAX e Nutpie per un campionamento più veloce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="17_prediction.html">La predizione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
@@ -312,6 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
@@ -557,12 +558,11 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
-<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="c1"># Initialize random number generator</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
-<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -607,7 +607,7 @@ p(\mu \mid y) = \frac{1}{{\sigma_p \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_p)^
 </section>
 <section id="un-esempio-concreto">
 <h2>Un esempio concreto<a class="headerlink" href="#un-esempio-concreto" title="Permalink to this heading">#</a></h2>
-<p>Per esaminare un esempio pratico, consideriamo i 30 valori BDI-II dei soggetti clinici esaminati da <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id65" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
+<p>Per esaminare un esempio pratico, consideriamo i 30 valori BDI-II dei soggetti clinici esaminati da <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id66" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -766,7 +766,7 @@ p(\mu \mid y) = \frac{1}{{\sigma_p \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_p)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7252b219669962d965d70b98601daf5f0b52e0dbec05d63234c279f851eeac35.png" src="../_images/7252b219669962d965d70b98601daf5f0b52e0dbec05d63234c279f851eeac35.png" />
+<img alt="../_images/ecc0ba97161933486f68af4c7b65fd787aef4bc737db1c7544cf0c07bac6318e.png" src="../_images/ecc0ba97161933486f68af4c7b65fd787aef4bc737db1c7544cf0c07bac6318e.png" />
 </div>
 </div>
 </section>
@@ -784,11 +784,11 @@ p(\mu \mid y) = \frac{1}{{\sigma_p \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_p)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Feb 08 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Feb 21 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
-IPython version      : 8.19.0
+IPython version      : 8.21.0
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
@@ -798,11 +798,11 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-seaborn   : 0.13.0
-pandas    : 2.1.4
+scipy     : 1.12.0
+seaborn   : 0.13.2
+pandas    : 2.2.0
+numpy     : 1.26.4
 matplotlib: 3.8.2
-scipy     : 1.11.4
-numpy     : 1.26.2
 arviz     : 0.17.0
 
 Watermark: 2.4.3
