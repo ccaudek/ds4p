@@ -250,7 +250,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/12_jax.html">Usare JAX e Nutpie per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/12_jax.html">Usare JAX per un campionamento più veloce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_prediction.html">La predizione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
@@ -262,7 +262,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_one_mean.html">✏️ Esercizio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_one_mean_2.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_two_groups.html">Confronto tra due gruppi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_multiple_groups.html">Gruppi multipli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_data_containers.html">Contenitori di dati</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/30_entropy.html">Entropia</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/31_kl.html">La divergenza di Kullback-Leibler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/32_loo.html">Validazione Incrociata Leave-One-Out</a></li>
@@ -554,6 +554,9 @@ document.write(`
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funzione-di-ripartizione-per-variabili-casuali-discrete">Funzione di Ripartizione per Variabili Casuali Discrete</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trovare-la-probabilita-con-una-simulazione">Trovare la probabilità con una simulazione</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-di-probabilita-e-statistica-bayesiana">Distribuzioni di Probabilità e Statistica Bayesiana</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-del-compleanno">Il problema del compleanno</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-legge-dei-grandi-numeri">La Legge dei Grandi Numeri</a></li>
 </ul>
@@ -1224,6 +1227,34 @@ F(x_k) = P(X \leq x_k) = \sum_{x_i \leq x_k} P(x_i).
 </div>
 </div>
 </section>
+</section>
+<section id="distribuzioni-di-probabilita-e-statistica-bayesiana">
+<h2>Distribuzioni di Probabilità e Statistica Bayesiana<a class="headerlink" href="#distribuzioni-di-probabilita-e-statistica-bayesiana" title="Permalink to this heading">#</a></h2>
+<p>La statistica bayesiana impiega le distribuzioni di probabilità come motore inferenziale per la stima dei parametri e dell’incertezza.</p>
+<p>Immaginiamo che le distribuzioni di probabilità siano piccoli pezzi di “Lego” con cui possiamo costruire qualsiasi cosa desideriamo. Questo principio si applica analogamente ai modelli statistici bayesiani. Possiamo costruire modelli che vanno dai più semplici ai più complessi, utilizzando le distribuzioni di probabilità e le loro interrelazioni.</p>
+<p>Una funzione di distribuzione di probabilità è una funzione matematica che fornisce le probabilità associate a differenti esiti di un esperimento. Essa offre una descrizione matematica di un fenomeno aleatorio in termini del suo spazio campionario e delle probabilità degli eventi (sottoinsiemi dello spazio campionario).</p>
+<div class="math notranslate nohighlight">
+\[ P(X): X \rightarrow \mathbb{R} \in [0, 1] \]</div>
+<p>Per le variabili aleatorie discrete, utilizziamo il termine “massa”; per quelle continue, parliamo invece di “densità”.</p>
+<p>Adottiamo la notazione
+$<span class="math notranslate nohighlight">\( X \sim \text{Dist}(\theta_1, \theta_2, \ldots), \)</span>$</p>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(X\)</span>: variabile aleatoria</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{Dist}\)</span>: nome della distribuzione</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_1, \theta_2, \ldots\)</span>: parametri che definiscono il comportamento della distribuzione</p></li>
+</ul>
+<p>Ogni distribuzione di probabilità può essere “parametrizzata” specificando dei parametri che permettono di controllare certi aspetti della distribuzione per un obiettivo specifico.</p>
+<p>Come vedremo nei capitoli successivi, è fondamentale comprendere la distinzione tra due principali categorie di distribuzioni di probabilità:</p>
+<ol class="arabic">
+<li><p><strong>Distribuzioni di Probabilità Discrete</strong>: Queste distribuzioni caratterizzano risultati che assumono valori numerici discreti, come i numeri interi. In termini matematici, i possibili esiti possono essere espressi come <span class="math notranslate nohighlight">\(-N, \ldots, -2, -1, 0, 1, 2, \ldots, N\)</span>, dove <span class="math notranslate nohighlight">\(N \in \mathbb{Z}\)</span>. In queste distribuzioni, parliamo di “massa” di probabilità, poiché la probabilità è assegnata a punti specifici nel dominio di definizione.</p></li>
+<li><p><strong>Distribuzioni di Probabilità Continue</strong>: Al contrario delle distribuzioni discrete, le distribuzioni continue si occupano di esiti che cadono in un intervallo continuo di numeri reali, rappresentati matematicamente come <span class="math notranslate nohighlight">\((-\infty, +\infty) \in \mathbb{R}\)</span>. Per queste distribuzioni, utilizziamo il termine “densità” di probabilità. A differenza delle variabili discrete, non possiamo parlare della probabilità che una variabile casuale <span class="math notranslate nohighlight">\(X\)</span> assuma esattamente un valore <span class="math notranslate nohighlight">\(x\)</span>, poiché in un contesto continuo tale probabilità è sempre nulla. Questo avviene perché non è possibile specificare un singolo valore esatto all’interno di un continuum. Invece, consideriamo la probabilità che <span class="math notranslate nohighlight">\(X\)</span> si collochi all’interno di un intervallo specifico <span class="math notranslate nohighlight">\([a, b]\)</span>.</p>
+<p>La funzione di densità di probabilità (PDF, dall’inglese Probability Density Function) gioca un ruolo chiave in questo contesto ed è definita come segue:</p>
+<div class="math notranslate nohighlight">
+\[\text{PDF}(x) = P(a \leq X \leq b) = \int_a^b f(x) \, dx. \]</div>
+<p>Questo strumento matematico ci permette di calcolare la probabilità che una variabile casuale continui a prendere valori all’interno di un intervallo dato, fornendo una descrizione completa delle caratteristiche probabilistiche del fenomeno in esame.</p>
+</li>
+</ol>
 <section id="il-problema-del-compleanno">
 <h3>Il problema del compleanno<a class="headerlink" href="#il-problema-del-compleanno" title="Permalink to this heading">#</a></h3>
 <p>Consideriamo ora il famoso paradosso del compleanno, anche noto come problema del compleanno, che è un curioso risultato della teoria della probabilità introdotto da Richard von Mises nel 1939. Questo paradosso afferma che la probabilità che almeno due persone in un gruppo abbiano la stessa data di compleanno è notevolmente più alta di quanto ci si potrebbe aspettare intuitivamente. Ad esempio, in un gruppo di sole 23 persone, la probabilità che almeno due di loro abbiano lo stesso compleanno è di circa il 51%, mentre con 30 persone questa probabilità supera il 70% e con 50 persone raggiunge addirittura il 97%. Questo esempio mette in evidenza come le nostre intuizioni possano essere fuorvianti quando si tratta di calcolare la probabilità di eventi rari o improbabili.</p>
@@ -1538,6 +1569,9 @@ Watermark: 2.4.3
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funzione-di-ripartizione-per-variabili-casuali-discrete">Funzione di Ripartizione per Variabili Casuali Discrete</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trovare-la-probabilita-con-una-simulazione">Trovare la probabilità con una simulazione</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-di-probabilita-e-statistica-bayesiana">Distribuzioni di Probabilità e Statistica Bayesiana</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-del-compleanno">Il problema del compleanno</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-legge-dei-grandi-numeri">La Legge dei Grandi Numeri</a></li>
 </ul>
