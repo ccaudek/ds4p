@@ -294,7 +294,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="05_covid.html">Inferenza controfattuale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_counterfactual.html">Analisi causale con PyMC</a></li>
 
+<li class="toctree-l2"><a class="reference internal" href="05_simpson.html">Paradosso di Simpson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_stab.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_repeated_measures.html">✏️ Esercizi</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -309,6 +311,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
@@ -543,6 +546,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
             </nav>
         </div>
@@ -556,7 +560,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="modello-di-regressione-logistica">
 <span id="log-reg-notebook"></span><h1>Modello di regressione logistica<a class="headerlink" href="#modello-di-regressione-logistica" title="Permalink to this heading">#</a></h1>
-<p>In questo capitolo, approfondiremo la regressione logistica bivariata, un modello statistico che ci consente di analizzare le relazioni tra una variabile di esito binaria e una singola variabile indipendente. Esploreremo il processo di stima dei coefficienti del modello attraverso un approccio bayesiano, il quale ci offre stime a posteriori più informative e la possibilità di calcolare intervalli di credibilità per tali coefficienti. In aggiunta, forniremo un’interpretazione dei risultati ottenuti dalla regressione logistica. Mostreremo come i coefficienti influenzano la probabilità di successo della variabile binaria di esito, nonché come interpretare il loro segno e ampiezza.</p>
+<p>In questo capitolo, approfondiremo la regressione logistica bivariata, un modello statistico che ci consente di analizzare le relazioni tra una variabile di esito binaria e una singola variabile indipendente. Esploreremo il processo di stima dei coefficienti del modello attraverso un approccio bayesiano. In aggiunta, forniremo un’interpretazione dei risultati ottenuti dalla regressione logistica. Mostreremo come i coefficienti influenzano la probabilità di successo della variabile binaria di esito, nonché come interpretare il loro segno e ampiezza.</p>
 <section id="preparazione-del-notebook">
 <h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -578,7 +582,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_21293/1891035395.py:2: DeprecationWarning: 
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_63048/1891035395.py:2: DeprecationWarning: 
 Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
 (to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
 but was not found to be installed on your system.
@@ -605,31 +609,29 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </section>
 <section id="regressione-logistica">
 <h2>Regressione logistica<a class="headerlink" href="#regressione-logistica" title="Permalink to this heading">#</a></h2>
-<p>La regressione logistica rappresenta un metodo statistico fondamentale per l’analisi di variabili dipendenti che assumono due sole categorie, generalmente denominate “successo” (1) e “fallimento” (0). Questo approccio si rivela particolarmente utile in studi dove l’interesse è rivolto verso fenomeni dicotomici, come ad esempio l’indagine sulla tendenza di un individuo a dedicarsi alla meditazione giornaliera, con esiti categorizzati in 0 (non ha meditato) e 1 (ha meditato).</p>
-<p>Quando si analizzano le risposte a domande quali “Quante volte hai meditato nell’ultimo periodo di sette giorni?”, si entra nel dominio della regressione binomiale, che considera le proporzioni come variabile di risposta. Tale approccio, però, può comportare una semplificazione eccessiva dei dati, poiché informazioni dettagliate vengono omesse. Ad esempio, un valore proporzionale di 0.5 potrebbe derivare da diverse combinazioni di esiti, come 1 successo su 2 tentativi o 2 su 4, e questi dettagli specifici si perdono se ci si limita all’analisi delle sole proporzioni. Di conseguenza, è consigliabile, quando fattibile, analizzare i dati nella loro forma originaria, mantenendo l’intera sequenza di esiti 0 e 1, per preservare la ricchezza informativa e garantire un’analisi più accurata e dettagliata del fenomeno in esame.</p>
-<p>Nell’ambito della statistica Bayesiana, la regressione logistica viene formulata considerando ciascun elemento, inclusi i coefficienti di regressione, come variabili casuali. L’obiettivo diventa quindi determinare la distribuzione a posteriori di questi coefficienti, utilizzando la formula di Bayes:</p>
+<p>La regressione logistica costituisce un approccio statistico per l’esame di variabili dipendenti binarie, ovvero quelle che corrispondono esclusivamente a due possibili esiti, usualmente codificati come “successo” (1) e “fallimento” (0). Questo metodo si rivela particolarmente utile nell’analizzare dati categorici dove l’obiettivo è prevedere la presenza o l’assenza di una caratteristica o esito basato su una serie di variabili indipendenti.</p>
+<p>Nel contesto della statistica Bayesiana, la regressione logistica è formulata considerando sia i coefficienti di regressione sia le variabili risposta come elementi casuali. L’obiettivo si concentra sull’identificazione della distribuzione a posteriori dei coefficienti, applicando la formula di Bayes:</p>
 <div class="math notranslate nohighlight">
 \[
-p(\theta \mid y) = \frac{p(y \mid \theta) \cdot p(\theta)}{p(y)}.
+p(\theta \mid y) = \frac{p(y \mid \theta) \cdot p(\theta)}{p(y)},
 \]</div>
-<p>Sebbene il calcolo del denominatore possa risultare complesso, l’approccio Monte Carlo Markov Chain (MCMC) consente di superare questa difficoltà, concentrandosi principalmente sul numeratore. Ciò richiede la definizione di due componenti chiave: la distribuzione a priori <span class="math notranslate nohighlight">\( p(\theta) \)</span> e la funzione di verosimiglianza <span class="math notranslate nohighlight">\( p(y \mid \theta) \)</span>. Generalmente, si predilige una distribuzione a priori poco informativa per minimizzare l’influenza di presupposti soggettivi e massimizzare quella dei dati osservati sulle stime posteriori.</p>
-<p>La funzione di verosimiglianza nella regressione logistica si basa sul prodotto di <span class="math notranslate nohighlight">\( n \)</span> prove di Bernoulli, ognuna caratterizzata da:</p>
+<p>dove il calcolo diretto del denominatore <span class="math notranslate nohighlight">\(p(y)\)</span> è notoriamente complesso. Tuttavia, l’uso delle tecniche Monte Carlo Markov Chain (MCMC) permette di aggirare tale ostacolo, enfatizzando il numeratore della formula. Questo approccio richiede la definizione di una distribuzione a priori <span class="math notranslate nohighlight">\(p(\theta)\)</span>, preferibilmente non informativa o debolmente informativa, per limitare l’impatto di assunzioni a priori e massimizzare l’influenza dei dati osservati. La funzione di verosimiglianza <span class="math notranslate nohighlight">\(p(y \mid \theta)\)</span>, fondamentale in questo contesto, si basa sull’ipotesi che gli esiti seguano distribuzioni di Bernoulli indipendenti, con una probabilità di successo <span class="math notranslate nohighlight">\(p_i\)</span> per ciascun evento, descritta come:</p>
 <div class="math notranslate nohighlight">
 \[
 p_i^{y_i} (1 - p_i)^{1 - y_i},
 \]</div>
-<p>dove <span class="math notranslate nohighlight">\( p_i = P(y_i = 1) \)</span> rappresenta la probabilità di successo in un singolo evento Bernoulliano e <span class="math notranslate nohighlight">\( y_i \)</span> indica l’esito osservato (0 o 1).</p>
-<p>Per esprimere <span class="math notranslate nohighlight">\( p_i \)</span>, si utilizza comunemente la funzione logistica:</p>
+<p>qui <span class="math notranslate nohighlight">\(p_i\)</span> è la probabilità stimata di successo per ogni prova, e <span class="math notranslate nohighlight">\(y_i\)</span> rappresenta l’esito osservato.</p>
+<p>La probabilità <span class="math notranslate nohighlight">\(p_i\)</span> viene comunemente espressa tramite la funzione logistica, che garantisce che i valori previsti si collocano all’interno dell’intervallo [0, 1]:</p>
 <div class="math notranslate nohighlight">
 \[
 p_i = \frac{1}{1 + e^{-\eta_i}},
 \]</div>
-<p>dove <span class="math notranslate nohighlight">\( \eta_i \)</span> deriva da una combinazione lineare di predittori <span class="math notranslate nohighlight">\( X \)</span> e coefficienti di regressione <span class="math notranslate nohighlight">\( \theta \)</span>:</p>
+<p>dove <span class="math notranslate nohighlight">\(\eta_i\)</span> deriva da una combinazione lineare dei predittori <span class="math notranslate nohighlight">\(X\)</span> e dei coefficienti di regressione <span class="math notranslate nohighlight">\(\theta\)</span>, espressa come:</p>
 <div class="math notranslate nohighlight">
 \[
-\eta_i = \theta_0 + \theta_1 X_{i}.
+\eta_i = \theta_0 + \theta_1 X_{i1} + \theta_2 X_{i2} + \cdots + \theta_k X_{ik}.
 \]</div>
-<p>In questa espressione, <span class="math notranslate nohighlight">\( \theta_0 \)</span> è l’intercetta, mentre <span class="math notranslate nohighlight">\( \theta_1 \)</span> rappresenta il coefficiente associato al predittore <span class="math notranslate nohighlight">\( X_i \)</span>. La funzione logit trasforma quindi <span class="math notranslate nohighlight">\( \eta_i \)</span> (il valore atteso della <span class="math notranslate nohighlight">\(y\)</span>), che varia nell’intervallo <span class="math notranslate nohighlight">\( -\infty \)</span> a <span class="math notranslate nohighlight">\( \infty \)</span>, in una probabilità <span class="math notranslate nohighlight">\( p_i \)</span> compresa tra 0 e 1.</p>
+<p>In questa equazione, <span class="math notranslate nohighlight">\(\theta_0\)</span> rappresenta l’intercetta del modello, mentre i termini <span class="math notranslate nohighlight">\(\theta_1, \theta_2, \ldots, \theta_k\)</span> si riferiscono ai coefficienti associati a ciascun predittore <span class="math notranslate nohighlight">\(X_{ij}\)</span>. La trasformazione logit, quindi, converte il valore lineare <span class="math notranslate nohighlight">\(\eta_i\)</span>, che può variare da <span class="math notranslate nohighlight">\(-\infty\)</span> a <span class="math notranslate nohighlight">\(+\infty\)</span>, in una probabilità <span class="math notranslate nohighlight">\(p_i\)</span> contenuta tra 0 e 1, facilitando l’interpretazione dei risultati in termini di probabilità di occorrenza dell’evento di interesse.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
@@ -750,6 +752,13 @@ e^{\eta_i} = \frac{p_i}{1 - p_i}.
   </tbody>
 </table>
 </div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;clinton.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 <p>La nostra variabile di esito è <code class="docutils literal notranslate"><span class="pre">vote</span></code>, che indica le risposte delle persone alla seguente domanda:</p>
 <blockquote>
@@ -885,31 +894,22 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:07.862462
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:02.873151
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                  | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                    | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                  | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                    | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -918,7 +918,7 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                  | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -927,7 +927,7 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                    | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -936,7 +936,7 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                  | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -945,7 +945,7 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                    | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -954,7 +954,7 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                 | 0/2000 [00:02&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -963,7 +963,19 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                 | 0/2000 [00:02&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -972,19 +984,7 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                 | 0/2000 [00:02&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                 | 0/2000 [00:02&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  60%|██████████████████████████████▌                    | 1200/2000 [00:02&lt;00:00, 11862.17it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -993,52 +993,61 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  60%|██████████████████████████████▌                    | 1200/2000 [00:02&lt;00:00, 11669.65it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  70%|███████████████████████████████████████████▍                  | 1400/2000 [00:02&lt;00:00, 13942.84it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  55%|████████████████████████████                       | 1100/2000 [00:02&lt;00:00, 10551.44it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  70%|███████████████████████████████████████████▍                  | 1400/2000 [00:02&lt;00:00, 13950.49it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  65%|█████████████████████████████████▏                 | 1300/2000 [00:02&lt;00:00, 12416.30it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  65%|████████████████████████████████████████▎                     | 1300/2000 [00:02&lt;00:00, 12718.16it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|█████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 882.20it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|█████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 882.95it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|█████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 883.67it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|█████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 884.28it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  60%|█████████████████████████████████████▏                        | 1200/2000 [00:02&lt;00:00, 11667.37it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.767292
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 840.42it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 841.23it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 841.92it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 842.52it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.841013
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.106926
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.093164
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.285081
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.282705
 </pre></div>
 </div>
 </div>
@@ -1071,8 +1080,7 @@ Name: count, dtype: int64
 <p>Otteniamo una rappresentazione delle distribuzioni a priori usate da Bambi.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clinton_model</span><span class="o">.</span><span class="n">plot_priors</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">clinton_model</span><span class="o">.</span><span class="n">plot_priors</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1080,7 +1088,7 @@ Name: count, dtype: int64
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling: [Intercept, age]
 </pre></div>
 </div>
-<img alt="../_images/4e27f678ff19d373019370f7a9737c46ec08259d6cb1d6efc9c0a32b6738e323.png" src="../_images/4e27f678ff19d373019370f7a9737c46ec08259d6cb1d6efc9c0a32b6738e323.png" />
+<img alt="../_images/ed87102087f5ee12ac029f012e2414bef9654b6ffdd25ea065801d3743f7fa82.png" src="../_images/ed87102087f5ee12ac029f012e2414bef9654b6ffdd25ea065801d3743f7fa82.png" />
 </div>
 </div>
 </section>
@@ -1091,12 +1099,11 @@ Name: count, dtype: int64
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">clinton_fitted</span><span class="p">,</span> <span class="n">combined</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/238968afb4b3948d0f570857939656f71dd32d6653e837ff443a2dd31dd38128.png" src="../_images/238968afb4b3948d0f570857939656f71dd32d6653e837ff443a2dd31dd38128.png" />
+<img alt="../_images/d4edbac6610e16576c3129c3776e91688c5d136b2ef66a13b50ce00c1102a942.png" src="../_images/d4edbac6610e16576c3129c3776e91688c5d136b2ef66a13b50ce00c1102a942.png" />
 </div>
 </div>
 <section id="posterior-predictive-check">
@@ -1112,13 +1119,12 @@ Name: count, dtype: int64
 <p>Otteniamo il Posterior Preditive Check.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">clinton_fitted</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">clinton_fitted</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/863bad0686611943d300137631450f76be8f5597472b3bdb6bb815957d609151.png" src="../_images/863bad0686611943d300137631450f76be8f5597472b3bdb6bb815957d609151.png" />
+<img alt="../_images/2adb212b045f0165d59cc7a9656a8a917105b05695b5a3ab5ed092780829180b.png" src="../_images/2adb212b045f0165d59cc7a9656a8a917105b05695b5a3ab5ed092780829180b.png" />
 </div>
 </div>
 <p>I possibili risultati futuri sono coerenti con i dati osservati, il che fornisce evidenze di un buon adattamento del modello.</p>
@@ -1136,13 +1142,12 @@ Name: count, dtype: int64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_khat</span><span class="p">(</span><span class="n">loo</span><span class="o">.</span><span class="n">pareto_k</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_khat</span><span class="p">(</span><span class="n">loo</span><span class="o">.</span><span class="n">pareto_k</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/20b160a0cad1478fed061f7400d1a2dfae8861708edaa35f70841f7f81d2ada0.png" src="../_images/20b160a0cad1478fed061f7400d1a2dfae8861708edaa35f70841f7f81d2ada0.png" />
+<img alt="../_images/0e0ff225efd2fc648516870fd18531edc297052513acfccbb0bf0ca90691deef.png" src="../_images/0e0ff225efd2fc648516870fd18531edc297052513acfccbb0bf0ca90691deef.png" />
 </div>
 </div>
 <p>La presenza di valori di <span class="math notranslate nohighlight">\(|\hat \kappa| &lt; 0.5\)</span> nel grafico suggerisce un’elevata qualità dell’adattamento del modello, confermata dalla buona mescolanza delle catene MCMC. In questo contesto, non sono rilevabili problemi significativi di convergenza, né si osservano evidenze di punti dati particolarmente influenti. Questo è indicativo di un modello che si adatta efficacemente ai dati a disposizione.</p>
@@ -1159,30 +1164,30 @@ Name: count, dtype: int64
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                 mean     sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  \
-Intercept       1.204  0.333   0.574    1.821      0.006    0.004    3302.0   
-age            -0.018  0.006  -0.030   -0.007      0.000    0.000    3547.0   
-vote_mean[0]    0.548  0.027   0.496    0.599      0.000    0.000    3304.0   
-vote_mean[1]    0.508  0.035   0.440    0.569      0.001    0.000    3562.0   
-vote_mean[2]    0.441  0.052   0.348    0.542      0.001    0.001    3659.0   
+Intercept       1.191  0.331   0.605    1.845      0.005    0.004    4199.0   
+age            -0.018  0.006  -0.029   -0.006      0.000    0.000    4495.0   
+vote_mean[0]    0.549  0.028   0.499    0.604      0.000    0.000    3513.0   
+vote_mean[1]    0.509  0.036   0.444    0.579      0.001    0.000    3904.0   
+vote_mean[2]    0.443  0.053   0.348    0.548      0.001    0.001    4306.0   
 ...               ...    ...     ...      ...        ...      ...       ...   
-vote_mean[368]  0.605  0.027   0.554    0.657      0.001    0.000    2965.0   
-vote_mean[369]  0.592  0.026   0.546    0.645      0.000    0.000    2996.0   
-vote_mean[370]  0.512  0.034   0.448    0.573      0.001    0.000    3546.0   
-vote_mean[371]  0.622  0.030   0.564    0.675      0.001    0.000    2967.0   
-vote_mean[372]  0.622  0.030   0.564    0.675      0.001    0.000    2967.0   
+vote_mean[368]  0.605  0.028   0.553    0.655      0.000    0.000    3357.0   
+vote_mean[369]  0.592  0.027   0.544    0.643      0.000    0.000    3330.0   
+vote_mean[370]  0.513  0.035   0.453    0.583      0.001    0.000    3859.0   
+vote_mean[371]  0.622  0.030   0.565    0.675      0.001    0.000    3465.0   
+vote_mean[372]  0.622  0.030   0.565    0.675      0.001    0.000    3465.0   
 
                 ess_tail  r_hat  
-Intercept         2637.0    1.0  
-age               2539.0    1.0  
-vote_mean[0]      2325.0    1.0  
-vote_mean[1]      2681.0    1.0  
-vote_mean[2]      2446.0    1.0  
+Intercept         2859.0    1.0  
+age               2773.0    1.0  
+vote_mean[0]      2655.0    1.0  
+vote_mean[1]      2774.0    1.0  
+vote_mean[2]      2969.0    1.0  
 ...                  ...    ...  
-vote_mean[368]    2430.0    1.0  
-vote_mean[369]    2510.0    1.0  
-vote_mean[370]    2764.0    1.0  
-vote_mean[371]    2236.0    1.0  
-vote_mean[372]    2236.0    1.0  
+vote_mean[368]    2851.0    1.0  
+vote_mean[369]    2676.0    1.0  
+vote_mean[370]    2812.0    1.0  
+vote_mean[371]    3031.0    1.0  
+vote_mean[372]    3031.0    1.0  
 
 [375 rows x 9 columns]
 </pre></div>
@@ -1209,7 +1214,7 @@ vote_mean[372]    2236.0    1.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.204
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.191
 </pre></div>
 </div>
 </div>
@@ -1221,7 +1226,7 @@ vote_mean[372]    2236.0    1.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.3334239868128988
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.290369932679089
 </pre></div>
 </div>
 </div>
@@ -1234,7 +1239,7 @@ vote_mean[372]    2236.0    1.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.7692355968298709
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.7669198657245955
 </pre></div>
 </div>
 </div>
@@ -1393,7 +1398,7 @@ vote_mean[372]    2236.0    1.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3a97cd0438eae90c531fab0906af63d2f6149e49e09d4f832d917c466a5465d6.png" src="../_images/3a97cd0438eae90c531fab0906af63d2f6149e49e09d4f832d917c466a5465d6.png" />
+<img alt="../_images/b8e35dba9a151a5e79e4e5e4b5163ecf36d5d3be23bfa8e1a17f4ff1cb69f8b4.png" src="../_images/b8e35dba9a151a5e79e4e5e4b5163ecf36d5d3be23bfa8e1a17f4ff1cb69f8b4.png" />
 </div>
 </div>
 <p>È possibile interpretare il grafico precedente nel seguente modo: fino all’età di circa 50 anni, la propensione al voto per Clinton supera quella per Trump. Proseguendo oltre i 50 anni, questa tendenza tende ad invertirsi. La presenza di più curve nel grafico indica l’incertezza a posteriori delle previsioni effettuate dal modello.</p>
@@ -1413,7 +1418,7 @@ vote_mean[372]    2236.0    1.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/787f5541cb27677808f9b62f3f4c4c3679090817654dd70289b68ef87b9be7ef.png" src="../_images/787f5541cb27677808f9b62f3f4c4c3679090817654dd70289b68ef87b9be7ef.png" />
+<img alt="../_images/6ed65a4ae78a4bac6656b28f77b901339c9a3af7ffa802d7347c161f212d61ec.png" src="../_images/6ed65a4ae78a4bac6656b28f77b901339c9a3af7ffa802d7347c161f212d61ec.png" />
 </div>
 </div>
 <p>Nel secondo grafico mostriamo la probabilità di votare per Clinton come funzione non lineare dell’età.</p>
@@ -1440,7 +1445,7 @@ vote_mean[372]    2236.0    1.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ff198bf74d092ec3efc18e3ec04b2c689a278f03908dd27109fea729c36f87a5.png" src="../_images/ff198bf74d092ec3efc18e3ec04b2c689a278f03908dd27109fea729c36f87a5.png" />
+<img alt="../_images/adda067ae4ce9c23fcca8cb83cb9ad5eec18755d9c6b099a50b9c5644892e3a1.png" src="../_images/adda067ae4ce9c23fcca8cb83cb9ad5eec18755d9c6b099a50b9c5644892e3a1.png" />
 </div>
 </div>
 </section>
@@ -1466,47 +1471,47 @@ vote_mean[372]    2236.0    1.0
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.DataArray &#39;vote_mean&#39; (chain: 4, draw: 1000, vote_obs: 373)&gt;
-array([[[0.56792954, 0.50042923, 0.38909863, ..., 0.50797555,
-         0.68710172, 0.68710172],
-        [0.529945  , 0.52181615, 0.50824447, ..., 0.52272   ,
-         0.5452528 , 0.5452528 ],
-        [0.5787459 , 0.51566729, 0.41042559, ..., 0.52273833,
-         0.68979821, 0.68979821],
+array([[[0.58518746, 0.55132593, 0.49397595, ..., 0.5551179 ,
+         0.64678019, 0.64678019],
+        [0.51078336, 0.46282332, 0.38480925, ..., 0.46813455,
+         0.60013721, 0.60013721],
+        [0.53803725, 0.50799765, 0.45791059, ..., 0.51134223,
+         0.5938636 , 0.5938636 ],
         ...,
-        [0.54864025, 0.50165814, 0.42369815, ..., 0.50689509,
-         0.63444182, 0.63444182],
-        [0.51812625, 0.45438027, 0.3523188 , ..., 0.46142775,
-         0.63533989, 0.63533989],
-        [0.55254208, 0.51806397, 0.46038018, ..., 0.52190946,
-         0.61606044, 0.61606044]],
+        [0.5526474 , 0.50404661, 0.42332865, ..., 0.50946741,
+         0.64108082, 0.64108082],
+        [0.54333766, 0.50928881, 0.45250551, ..., 0.51308209,
+         0.60631779, 0.60631779],
+        [0.54894283, 0.50415138, 0.42970586, ..., 0.50914474,
+         0.63088416, 0.63088416]],
 
-       [[0.52388249, 0.475692  , 0.39679731, ..., 0.48104057,
-         0.61301201, 0.61301201],
-        [0.53471804, 0.4954027 , 0.4302415 , ..., 0.49977718,
-         0.60744119, 0.60744119],
-        [0.57201095, 0.53003309, 0.45941571, ..., 0.53472948,
-         0.6481147 , 0.6481147 ],
+       [[0.53688695, 0.48514641, 0.40014871, ..., 0.49089994,
+         0.63164612, 0.63164612],
+        [0.58016165, 0.53680446, 0.46362203, ..., 0.5416619 ,
+         0.6583144 , 0.6583144 ],
+        [0.52307586, 0.47685809, 0.40107884, ..., 0.48198831,
+         0.60869235, 0.60869235],
 ...
-        [0.52094552, 0.47708804, 0.40509405, ..., 0.48195603,
-         0.60238504, 0.60238504],
-        [0.51114842, 0.47528871, 0.41626206, ..., 0.47926731,
-         0.57827774, 0.57827774],
-        [0.55998707, 0.49990206, 0.40061724, ..., 0.50661005,
-         0.66758416, 0.66758416]],
+        [0.53497213, 0.47804   , 0.38510876, ..., 0.48436468,
+         0.63895009, 0.63895009],
+        [0.54588023, 0.51015732, 0.45056914, ..., 0.51413838,
+         0.61180657, 0.61180657],
+        [0.54653445, 0.51141826, 0.45281232, ..., 0.51533202,
+         0.61135366, 0.61135366]],
 
-       [[0.54640768, 0.49063822, 0.39887657, ..., 0.49684878,
-         0.64761139, 0.64761139],
-        [0.54311428, 0.48933368, 0.40084742, ..., 0.49531993,
-         0.64107937, 0.64107937],
-        [0.56124264, 0.51800741, 0.44566973, ..., 0.52283669,
-         0.63995047, 0.63995047],
+       [[0.53245229, 0.4846948 , 0.40613663, ..., 0.49000335,
+         0.62039087, 0.62039087],
+        [0.57482056, 0.55539753, 0.52267572, ..., 0.55756515,
+         0.61084136, 0.61084136],
+        [0.5564814 , 0.53060839, 0.48718819, ..., 0.5334939 ,
+         0.60442058, 0.60442058],
         ...,
-        [0.57713788, 0.54637762, 0.49443247, ..., 0.54981741,
-         0.63346873, 0.63346873],
-        [0.61685174, 0.57973231, 0.51602477, ..., 0.58390989,
-         0.6831099 , 0.6831099 ],
-        [0.62740907, 0.58522072, 0.51236019, ..., 0.58998306,
-         0.70165995, 0.70165995]]])
+        [0.54541842, 0.49515848, 0.41210483, ..., 0.50075673,
+         0.63711572, 0.63711572],
+        [0.54208633, 0.49066697, 0.40593278, ..., 0.49639042,
+         0.6359917 , 0.6359917 ],
+        [0.55708034, 0.52589236, 0.47358229, ..., 0.52937221,
+         0.61459689, 0.61459689]]])
 Coordinates:
   * chain     (chain) int64 0 1 2 3
   * draw      (draw) int64 0 1 2 3 4 5 6 7 8 ... 992 993 994 995 996 997 998 999
@@ -1556,35 +1561,35 @@ Coordinates:
       <td>clinton</td>
       <td>56</td>
       <td>democrat</td>
-      <td>0.548176</td>
+      <td>0.548633</td>
     </tr>
     <tr>
       <th>1</th>
       <td>trump</td>
       <td>65</td>
       <td>republican</td>
-      <td>0.507864</td>
+      <td>0.508900</td>
     </tr>
     <tr>
       <th>2</th>
       <td>clinton</td>
       <td>80</td>
       <td>democrat</td>
-      <td>0.441214</td>
+      <td>0.443196</td>
     </tr>
     <tr>
       <th>3</th>
       <td>trump</td>
       <td>38</td>
       <td>republican</td>
-      <td>0.626277</td>
+      <td>0.625661</td>
     </tr>
     <tr>
       <th>4</th>
       <td>trump</td>
       <td>60</td>
       <td>republican</td>
-      <td>0.530294</td>
+      <td>0.531007</td>
     </tr>
   </tbody>
 </table>
@@ -1615,8 +1620,8 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[ 33 125]
- [ 31 184]]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[ 28 130]
+ [ 27 188]]
 </pre></div>
 </div>
 </div>
@@ -1716,15 +1721,18 @@ Coordinates:
 <p>In questo capitolo, abbiamo esplorato il modello di regressione logistica, una tecnica statistica utilizzata per analizzare le relazioni tra variabili binarie e variabili indipendenti, sia continue che categoriche. Abbiamo spiegato come il modello di regressione logistica impieghi il logit delle probabilità per modellare il legame tra le variabili di risultato e i predittori. La funzione logit trasforma l’intervallo di probabilità da 0 a 1 in un intervallo da meno infinito a più infinito, rendendo possibile l’utilizzo di un modello di regressione lineare nel caso di variabili dipendenti dicotomiche.</p>
 <p>In aggiunta, abbiamo illustrato come interpretare i coefficienti nel contesto del modello di regressione logistica. Quando il modello coinvolge una singola variabile indipendente, la rappresentazione grafica delle probabilità attese si rivela uno strumento di grande valore per ottenere una comprensione più accurata dei risultati.</p>
 <p>Infine, abbiamo introdotto l’approccio bayesiano per ottenere stime a posteriori dei parametri. Questo approccio ci permette di ottenere una visione più completa delle incertezze legate alle stime dei coefficienti. Attraverso l’aggiornamento bayesiano, siamo in grado di calcolare intervalli di credibilità in base al grado di certezza soggettiva desiderato, offrendo così un ulteriore livello di informazione e interpretazione all’analisi.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
-<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m -p jax
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -m -p jax
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Feb 17 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Feb 24 2024
 
 Python implementation: CPython
 Python version       : 3.11.7
@@ -1741,13 +1749,11 @@ CPU cores   : 8
 Architecture: 64bit
 
 numpy     : 1.26.4
+pandas    : 2.2.0
 matplotlib: 3.8.2
 bambi     : 0.13.0
-pandas    : 2.2.0
 seaborn   : 0.13.2
 arviz     : 0.17.0
-
-Watermark: 2.4.3
 </pre></div>
 </div>
 </div>
@@ -1843,6 +1849,7 @@ Watermark: 2.4.3
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
   </nav></div>
 
