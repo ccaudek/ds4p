@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/04_expval_var.html">Proprietà delle variabili casuali</a></li>
@@ -283,8 +283,8 @@
 <li class="toctree-l2"><a class="reference internal" href="45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="hssm.html">Drift Diffusion Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="50_cmdstanpy.html">CmdStanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="50_stan_beta_binomial.html">CmdStanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -890,7 +890,7 @@ p(\tilde{y} \mid y) = \int_\Theta p(\tilde{y} \mid \theta) p(\theta \mid y) \, \
 <h3>Confrontare Più Modelli<a class="headerlink" href="#confrontare-piu-modelli" title="Link to this heading">#</a></h3>
 <p>Supponiamo di avere una serie di <span class="math notranslate nohighlight">\(k\)</span> modelli distinti <span class="math notranslate nohighlight">\(\{q_{\mathcal{M}_1}, q_{\mathcal{M}_2}, \ldots, q_{\mathcal{M}_k}\}\)</span>. Se conoscessimo <span class="math notranslate nohighlight">\(p_t\)</span>, potremmo calcolare la Divergenza KL per ogni modello in questo modo:</p>
 <div class="math notranslate nohighlight" id="equation-eq-kl-mod-comp">
-<span class="eqno">(65)<a class="headerlink" href="#equation-eq-kl-mod-comp" title="Link to this equation">#</a></span>\[\begin{split}
+<span class="eqno">(62)<a class="headerlink" href="#equation-eq-kl-mod-comp" title="Link to this equation">#</a></span>\[\begin{split}
 \begin{align*}
 \mathbb{KL} (p_t \mid\mid q_{\mathcal{M}_1}) &amp;= \mathbb{E} (\log p_t) - \mathbb{E} (\log q_{\mathcal{M}_1}), \\
 \mathbb{KL} (p_t \mid\mid q_{\mathcal{M}_2}) &amp;= \mathbb{E} (\log p_t) - \mathbb{E} (\log q_{\mathcal{M}_2}), \\
@@ -900,11 +900,11 @@ p(\tilde{y} \mid y) = \int_\Theta p(\tilde{y} \mid \theta) p(\theta \mid y) \, \
 \end{split}\]</div>
 <p>In pratica, però, <span class="math notranslate nohighlight">\(p_t\)</span> è sconosciuta. Fortunatamente, <span class="math notranslate nohighlight">\(p_t\)</span> rimane costante in tutte le equazioni, permettendoci di confrontare i modelli focalizzandoci sul secondo termine della Divergenza KL, che è indipendente da <span class="math notranslate nohighlight">\(p_t\)</span>. Per un modello generico <span class="math notranslate nohighlight">\(\mathcal{M}\)</span>, questo termine è:</p>
 <div class="math notranslate nohighlight" id="equation-eq-kl-div-cont-t2">
-<span class="eqno">(66)<a class="headerlink" href="#equation-eq-kl-div-cont-t2" title="Link to this equation">#</a></span>\[
+<span class="eqno">(63)<a class="headerlink" href="#equation-eq-kl-div-cont-t2" title="Link to this equation">#</a></span>\[
 \mathbb{E} \log p_{\mathcal{M}}(y) = \int_{-\infty}^{+\infty} p_t(y) \log p_{\mathcal{M}}(y) \, \mathrm{d}y .
 \]</div>
 <p>In questo modo, possiamo costruire un metodo per confrontare i modelli senza dover conoscere il modello generatore effettivo dei dati.</p>
-<p>In conclusione, l’eq. <a class="reference internal" href="#equation-eq-kl-div-cont-t2">(66)</a> calcola la densità logaritmica media della distribuzione <span class="math notranslate nohighlight">\(p_{\mathcal{M}}(y)\)</span> basata sulla distribuzione reale <span class="math notranslate nohighlight">\(p_t(y)\)</span>. Ciò indica quanto accuratamente il modello <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> rappresenta i dati reali generati da <span class="math notranslate nohighlight">\(p_t\)</span>.</p>
+<p>In conclusione, l’eq. <a class="reference internal" href="#equation-eq-kl-div-cont-t2">(63)</a> calcola la densità logaritmica media della distribuzione <span class="math notranslate nohighlight">\(p_{\mathcal{M}}(y)\)</span> basata sulla distribuzione reale <span class="math notranslate nohighlight">\(p_t(y)\)</span>. Ciò indica quanto accuratamente il modello <span class="math notranslate nohighlight">\(\mathcal{M}\)</span> rappresenta i dati reali generati da <span class="math notranslate nohighlight">\(p_t\)</span>.</p>
 </section>
 </section>
 <section id="considerazioni-conclusive">

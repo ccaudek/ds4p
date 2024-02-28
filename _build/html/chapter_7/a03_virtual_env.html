@@ -229,7 +229,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/04_expval_var.html">Proprietà delle variabili casuali</a></li>
@@ -281,8 +281,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/hssm.html">Drift Diffusion Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_cmdstanpy.html">CmdStanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_stan_beta_binomial.html">CmdStanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -539,10 +539,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosa-e-un-ambiente-virtuale">Cosa è un Ambiente Virtuale?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-un-ambiente-virtuale">Perché Usare un Ambiente Virtuale?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#come-creare-un-ambiente-virtuale">Come Creare un Ambiente Virtuale</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-dell-ambiente-virtuale-con-conda">Gestione dell’Ambiente Virtuale con Conda</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#passaggi-per-gestire-gli-ambienti-virtuali">Passaggi per Gestire gli Ambienti Virtuali</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-dell-ambiente-virtuale-con-conda">Gestione dell’Ambiente Virtuale con Conda</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#passaggi-per-gestire-gli-ambienti-virtuali">Passaggi per Gestire gli Ambienti Virtuali</a></li>
 </ul>
             </nav>
         </div>
@@ -570,78 +568,110 @@ document.write(`
 </section>
 <section id="come-creare-un-ambiente-virtuale">
 <h2>Come Creare un Ambiente Virtuale<a class="headerlink" href="#come-creare-un-ambiente-virtuale" title="Link to this heading">#</a></h2>
-<p>Per creare un ambiente virtuale, di solito si utilizza uno strumento chiamato <code class="docutils literal notranslate"><span class="pre">conda</span></code>, che dovrebbe essere già installato se avete seguito le istruzioni per installare Anaconda.</p>
+<p>Per creare un ambiente virtuale, faremo uso di uno strumento chiamato <code class="docutils literal notranslate"><span class="pre">conda</span></code>, il quale dovrebbe essere già presente sul vostro sistema se avete seguito correttamente le istruzioni per installare Anaconda.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Per imparare a creare un ambiente virtuale, potete guardare un tutorial video al seguente <a class="reference external" href="https://drive.google.com/file/d/1eGvX1gDPVHv41oB9pgcTsJ13DYGbgr_6/view?usp=share_link">link</a>. Questo video presume che abbiate già <code class="docutils literal notranslate"><span class="pre">conda</span></code> sul vostro computer e vi guiderà passo dopo passo nel processo. Ricordate, è importante che Anaconda sia installato correttamente per poter utilizzare <code class="docutils literal notranslate"><span class="pre">conda</span></code>.</p>
+<p>Un tutorial video è disponibile al seguente <a class="reference external" href="https://drive.google.com/file/d/1eGvX1gDPVHv41oB9pgcTsJ13DYGbgr_6/view?usp=share_link">link</a>. Questo tutorial presuppone che abbiate già installato <code class="docutils literal notranslate"><span class="pre">conda</span></code> sul vostro computer e vi condurrà attraverso ogni passaggio del processo. È fondamentale assicurarsi che Anaconda sia installato correttamente per poter utilizzare <code class="docutils literal notranslate"><span class="pre">conda</span></code> senza problemi.</p>
 </div>
+<p>È altresì possibile creare e gestire gli ambienti virtuali attraverso l’interfaccia grafica di Anaconda. Una guida dettagliata è disponibile <a class="reference external" href="https://dbdmg.polito.it/dbdmg_web/wp-content/uploads/2023/03/0_anaconda-guide_040323.pdf">qui</a>. Tuttavia, personalmente, trovo più agevole utilizzare Conda direttamente dalla linea di comando.</p>
 </section>
 <section id="gestione-dell-ambiente-virtuale-con-conda">
 <h2>Gestione dell’Ambiente Virtuale con Conda<a class="headerlink" href="#gestione-dell-ambiente-virtuale-con-conda" title="Link to this heading">#</a></h2>
-<p>Per creare e gestire gli ambienti virtuali, in questo insegnamento useremo <code class="docutils literal notranslate"><span class="pre">conda</span></code>, uno strumento incluso in Anaconda. Per seguire le istruzioni seguenti, dovete utilizzare il <em>terminale</em> su macOS/Linux o il <em>Prompt dei comandi</em> su Windows.</p>
+<p>Per creare e gestire gli ambienti virtuali, in questo insegnamento useremo <code class="docutils literal notranslate"><span class="pre">conda</span></code>, uno strumento incluso in Anaconda. Per seguire le istruzioni seguenti, dovete utilizzare il <em>terminale</em> su macOS/Linux o <em>PowerShell</em> su Windows.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>È di fondamentale importanza evitare l’installazione di pacchetti nell’ambiente <code class="docutils literal notranslate"><span class="pre">base</span></code> di Conda. Per fare ciò, è indispensabile la creazione di un nuovo ambiente virtuale e l’attivazione di quest’ultimo prima di procedere con l’installazione di qualsiasi componente. Potrete verificare l’ambiente attivo controllando il nome visualizzato all’inizio del prompt nel vostro terminale.</p>
+<p>È di vitale importanza <strong>evitare di installare pacchetti direttamente nell’ambiente <code class="docutils literal notranslate"><span class="pre">base</span></code> di Conda</strong>. Per fare ciò, è essenziale seguire i seguenti passaggi:</p>
+<ol class="arabic simple">
+<li><p>Deselezionare l’ambiente base.</p></li>
+<li><p>Creare un nuovo ambiente virtuale.</p></li>
+<li><p>Attivare questo nuovo ambiente.</p></li>
+</ol>
+<p>Solo dopo aver completato questi passaggi si può procedere con l’installazione di qualsiasi componente. È possibile verificare l’ambiente attivo controllando il nome visualizzato all’inizio del prompt nel terminale.</p>
 </div>
+</section>
 <section id="passaggi-per-gestire-gli-ambienti-virtuali">
-<h3>Passaggi per Gestire gli Ambienti Virtuali<a class="headerlink" href="#passaggi-per-gestire-gli-ambienti-virtuali" title="Link to this heading">#</a></h3>
+<h2>Passaggi per Gestire gli Ambienti Virtuali<a class="headerlink" href="#passaggi-per-gestire-gli-ambienti-virtuali" title="Link to this heading">#</a></h2>
+<p>Gestire gli ambienti virtuali è fondamentale per mantenere organizzate le dipendenze dei vari progetti. Ecco come procedere:</p>
 <ol class="arabic">
 <li><p><strong>Uscire dall’Ambiente Virtuale Corrente</strong>:
-Se siete già in un ambiente virtuale, uscitene digitando:</p>
+Se siete all’interno di un ambiente virtuale e desiderate uscirne, potete farlo utilizzando il comando:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>deactivate
 </pre></div>
 </div>
-<p>Se ricevete un messaggio che dice che non c’è nessun ambiente da disattivare, significa che siete già pronti per il passaggio successivo.</p>
+<p>Se il sistema risponde indicando che non ci sono ambienti da disattivare, significa che non siete in un ambiente virtuale e potete procedere al passo successivo.</p>
 </li>
 <li><p><strong>Creare un Nuovo Ambiente Virtuale</strong>:
-Se volete creare un ambiente chiamato <code class="docutils literal notranslate"><span class="pre">pymc_env</span></code>, per esempio, eseguite:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>-n<span class="w"> </span>pymc_env<span class="w"> </span><span class="s2">&quot;pymc==5.10.3&quot;</span>
+Per creare un nuovo ambiente virtuale, ad esempio denominato <code class="docutils literal notranslate"><span class="pre">pymc_env</span></code>, e installare una versione specifica di PyMC, potete utilizzare il comando:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pymc_env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="s2">&quot;pymc==5.10.4&quot;</span>
 </pre></div>
 </div>
-<p>Quando vi viene chiesto di procedere, digitate <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<p>Conda vi chiederà di confermare l’installazione digitando <code class="docutils literal notranslate"><span class="pre">y</span></code>. Questo passaggio crea l’ambiente e installa la versione specificata di PyMC, insieme a tutte le dipendenze richieste.</p>
 </li>
 <li><p><strong>Attivare il Nuovo Ambiente</strong>:
-Ora attivate l’ambiente appena creato con:</p>
+Per utilizzare l’ambiente che avete appena creato, dovete attivarlo con:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>pymc_env
 </pre></div>
 </div>
 </li>
 <li><p><strong>Installare le Librerie Necessarie</strong>:
-Nel nuovo ambiente, installate le seguenti librerie:</p>
+All’interno dell’ambiente, potete installare altre librerie necessarie per il vostro progetto. Ecco come installare alcune librerie comuni per l’analisi dati:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>jax<span class="w"> </span>numpyro<span class="w"> </span>bambi<span class="w"> </span>seaborn<span class="w"> </span>pingouin<span class="w"> </span>watermark<span class="w"> </span>-y<span class="w"> </span>
 </pre></div>
 </div>
-<p>Per gli utenti Windows, invece di <code class="docutils literal notranslate"><span class="pre">numpyro</span></code>, installate <code class="docutils literal notranslate"><span class="pre">nutpie</span></code>:</p>
+<p>È importante notare che, per gli utenti Windows, <code class="docutils literal notranslate"><span class="pre">numpyro</span></code> potrebbe non essere supportato. In tal caso, è possibile installare un’alternativa come <code class="docutils literal notranslate"><span class="pre">nutpie</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>nutpie
 </pre></div>
 </div>
 </li>
-<li><p><strong>Aggiornare PyMC e Altre Librerie</strong>:</p>
-<p>Per aggiornare PyMC e le altre librerie, utilizzate:</p>
+<li><p><strong>Aggiornare PyMC e Altre Librerie</strong>:
+Per mantenere aggiornate le librerie nel vostro ambiente, compreso PyMC, potete eseguire:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>update<span class="w"> </span>--all
 </pre></div>
 </div>
+<p>Questo comando verifica la disponibilità di versioni più recenti delle librerie installate e le aggiorna.</p>
 </li>
-<li><p><strong>Comandi Utili per Gestire Ambienti e Librerie</strong>:</p></li>
-</ol>
+<li><p><strong>Comandi Utili per Gestire Ambienti e Librerie</strong>:
+Ecco alcuni comandi aggiuntivi che potrebbero tornarvi utili:</p>
 <ul>
-<li><p>Per vedere l’indirizzo dell’ambiente virtuale:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>info<span class="w"> </span>-e
+<li><p>Per elencare tutti gli ambienti virtuali disponibili e vedere quello attivo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>list
 </pre></div>
 </div>
 </li>
-<li><p>Per rimuovere un ambiente virtuale (ad esempio <code class="docutils literal notranslate"><span class="pre">my_env</span></code>):</p>
+<li><p>Per rimuovere un ambiente virtuale, ad esempio <code class="docutils literal notranslate"><span class="pre">my_env</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>my_env
 </pre></div>
 </div>
 </li>
-<li><p>Per rimuovere una libreria dall’ambiente (ad esempio <code class="docutils literal notranslate"><span class="pre">package_name</span></code>):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>remove<span class="w"> </span>package_name
+<li><p>Per rimuovere una specifica libreria dall’ambiente, ad esempio <code class="docutils literal notranslate"><span class="pre">package_name</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>remove<span class="w"> </span>-n<span class="w"> </span>nome_ambiente<span class="w"> </span>package_name
 </pre></div>
 </div>
 </li>
 </ul>
-</section>
+<p>Quest’ultimo comando richiede di specificare l’ambiente dal quale si desidera rimuovere la libreria, garantendo così che l’operazione sia eseguita nel contesto corretto.</p>
+</li>
+</ol>
+<p>Questi passaggi e comandi dovrebbero fornire una solida base per la gestione efficiente degli ambienti virtuali con Conda, consentendovi di mantenere separate e organizzate le dipendenze dei diversi progetti.</p>
+<p>In conclusione, per configurare l’ambiente virtuale <code class="docutils literal notranslate"><span class="pre">pymc_env</span></code> e installare PyMC insieme agli altri pacchetti necessari per questo insegnamento, è possibile seguire le istruzioni seguenti a seconda del sistema operativo.</p>
+<ul>
+<li><p>Su Unix, eseguire i seguenti comandi:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>deactivate
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pymc_env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="s2">&quot;pymc==5.10.4&quot;</span>
+conda<span class="w"> </span>activate<span class="w"> </span>pymc_env
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>jax<span class="w"> </span>numpyro<span class="w"> </span>bambi<span class="w"> </span>seaborn<span class="w"> </span>pingouin<span class="w"> </span>watermark<span class="w"> </span>-y<span class="w"> </span>
+</pre></div>
+</div>
+</li>
+<li><p>Su Windows, seguire queste istruzioni:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>deactivate
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pymc_env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="s2">&quot;pymc==5.10.4&quot;</span>
+conda<span class="w"> </span>activate<span class="w"> </span>pymc_env
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>nutpie<span class="w"> </span>bambi<span class="w"> </span>seaborn<span class="w"> </span>pingouin<span class="w"> </span>watermark<span class="w"> </span>-y<span class="w"> </span>
+</pre></div>
+</div>
+</li>
+</ul>
 </section>
 </section>
 
@@ -712,10 +742,8 @@ Nel nuovo ambiente, installate le seguenti librerie:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosa-e-un-ambiente-virtuale">Cosa è un Ambiente Virtuale?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-un-ambiente-virtuale">Perché Usare un Ambiente Virtuale?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#come-creare-un-ambiente-virtuale">Come Creare un Ambiente Virtuale</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-dell-ambiente-virtuale-con-conda">Gestione dell’Ambiente Virtuale con Conda</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#passaggi-per-gestire-gli-ambienti-virtuali">Passaggi per Gestire gli Ambienti Virtuali</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-dell-ambiente-virtuale-con-conda">Gestione dell’Ambiente Virtuale con Conda</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#passaggi-per-gestire-gli-ambienti-virtuali">Passaggi per Gestire gli Ambienti Virtuali</a></li>
 </ul>
   </nav></div>
 
