@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>1. Perdita di Dati Casuale e Indipendente dalle Cause &#8212; ds4p</title>
+    <title>Dati mancanti &#8212; ds4p</title>
   
   
   
@@ -252,7 +252,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
@@ -278,11 +278,10 @@
 <li class="toctree-l2"><a class="reference internal" href="40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-
-
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="50_stan_beta_binomial.html">CmdStanPy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -336,7 +335,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambiente virtuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -526,7 +525,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>1. Perdita di Dati Casuale e Indipendente dalle Cause</h1>
+    <h1>Dati mancanti</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -536,11 +535,17 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dalla-causa">2. Perdita di Dati Condizionata dalla Causa</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dal-risultato">3. Perdita di Dati Condizionata dal Risultato</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-tassonomia-di-rubin">La tassonomia di Rubin</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-casuale-e-indipendente-dalle-cause">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dalle-cause">2. Perdita di Dati Condizionata dalle Cause</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dal-risultato">3. Perdita di Dati Condizionata dal Risultato</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusioni">Conclusioni</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
             </nav>
         </div>
     </div>
@@ -551,7 +556,13 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="cell docutils container">
+  <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/425_hierarchical_models.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="dati-mancanti">
+<span id="missing-data-notebook"></span><h1>Dati mancanti<a class="headerlink" href="#dati-mancanti" title="Link to this heading">#</a></h1>
+<p>Nel campo della data science, la gestione dei dati mancanti rappresenta una sfida cruciale e una competenza fondamentale per gli analisti e i ricercatori. I dati mancanti non sono solo una comune occorrenza nei dataset reali, ma possono anche avere un impatto significativo sulla qualità delle analisi, sulle inferenze tratte e sulle decisioni basate su tali dati. L’importanza di affrontare correttamente i dati mancanti risiede nella necessità di mantenere l’integrità delle analisi statistiche e di evitare conclusioni errate o distorte. Una gestione appropriata dei dati mancanti permette di migliorare l’accuratezza dei modelli predittivi, di aumentare la robustezza delle analisi e di garantire che le decisioni basate sui dati siano informate e affidabili. Pertanto, comprendere le cause dei dati mancanti, conoscere le diverse tipologie di assenza dei dati, come classificato nella tassonomia di Rubin, e applicare le tecniche di trattamento più adeguate sono competenze essenziali nella data science per massimizzare il valore estratto dai dati disponibili.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -578,6 +589,28 @@ document.write(`
 </div>
 </div>
 </div>
+</section>
+<section id="la-tassonomia-di-rubin">
+<h2>La tassonomia di Rubin<a class="headerlink" href="#la-tassonomia-di-rubin" title="Link to this heading">#</a></h2>
+<p>La tassonomia dei dati mancanti di Rubin introduce una classificazione che aiuta a comprendere e gestire le situazioni in cui i dati non sono completamente disponibili. Questa classificazione è particolarmente rilevante in ambiti come la statistica, la ricerca scientifica e l’analisi dei dati, dove la presenza di dati mancanti può influenzare significativamente i risultati degli studi. La tassonomia identifica tre categorie principali: Dati Mancanti Completamente a Caso (MCAR), Dati Mancanti a Caso (MAR) e Dati Mancanti Non a Caso (MNAR). Ognuna di queste categorie si basa su specifiche assunzioni relative alla probabilità condizionata che un dato sia mancante. Vediamo nel dettaglio:</p>
+<ol class="arabic simple">
+<li><p><strong>Dati Mancanti Completamente a Caso (MCAR)</strong>: Questa categoria rappresenta la situazione meno problematica tra le tre. L’assunzione MCAR suggerisce che la mancanza di dati avviene in modo completamente casuale, senza alcuna relazione sia con i dati osservati che con quelli non osservati. La mancanza è attribuibile a circostanze casuali e non legate alle caratteristiche dei dati stessi. In pratica, questo significa che la probabilità che un dato sia mancante è la stessa per tutte le osservazioni. Quando i dati sono MCAR, le tecniche di analisi possono procedere senza introdurre distorsioni significative nei risultati.</p></li>
+<li><p><strong>Dati Mancanti a Caso (MAR)</strong>: In questa categoria, la probabilità che un dato sia mancante può dipendere dai dati osservati, ma non da quelli non osservati. Questo tipo di mancanza viene considerato “ignorabile” perché, conoscendo i dati osservati, è possibile procedere con l’analisi senza compromettere l’affidabilità delle inferenze, sebbene possa esserci una perdita di precisione. Questa situazione si verifica quando la ragione della mancanza di dati è correlata a qualche caratteristica osservabile nel dataset, permettendo di gestire la mancanza attraverso l’analisi dei dati disponibili.</p></li>
+<li><p><strong>Dati Mancanti Non a Caso (MNAR)</strong>: Questa è la situazione più complessa e potenzialmente problematica. I dati sono considerati MNAR quando la probabilità che un dato sia mancante dipende dalle informazioni non osservate. Ciò significa che la mancanza di dati è correlata a valori che non sono noti o osservabili, rendendo più difficile l’imputazione e l’analisi. Le tecniche standard di gestione dei dati mancanti potrebbero introdurre distorsioni significative nei risultati a causa del rischio di confondimento. La gestione dei dati MNAR richiede metodi avanzati e cautela nell’interpretazione dei risultati.</p></li>
+</ol>
+<p>Le assunzioni su cui si basa questa tassonomia sono fondamentali per scegliere il metodo di trattamento dei dati mancanti più appropriato. Tuttavia, è importante notare che queste assunzioni sono intrinsecamente non verificabili. L’analisi e le conclusioni di uno studio dipenderanno dalla plausibilità di queste assunzioni nel contesto specifico in cui vengono applicate. La scelta di come trattare i dati mancanti dovrebbe quindi essere attentamente considerata e giustificata nel contesto della ricerca.</p>
+</section>
+<section id="un-esempio-empirico">
+<h2>Un Esempio Empirico<a class="headerlink" href="#un-esempio-empirico" title="Link to this heading">#</a></h2>
+<p>L’analisi e il trattamento dei dati mancanti rivestono un ruolo cruciale nell’interpretazione dei risultati di uno studio. Esaminiamo i diversi scenari di dati mancanti che hai delineato, prendendo spunto dall’esempio metaforico del “cane che mangia i compiti”, presentato nel tutorial di <a class="reference external" href="https://github.com/dustinstansbury/statistical-rethinking-2023/blob/main/Lecture%2018%20-%20Missing%20Data.ipynb">Dustin Stansbury</a>.</p>
+<section id="perdita-di-dati-casuale-e-indipendente-dalle-cause">
+<h3>1. Perdita di Dati Casuale e Indipendente dalle Cause<a class="headerlink" href="#perdita-di-dati-casuale-e-indipendente-dalle-cause" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Esempio</strong>:  Il fenomeno del “cane che mangia i compiti” avviene in maniera casuale.</p></li>
+<li><p><strong>Conseguenze</strong>: In questa situazione, la perdita di dati è classificata come “Missing Completely At Random” (MCAR), ovvero l’assenza di dati non è in alcun modo correlata né alle variabili osservate né a quelle non osservate.</p></li>
+<li><p><strong>Gestione</strong>: È possibile eliminare i casi con dati mancanti senza introdurre distorsioni, benché ciò possa ridurre l’efficienza dello studio a causa della diminuzione della dimensione del campione.</p></li>
+<li><p><strong>Ricollegamento ai DAG</strong>: In un Diagramma Aciclico Diretto (DAG), se la perdita di dati è indipendente da qualsiasi variabile, le relazioni causali tra le variabili non vengono alterate.</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Digraph object</span>
@@ -603,6 +636,7 @@ document.write(`
 <div class="cell_output docutils container">
 <img alt="../_images/46a22d653ec5c213d965c19fd73c04b123b69944c3e4bfa45470b67854478bc3.svg" src="../_images/46a22d653ec5c213d965c19fd73c04b123b69944c3e4bfa45470b67854478bc3.svg" /></div>
 </div>
+<p>Nel DAG, il nodo “S” rappresenta la competenza dello studente, mentre il nodo “H” simboleggia il compito che sarebbe stato valutato se non fosse stato parzialmente mangiato dal cane (D), un evento casuale. Di conseguenza, il docente valuta lo studente basandosi sul compito incompleto “H*”.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Helper function to plot regression line</span>
@@ -660,9 +694,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/feca161f4fb1c52aa495c94d0fd6226ae90ffbccbdd4a535b5306b26c64e6aae.png" src="../_images/feca161f4fb1c52aa495c94d0fd6226ae90ffbccbdd4a535b5306b26c64e6aae.png" />
+<img alt="../_images/6d43e7fb7c4128c38a1b58cae95d533afcb223da19ca1d464f0943ba3f32b5e7.png" src="../_images/6d43e7fb7c4128c38a1b58cae95d533afcb223da19ca1d464f0943ba3f32b5e7.png" />
 </div>
 </div>
+<p>In scenari di dati mancanti completamente a caso, si verifica una perdita di precisione, ma, mediamente, l’analisi non risulta distorta.</p>
+</section>
+<section id="perdita-di-dati-condizionata-dalle-cause">
+<h3>2. Perdita di Dati Condizionata dalle Cause<a class="headerlink" href="#perdita-di-dati-condizionata-dalle-cause" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Esempio</strong>: Il cane mangia i compiti in base alle abitudini di studio dello studente, ad esempio se lo studente trascura di nutrire il cane dopo aver studiato intensamente.</p></li>
+<li><p><strong>Conseguenze</strong>: Questo caso è definito come “Missing At Random” (MAR), in cui la probabilità di perdita di dati è correlata a variabili osservabili.</p></li>
+<li><p><strong>Gestione</strong>: È necessario adeguare l’analisi in base alla causa per prevenire distorsioni. L’impiego di modelli statistici che considerano le variabili legate alla mancanza di dati può risultare efficace.</p></li>
+<li><p><strong>Ricollegamento ai DAG</strong>: Se la perdita di dati è associata a una variabile causale nel DAG, è essenziale includere questa variabilità nell’analisi.</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Digraph object</span>
@@ -689,6 +733,7 @@ document.write(`
 <div class="cell_output docutils container">
 <img alt="../_images/e1151bb3866f9f49e2ab3d2a385c292aea10e24a5d868202ddac9d36d8bc25e0.svg" src="../_images/e1151bb3866f9f49e2ab3d2a385c292aea10e24a5d868202ddac9d36d8bc25e0.svg" /></div>
 </div>
+<p>In una prima simulazione,  il trattamento (competenza dello studente) e l’effetto (qualità del compito) hanno una relazione lineare. Questo scenario è molto raro.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
@@ -711,9 +756,11 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/44182b20a885d7e2434f713e65872fb3ea5bd27262cbcf7ff54080b78402f8b7.png" src="../_images/44182b20a885d7e2434f713e65872fb3ea5bd27262cbcf7ff54080b78402f8b7.png" />
+<img alt="../_images/67dd55b8a3d9eb6a83bb6997a5ba22dacf228e22cfdbc510fb4c54c4f7dfc283.png" src="../_images/67dd55b8a3d9eb6a83bb6997a5ba22dacf228e22cfdbc510fb4c54c4f7dfc283.png" />
 </div>
 </div>
+<p>Quando l’associazione tra abilità degli studenti e punteggio dei compiti è lineare, l’adattamento dal campione completo e da quello incompleto può risultare simile, con una perdita di precisione solo agli estremi del campione.</p>
+<p>Consideriamo ora il caso in cui il trattamento (capacità dello studente) e l’effetto (caratteristiche del compito) non sono associati linearmente. Questo scenario è molto più comune.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -736,9 +783,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/24b9d3d0bde5b74da3c836f3b9618152a1a792102d1233d7348f76d8f1af71f1.png" src="../_images/24b9d3d0bde5b74da3c836f3b9618152a1a792102d1233d7348f76d8f1af71f1.png" />
+<img alt="../_images/8e78cc4c21faacbd88d618a56868fe2f200e8b2f3e620c7ae35f686c7a417318.png" src="../_images/8e78cc4c21faacbd88d618a56868fe2f200e8b2f3e620c7ae35f686c7a417318.png" />
 </div>
 </div>
+<p>In un tale scenario, l’adattamento dal campione completo e da quello incompleto sono molto diversi. In altre parole, l’analisi del campione incompleto produce un risultato distorto.</p>
+</section>
+<section id="perdita-di-dati-condizionata-dal-risultato">
+<h3>3. Perdita di Dati Condizionata dal Risultato<a class="headerlink" href="#perdita-di-dati-condizionata-dal-risultato" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Esempio</strong>: Il cane mangia i compiti in base al punteggio ottenuto.</p></li>
+<li><p><strong>Conseguenze</strong>:  Questo scenario è classificato come “Missing Not At Random” (MNAR), in cui la perdita di dati è direttamente correlata al risultato mancante, complicando significativamente la gestione.</p></li>
+<li><p><strong>Gestione</strong>: Spesso, affrontare questa situazione richiede di modellare il processo causale alla base della perdita di dati, utilizzando tecniche come l’analisi di sopravvivenza o l’impiego di dati censurati.</p></li>
+<li><p><strong>Ricollegamento ai DAG</strong>: In presenza di dati mancanti correlati all’esito, è cruciale modellare esplicitamente tale relazione per comprendere le implicazioni.</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Digraph object</span>
@@ -789,62 +846,19 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c135272396942262de688e2f7936c4c8ead2465ac200e13cddaf94472a90e6a4.png" src="../_images/c135272396942262de688e2f7936c4c8ead2465ac200e13cddaf94472a90e6a4.png" />
+<img alt="../_images/16b5c363754a651e6dfdba8de45291262f5fb394ef940747d5c8a71abe896c56.png" src="../_images/16b5c363754a651e6dfdba8de45291262f5fb394ef940747d5c8a71abe896c56.png" />
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">n_homework</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="c1"># Student knowledge</span>
-<span class="n">S</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_homework</span><span class="p">)</span>
-
-<span class="c1"># Nonlinear association between student ability and homework score</span>
-<span class="n">mu_score</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.9</span> <span class="o">*</span> <span class="n">S</span><span class="p">)</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">mu_score</span><span class="p">)</span>
-
-<span class="c1"># Dog eats 90% of homework that is below average</span>
-<span class="n">p_dog_eats_homework</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">H</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">D</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">bernoulli</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p_dog_eats_homework</span><span class="p">)</span>
-<span class="n">Hstar</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">Hstar</span><span class="p">[</span><span class="n">D</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-
-<span class="n">plot_dog_homework</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Hstar</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Missing data conditioned on outcome state</span><span class="se">\n</span><span class="s2">similar for nonlinear relationships&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/9e521f0b360e4dddce46bb8dba116d7b179eadaf7c035cba5b904d8cb4acd470.png" src="../_images/9e521f0b360e4dddce46bb8dba116d7b179eadaf7c035cba5b904d8cb4acd470.png" />
-</div>
-</div>
-<p>L’analisi dei dati mancanti e la loro gestione possono avere implicazioni significative nell’interpretazione dei risultati di uno studio. Riflettiamo sui vari casi di dati mancanti che hai descritto, usando l’esempio metaforico del “cane che mangia i compiti” e collegandoli agli esempi precedenti di grafici causali (DAG):</p>
-<section id="perdita-di-dati-casuale-e-indipendente-dalle-cause">
-<h1>1. Perdita di Dati Casuale e Indipendente dalle Cause<a class="headerlink" href="#perdita-di-dati-casuale-e-indipendente-dalle-cause" title="Link to this heading">#</a></h1>
-<ul class="simple">
-<li><p><strong>Esempio</strong>: “Il cane mangia i compiti in modo casuale”.</p></li>
-<li><p><strong>Conseguenze</strong>: In questo caso, la perdita di dati è considerata “Missing Completely At Random” (MCAR). L’assenza di dati non è correlata né alle variabili osservate né a quelle non osservate.</p></li>
-<li><p><strong>Gestione</strong>: È possibile escludere i casi completi senza introdurre bias, ma questo potrebbe portare a una perdita di efficienza (riduzione della dimensione del campione).</p></li>
-<li><p><strong>Ricollegamento ai DAG</strong>: In un DAG, se la perdita di dati è indipendente da qualsiasi nodo, questo non altera le relazioni causali tra le variabili.</p></li>
-</ul>
+<p>l’adattamento dal campione completo e da quello incompleto sono molto diversi. In altre parole, l’analisi del campione incompleto produce un risultato distorto. La situazione è simile a quella precedene in cui la relazione tra cause e risultati non era lineare.</p>
+<p>Senza conoscere la relazione causale tra il risultato e la perdita di dati, e le forme funzionali di come X è associato con Y, è difficile tenere conto di questo scenario.</p>
 </section>
-<section id="perdita-di-dati-condizionata-dalla-causa">
-<h1>2. Perdita di Dati Condizionata dalla Causa<a class="headerlink" href="#perdita-di-dati-condizionata-dalla-causa" title="Link to this heading">#</a></h1>
-<ul class="simple">
-<li><p><strong>Esempio</strong>: “Il cane mangia i compiti basandosi sulle abitudini di studio dello studente”.</p></li>
-<li><p><strong>Conseguenze</strong>: Questa situazione è classificata come “Missing At Random” (MAR). La probabilità di perdita di dati è correlata a variabili osservate.</p></li>
-<li><p><strong>Gestione</strong>: È necessario condizionare correttamente sulla causa durante l’analisi per evitare distorsioni. Tecniche come la modellazione statistica che tiene conto delle variabili correlate alla perdita di dati possono essere utili.</p></li>
-<li><p><strong>Ricollegamento ai DAG</strong>: Se la perdita di dati è legata a una variabile causale nel DAG, dobbiamo assicurarci di considerare questa variabilità durante l’analisi.</p></li>
-</ul>
 </section>
-<section id="perdita-di-dati-condizionata-dal-risultato">
-<h1>3. Perdita di Dati Condizionata dal Risultato<a class="headerlink" href="#perdita-di-dati-condizionata-dal-risultato" title="Link to this heading">#</a></h1>
-<ul class="simple">
-<li><p><strong>Esempio</strong>: “Il cane mangia i compiti basandosi sul punteggio dei compiti”.</p></li>
-<li><p><strong>Conseguenze</strong>: Questa è una situazione di “Missing Not At Random” (MNAR). La perdita di dati è correlata al risultato mancante stesso, il che rende la situazione più complessa.</p></li>
-<li><p><strong>Gestione</strong>: Spesso è difficile da gestire senza modellare il processo causale che determina la perdita di dati (es. comportamento del cane). Tecniche come l’analisi di sopravvivenza e i dati censurati possono essere applicate.</p></li>
-<li><p><strong>Ricollegamento ai DAG</strong>: In un DAG, se la perdita di dati è correlata all’esito, potrebbe essere necessario modellare esplicitamente questa relazione per comprendere le implicazioni.</p></li>
-</ul>
-<p>In sintesi, la gestione dei dati mancanti dipende dalla loro relazione con le variabili nel modello causale. Comprendere la natura della perdita di dati è fondamentale per selezionare l’approccio analitico appropriato e per interpretare accuratamente i risultati dello studio.</p>
+<section id="conclusioni">
+<h2>Conclusioni<a class="headerlink" href="#conclusioni" title="Link to this heading">#</a></h2>
+<p>In conclusione, la strategia di gestione dei dati mancanti varia a seconda della loro relazione con le variabili nel modello causale. Comprendere la natura della perdita di dati è vitale per scegliere l’approccio analitico corretto e per interpretare con precisione i risultati dello studio. Solo nel caso di dati mancanti completamente a caso, l’analisi che ignora la mancanza di dati produce risultati affidabili.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -853,11 +867,11 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 06 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Feb 29 2024
 
 Python implementation: CPython
-Python version       : 3.11.7
-IPython version      : 8.19.0
+Python version       : 3.11.8
+IPython version      : 8.22.1
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
@@ -867,21 +881,22 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-numpy      : 1.26.2
+xarray     : 2024.2.0
+seaborn    : 0.13.2
 statsmodels: 0.14.1
-matplotlib : 3.8.2
-seaborn    : 0.13.0
-xarray     : 2023.12.0
-scipy      : 1.11.4
-pymc       : 5.10.3
-pandas     : 2.1.4
+scipy      : 1.12.0
+numpy      : 1.26.4
+pymc       : 5.10.4
+matplotlib : 3.8.3
 arviz      : 0.17.0
+pandas     : 2.2.1
 
 Watermark: 2.4.3
 </pre></div>
 </div>
 </div>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -948,11 +963,17 @@ Watermark: 2.4.3
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dalla-causa">2. Perdita di Dati Condizionata dalla Causa</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dal-risultato">3. Perdita di Dati Condizionata dal Risultato</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-tassonomia-di-rubin">La tassonomia di Rubin</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-casuale-e-indipendente-dalle-cause">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dalle-cause">2. Perdita di Dati Condizionata dalle Cause</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perdita-di-dati-condizionata-dal-risultato">3. Perdita di Dati Condizionata dal Risultato</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusioni">Conclusioni</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
   </nav></div>
 
 </div></div>
