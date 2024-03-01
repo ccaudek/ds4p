@@ -542,6 +542,10 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-dell-ambiente-virtuale">Gestione dell’Ambiente Virtuale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-degli-ambienti-virtuali-passaggi-essenziali">Gestione degli Ambienti Virtuali: Passaggi Essenziali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configurazione-degli-ambienti-virtuali-per-psicometria">Configurazione degli Ambienti Virtuali per Psicometria</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conda-forge">Conda Forge</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vantaggi-dell-uso-di-conda-forge">Vantaggi dell’Uso di Conda Forge</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -581,8 +585,8 @@ document.write(`
 </section>
 <section id="gestione-dell-ambiente-virtuale">
 <h2>Gestione dell’Ambiente Virtuale<a class="headerlink" href="#gestione-dell-ambiente-virtuale" title="Link to this heading">#</a></h2>
-<p>Per una gestione più efficiente degli ambienti virtuali, è consigliabile utilizzare la linea di comando anziché l’interfaccia grafica di Anaconda. Questo offre maggiore controllo e flessibilità nel processo di creazione e gestione degli ambienti.</p>
-<p>Seguendo correttamente questi passaggi, è possibile sfruttare appieno i vantaggi degli ambienti virtuali, garantendo un ambiente di sviluppo Python pulito e ben organizzato. (Un tutorial video è disponibile al seguente <a class="reference external" href="https://drive.google.com/file/d/1eGvX1gDPVHv41oB9pgcTsJ13DYGbgr_6/view?usp=share_link">link</a>)</p>
+<p>Per una gestione più efficiente degli <a class="reference external" href="https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#">ambienti virtuali</a>, è consigliabile utilizzare la linea di comando anziché l’interfaccia grafica di Anaconda. Questo offre maggiore controllo e flessibilità nel processo di creazione e gestione degli ambienti.</p>
+<p>Seguendo correttamente questi passaggi, è possibile sfruttare appieno i vantaggi degli ambienti virtuali, garantendo un ambiente di sviluppo Python pulito e ben organizzato.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>È fondamentale <strong>evitare l’installazione diretta di pacchetti nell’ambiente <code class="docutils literal notranslate"><span class="pre">base</span></code> di Conda</strong>. Assicuratevi sempre di seguire attentamente i seguenti passaggi:</p>
@@ -677,13 +681,34 @@ conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> <
 </li>
 </ul>
 <p><strong>Ambiente Virtuale <code class="docutils literal notranslate"><span class="pre">stan_env</span></code></strong></p>
-<p>Per utilizzare il campionatore CmdStan e il linguaggio di programmazione probabilistica Stan, adotteremo l’ambiente virtuale <code class="docutils literal notranslate"><span class="pre">stan_env</span></code>. Se si utilizza <code class="docutils literal notranslate"><span class="pre">conda</span></code>, è possibile installare CmdStanPy e i componenti sottostanti di CmdStan dal repository conda-forge tramite la seguente procedura.</p>
+<p>Per utilizzare il campionatore CmdStan e il linguaggio di programmazione probabilistica Stan, adotteremo l’ambiente virtuale <code class="docutils literal notranslate"><span class="pre">stan_env</span></code>. Se si utilizza <code class="docutils literal notranslate"><span class="pre">conda</span></code>, è possibile installare <a class="reference external" href="https://mc-stan.org/docs/cmdstan-guide/cmdstan-installation.html">CmdStanPy</a> e i componenti sottostanti di CmdStan dal repository conda-forge tramite la seguente procedura.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>deactivate<span class="w"> </span>
 conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>stan_env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>cmdstanpy<span class="w"> </span>
 conda<span class="w"> </span>activate<span class="w"> </span>stan_env
 conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>seaborn<span class="w"> </span>arviz<span class="w"> </span>watermark<span class="w"> </span>-y
 </pre></div>
 </div>
+</section>
+<section id="conda-forge">
+<h2>Conda Forge<a class="headerlink" href="#conda-forge" title="Link to this heading">#</a></h2>
+<p>È consigliato aggiungere Conda Forge come canale aggiuntivo da cui Conda può cercare e installare i pacchetti. Conda Forge è una community-driven collection di pacchetti.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>conda-forge
+conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>channel_priority<span class="w"> </span>strict
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">config</span> <span class="pre">--add</span> <span class="pre">channels</span> <span class="pre">conda-forge</span></code></strong>: Questo comando aggiunge Conda Forge come canale aggiuntivo da cui Conda può cercare e installare pacchetti. Aggiungere Conda Forge come canale significa che quando si cerca o si installa un pacchetto, Conda considererà anche i pacchetti disponibili in Conda Forge, oltre ai canali predefiniti.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">config</span> <span class="pre">--set</span> <span class="pre">channel_priority</span> <span class="pre">strict</span></code></strong>: Questo comando imposta la priorità dei canali a “strict”, il che significa che Conda darà priorità ai pacchetti trovati nei canali elencati per primi nel file di configurazione <code class="docutils literal notranslate"><span class="pre">.condarc</span></code>. Se un pacchetto è disponibile in più canali, Conda installerà la versione dal canale con la priorità più alta. Impostare la priorità dei canali su “strict” aiuta a evitare problemi di compatibilità tra pacchetti installati da canali diversi.</p></li>
+</ul>
+<section id="vantaggi-dell-uso-di-conda-forge">
+<h3>Vantaggi dell’Uso di Conda Forge<a class="headerlink" href="#vantaggi-dell-uso-di-conda-forge" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Maggior Numero di Pacchetti Disponibili</strong>: Conda Forge ospita un numero maggiore di pacchetti rispetto al canale predefinito di Conda (Anaconda). Questo significa che ci sono maggiori possibilità di trovare il pacchetto di cui si ha bisogno senza dover ricorrere all’installazione manuale o ad altre soluzioni.</p></li>
+<li><p><strong>Aggiornamenti Più Frequenti</strong>: I pacchetti su Conda Forge tendono ad essere aggiornati più frequentemente. Se stiamo cercando la versione più recente di un pacchetto, è più probabile trovarla su Conda Forge.</p></li>
+<li><p><strong>Maggiore Coerenza e Compatibilità</strong>: Impostando la priorità dei canali su “strict” e utilizzando principalmente Conda Forge, si aumenta la coerenza e la compatibilità tra i pacchetti installati. Questo riduce il rischio di conflitti tra dipendenze, rendendo più facile la gestione dell’ambiente.</p></li>
+</ol>
+<p>L’aggiunta di Conda Forge come canale e l’impostazione della priorità dei canali su “strict” sono pratiche consigliate per migliorare l’esperienza di gestione dei pacchetti con Conda. Questo approccio può aiutarci a mantenere il nostro ambiente più stabile, aggiornato e in linea con le ultime versioni dei pacchetti disponibili, massimizzando al contempo la compatibilità tra le dipendenze.</p>
+</section>
 </section>
 </section>
 
@@ -757,6 +782,10 @@ conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> <
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-dell-ambiente-virtuale">Gestione dell’Ambiente Virtuale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gestione-degli-ambienti-virtuali-passaggi-essenziali">Gestione degli Ambienti Virtuali: Passaggi Essenziali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configurazione-degli-ambienti-virtuali-per-psicometria">Configurazione degli Ambienti Virtuali per Psicometria</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conda-forge">Conda Forge</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vantaggi-dell-uso-di-conda-forge">Vantaggi dell’Uso di Conda Forge</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
