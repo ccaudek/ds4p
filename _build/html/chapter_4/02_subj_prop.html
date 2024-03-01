@@ -79,7 +79,7 @@
     <link rel="icon" href="../_static/increasing.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Distribuzioni coniugate (1)" href="03_conjugate_families_1.html" />
+    <link rel="next" title="Distribuzioni coniugate" href="03_conjugate_families_1.html" />
     <link rel="prev" title="Modellazione bayesiana" href="01_intro_bayes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -254,7 +254,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Pensare ad una proporzione in termini soggettivi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
@@ -280,11 +280,10 @@
 <li class="toctree-l2"><a class="reference internal" href="40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
-<li class="toctree-l2"><a class="reference internal" href="45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="45_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="50_stan_beta_binomial.html">CmdStanPy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -312,6 +311,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mediation.html">Modello di mediazione con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -585,7 +585,6 @@ document.write(`
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
 <span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -686,7 +685,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f619cd0b3434d865a4a30511349698ae0f58dc1458a1ce9d178ae80e0f81661a.png" src="../_images/f619cd0b3434d865a4a30511349698ae0f58dc1458a1ce9d178ae80e0f81661a.png" />
+<img alt="../_images/84fac69f7e78d3a0f6aec49da39174d98e663a3d62b56e39e1c7588e27a7c921.png" src="../_images/84fac69f7e78d3a0f6aec49da39174d98e663a3d62b56e39e1c7588e27a7c921.png" />
 </div>
 </div>
 <p>Se, al contrario, riteniamo che i valori centrali nella distribuzione di <span class="math notranslate nohighlight">\(\theta\)</span> siano più credibili rispetto a quelli situati agli estremi, potremmo esprimere questa opinione soggettiva mediante la seguente distribuzione di massa di probabilità.</p>
@@ -701,7 +700,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1557349956ed1d1f336e0c2121ffb2e5668128792853e1200201be3f322be301.png" src="../_images/1557349956ed1d1f336e0c2121ffb2e5668128792853e1200201be3f322be301.png" />
+<img alt="../_images/0eb30b591cf03dae1f9f066d0efeed9068a6e183c55684833329e8f5d8e9fcea.png" src="../_images/0eb30b591cf03dae1f9f066d0efeed9068a6e183c55684833329e8f5d8e9fcea.png" />
 </div>
 </div>
 <p>La prima distribuzione di probabilità rappresenta una distribuzione discreta uniforme poiché assegna la stessa probabilità a ciascun elemento dell’insieme discreto su cui è definita, ossia i valori <span class="math notranslate nohighlight">\({0, 0.1, 0.2, \dots, 1.0}\)</span>. La seconda distribuzione di probabilità, pur essendo discreta, segue un andamento non uniforme: si presume che <span class="math notranslate nohighlight">\(\theta\)</span> abbia una probabilità maggiore di assumere un valore dall’insieme <span class="math notranslate nohighlight">\({0.4, 0.5, 0.6, 0.7}\)</span> rispetto all’insieme <span class="math notranslate nohighlight">\({0.1, 0.2, 0.3, 0.8, 0.9, 1.0}\)</span>.</p>
@@ -740,7 +739,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e150a70898495507a77082496ef2a47bfacda2ad4d552b5bb2c1d49dcfaabc51.png" src="../_images/e150a70898495507a77082496ef2a47bfacda2ad4d552b5bb2c1d49dcfaabc51.png" />
+<img alt="../_images/0c250c3b0a78bbdfaa171946496b6331bfaf207629fdc682d31cfc5ca5ad8174.png" src="../_images/0c250c3b0a78bbdfaa171946496b6331bfaf207629fdc682d31cfc5ca5ad8174.png" />
 </div>
 </div>
 <p>Per calcolare la distribuzione a posteriori, eseguiamo una moltiplicazione elemento per elemento tra il vettore contenente i valori della distribuzione a priori e il vettore contenente i valori della funzione di verosimiglianza. Usando Python, il risultato si trova nel modo seguente.</p>
@@ -826,7 +825,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b1dfce35a15a09ab23128edb5b4df150268109aa3af0e9916affc0960ae239b6.png" src="../_images/b1dfce35a15a09ab23128edb5b4df150268109aa3af0e9916affc0960ae239b6.png" />
+<img alt="../_images/945486b8f0ce11fc2bd98e3736222c69c0ed0f76235a31a072fe821801255fe6.png" src="../_images/945486b8f0ce11fc2bd98e3736222c69c0ed0f76235a31a072fe821801255fe6.png" />
 </div>
 </div>
 <p>Una volta trovata la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span>, possiamo calcolare altre quantità di interesse. Ad esempio, la moda a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> può essere individuata direttamente dal grafico precedente e risulta pari a 0.6. Per calcolare invece la media a posteriori, ci avvaliamo della formula del valore atteso delle variabili casuali.</p>
@@ -877,7 +876,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/74ba7cfa9bef7a25b4c284d2894bf886bab29dbc823c58c52c779327f4253755.png" src="../_images/74ba7cfa9bef7a25b4c284d2894bf886bab29dbc823c58c52c779327f4253755.png" />
+<img alt="../_images/637a131b68041acc1c8c946ae0793c5f19fd83bd7c1ca9ca50afc00ece7063a2.png" src="../_images/637a131b68041acc1c8c946ae0793c5f19fd83bd7c1ca9ca50afc00ece7063a2.png" />
 </div>
 </div>
 <p>Supponiamo – solo allo scopo di illustrare la procedura – che le nostre credenze a priori siano rappresentate da una Beta(2, 5).</p>
@@ -897,7 +896,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0f051008d43af4682a208b7ceb120e350456e5d4b80bb00bebdc24ce630610d7.png" src="../_images/0f051008d43af4682a208b7ceb120e350456e5d4b80bb00bebdc24ce630610d7.png" />
+<img alt="../_images/8f855fca872c8121ea5ab0bf9d8a04e5d330f6de01beaa3496cae8a94a368edc.png" src="../_images/8f855fca872c8121ea5ab0bf9d8a04e5d330f6de01beaa3496cae8a94a368edc.png" />
 </div>
 </div>
 <p>Nel seguente esempio, useremo la funzione <code class="docutils literal notranslate"><span class="pre">beta.pdf()</span></code> per generare una distribuzione a priori discretizzata.</p>
@@ -921,7 +920,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1aea6d837d9d6c34e5241447a7bd5556f051afc5091f03de2174d6b7a900e2ab.png" src="../_images/1aea6d837d9d6c34e5241447a7bd5556f051afc5091f03de2174d6b7a900e2ab.png" />
+<img alt="../_images/349fb2134e147dc51c0850f9416e7d4123a59f0cdf254fb3466837cc72865149.png" src="../_images/349fb2134e147dc51c0850f9416e7d4123a59f0cdf254fb3466837cc72865149.png" />
 </div>
 </div>
 <p>Ora però usiamo un numero maggiore di valori <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
@@ -1014,7 +1013,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0a34506e5ebd3723739754ea659ad070161c33bf2669286087b6ed1fce7254eb.png" src="../_images/0a34506e5ebd3723739754ea659ad070161c33bf2669286087b6ed1fce7254eb.png" />
+<img alt="../_images/691d1b6555e0e39d76a04d48a001d65e976d882085b6a41aa86caa7ea9fdc217.png" src="../_images/691d1b6555e0e39d76a04d48a001d65e976d882085b6a41aa86caa7ea9fdc217.png" />
 </div>
 </div>
 <p>Possiamo calcolare la media e la deviazione standard della distribuzione a posteriori come abbiamo fatto in precedenza.</p>
@@ -1073,7 +1072,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/14b074e7c97445cd4985aa0df579e744b27b7f19235f4d4387b99dd57d0e456f.png" src="../_images/14b074e7c97445cd4985aa0df579e744b27b7f19235f4d4387b99dd57d0e456f.png" />
+<img alt="../_images/5bbe222bc8d78808cf176243f041595aac8433c0799b558752c9e940ea9a97f7.png" src="../_images/5bbe222bc8d78808cf176243f041595aac8433c0799b558752c9e940ea9a97f7.png" />
 </div>
 </div>
 <p>Sfruttando il campione estratto dalla distribuzione a posteriori, è possibile calcolare diverse quantità di interesse. Ad esempio, la stima della media a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> si ottiene semplicemente calcolando la media dei valori così ottenuti.</p>
@@ -1084,7 +1083,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.49930280000000005
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4995786
 </pre></div>
 </div>
 </div>
@@ -1097,7 +1096,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.12131275824149741
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.12220392637734682
 </pre></div>
 </div>
 </div>
@@ -1123,7 +1122,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.511
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.539
 </pre></div>
 </div>
 </div>
@@ -1136,7 +1135,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.499
 </pre></div>
 </div>
 </div>
@@ -1162,7 +1161,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4994
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5005
 </pre></div>
 </div>
 </div>
@@ -1175,7 +1174,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.2051
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.208
 </pre></div>
 </div>
 </div>
@@ -1188,7 +1187,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.259, 0.744])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.261, 0.747])
 </pre></div>
 </div>
 </div>
@@ -1202,7 +1201,7 @@ p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.276, 0.725])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.286, 0.74 ])
 </pre></div>
 </div>
 </div>
@@ -1256,10 +1255,10 @@ Architecture: 64bit
 
 scipy     : 1.12.0
 matplotlib: 3.8.3
+arviz     : 0.17.0
 seaborn   : 0.13.2
 numpy     : 1.26.4
 pandas    : 2.2.1
-arviz     : 0.17.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -1320,7 +1319,7 @@ Watermark: 2.4.3
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Distribuzioni coniugate (1)</p>
+        <p class="prev-next-title">Distribuzioni coniugate</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

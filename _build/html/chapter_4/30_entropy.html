@@ -254,7 +254,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
@@ -280,11 +280,10 @@
 <li class="toctree-l2"><a class="reference internal" href="40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
-<li class="toctree-l2"><a class="reference internal" href="45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="45_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="50_stan_beta_binomial.html">CmdStanPy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -312,6 +311,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mediation.html">Modello di mediazione con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -338,7 +338,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambiente virtuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -555,6 +555,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
             </nav>
         </div>
@@ -595,12 +596,10 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
-<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="c1"># Initialize random number generator</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-grayscale&quot;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
-<span class="n">default_cycler</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#6a6a6a&quot;</span><span class="p">,</span> <span class="s2">&quot;#bebebe&quot;</span><span class="p">,</span> <span class="s2">&quot;#2a2eec&quot;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">prop_cycle</span><span class="o">=</span><span class="n">default_cycler</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -753,7 +752,7 @@ H(X) = \mathbb{E}[I(X)] = -\sum_{x \in X} p(x) \log_{2}(p(x)).
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1f478a9cacdb4c5031c639f52276c374b50503826f5226910ec69fc76a72d9f1.png" src="../_images/1f478a9cacdb4c5031c639f52276c374b50503826f5226910ec69fc76a72d9f1.png" />
+<img alt="../_images/50df5b03d3ea43082436bbb24ef75d565e232ea07c0a8c0a321f36112b4749e6.png" src="../_images/50df5b03d3ea43082436bbb24ef75d565e232ea07c0a8c0a321f36112b4749e6.png" />
 </div>
 </div>
 <p>La figura mostra che questa relazione non è lineare, è infatti leggermente sublineare. Questo ha senso dato che abbiamo usato una funzione logaritmica.</p>
@@ -791,7 +790,7 @@ H(X) = \mathbb{E}[I(X)] = -\sum_{x \in X} p(x) \log_{2}(p(x)).
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fc88eea0e3bc37c4b354f517b5fae0fe8902c2270821dcb4989b02b78a488482.png" src="../_images/fc88eea0e3bc37c4b354f517b5fae0fe8902c2270821dcb4989b02b78a488482.png" />
+<img alt="../_images/016970649264733538004c4b3a8a1e303d1cd9bb17f352f5d2bb555027f3ab15.png" src="../_images/016970649264733538004c4b3a8a1e303d1cd9bb17f352f5d2bb555027f3ab15.png" />
 </div>
 </div>
 <p>Questo script mostra che, per la distribuzione normale, l’entropia tende ad aumentare con l’aumento della varianza. Tuttavia, consideriamo ora due distribuzioni con la stessa varianza ma probabilità differenti:</p>
@@ -939,7 +938,7 @@ H(P, Q) = -\sum_x p(x) \log(q(x)).
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.1987046913151248
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.2154733258740965
 </pre></div>
 </div>
 </div>
@@ -965,7 +964,7 @@ H(P, Q) = -\sum_x p(x) \log(q(x)).
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9307657326095
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9104184421260986
 </pre></div>
 </div>
 </div>
@@ -979,6 +978,9 @@ H(P, Q) = -\sum_x p(x) \log(q(x)).
 <h2>Riflessioni Conclusive<a class="headerlink" href="#riflessioni-conclusive" title="Link to this heading">#</a></h2>
 <p>In questo capitolo, abbiamo esaminato il concetto di entropia, evidenziando il suo ruolo fondamentale nel quantificare l’incertezza all’interno delle distribuzioni di probabilità. Abbiamo anche affrontato la questione di come l’entropia possa essere impiegata per valutare la “distanza” tra un modello teorico e i dati reali. A tale scopo, abbiamo introdotto la divergenza di Kullback-Leibler (KL), una misura che non solo quantifica le discrepanze tra due distribuzioni probabilistiche, ma agisce anche come collegamento tra teoria e pratica, tra il modello ideale e il mondo empirico.</p>
 <p>Nel capitolo successivo, approfondiremo ulteriormente il tema della divergenza KL. Esploreremo come questo strumento possa essere utilizzato per confrontare modelli teorici con dati empirici e ci concentreremo su come possa fornirci una comprensione più dettagliata dell’adattamento di un modello alla realtà che intende rappresentare. Questa esplorazione ci permetterà di valutare più accuratamente la validità e la generalizzabilità dei modelli scientifici nel loro tentativo di catturare e interpretare la complessità dei dati reali.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -987,11 +989,11 @@ H(P, Q) = -\sum_x p(x) \log(q(x)).
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Feb 11 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 01 2024
 
 Python implementation: CPython
-Python version       : 3.11.7
-IPython version      : 8.19.0
+Python version       : 3.11.8
+IPython version      : 8.22.1
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
@@ -1001,13 +1003,13 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-scipy      : 1.11.4
+numpy      : 1.26.4
+seaborn    : 0.13.2
+matplotlib : 3.8.3
 arviz      : 0.17.0
-seaborn    : 0.13.0
-matplotlib : 3.8.2
-pandas     : 2.1.4
+pandas     : 2.2.1
 statsmodels: 0.14.1
-numpy      : 1.26.2
+scipy      : 1.12.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -1098,6 +1100,7 @@ Watermark: 2.4.3
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
   </nav></div>
 

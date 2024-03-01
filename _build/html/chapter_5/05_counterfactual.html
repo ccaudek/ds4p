@@ -254,7 +254,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
@@ -280,11 +280,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_stan_beta_binomial.html">CmdStanPy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
@@ -312,6 +311,7 @@
 <li class="toctree-l2"><a class="reference internal" href="05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_mediation.html">Modello di mediazione con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -338,7 +338,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambiente virtuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -551,6 +551,7 @@ document.write(`
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#analisi-controfattuale">Analisi controfattuale</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-conclusive">Commenti e considerazioni conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
 </li>
 </ul>
@@ -590,6 +591,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -598,7 +605,6 @@ document.write(`
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
 <span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -664,7 +670,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b1cb630197c4de7ab2dccea1c5320be9a8b2885364997f2597c79ea7b53a307c.png" src="../_images/b1cb630197c4de7ab2dccea1c5320be9a8b2885364997f2597c79ea7b53a307c.png" />
+<img alt="../_images/9ca805d15707b3ada85adb6a1831af5050712cd9c0a4871a638e9feeb88c3b9c.png" src="../_images/9ca805d15707b3ada85adb6a1831af5050712cd9c0a4871a638e9feeb88c3b9c.png" />
 </div>
 </div>
 <p>Come si può vedere, stiamo essenzialmente impostando due regressioni: una regressione logistica di <span class="math notranslate nohighlight">\( C \)</span> su <span class="math notranslate nohighlight">\( Z \)</span>, e una regressione lineare di <span class="math notranslate nohighlight">\( C \)</span> <em>e</em> <span class="math notranslate nohighlight">\( Z \)</span> su <span class="math notranslate nohighlight">\( Y \)</span>. Il nostro principale interesse in questa analisi riguarda la relazione tra il trattamento <span class="math notranslate nohighlight">\( Z \)</span> e l’esito <span class="math notranslate nohighlight">\( Y \)</span>. Possiamo dunque notare come questo esempio rappresenti una tipica <em>relazione confondente</em>.”</p>
@@ -708,7 +714,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1fd643f1cfd67d7c63d70fe585a2e0a3bca9ce357b09e33770ed21a74e80ca21.svg" src="../_images/1fd643f1cfd67d7c63d70fe585a2e0a3bca9ce357b09e33770ed21a74e80ca21.svg" /></div>
+<img alt="../_images/9d88871120c64071b9c7ca8401065f8dab8f4f48ac3512d4af779c8d1d3538b0.svg" src="../_images/9d88871120c64071b9c7ca8401065f8dab8f4f48ac3512d4af779c8d1d3538b0.svg" /></div>
 </div>
 </section>
 </section>
@@ -798,33 +804,33 @@ document.write(`
   </thead>
   <tbody>
     <tr>
-      <th>14</th>
-      <td>2.525540</td>
-      <td>2.289737</td>
+      <th>89</th>
+      <td>2.380864</td>
+      <td>2.169507</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>43</th>
-      <td>2.150877</td>
-      <td>2.231028</td>
+      <th>39</th>
+      <td>2.000382</td>
+      <td>1.781820</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>67</th>
-      <td>1.591218</td>
-      <td>1.579474</td>
+      <th>86</th>
+      <td>1.944877</td>
+      <td>1.940051</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>49</th>
-      <td>1.556414</td>
-      <td>1.937416</td>
+      <th>82</th>
+      <td>1.782898</td>
+      <td>1.688902</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>68</th>
-      <td>1.468020</td>
-      <td>1.436564</td>
+      <th>48</th>
+      <td>1.704115</td>
+      <td>1.437418</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -852,7 +858,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0cf2b626fcb64ec2bbcc590ba06f3337f6787319d9e6e554d35976037ce8938a.png" src="../_images/0cf2b626fcb64ec2bbcc590ba06f3337f6787319d9e6e554d35976037ce8938a.png" />
+<img alt="../_images/0ac004aea7bec328a4409a88882c275e4dacfc69fa64b46e09bd70cdadb195bc.png" src="../_images/0ac004aea7bec328a4409a88882c275e4dacfc69fa64b46e09bd70cdadb195bc.png" />
 </div>
 </div>
 <div class="cell tag_hide-output docutils container">
@@ -871,24 +877,121 @@ document.write(`
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:04.141913
-Sampling...
-Compiling.. :   0%|          | 0/2000 [00:00&lt;?, ?it/s]
-
-
-
-
-
-
-
-Running chain 0:   0%|          | 0/2000 [00:02&lt;?, ?it/s]
-Running chain 0: 100%|██████████| 2000/2000 [00:02&lt;00:00, 824.31it/s]
-Running chain 1: 100%|██████████| 2000/2000 [00:02&lt;00:00, 824.89it/s]
-Running chain 2: 100%|██████████| 2000/2000 [00:02&lt;00:00, 825.67it/s]
-Running chain 3: 100%|██████████| 2000/2000 [00:02&lt;00:00, 826.30it/s]
-Sampling time = 0:00:03.671374
-Transforming variables...
-Transformation time = 0:00:00.119210
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:02.396663
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1666.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1668.21it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1669.94it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1671.67it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.497507
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.062106
 </pre></div>
 </div>
 </div>
@@ -905,7 +1008,7 @@ Transformation time = 0:00:00.119210
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3ef09dfd3f9241b11a0f490a76972adfd324494b8628d95a61c0149ec81d751f.png" src="../_images/3ef09dfd3f9241b11a0f490a76972adfd324494b8628d95a61c0149ec81d751f.png" />
+<img alt="../_images/ee7503262b4c167aeea3c5f4f1e00bf9ce8ac52ddc28753d3613e8af082a6afa.png" src="../_images/ee7503262b4c167aeea3c5f4f1e00bf9ce8ac52ddc28753d3613e8af082a6afa.png" />
 </div>
 </div>
 <p>Si noti che l’indicatore che quantifica l’ATE, ovvero l’effetto del trattamento con TCC sul miglioramento della qualità della vita, è pari a 0.87, con un intervallo di credibilità al 94% compreso tra 0.54 e 1.2. Sulla base di queste informazioni, saremmo portati a concludere che la TCC è efficace nel migliorare la qualità della vita riducendo i sintomi d’ansia. Tuttavia, questa conclusione sarebbe errata, in quanto abbiamo generato i dati in maniera tale che non esista un effetto causale diretto della TCC, indicata come <span class="math notranslate nohighlight">\(Z\)</span> nel modello, sull’esito <span class="math notranslate nohighlight">\(Y\)</span>, che rappresenta la qualità della vita. Il motivo dell’errore risiede nel modello causale adottato per l’analisi, che ha trascurato l’influenza della variabile di confondimento <span class="math notranslate nohighlight">\(C\)</span>, associata alla pratica della mindfulness. Pertanto, il risultato ottenuto non riflette l’effettiva assenza di un impatto causale della TCC sulla qualità della vita.</p>
@@ -939,27 +1042,121 @@ Transformation time = 0:00:00.119210
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:23.421513
-Sampling...
-Compiling.. :   0%|          | 0/2000 [00:00&lt;?, ?it/s]
-
-
-
-
-
-
-
-Running chain 0:   0%|          | 0/2000 [00:03&lt;?, ?it/s]
-Running chain 0:  65%|██████▌   | 1300/2000 [00:03&lt;00:00, 12988.55it/s]
-
-
-Running chain 0: 100%|██████████| 2000/2000 [00:03&lt;00:00, 610.27it/s]  
-Running chain 1: 100%|██████████| 2000/2000 [00:03&lt;00:00, 610.49it/s]  
-Running chain 2: 100%|██████████| 2000/2000 [00:03&lt;00:00, 610.81it/s]  
-Running chain 3: 100%|██████████| 2000/2000 [00:03&lt;00:00, 611.11it/s]  
-Sampling time = 0:00:03.480493
-Transforming variables...
-Transformation time = 0:00:00.171973
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:09.607947
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1211.00it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1211.79it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1212.68it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1213.55it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.739225
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.086478
 </pre></div>
 </div>
 </div>
@@ -979,7 +1176,7 @@ Transformation time = 0:00:00.171973
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/84dba3a588b333254eae86740235f2ea9c36e87d25d3f8fd740c5aca8e85bd62.png" src="../_images/84dba3a588b333254eae86740235f2ea9c36e87d25d3f8fd740c5aca8e85bd62.png" />
+<img alt="../_images/4fa5ef72acb3391b9d708b191e3c6a53f43a42427b1ff0ffce98db8b5fc99a00.png" src="../_images/4fa5ef72acb3391b9d708b191e3c6a53f43a42427b1ff0ffce98db8b5fc99a00.png" />
 </div>
 </div>
 <p>Si noti che il parametro <code class="docutils literal notranslate"><span class="pre">beta_zy</span></code> (il cui vero valore è 0) viene stimato correttamente: 0.01, 94% CI [-0.07, 0.1]. Fino a qui abbiamo solo dimostrato che, usando il modello causale corretto, è possibile stimare i parametri in maniera non distorta.</p>
@@ -1105,7 +1302,7 @@ Transformation time = 0:00:00.171973
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estimated ATE = 0.07
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estimated ATE = -0.05
 </pre></div>
 </div>
 </div>
@@ -1160,7 +1357,7 @@ Transformation time = 0:00:00.171973
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4ce5a7336dbca17cda39acdf93179e59312d113d8dd0c8b37584b9120e52763d.png" src="../_images/4ce5a7336dbca17cda39acdf93179e59312d113d8dd0c8b37584b9120e52763d.png" />
+<img alt="../_images/02d1459f93cb3e8b66117efc480608a0361f3d060c49927374284ce95aeea3b8.png" src="../_images/02d1459f93cb3e8b66117efc480608a0361f3d060c49927374284ce95aeea3b8.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1173,7 +1370,7 @@ Transformation time = 0:00:00.171973
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Causal effect of the TCC treatment on QoL is 6.9% [-2.6%,17.1%] of the effect of mindfulness on QoL
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Causal effect of the TCC treatment on QoL is -5.0% [-15.6%,5.4%] of the effect of mindfulness on QoL
 </pre></div>
 </div>
 </div>
@@ -1183,6 +1380,9 @@ Transformation time = 0:00:00.171973
 <p>Analizzando lo stesso insieme di dati attraverso due analisi statistiche diverse, basate su presupposti differenti riguardo il meccanismo generatore dei dati, arriviamo a conclusioni opposte. Nel primo caso, trascurando l’effetto di una variabile confondente, deduciamo che il trattamento con la Terapia Cognitivo-Comportamentale (TCC) è efficace nel migliorare la qualità della vita. Nel secondo, invece, tenendo conto dell’effetto potenziale della variabile confondente, concludiamo che il trattamento TCC non ha effetto sul miglioramento della qualità della vita, risultato che rispecchia la struttura causale che abbiamo usato per generare i dati.</p>
 <p>Questo esempio evidenzia in maniera chiara quanto sia facile essere ingannati dalle correlazioni. Inizialmente sembrava che il trattamento TCC avesse un effetto positivo sulla qualità della vita, ma questa percezione era frutto dell’influenza della pratica della mindfulness. Tale illusione si dissolve quando analizziamo i dati in due scenari diversi: uno in cui manteniamo l’effetto della mindfulness e uno in cui lo eliminiamo. Se ci fossimo limitati a valutare l’associazione tra le variabili, avremmo erroneamente concluso che il trattamento TCC è efficace, una deduzione non supportata dalla realtà dei dati simulati. Inoltre, è fondamentale considerare l’incertezza che accompagna le stime puntuali. Nonostante abbiamo identificato un lieve effetto positivo del trattamento TCC, l’intervallo di credibilità ci mostra che la stima è troppo influenzata dal rumore per confermare con certezza un effetto positivo.</p>
 <p>Questo caso studio mette in luce l’importanza e l’efficacia dell’approccio bayesiano nella modellazione causale, un approccio che può essere facilmente implementato con PyMC. Definendo accuratamente il processo generativo dei dati e sfruttando strumenti come l’operatore “do()”, possiamo simulare interventi tenendo conto sia delle relazioni causali che dell’incertezza associata ai parametri del modello. Ciò ci permette di condurre analisi di tipo “cosa succederebbe se” in scenari ipotetici, fornendo una visione più completa e sofisticata delle dinamiche causali presenti nei nostri dati.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -1191,13 +1391,13 @@ Transformation time = 0:00:00.171973
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Feb 13 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 01 2024
 
 Python implementation: CPython
-Python version       : 3.11.7
-IPython version      : 8.21.0
+Python version       : 3.11.8
+IPython version      : 8.22.1
 
-jax: 0.4.23
+jax: 0.4.25
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
@@ -1207,14 +1407,14 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-bambi     : 0.13.0
-networkx  : 3.2.1
-pymc      : 5.10.3
 numpy     : 1.26.4
-pandas    : 2.2.0
-seaborn   : 0.13.2
-matplotlib: 3.8.2
+bambi     : 0.13.0
+pandas    : 2.2.1
 arviz     : 0.17.0
+pymc      : 5.10.4
+networkx  : 3.2.1
+matplotlib: 3.8.3
+seaborn   : 0.13.2
 
 Watermark: 2.4.3
 </pre></div>
@@ -1301,6 +1501,7 @@ Watermark: 2.4.3
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#analisi-controfattuale">Analisi controfattuale</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-conclusive">Commenti e considerazioni conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
 </li>
 </ul>

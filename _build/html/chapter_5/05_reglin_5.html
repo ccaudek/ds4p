@@ -254,7 +254,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
@@ -280,11 +280,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_stan_beta_binomial.html">CmdStanPy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
@@ -312,6 +311,7 @@
 <li class="toctree-l2"><a class="reference internal" href="05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_mediation.html">Modello di mediazione con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -338,7 +338,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambiente virtuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -576,7 +576,7 @@ document.write(`
   <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/05_reglin_5.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="il-modello-lineare-gerarchico">
 <span id="multilevel-notebook"></span><h1>Il modello lineare gerarchico<a class="headerlink" href="#il-modello-lineare-gerarchico" title="Link to this heading">#</a></h1>
-<p>In questo capitolo, approfondiremo la metodologia della regressione lineare gerarchica Bayesiana, utilizzando le API della libreria Bambi. L’obiettivo è di applicare questo  metodo statistico a un dataset multilivello. In particolare, ci concentreremo su un dataset che comprende diverse unità di osservazione (i soggetti), ognuna delle quali ha più misurazioni associate.</p>
+<p>In questo capitolo, esploreremo in dettaglio la metodologia della regressione lineare gerarchica Bayesiana, facendo uso delle API della libreria Bambi. Il nostro obiettivo principale è quello di applicare questo metodo statistico a un dataset multilivello. Nello specifico, ci concentreremo su un dataset che comprende diverse unità di osservazione, rappresentate dai soggetti, ciascuna delle quali è associata a più misurazioni. Per avere una comprensione visiva più chiara dei modelli gerarchici, possiamo consultare il demo di Michael Freeman disponibile <a class="reference external" href="http://mfviz.com/hierarchical-models/">su questo sito</a>.</p>
 <section id="preparazione-del-notebook">
 <h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
@@ -599,16 +599,6 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_17293/63920542.py:2: DeprecationWarning: 
-Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
-(to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
-but was not found to be installed on your system.
-If this would cause problems for you,
-please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
-        
-  import pandas as pd
-</pre></div>
-</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
 </pre></div>
@@ -622,19 +612,6 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
 <span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We can control the number cores that are used by an environment variable:</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">multiprocessing</span>
-
-<span class="n">num_cores</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;RAYON_NUM_THREADS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">num_cores</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -837,7 +814,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d2cc72c2ea25733cd74f9c2a2e9e2c8c5d24df7e9dbb096a05a9d24f1013a733.png" src="../_images/d2cc72c2ea25733cd74f9c2a2e9e2c8c5d24df7e9dbb096a05a9d24f1013a733.png" />
+<img alt="../_images/d7acd5fab426c3273dde83c4e2d6d71e97e3e74c00f10db2b6168239104a3810.png" src="../_images/d7acd5fab426c3273dde83c4e2d6d71e97e3e74c00f10db2b6168239104a3810.png" />
 </div>
 </div>
 </section>
@@ -892,31 +869,22 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.876241
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:04.754497
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -925,7 +893,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -934,7 +902,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -943,7 +911,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -952,7 +920,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -961,7 +929,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -970,7 +950,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -979,40 +959,37 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1458.97it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1408.14it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1460.17it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1409.43it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1461.43it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1410.82it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1462.65it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1412.15it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.647844
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.578725
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.064371
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.062964
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.117264
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:01.161351
 </pre></div>
 </div>
 </div>
@@ -1026,7 +1003,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a5bec88e2ed1e6692025806cc49645d0eafc6d236c445643eeffa56f8872e4b9.svg" src="../_images/a5bec88e2ed1e6692025806cc49645d0eafc6d236c445643eeffa56f8872e4b9.svg" /></div>
+<img alt="../_images/74883789f7f89c0606446531ff374cb0bccf8846e7289947b7b2cbf9c6a1952e.svg" src="../_images/74883789f7f89c0606446531ff374cb0bccf8846e7289947b7b2cbf9c6a1952e.svg" /></div>
 </div>
 <p>Un sommario numerico delle distribuzioni a posteriori dei parametri si ottiene con <code class="docutils literal notranslate"><span class="pre">az.summary</span></code>.</p>
 <div class="cell docutils container">
@@ -1068,38 +1045,38 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>244.99</td>
-      <td>11.21</td>
-      <td>223.82</td>
-      <td>264.83</td>
+      <td>244.98</td>
+      <td>11.11</td>
+      <td>223.34</td>
+      <td>265.22</td>
       <td>0.18</td>
       <td>0.13</td>
-      <td>3941.72</td>
-      <td>2644.97</td>
+      <td>3910.00</td>
+      <td>2817.25</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days</th>
-      <td>11.45</td>
-      <td>1.87</td>
-      <td>8.14</td>
-      <td>15.15</td>
+      <td>11.44</td>
+      <td>1.85</td>
+      <td>8.05</td>
+      <td>15.07</td>
       <td>0.03</td>
       <td>0.02</td>
-      <td>3877.24</td>
-      <td>2617.20</td>
+      <td>3978.44</td>
+      <td>2696.14</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Reaction_sigma</th>
-      <td>51.27</td>
-      <td>3.10</td>
-      <td>45.65</td>
-      <td>56.99</td>
+      <td>51.15</td>
+      <td>3.05</td>
+      <td>45.51</td>
+      <td>56.92</td>
       <td>0.05</td>
-      <td>0.04</td>
-      <td>3758.69</td>
-      <td>2638.56</td>
+      <td>0.03</td>
+      <td>3892.47</td>
+      <td>2682.93</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1150,31 +1127,22 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.942898
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:06.109559
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1183,7 +1151,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1192,7 +1160,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1201,7 +1169,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1210,7 +1178,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1219,7 +1187,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1228,19 +1196,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1249,40 +1205,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   5%|███▎                                                              | 100/2000 [00:01&lt;00:03, 479.91it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   5%|███▎                                                              | 100/2000 [00:01&lt;00:04, 468.77it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   5%|███▎                                                              | 100/2000 [00:01&lt;00:04, 465.01it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   5%|███▎                                                              | 100/2000 [00:01&lt;00:04, 453.57it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  55%|███████████████████████████████████▏                            | 1100/2000 [00:02&lt;00:00, 4282.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  60%|██████████████████████████████████████▍                         | 1200/2000 [00:02&lt;00:00, 4632.89it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1291,7 +1226,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  60%|██████████████████████████████████████▍                         | 1200/2000 [00:02&lt;00:00, 4527.08it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   5%|███▎                                                             | 100/2000 [00:01&lt;00:03, 483.10it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   5%|███▎                                                             | 100/2000 [00:01&lt;00:03, 475.98it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   5%|███▎                                                             | 100/2000 [00:01&lt;00:04, 469.06it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1300,40 +1247,70 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  60%|██████████████████████████████████████▍                         | 1200/2000 [00:02&lt;00:00, 4500.71it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   5%|███▎                                                             | 100/2000 [00:01&lt;00:04, 462.63it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 936.16it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 936.62it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 937.20it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 937.71it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  55%|██████████████████████████████████▋                            | 1100/2000 [00:01&lt;00:00, 4317.11it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.244922
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 4652.45it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 4555.97it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 4546.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 970.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 971.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 971.87it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 972.42it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.166347
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.084327
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.083726
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.116610
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.111263
 </pre></div>
 </div>
 </div>
@@ -1347,7 +1324,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a075bb6f86f4e2bfd1ecd22c191c7d55d067fcea8d3ceb1aa73055b82b16812d.svg" src="../_images/a075bb6f86f4e2bfd1ecd22c191c7d55d067fcea8d3ceb1aa73055b82b16812d.svg" /></div>
+<img alt="../_images/43d376f7973f7e83f846661dcd5978b5f20aa53432c593122b0f89009190f942.svg" src="../_images/43d376f7973f7e83f846661dcd5978b5f20aa53432c593122b0f89009190f942.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1388,446 +1365,446 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>247.49</td>
-      <td>22.92</td>
-      <td>205.56</td>
-      <td>290.40</td>
-      <td>1.18</td>
-      <td>0.84</td>
-      <td>379.03</td>
-      <td>730.13</td>
+      <td>246.00</td>
+      <td>23.28</td>
+      <td>203.00</td>
+      <td>291.13</td>
+      <td>1.26</td>
+      <td>0.89</td>
+      <td>340.38</td>
+      <td>553.09</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>Days</th>
-      <td>21.22</td>
-      <td>3.81</td>
-      <td>13.69</td>
-      <td>27.91</td>
-      <td>0.20</td>
-      <td>0.14</td>
-      <td>373.20</td>
-      <td>696.96</td>
+      <td>21.47</td>
+      <td>3.92</td>
+      <td>14.44</td>
+      <td>29.21</td>
+      <td>0.22</td>
+      <td>0.15</td>
+      <td>333.79</td>
+      <td>561.68</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>C(Subject)[309]</th>
-      <td>-55.92</td>
-      <td>33.03</td>
-      <td>-119.73</td>
-      <td>3.65</td>
-      <td>1.25</td>
-      <td>0.88</td>
-      <td>702.07</td>
-      <td>1596.80</td>
+      <td>-54.64</td>
+      <td>33.64</td>
+      <td>-124.51</td>
+      <td>3.17</td>
+      <td>1.39</td>
+      <td>0.99</td>
+      <td>586.00</td>
+      <td>1101.93</td>
       <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[310]</th>
-      <td>-30.02</td>
-      <td>33.08</td>
-      <td>-93.83</td>
-      <td>30.09</td>
-      <td>1.23</td>
-      <td>0.87</td>
-      <td>721.12</td>
-      <td>1539.06</td>
-      <td>1.00</td>
-    </tr>
-    <tr>
-      <th>C(Subject)[330]</th>
-      <td>9.51</td>
-      <td>32.92</td>
-      <td>-48.62</td>
-      <td>75.02</td>
-      <td>1.32</td>
-      <td>0.94</td>
-      <td>616.83</td>
-      <td>1196.33</td>
+      <td>-27.94</td>
+      <td>33.04</td>
+      <td>-86.98</td>
+      <td>36.95</td>
+      <td>1.39</td>
+      <td>0.98</td>
+      <td>564.72</td>
+      <td>1128.24</td>
       <td>1.01</td>
     </tr>
     <tr>
+      <th>C(Subject)[330]</th>
+      <td>10.98</td>
+      <td>33.40</td>
+      <td>-52.34</td>
+      <td>71.88</td>
+      <td>1.36</td>
+      <td>0.96</td>
+      <td>605.89</td>
+      <td>1345.99</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
       <th>C(Subject)[331]</th>
-      <td>40.48</td>
-      <td>32.77</td>
-      <td>-21.48</td>
-      <td>100.42</td>
-      <td>1.29</td>
-      <td>0.91</td>
-      <td>649.78</td>
-      <td>1245.22</td>
+      <td>43.06</td>
+      <td>33.71</td>
+      <td>-21.27</td>
+      <td>107.55</td>
+      <td>1.37</td>
+      <td>0.97</td>
+      <td>604.92</td>
+      <td>1068.45</td>
       <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[332]</th>
-      <td>63.11</td>
-      <td>32.40</td>
-      <td>-0.77</td>
-      <td>119.17</td>
-      <td>1.29</td>
-      <td>0.91</td>
-      <td>634.98</td>
-      <td>1075.89</td>
-      <td>1.01</td>
+      <td>65.06</td>
+      <td>33.01</td>
+      <td>0.36</td>
+      <td>125.01</td>
+      <td>1.33</td>
+      <td>0.94</td>
+      <td>615.16</td>
+      <td>1326.46</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[333]</th>
-      <td>16.30</td>
-      <td>32.32</td>
-      <td>-42.43</td>
-      <td>77.54</td>
-      <td>1.22</td>
-      <td>0.86</td>
-      <td>700.03</td>
-      <td>1528.62</td>
-      <td>1.01</td>
+      <td>17.59</td>
+      <td>32.77</td>
+      <td>-41.31</td>
+      <td>80.94</td>
+      <td>1.34</td>
+      <td>0.95</td>
+      <td>602.06</td>
+      <td>1326.54</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[334]</th>
-      <td>-45.89</td>
-      <td>33.57</td>
-      <td>-110.81</td>
-      <td>15.28</td>
-      <td>1.35</td>
-      <td>0.96</td>
-      <td>615.81</td>
-      <td>1184.58</td>
+      <td>-44.73</td>
+      <td>33.05</td>
+      <td>-109.92</td>
+      <td>15.49</td>
+      <td>1.39</td>
+      <td>0.98</td>
+      <td>569.32</td>
+      <td>1204.27</td>
       <td>1.01</td>
     </tr>
     <tr>
       <th>C(Subject)[335]</th>
-      <td>23.53</td>
-      <td>31.95</td>
-      <td>-38.72</td>
-      <td>80.98</td>
-      <td>1.29</td>
-      <td>0.91</td>
-      <td>620.02</td>
-      <td>1322.69</td>
-      <td>1.01</td>
+      <td>25.10</td>
+      <td>33.45</td>
+      <td>-35.02</td>
+      <td>91.09</td>
+      <td>1.39</td>
+      <td>0.98</td>
+      <td>580.63</td>
+      <td>1334.20</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[337]</th>
-      <td>19.82</td>
-      <td>32.87</td>
-      <td>-40.12</td>
-      <td>81.31</td>
-      <td>1.31</td>
-      <td>0.93</td>
-      <td>627.51</td>
-      <td>1305.47</td>
-      <td>1.01</td>
+      <td>21.88</td>
+      <td>33.23</td>
+      <td>-37.84</td>
+      <td>87.96</td>
+      <td>1.32</td>
+      <td>0.94</td>
+      <td>632.72</td>
+      <td>1378.93</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[349]</th>
-      <td>-51.05</td>
-      <td>32.84</td>
-      <td>-110.24</td>
-      <td>11.49</td>
-      <td>1.26</td>
-      <td>0.89</td>
-      <td>683.06</td>
-      <td>1711.00</td>
-      <td>1.01</td>
+      <td>-50.39</td>
+      <td>33.76</td>
+      <td>-116.14</td>
+      <td>11.14</td>
+      <td>1.38</td>
+      <td>0.98</td>
+      <td>597.47</td>
+      <td>1223.06</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[350]</th>
-      <td>-45.76</td>
-      <td>33.06</td>
-      <td>-107.92</td>
-      <td>14.89</td>
-      <td>1.28</td>
-      <td>0.90</td>
-      <td>672.96</td>
-      <td>1308.25</td>
-      <td>1.01</td>
+      <td>-44.43</td>
+      <td>33.37</td>
+      <td>-106.53</td>
+      <td>17.44</td>
+      <td>1.37</td>
+      <td>0.97</td>
+      <td>593.54</td>
+      <td>1165.57</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[351]</th>
-      <td>-0.86</td>
-      <td>32.92</td>
-      <td>-63.27</td>
-      <td>59.36</td>
-      <td>1.26</td>
-      <td>0.89</td>
-      <td>679.69</td>
-      <td>1246.97</td>
+      <td>1.17</td>
+      <td>33.03</td>
+      <td>-63.69</td>
+      <td>60.45</td>
+      <td>1.33</td>
+      <td>0.94</td>
+      <td>612.72</td>
+      <td>1209.84</td>
       <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[352]</th>
-      <td>69.44</td>
-      <td>32.81</td>
-      <td>11.35</td>
-      <td>134.40</td>
-      <td>1.31</td>
-      <td>0.93</td>
-      <td>630.09</td>
-      <td>1406.38</td>
-      <td>1.01</td>
+      <td>70.70</td>
+      <td>33.09</td>
+      <td>4.49</td>
+      <td>130.98</td>
+      <td>1.33</td>
+      <td>0.94</td>
+      <td>617.81</td>
+      <td>1298.61</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[369]</th>
-      <td>-8.08</td>
-      <td>33.04</td>
-      <td>-70.10</td>
-      <td>53.04</td>
-      <td>1.30</td>
-      <td>0.92</td>
-      <td>646.01</td>
-      <td>1158.84</td>
-      <td>1.01</td>
+      <td>-7.36</td>
+      <td>33.37</td>
+      <td>-70.73</td>
+      <td>54.37</td>
+      <td>1.38</td>
+      <td>0.98</td>
+      <td>583.74</td>
+      <td>1209.04</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[370]</th>
-      <td>-53.63</td>
-      <td>33.13</td>
-      <td>-120.31</td>
-      <td>6.52</td>
-      <td>1.26</td>
-      <td>0.89</td>
-      <td>696.15</td>
-      <td>1536.71</td>
+      <td>-52.24</td>
+      <td>33.21</td>
+      <td>-115.73</td>
+      <td>7.37</td>
+      <td>1.33</td>
+      <td>0.94</td>
+      <td>623.23</td>
+      <td>1379.68</td>
       <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[371]</th>
-      <td>-14.52</td>
-      <td>32.89</td>
-      <td>-76.17</td>
-      <td>47.53</td>
-      <td>1.31</td>
-      <td>0.93</td>
-      <td>628.14</td>
-      <td>1257.50</td>
-      <td>1.01</td>
+      <td>-12.78</td>
+      <td>33.10</td>
+      <td>-76.05</td>
+      <td>48.98</td>
+      <td>1.40</td>
+      <td>0.99</td>
+      <td>564.64</td>
+      <td>1101.55</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>C(Subject)[372]</th>
-      <td>21.09</td>
-      <td>32.57</td>
-      <td>-41.11</td>
-      <td>79.84</td>
-      <td>1.24</td>
-      <td>0.88</td>
-      <td>684.59</td>
-      <td>1303.53</td>
-      <td>1.01</td>
+      <td>22.19</td>
+      <td>33.14</td>
+      <td>-40.49</td>
+      <td>84.12</td>
+      <td>1.38</td>
+      <td>0.98</td>
+      <td>575.87</td>
+      <td>1172.90</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[309]</th>
-      <td>-16.84</td>
-      <td>5.51</td>
-      <td>-27.18</td>
-      <td>-6.75</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>680.68</td>
-      <td>1708.64</td>
+      <td>-17.09</td>
+      <td>5.72</td>
+      <td>-27.59</td>
+      <td>-5.94</td>
+      <td>0.24</td>
+      <td>0.17</td>
+      <td>575.56</td>
+      <td>1007.33</td>
       <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[310]</th>
-      <td>-17.19</td>
-      <td>5.51</td>
-      <td>-27.84</td>
-      <td>-7.10</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>697.83</td>
-      <td>1381.42</td>
-      <td>1.00</td>
-    </tr>
-    <tr>
-      <th>Days:C(Subject)[330]</th>
-      <td>-13.21</td>
-      <td>5.53</td>
-      <td>-23.84</td>
-      <td>-3.13</td>
-      <td>0.22</td>
-      <td>0.16</td>
-      <td>624.31</td>
-      <td>1171.39</td>
+      <td>-17.58</td>
+      <td>5.55</td>
+      <td>-28.71</td>
+      <td>-7.70</td>
+      <td>0.24</td>
+      <td>0.17</td>
+      <td>558.89</td>
+      <td>1106.73</td>
       <td>1.01</td>
     </tr>
     <tr>
+      <th>Days:C(Subject)[330]</th>
+      <td>-13.43</td>
+      <td>5.54</td>
+      <td>-23.16</td>
+      <td>-2.60</td>
+      <td>0.23</td>
+      <td>0.17</td>
+      <td>571.82</td>
+      <td>1177.69</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
       <th>Days:C(Subject)[331]</th>
-      <td>-16.28</td>
-      <td>5.48</td>
-      <td>-26.00</td>
-      <td>-5.88</td>
-      <td>0.22</td>
-      <td>0.15</td>
-      <td>651.68</td>
-      <td>1322.64</td>
+      <td>-16.67</td>
+      <td>5.62</td>
+      <td>-27.35</td>
+      <td>-6.19</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>591.83</td>
+      <td>1060.75</td>
       <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[332]</th>
-      <td>-18.72</td>
-      <td>5.46</td>
-      <td>-28.90</td>
-      <td>-8.93</td>
-      <td>0.22</td>
-      <td>0.15</td>
-      <td>623.78</td>
-      <td>1562.01</td>
-      <td>1.01</td>
+      <td>-19.06</td>
+      <td>5.58</td>
+      <td>-29.70</td>
+      <td>-8.28</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>588.87</td>
+      <td>1382.41</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[333]</th>
-      <td>-10.39</td>
-      <td>5.40</td>
-      <td>-20.87</td>
-      <td>-0.67</td>
-      <td>0.20</td>
-      <td>0.14</td>
-      <td>701.99</td>
-      <td>1374.12</td>
-      <td>1.01</td>
+      <td>-10.53</td>
+      <td>5.52</td>
+      <td>-20.53</td>
+      <td>0.15</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>583.51</td>
+      <td>1430.42</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[334]</th>
-      <td>-3.11</td>
-      <td>5.58</td>
-      <td>-12.78</td>
-      <td>8.14</td>
-      <td>0.23</td>
-      <td>0.16</td>
-      <td>610.71</td>
-      <td>1296.77</td>
-      <td>1.01</td>
+      <td>-3.30</td>
+      <td>5.60</td>
+      <td>-12.82</td>
+      <td>8.23</td>
+      <td>0.24</td>
+      <td>0.17</td>
+      <td>548.20</td>
+      <td>1106.63</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[335]</th>
-      <td>-25.41</td>
-      <td>5.38</td>
-      <td>-35.90</td>
-      <td>-15.83</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>636.43</td>
-      <td>1427.60</td>
-      <td>1.01</td>
+      <td>-25.62</td>
+      <td>5.58</td>
+      <td>-36.99</td>
+      <td>-15.87</td>
+      <td>0.23</td>
+      <td>0.17</td>
+      <td>574.45</td>
+      <td>1222.02</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[337]</th>
-      <td>1.32</td>
-      <td>5.54</td>
-      <td>-8.06</td>
-      <td>12.55</td>
-      <td>0.22</td>
-      <td>0.15</td>
-      <td>648.95</td>
-      <td>1380.80</td>
-      <td>1.01</td>
+      <td>0.98</td>
+      <td>5.60</td>
+      <td>-10.62</td>
+      <td>10.53</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>619.01</td>
+      <td>1443.49</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[349]</th>
-      <td>-4.83</td>
-      <td>5.49</td>
-      <td>-14.58</td>
-      <td>5.58</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>689.39</td>
-      <td>1758.88</td>
-      <td>1.01</td>
+      <td>-4.98</td>
+      <td>5.67</td>
+      <td>-15.84</td>
+      <td>5.80</td>
+      <td>0.24</td>
+      <td>0.17</td>
+      <td>570.84</td>
+      <td>1118.21</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[350]</th>
-      <td>2.01</td>
-      <td>5.51</td>
-      <td>-7.50</td>
-      <td>12.85</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>679.01</td>
-      <td>1412.79</td>
-      <td>1.01</td>
+      <td>1.81</td>
+      <td>5.62</td>
+      <td>-8.48</td>
+      <td>12.46</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>587.54</td>
+      <td>993.43</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[351]</th>
-      <td>-12.68</td>
-      <td>5.42</td>
-      <td>-22.68</td>
-      <td>-2.71</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>664.12</td>
-      <td>1433.42</td>
-      <td>1.01</td>
+      <td>-12.99</td>
+      <td>5.49</td>
+      <td>-22.82</td>
+      <td>-2.30</td>
+      <td>0.22</td>
+      <td>0.16</td>
+      <td>617.61</td>
+      <td>1034.78</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[352]</th>
-      <td>-13.95</td>
-      <td>5.47</td>
-      <td>-24.69</td>
-      <td>-4.17</td>
-      <td>0.22</td>
-      <td>0.15</td>
-      <td>629.92</td>
-      <td>1387.69</td>
-      <td>1.01</td>
+      <td>-14.18</td>
+      <td>5.61</td>
+      <td>-24.51</td>
+      <td>-3.48</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>617.70</td>
+      <td>1252.61</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[369]</th>
-      <td>-7.46</td>
-      <td>5.53</td>
-      <td>-17.67</td>
-      <td>3.08</td>
-      <td>0.22</td>
-      <td>0.15</td>
-      <td>656.07</td>
-      <td>1278.01</td>
-      <td>1.01</td>
+      <td>-7.59</td>
+      <td>5.59</td>
+      <td>-17.73</td>
+      <td>3.13</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>592.89</td>
+      <td>1566.82</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[370]</th>
-      <td>-0.59</td>
-      <td>5.52</td>
-      <td>-10.76</td>
-      <td>10.03</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>658.78</td>
-      <td>1275.68</td>
-      <td>1.01</td>
+      <td>-0.86</td>
+      <td>5.62</td>
+      <td>-10.81</td>
+      <td>9.89</td>
+      <td>0.23</td>
+      <td>0.16</td>
+      <td>619.36</td>
+      <td>1296.70</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[371]</th>
-      <td>-8.84</td>
-      <td>5.46</td>
-      <td>-19.30</td>
-      <td>1.44</td>
-      <td>0.22</td>
-      <td>0.16</td>
-      <td>606.69</td>
-      <td>1148.72</td>
-      <td>1.01</td>
+      <td>-9.14</td>
+      <td>5.53</td>
+      <td>-20.04</td>
+      <td>0.95</td>
+      <td>0.23</td>
+      <td>0.17</td>
+      <td>563.85</td>
+      <td>915.05</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Days:C(Subject)[372]</th>
-      <td>-10.13</td>
-      <td>5.44</td>
-      <td>-20.19</td>
-      <td>0.15</td>
-      <td>0.21</td>
-      <td>0.15</td>
-      <td>700.56</td>
-      <td>1507.12</td>
-      <td>1.01</td>
+      <td>-10.34</td>
+      <td>5.60</td>
+      <td>-21.06</td>
+      <td>0.25</td>
+      <td>0.23</td>
+      <td>0.17</td>
+      <td>569.30</td>
+      <td>1279.42</td>
+      <td>1.00</td>
     </tr>
     <tr>
       <th>Reaction_sigma</th>
-      <td>25.81</td>
-      <td>1.81</td>
+      <td>25.78</td>
+      <td>1.80</td>
       <td>22.40</td>
-      <td>29.02</td>
+      <td>29.08</td>
       <td>0.03</td>
       <td>0.02</td>
-      <td>3827.44</td>
-      <td>2706.08</td>
+      <td>3903.73</td>
+      <td>3067.91</td>
       <td>1.00</td>
     </tr>
   </tbody>
@@ -1952,31 +1929,22 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.098757
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.360607
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1985,7 +1953,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1994,7 +1962,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2003,7 +1971,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2012,7 +1980,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2021,28 +1989,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                             | 0/2000 [00:02&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                             | 0/2000 [00:02&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                             | 0/2000 [00:02&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                             | 0/2000 [00:02&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2051,19 +2010,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  25%|████████████████▎                                                | 500/2000 [00:02&lt;00:00, 4976.75it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  35%|██████████████████████▊                                          | 700/2000 [00:02&lt;00:00, 6628.35it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  35%|██████████████████████▊                                          | 700/2000 [00:02&lt;00:00, 6347.09it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2072,7 +2019,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  35%|██████████████████████▊                                          | 700/2000 [00:02&lt;00:00, 6276.95it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2081,7 +2028,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  70%|████████████████████████████████████████████▊                   | 1400/2000 [00:02&lt;00:00, 7336.38it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  35%|██████████████████████▍                                         | 700/2000 [00:01&lt;00:00, 6973.44it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2090,52 +2037,79 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  80%|███████████████████████████████████████████████████▏            | 1600/2000 [00:02&lt;00:00, 7833.34it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  35%|██████████████████████▍                                         | 700/2000 [00:01&lt;00:00, 6942.45it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  85%|██████████████████████████████████████████████████████▍         | 1700/2000 [00:02&lt;00:00, 8222.73it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  35%|██████████████████████▍                                         | 700/2000 [00:01&lt;00:00, 6613.62it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  75%|████████████████████████████████████████████████                | 1500/2000 [00:02&lt;00:00, 7062.43it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  35%|██████████████████████▍                                         | 700/2000 [00:01&lt;00:00, 6450.37it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 840.76it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 841.05it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 841.49it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 841.92it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  90%|████████████████████████████████████████████████████████▋      | 1800/2000 [00:02&lt;00:00, 8952.54it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.517358
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  85%|█████████████████████████████████████████████████████▌         | 1700/2000 [00:02&lt;00:00, 8307.51it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  85%|█████████████████████████████████████████████████████▌         | 1700/2000 [00:02&lt;00:00, 8361.89it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  85%|█████████████████████████████████████████████████████▌         | 1700/2000 [00:02&lt;00:00, 8415.29it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 969.39it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 969.80it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 970.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 970.90it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.194120
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.113057
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.110326
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.153417
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.145483
 </pre></div>
 </div>
 </div>
@@ -2149,7 +2123,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c7e9fffc99f8a9ebeec034e306462c024602148f72094e84a8098ecf707a851f.svg" src="../_images/c7e9fffc99f8a9ebeec034e306462c024602148f72094e84a8098ecf707a851f.svg" /></div>
+<img alt="../_images/e29da7b5c39eb8da30985d0abf89e59241ec53589409d26f078a98258b7227b0.svg" src="../_images/e29da7b5c39eb8da30985d0abf89e59241ec53589409d26f078a98258b7227b0.svg" /></div>
 </div>
 <p>Esaminiamo i risultati.</p>
 <div class="cell docutils container">
@@ -2191,494 +2165,494 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>245.18</td>
-      <td>9.59</td>
-      <td>226.75</td>
-      <td>262.96</td>
-      <td>0.19</td>
+      <td>245.14</td>
+      <td>9.47</td>
+      <td>226.71</td>
+      <td>262.49</td>
+      <td>0.20</td>
       <td>0.14</td>
-      <td>2453.17</td>
-      <td>3215.26</td>
+      <td>2201.88</td>
+      <td>2757.02</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days</th>
-      <td>11.33</td>
-      <td>1.93</td>
-      <td>7.70</td>
-      <td>14.95</td>
+      <td>11.51</td>
+      <td>1.89</td>
+      <td>7.92</td>
+      <td>15.02</td>
       <td>0.05</td>
-      <td>0.04</td>
-      <td>1499.54</td>
-      <td>2076.93</td>
+      <td>0.03</td>
+      <td>1583.47</td>
+      <td>2287.69</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Reaction_sigma</th>
-      <td>26.07</td>
-      <td>1.79</td>
-      <td>22.93</td>
-      <td>29.51</td>
-      <td>0.04</td>
+      <td>26.05</td>
+      <td>1.80</td>
+      <td>22.85</td>
+      <td>29.53</td>
+      <td>0.03</td>
       <td>0.02</td>
-      <td>2666.34</td>
-      <td>2750.42</td>
+      <td>3823.18</td>
+      <td>3136.09</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject_sigma</th>
-      <td>31.31</td>
-      <td>8.84</td>
-      <td>15.00</td>
-      <td>47.36</td>
-      <td>0.24</td>
-      <td>0.17</td>
-      <td>1342.54</td>
-      <td>2293.96</td>
+      <td>31.16</td>
+      <td>8.86</td>
+      <td>15.86</td>
+      <td>48.90</td>
+      <td>0.22</td>
+      <td>0.15</td>
+      <td>1661.99</td>
+      <td>1632.54</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject_sigma</th>
-      <td>6.90</td>
-      <td>1.63</td>
-      <td>4.12</td>
-      <td>10.10</td>
+      <td>6.91</td>
+      <td>1.61</td>
+      <td>4.17</td>
+      <td>10.01</td>
       <td>0.04</td>
       <td>0.03</td>
-      <td>1690.09</td>
-      <td>2434.69</td>
+      <td>1768.25</td>
+      <td>2339.34</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[308]</th>
-      <td>10.45</td>
-      <td>18.68</td>
-      <td>-24.21</td>
-      <td>45.36</td>
-      <td>0.32</td>
-      <td>0.25</td>
-      <td>3401.26</td>
-      <td>3093.80</td>
+      <td>9.98</td>
+      <td>18.03</td>
+      <td>-24.40</td>
+      <td>42.83</td>
+      <td>0.30</td>
+      <td>0.26</td>
+      <td>3701.54</td>
+      <td>2771.68</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[309]</th>
-      <td>-42.21</td>
-      <td>20.17</td>
-      <td>-81.04</td>
-      <td>-5.74</td>
-      <td>0.34</td>
-      <td>0.24</td>
-      <td>3458.35</td>
-      <td>3170.77</td>
+      <td>-41.98</td>
+      <td>20.73</td>
+      <td>-81.18</td>
+      <td>-2.64</td>
+      <td>0.36</td>
+      <td>0.25</td>
+      <td>3386.98</td>
+      <td>2391.27</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[310]</th>
-      <td>-25.73</td>
-      <td>18.78</td>
-      <td>-62.97</td>
-      <td>7.03</td>
-      <td>0.33</td>
-      <td>0.26</td>
-      <td>3215.23</td>
-      <td>2586.68</td>
+      <td>-25.63</td>
+      <td>19.12</td>
+      <td>-60.22</td>
+      <td>10.90</td>
+      <td>0.31</td>
+      <td>0.23</td>
+      <td>3860.59</td>
+      <td>3315.95</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[330]</th>
-      <td>4.55</td>
-      <td>17.87</td>
-      <td>-31.47</td>
-      <td>36.56</td>
-      <td>0.30</td>
-      <td>0.27</td>
-      <td>3523.81</td>
-      <td>2811.94</td>
+      <td>4.23</td>
+      <td>18.24</td>
+      <td>-31.27</td>
+      <td>36.15</td>
+      <td>0.29</td>
+      <td>0.28</td>
+      <td>3877.76</td>
+      <td>3258.16</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[331]</th>
-      <td>22.38</td>
-      <td>19.43</td>
-      <td>-14.60</td>
-      <td>57.16</td>
-      <td>0.35</td>
-      <td>0.26</td>
-      <td>3186.18</td>
-      <td>2686.71</td>
+      <td>22.18</td>
+      <td>18.57</td>
+      <td>-13.91</td>
+      <td>56.43</td>
+      <td>0.32</td>
+      <td>0.24</td>
+      <td>3496.25</td>
+      <td>2921.53</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[332]</th>
-      <td>34.87</td>
-      <td>19.75</td>
+      <td>34.18</td>
+      <td>19.60</td>
       <td>-2.51</td>
-      <td>72.73</td>
-      <td>0.37</td>
-      <td>0.26</td>
-      <td>2878.64</td>
-      <td>2702.08</td>
+      <td>70.36</td>
+      <td>0.34</td>
+      <td>0.24</td>
+      <td>3314.63</td>
+      <td>2757.27</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[333]</th>
-      <td>11.69</td>
-      <td>18.35</td>
-      <td>-23.42</td>
-      <td>46.12</td>
-      <td>0.31</td>
-      <td>0.26</td>
-      <td>3510.53</td>
-      <td>2593.74</td>
+      <td>11.84</td>
+      <td>17.86</td>
+      <td>-21.00</td>
+      <td>46.00</td>
+      <td>0.29</td>
+      <td>0.25</td>
+      <td>3706.99</td>
+      <td>2983.49</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[334]</th>
-      <td>-21.73</td>
-      <td>18.92</td>
-      <td>-56.93</td>
-      <td>13.78</td>
-      <td>0.33</td>
-      <td>0.25</td>
-      <td>3335.02</td>
-      <td>2993.37</td>
+      <td>-21.67</td>
+      <td>18.26</td>
+      <td>-55.59</td>
+      <td>12.96</td>
+      <td>0.30</td>
+      <td>0.23</td>
+      <td>3696.74</td>
+      <td>3127.71</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[335]</th>
-      <td>1.51</td>
-      <td>18.96</td>
-      <td>-34.04</td>
-      <td>36.60</td>
-      <td>0.30</td>
-      <td>0.26</td>
-      <td>3890.96</td>
-      <td>3326.72</td>
+      <td>1.86</td>
+      <td>18.62</td>
+      <td>-33.75</td>
+      <td>37.02</td>
+      <td>0.31</td>
+      <td>0.28</td>
+      <td>3596.20</td>
+      <td>3003.87</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[337]</th>
-      <td>26.19</td>
-      <td>19.37</td>
-      <td>-8.52</td>
-      <td>63.70</td>
-      <td>0.32</td>
-      <td>0.25</td>
-      <td>3582.90</td>
-      <td>3130.73</td>
+      <td>25.95</td>
+      <td>19.66</td>
+      <td>-8.78</td>
+      <td>63.61</td>
+      <td>0.33</td>
+      <td>0.24</td>
+      <td>3499.20</td>
+      <td>3184.05</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[349]</th>
-      <td>-27.32</td>
-      <td>19.08</td>
-      <td>-63.65</td>
-      <td>7.75</td>
-      <td>0.33</td>
-      <td>0.24</td>
-      <td>3370.78</td>
-      <td>2981.48</td>
+      <td>-27.05</td>
+      <td>19.27</td>
+      <td>-64.43</td>
+      <td>7.16</td>
+      <td>0.35</td>
+      <td>0.25</td>
+      <td>2972.72</td>
+      <td>2634.07</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[350]</th>
-      <td>-16.43</td>
-      <td>18.58</td>
-      <td>-49.41</td>
-      <td>20.03</td>
-      <td>0.31</td>
-      <td>0.23</td>
-      <td>3482.21</td>
-      <td>3103.83</td>
+      <td>-16.96</td>
+      <td>18.93</td>
+      <td>-50.58</td>
+      <td>19.47</td>
+      <td>0.33</td>
+      <td>0.24</td>
+      <td>3201.26</td>
+      <td>2994.62</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[351]</th>
-      <td>-1.24</td>
-      <td>17.96</td>
-      <td>-35.98</td>
-      <td>32.13</td>
-      <td>0.30</td>
-      <td>0.27</td>
-      <td>3608.72</td>
-      <td>2962.92</td>
+      <td>-1.67</td>
+      <td>18.43</td>
+      <td>-37.21</td>
+      <td>32.20</td>
+      <td>0.32</td>
+      <td>0.28</td>
+      <td>3383.71</td>
+      <td>2678.47</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[352]</th>
-      <td>43.59</td>
-      <td>20.19</td>
-      <td>7.65</td>
-      <td>82.39</td>
-      <td>0.39</td>
-      <td>0.28</td>
-      <td>2634.63</td>
-      <td>2973.66</td>
+      <td>43.23</td>
+      <td>19.91</td>
+      <td>5.05</td>
+      <td>79.98</td>
+      <td>0.37</td>
+      <td>0.26</td>
+      <td>2870.70</td>
+      <td>2490.62</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[369]</th>
-      <td>-1.47</td>
-      <td>18.56</td>
-      <td>-37.34</td>
-      <td>32.88</td>
-      <td>0.31</td>
+      <td>-1.83</td>
+      <td>17.78</td>
+      <td>-33.53</td>
+      <td>33.76</td>
       <td>0.28</td>
-      <td>3657.83</td>
-      <td>2634.87</td>
+      <td>0.25</td>
+      <td>4012.24</td>
+      <td>3189.23</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[370]</th>
-      <td>-25.29</td>
-      <td>19.07</td>
-      <td>-62.47</td>
-      <td>8.08</td>
-      <td>0.33</td>
-      <td>0.24</td>
-      <td>3417.77</td>
-      <td>3341.08</td>
+      <td>-25.38</td>
+      <td>18.87</td>
+      <td>-62.73</td>
+      <td>7.86</td>
+      <td>0.34</td>
+      <td>0.25</td>
+      <td>3126.10</td>
+      <td>3089.58</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[371]</th>
-      <td>-7.07</td>
-      <td>17.98</td>
-      <td>-42.27</td>
-      <td>25.32</td>
-      <td>0.31</td>
-      <td>0.27</td>
-      <td>3403.42</td>
-      <td>2795.56</td>
+      <td>-7.26</td>
+      <td>18.65</td>
+      <td>-44.42</td>
+      <td>25.82</td>
+      <td>0.29</td>
+      <td>0.25</td>
+      <td>4182.00</td>
+      <td>3024.50</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>1|Subject[372]</th>
-      <td>15.62</td>
-      <td>18.38</td>
-      <td>-17.68</td>
-      <td>52.16</td>
-      <td>0.33</td>
-      <td>0.24</td>
-      <td>3139.25</td>
-      <td>3320.38</td>
+      <td>14.86</td>
+      <td>18.24</td>
+      <td>-16.99</td>
+      <td>50.55</td>
+      <td>0.31</td>
+      <td>0.25</td>
+      <td>3451.54</td>
+      <td>2992.91</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[308]</th>
-      <td>8.25</td>
-      <td>3.35</td>
-      <td>1.68</td>
-      <td>14.37</td>
-      <td>0.07</td>
-      <td>0.05</td>
-      <td>2332.77</td>
-      <td>2722.72</td>
+      <td>8.14</td>
+      <td>3.27</td>
+      <td>1.95</td>
+      <td>14.17</td>
+      <td>0.06</td>
+      <td>0.04</td>
+      <td>3123.99</td>
+      <td>3185.05</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[309]</th>
-      <td>-8.29</td>
-      <td>3.57</td>
-      <td>-14.76</td>
-      <td>-1.39</td>
+      <td>-8.46</td>
+      <td>3.61</td>
+      <td>-15.44</td>
+      <td>-1.91</td>
       <td>0.07</td>
       <td>0.05</td>
-      <td>2497.93</td>
-      <td>2212.60</td>
+      <td>2761.33</td>
+      <td>2821.00</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[310]</th>
-      <td>-7.23</td>
-      <td>3.34</td>
-      <td>-13.37</td>
-      <td>-0.97</td>
-      <td>0.07</td>
+      <td>-7.38</td>
+      <td>3.37</td>
+      <td>-13.54</td>
+      <td>-0.90</td>
+      <td>0.06</td>
       <td>0.05</td>
-      <td>2627.39</td>
-      <td>2974.26</td>
+      <td>2821.60</td>
+      <td>2730.13</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[330]</th>
-      <td>-2.05</td>
-      <td>3.24</td>
-      <td>-8.12</td>
-      <td>3.94</td>
+      <td>-2.19</td>
+      <td>3.34</td>
+      <td>-8.29</td>
+      <td>4.17</td>
       <td>0.06</td>
       <td>0.05</td>
-      <td>2930.78</td>
-      <td>2656.45</td>
+      <td>2681.85</td>
+      <td>2875.77</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[331]</th>
-      <td>-3.02</td>
-      <td>3.41</td>
-      <td>-9.38</td>
-      <td>3.15</td>
-      <td>0.07</td>
+      <td>-3.18</td>
+      <td>3.35</td>
+      <td>-9.50</td>
+      <td>3.47</td>
+      <td>0.06</td>
       <td>0.05</td>
-      <td>2356.95</td>
-      <td>2602.07</td>
+      <td>2944.76</td>
+      <td>2742.28</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[332]</th>
-      <td>-3.92</td>
-      <td>3.55</td>
-      <td>-10.55</td>
+      <td>-3.95</td>
+      <td>3.48</td>
+      <td>-10.29</td>
       <td>2.68</td>
-      <td>0.07</td>
+      <td>0.06</td>
       <td>0.05</td>
-      <td>2540.45</td>
-      <td>2680.44</td>
+      <td>2901.01</td>
+      <td>2887.72</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[333]</th>
-      <td>0.59</td>
-      <td>3.33</td>
-      <td>-6.03</td>
-      <td>6.65</td>
+      <td>0.41</td>
+      <td>3.22</td>
+      <td>-5.68</td>
+      <td>6.37</td>
       <td>0.06</td>
-      <td>0.05</td>
-      <td>2809.10</td>
-      <td>2788.19</td>
+      <td>0.04</td>
+      <td>2769.54</td>
+      <td>2829.15</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[334]</th>
-      <td>3.26</td>
-      <td>3.35</td>
-      <td>-2.89</td>
-      <td>9.71</td>
+      <td>3.09</td>
+      <td>3.27</td>
+      <td>-3.29</td>
+      <td>9.05</td>
       <td>0.06</td>
-      <td>0.05</td>
-      <td>2690.94</td>
-      <td>2781.99</td>
+      <td>0.04</td>
+      <td>2907.63</td>
+      <td>3075.58</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[335]</th>
-      <td>-11.09</td>
-      <td>3.43</td>
-      <td>-17.33</td>
-      <td>-4.71</td>
+      <td>-11.30</td>
+      <td>3.47</td>
+      <td>-17.80</td>
+      <td>-4.78</td>
       <td>0.07</td>
       <td>0.05</td>
-      <td>2779.59</td>
-      <td>2866.92</td>
+      <td>2811.00</td>
+      <td>2919.05</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[337]</th>
-      <td>10.00</td>
-      <td>3.45</td>
-      <td>3.58</td>
-      <td>16.55</td>
-      <td>0.07</td>
+      <td>9.88</td>
+      <td>3.48</td>
+      <td>3.17</td>
+      <td>16.19</td>
+      <td>0.06</td>
       <td>0.05</td>
-      <td>2591.19</td>
-      <td>3072.68</td>
+      <td>2949.00</td>
+      <td>2882.23</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[349]</th>
-      <td>1.65</td>
-      <td>3.39</td>
-      <td>-4.38</td>
-      <td>8.35</td>
-      <td>0.07</td>
-      <td>0.05</td>
-      <td>2384.14</td>
-      <td>2762.58</td>
+      <td>1.46</td>
+      <td>3.35</td>
+      <td>-5.11</td>
+      <td>7.40</td>
+      <td>0.06</td>
+      <td>0.04</td>
+      <td>2985.29</td>
+      <td>2755.70</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[350]</th>
-      <td>7.33</td>
-      <td>3.35</td>
-      <td>0.79</td>
-      <td>13.35</td>
+      <td>7.22</td>
+      <td>3.37</td>
+      <td>0.91</td>
+      <td>13.44</td>
       <td>0.06</td>
-      <td>0.05</td>
-      <td>2747.84</td>
-      <td>2845.60</td>
+      <td>0.04</td>
+      <td>2954.09</td>
+      <td>2705.98</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[351]</th>
-      <td>-2.24</td>
-      <td>3.29</td>
-      <td>-8.35</td>
-      <td>4.14</td>
+      <td>-2.34</td>
+      <td>3.32</td>
+      <td>-8.32</td>
+      <td>4.18</td>
       <td>0.06</td>
       <td>0.05</td>
-      <td>2676.66</td>
-      <td>2738.81</td>
+      <td>2917.37</td>
+      <td>3102.67</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[352]</th>
-      <td>0.30</td>
-      <td>3.60</td>
-      <td>-6.37</td>
-      <td>7.27</td>
+      <td>0.17</td>
+      <td>3.49</td>
+      <td>-5.96</td>
+      <td>7.33</td>
       <td>0.07</td>
       <td>0.05</td>
-      <td>2312.24</td>
-      <td>2857.02</td>
+      <td>2499.31</td>
+      <td>3022.11</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[369]</th>
-      <td>1.66</td>
-      <td>3.36</td>
-      <td>-5.03</td>
-      <td>7.70</td>
+      <td>1.58</td>
+      <td>3.19</td>
+      <td>-4.50</td>
+      <td>7.53</td>
       <td>0.06</td>
-      <td>0.05</td>
-      <td>2713.49</td>
-      <td>2940.34</td>
+      <td>0.04</td>
+      <td>2873.10</td>
+      <td>3010.47</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[370]</th>
-      <td>4.95</td>
-      <td>3.46</td>
-      <td>-1.26</td>
-      <td>11.60</td>
-      <td>0.07</td>
+      <td>4.84</td>
+      <td>3.36</td>
+      <td>-0.86</td>
+      <td>11.50</td>
+      <td>0.06</td>
       <td>0.05</td>
-      <td>2585.96</td>
-      <td>2629.95</td>
+      <td>2716.07</td>
+      <td>2948.06</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[371]</th>
-      <td>0.23</td>
-      <td>3.28</td>
-      <td>-5.89</td>
-      <td>6.34</td>
-      <td>0.07</td>
+      <td>0.11</td>
+      <td>3.35</td>
+      <td>-6.03</td>
+      <td>6.44</td>
+      <td>0.06</td>
       <td>0.05</td>
-      <td>2553.29</td>
-      <td>2847.65</td>
+      <td>2812.34</td>
+      <td>3028.17</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days|Subject[372]</th>
-      <td>0.91</td>
-      <td>3.25</td>
-      <td>-4.93</td>
-      <td>7.37</td>
-      <td>0.07</td>
-      <td>0.05</td>
-      <td>2415.57</td>
-      <td>2619.43</td>
+      <td>0.85</td>
+      <td>3.23</td>
+      <td>-4.89</td>
+      <td>7.16</td>
+      <td>0.06</td>
+      <td>0.04</td>
+      <td>2867.48</td>
+      <td>2878.17</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -2791,26 +2765,26 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>245.18</td>
-      <td>9.59</td>
-      <td>226.75</td>
-      <td>262.96</td>
-      <td>0.19</td>
+      <td>245.14</td>
+      <td>9.47</td>
+      <td>226.71</td>
+      <td>262.49</td>
+      <td>0.20</td>
       <td>0.14</td>
-      <td>2453.17</td>
-      <td>3215.26</td>
+      <td>2201.88</td>
+      <td>2757.02</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Days</th>
-      <td>11.33</td>
-      <td>1.93</td>
-      <td>7.70</td>
-      <td>14.95</td>
+      <td>11.51</td>
+      <td>1.89</td>
+      <td>7.92</td>
+      <td>15.02</td>
       <td>0.05</td>
-      <td>0.04</td>
-      <td>1499.54</td>
-      <td>2076.93</td>
+      <td>0.03</td>
+      <td>1583.47</td>
+      <td>2287.69</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -2830,7 +2804,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f01651a3f30d284233bded398f6b46fa9d8799b8b51b8ccd6a74f4fb94557246.png" src="../_images/f01651a3f30d284233bded398f6b46fa9d8799b8b51b8ccd6a74f4fb94557246.png" />
+<img alt="../_images/2559fc62bb9ee299ed87ae02ff29fe4ac58ff4a7f1520bb48772bc8c5dfcd1d8.png" src="../_images/2559fc62bb9ee299ed87ae02ff29fe4ac58ff4a7f1520bb48772bc8c5dfcd1d8.png" />
 </div>
 </div>
 <p>Dall’ampiezza delle distribuzioni a posteriori delle intercette per i singoli soggetti possiamo vedere che il tempo di reazione medio iniziale per un determinato soggetto può differire notevolmente dalla media generale che abbiamo visto nella tabella precedente. C’è anche una grande differenza nelle pendenze. Alcuni soggetti vedono aumentare rapidamente i loro tempi di reazione quando vengono deprivati del sonno, mentre altri hanno una tolleranza migliore e peggiorano più lentamente.</p>
@@ -2842,7 +2816,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/da22068f64a608bdf92b1a59ce7ca578a9c6a2ad36bea85db576a658ed4d3304.png" src="../_images/da22068f64a608bdf92b1a59ce7ca578a9c6a2ad36bea85db576a658ed4d3304.png" />
+<img alt="../_images/8b8152bb34602316101752c3d1c0a2f0ec084a8bc1c3e3616999ecc430737d39.png" src="../_images/8b8152bb34602316101752c3d1c0a2f0ec084a8bc1c3e3616999ecc430737d39.png" />
 </div>
 </div>
 <p>In sintesi, il modello gerarchico cattura il comportamento che abbiamo visto nella fase di esplorazione dei dati. Le persone differiscono sia nei tempi di reazione iniziali che nel modo in cui questi tempi di reazione sono influenzati dai giorni di deprivazione del sonno. Possiamo dunque giungere alle seguenti conclusioni:</p>
@@ -2877,7 +2851,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ec627b5b306a244a918ce61227a6e63ec0edf58437cd2103c8a8ccd29dd36132.png" src="../_images/ec627b5b306a244a918ce61227a6e63ec0edf58437cd2103c8a8ccd29dd36132.png" />
+<img alt="../_images/9c278e1f398089182b7b40e0bc534f8630f26401db4f15e5fab1407f85e1ec69.png" src="../_images/9c278e1f398089182b7b40e0bc534f8630f26401db4f15e5fab1407f85e1ec69.png" />
 </div>
 </div>
 </section>
@@ -2947,11 +2921,11 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
     <tr>
       <th>partial_pooling</th>
       <td>0</td>
-      <td>-692.153719</td>
-      <td>30.867601</td>
+      <td>-691.655403</td>
+      <td>30.236698</td>
       <td>0.000000</td>
-      <td>0.888449</td>
-      <td>21.652596</td>
+      <td>9.506007e-01</td>
+      <td>21.387619</td>
       <td>0.000000</td>
       <td>True</td>
       <td>log</td>
@@ -2959,24 +2933,24 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
     <tr>
       <th>no_pooling</th>
       <td>1</td>
-      <td>-694.779813</td>
-      <td>36.245003</td>
-      <td>2.626095</td>
-      <td>0.061883</td>
-      <td>21.878851</td>
-      <td>2.880138</td>
+      <td>-694.848983</td>
+      <td>36.385029</td>
+      <td>3.193580</td>
+      <td>9.864505e-17</td>
+      <td>21.865598</td>
+      <td>3.414324</td>
       <td>True</td>
       <td>log</td>
     </tr>
     <tr>
       <th>pooling</th>
       <td>2</td>
-      <td>-772.254695</td>
-      <td>3.108928</td>
-      <td>80.100976</td>
-      <td>0.049669</td>
-      <td>8.985092</td>
-      <td>20.242783</td>
+      <td>-772.133354</td>
+      <td>3.003512</td>
+      <td>80.477951</td>
+      <td>4.939933e-02</td>
+      <td>9.015318</td>
+      <td>20.041200</td>
       <td>False</td>
       <td>log</td>
     </tr>
@@ -2993,7 +2967,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/81279150065ab39ba28b237af9aa8be07269bc7e75013ce7bb8f76e0f8e40564.png" src="../_images/81279150065ab39ba28b237af9aa8be07269bc7e75013ce7bb8f76e0f8e40564.png" />
+<img alt="../_images/6a31313f35a4e56c7200dbaeb10153c53ff89692f85fed9b07e16ade9a15a509.png" src="../_images/6a31313f35a4e56c7200dbaeb10153c53ff89692f85fed9b07e16ade9a15a509.png" />
 </div>
 </div>
 <p>Il confronto tra i modelli guida il processo di selezione. In particolare, la comparazione tra il modello di partial-pooling e il modello completo di pooling è resa chiara dall’<code class="docutils literal notranslate"><span class="pre">elpd_diff</span></code> di 80.17 e dal suo errore standard di 19.97. Questi valori indicano inequivocabilmente che il modello di partial-pooling è superiore.</p>
@@ -3020,31 +2994,22 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.562028
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.508540
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3053,7 +3018,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3062,7 +3027,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3071,7 +3036,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3080,19 +3045,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3101,7 +3054,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3110,37 +3075,46 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1260.85it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1261.44it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1262.28it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1263.14it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1628.92it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.671168
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1630.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1631.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1633.13it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.300856
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.039497
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.038661
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.092615
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.087606
 </pre></div>
 </div>
 </div>
@@ -3153,7 +3127,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/32ea50fc061175eae6ee9b7b1760f2020ec615d652da7f3fa5ae999cb86e46eb.png" src="../_images/32ea50fc061175eae6ee9b7b1760f2020ec615d652da7f3fa5ae999cb86e46eb.png" />
+<img alt="../_images/5184abb8968fb1f473644669b719dbc127d7e8bfece82e2b2af08018f3595144.png" src="../_images/5184abb8968fb1f473644669b719dbc127d7e8bfece82e2b2af08018f3595144.png" />
 </div>
 </div>
 <div class="cell tag_hide-output docutils container">
@@ -3174,31 +3148,22 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.746075
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.825284
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3207,7 +3172,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3216,7 +3181,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3225,7 +3190,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3234,7 +3199,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3243,7 +3208,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3252,19 +3229,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3273,7 +3238,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   5%|███▎                                                              | 100/2000 [00:01&lt;00:04, 452.63it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   5%|███▎                                                             | 100/2000 [00:01&lt;00:03, 488.10it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   5%|███▎                                                             | 100/2000 [00:01&lt;00:04, 464.98it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3282,19 +3259,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   5%|███▎                                                              | 100/2000 [00:01&lt;00:04, 449.83it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   5%|███▎                                                              | 100/2000 [00:01&lt;00:04, 437.56it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   5%|███▎                                                              | 100/2000 [00:01&lt;00:04, 423.83it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   5%|███▎                                                             | 100/2000 [00:01&lt;00:04, 455.53it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3303,28 +3268,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  50%|████████████████████████████████                                | 1000/2000 [00:01&lt;00:00, 3713.71it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   5%|███▎                                                             | 100/2000 [00:01&lt;00:04, 454.58it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  50%|████████████████████████████████                                | 1000/2000 [00:01&lt;00:00, 3682.73it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  55%|██████████████████████████████████▋                            | 1100/2000 [00:01&lt;00:00, 4334.31it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  50%|████████████████████████████████                                | 1000/2000 [00:01&lt;00:00, 3645.09it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  50%|████████████████████████████████                                | 1000/2000 [00:01&lt;00:00, 3625.92it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  55%|██████████████████████████████████▋                            | 1100/2000 [00:01&lt;00:00, 4189.74it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3333,37 +3289,49 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 5797.23it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 4545.65it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 978.77it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 979.22it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 4505.24it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 979.82it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 980.42it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 989.06it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.128486
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 989.46it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 989.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 990.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.118496
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.061288
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.061568
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.122037
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.111961
 </pre></div>
 </div>
 </div>
@@ -3376,7 +3344,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0ebd19a6267acda8e1326ba3b54fb955907236bf4ce1f18025ac876eb115aa14.png" src="../_images/0ebd19a6267acda8e1326ba3b54fb955907236bf4ce1f18025ac876eb115aa14.png" />
+<img alt="../_images/6586f7b933bcc352d1ef2e63b67e61fd80f7c413a2950d1f4d9fd3f4b711b893.png" src="../_images/6586f7b933bcc352d1ef2e63b67e61fd80f7c413a2950d1f4d9fd3f4b711b893.png" />
 </div>
 </div>
 <div class="cell tag_hide-output docutils container">
@@ -3397,31 +3365,22 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.164391
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.100725
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3430,7 +3389,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3439,7 +3398,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3448,7 +3407,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                              | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3457,19 +3416,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                                | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3478,7 +3425,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3487,7 +3434,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                             | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3496,7 +3443,31 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  35%|██████████████████████▊                                          | 700/2000 [00:02&lt;00:00, 6853.81it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  40%|█████████████████████████▌                                      | 800/2000 [00:01&lt;00:00, 7835.76it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  35%|██████████████████████▍                                         | 700/2000 [00:01&lt;00:00, 6813.85it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3505,7 +3476,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  35%|██████████████████████▊                                          | 700/2000 [00:02&lt;00:00, 6738.35it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  40%|█████████████████████████▌                                      | 800/2000 [00:01&lt;00:00, 7501.68it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3514,28 +3485,19 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  40%|██████████████████████████                                       | 800/2000 [00:02&lt;00:00, 7595.02it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  40%|█████████████████████████▌                                      | 800/2000 [00:01&lt;00:00, 7247.58it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  40%|██████████████████████████                                       | 800/2000 [00:02&lt;00:00, 7495.55it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  90%|████████████████████████████████████████████████████████▋      | 1800/2000 [00:02&lt;00:00, 8956.39it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  80%|███████████████████████████████████████████████████▏            | 1600/2000 [00:02&lt;00:00, 7833.81it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  85%|██████████████████████████████████████████████████████▍         | 1700/2000 [00:02&lt;00:00, 8118.85it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  90%|████████████████████████████████████████████████████████▋      | 1800/2000 [00:02&lt;00:00, 8752.30it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -3544,40 +3506,46 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  85%|██████████████████████████████████████████████████████▍         | 1700/2000 [00:02&lt;00:00, 8172.03it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  85%|█████████████████████████████████████████████████████▌         | 1700/2000 [00:02&lt;00:00, 8167.59it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  95%|████████████████████████████████████████████████████████████▊   | 1900/2000 [00:02&lt;00:00, 8993.82it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 924.02it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  80%|██████████████████████████████████████████████████▍            | 1600/2000 [00:02&lt;00:00, 7508.65it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 924.39it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 925.14it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 966.97it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|█████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 925.78it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 967.43it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.282650
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 967.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|████████████████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 968.52it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.181885
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.089143
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.081932
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.151894
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.148473
 </pre></div>
 </div>
 </div>
@@ -3590,7 +3558,7 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6811b4729f007e6a726b54cffcbfd39d3fca82131686864471155fabe63a0413.png" src="../_images/6811b4729f007e6a726b54cffcbfd39d3fca82131686864471155fabe63a0413.png" />
+<img alt="../_images/be8a7082e05d9b8b1be43b3061e93f9c53d8c9542f02dbbb14b9d1f1018b116b.png" src="../_images/be8a7082e05d9b8b1be43b3061e93f9c53d8c9542f02dbbb14b9d1f1018b116b.png" />
 </div>
 </div>
 <p>In questo contesto specifico, l’analisi tramite i PPC (Posterior Predictive Checks) plots non rivela differenze evidenti tra i tre modelli in esame: tutti sembrano egualmente adeguati nell’adattarsi ai dati. Di conseguenza, i PPC plots non forniscono ulteriori chiarimenti o conferme alle conclusioni già raggiunte attraverso il confronto tra modelli basato sulla differenza ELPD (Expected Log Predictive Density). In altre parole, l’analisi visiva tramite i PPC plots non aggiunge valore o informazioni supplementari a quanto già dedotto dalle metriche di confronto.</p>
@@ -3619,11 +3587,11 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Feb 22 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 01 2024
 
 Python implementation: CPython
-Python version       : 3.11.7
-IPython version      : 8.21.0
+Python version       : 3.11.8
+IPython version      : 8.22.1
 
 jax: 0.4.23
 
@@ -3635,15 +3603,15 @@ Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
+xarray    : 2024.2.0
 numpy     : 1.26.4
-pymc      : 5.10.4
-matplotlib: 3.8.2
-seaborn   : 0.13.2
 pingouin  : 0.5.4
-arviz     : 0.17.0
-pandas    : 2.2.0
-xarray    : 2024.1.1
+pandas    : 2.2.1
 bambi     : 0.13.0
+seaborn   : 0.13.2
+pymc      : 5.10.4
+matplotlib: 3.8.3
+arviz     : 0.17.0
 
 Watermark: 2.4.3
 </pre></div>

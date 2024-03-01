@@ -254,7 +254,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
@@ -280,11 +280,10 @@
 <li class="toctree-l2"><a class="reference internal" href="40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
-<li class="toctree-l2"><a class="reference internal" href="45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="45_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="50_stan_beta_binomial.html">CmdStanPy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -312,6 +311,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mediation.html">Modello di mediazione con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -338,7 +338,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambiente virtuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -574,7 +574,7 @@ document.write(`
 <span class="collapsed">Show code cell source</span>
 <span class="expanded">Hide code cell source</span>
 </summary>
-<div class="cell_input above-output-prompt docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -585,24 +585,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">uniform</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">factorial</span>
-</pre></div>
-</div>
-</div>
-</details>
-<details class="hide below-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell output</span>
-<span class="expanded">Hide code cell output</span>
-</summary>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_20551/2616850848.py:2: DeprecationWarning: 
-Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
-(to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
-but was not found to be installed on your system.
-If this would cause problems for you,
-please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
-        
-  import pandas as pd
 </pre></div>
 </div>
 </div>
@@ -620,7 +602,6 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
 <span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -684,8 +665,7 @@ p(\theta, y) = p(y \mid \theta)p(\theta).
 \[ 
 p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)},
 \]</div>
-<p>ponendo in evidenza che $p(y \mid \</p>
-<p>theta)$ è la funzione di verosimiglianza e questa equazione incarna il fulcro dell’inferenza bayesiana, distinguendola dalla statistica frequentista.</p>
+<p>ponendo in evidenza che <span class="math notranslate nohighlight">\(p(y \mid \theta)\)</span> è la funzione di verosimiglianza e questa equazione incarna il fulcro dell’inferenza bayesiana, distinguendola dalla statistica frequentista.</p>
 <p>Per variabili discrete, la probabilità marginale dei dati si calcola sommando su tutti i possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span>, mentre per le variabili continue si utilizza l’integrazione:</p>
 <div class="math notranslate nohighlight">
 \[ 
@@ -748,7 +728,7 @@ p(y) = \int p(y \mid \theta)p(\theta)d\theta.
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/432c255dce230c77a62841c4ab93aa280409404e8d9cafaccea3a3755bacb6a7.png" src="../_images/432c255dce230c77a62841c4ab93aa280409404e8d9cafaccea3a3755bacb6a7.png" />
+<img alt="../_images/a61bfdca327fdc750035c8d649549c118c544ee7c8809bc6921e323f472b122e.png" src="../_images/a61bfdca327fdc750035c8d649549c118c544ee7c8809bc6921e323f472b122e.png" />
 </div>
 </div>
 <p>Il lettore attento si sarà chiesto se la curva continua dell’ultimo pannello non sia in realtà identica alla funzione di verosimiglianza binomiale con 6 successi in 9 prove – si veda il capitolo <a class="reference internal" href="../chapter_3/09_likelihood.html#notebook-likelihood"><span class="std std-ref">La verosimiglianza</span></a>. In effetti è proprio così.</p>
@@ -768,7 +748,7 @@ p(y) = \int p(y \mid \theta)p(\theta)d\theta.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6ca9bf2d0b838baa8b444b2173b17ae490e5917911eaf506836d7c4fef54d000.png" src="../_images/6ca9bf2d0b838baa8b444b2173b17ae490e5917911eaf506836d7c4fef54d000.png" />
+<img alt="../_images/04733089fd1c47c21ce542073fd640b83f099b320990ed4b1930fa79200d1262.png" src="../_images/04733089fd1c47c21ce542073fd640b83f099b320990ed4b1930fa79200d1262.png" />
 </div>
 </div>
 <section id="il-flusso-di-lavoro-bayesiano">
