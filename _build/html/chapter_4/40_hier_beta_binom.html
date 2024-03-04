@@ -231,6 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
@@ -584,7 +585,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/mambaforge/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
 </pre></div>
 </div>
@@ -616,8 +617,8 @@ p_i &amp;\sim \text{Beta}(\alpha, \beta), \quad i = 1, \ldots, k, \\
 <p>In questo capitolo, applicheremo il modello gerarchico beta-binomiale a un set di dati reali e discuteremo le metodologie per l’inferenza bayesiana e l’interpretazione dei risultati.</p>
 <section id="analisi-bayesiana-della-terapia-tattile">
 <h2>Analisi bayesiana della “terapia tattile”<a class="headerlink" href="#analisi-bayesiana-della-terapia-tattile" title="Link to this heading">#</a></h2>
-<p>Esaminiamo un problema presentato nel lavoro di <span id="id1"></span> riguardante la “terapia tattile” (Therapeutic Touch), una pratica infermieristica incentrata sulla manipolazione del presunto “campo energetico” di un paziente. Nonostante la sua prevalenza nelle scuole di infermieristica e negli ospedali negli Stati Uniti, come riportato da <span id="id2">Rosa <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id54" title="Linda Rosa, Emily Rosa, Larry Sarner, and Stephen Barrett. A close look at therapeutic touch. Jama, 279(13):1005–1010, 1998.">RRSB98</a>]</span>, evidenze empiriche a supporto della sua efficacia sono scarse o assenti.</p>
-<p>Il focus dell’indagine di <span id="id3">Rosa <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id54" title="Linda Rosa, Emily Rosa, Larry Sarner, and Stephen Barrett. A close look at therapeutic touch. Jama, 279(13):1005–1010, 1998.">RRSB98</a>]</span> è una delle asserzioni cardine degli operatori di terapia tattile: la presunta capacità di percepire i campi energetici senza contatto visivo. Per testare questa affermazione, è stato progettato un esperimento in cui gli operatori ponevano le loro mani attraverso un pannello che bloccava la visione. In ciascuna prova, un esaminatore, seguendo l’esito di un lancio di moneta, posizionava la sua mano sopra una delle mani dell’operatore. L’operatore doveva quindi identificare quale delle sue mani era stata “selezionata” dall’esaminatore. Ogni tentativo è stato classificato come “corretto” o “errato”.</p>
+<p>Esaminiamo un problema presentato nel lavoro di <span id="id1"></span> riguardante la “terapia tattile” (Therapeutic Touch), una pratica infermieristica incentrata sulla manipolazione del presunto “campo energetico” di un paziente. Nonostante la sua prevalenza nelle scuole di infermieristica e negli ospedali negli Stati Uniti, come riportato da <span id="id2">Rosa <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id53" title="Linda Rosa, Emily Rosa, Larry Sarner, and Stephen Barrett. A close look at therapeutic touch. Jama, 279(13):1005–1010, 1998.">RRSB98</a>]</span>, evidenze empiriche a supporto della sua efficacia sono scarse o assenti.</p>
+<p>Il focus dell’indagine di <span id="id3">Rosa <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id53" title="Linda Rosa, Emily Rosa, Larry Sarner, and Stephen Barrett. A close look at therapeutic touch. Jama, 279(13):1005–1010, 1998.">RRSB98</a>]</span> è una delle asserzioni cardine degli operatori di terapia tattile: la presunta capacità di percepire i campi energetici senza contatto visivo. Per testare questa affermazione, è stato progettato un esperimento in cui gli operatori ponevano le loro mani attraverso un pannello che bloccava la visione. In ciascuna prova, un esaminatore, seguendo l’esito di un lancio di moneta, posizionava la sua mano sopra una delle mani dell’operatore. L’operatore doveva quindi identificare quale delle sue mani era stata “selezionata” dall’esaminatore. Ogni tentativo è stato classificato come “corretto” o “errato”.</p>
 <p>L’unità di osservazione in questo esperimento è costituita da un set di 10 prove per operatore. In totale, lo studio ha coinvolto 21 operatori, con sette di loro sottoposti a retest dopo circa un anno. I dati di retest sono stati trattati come entità indipendenti, portando a un campione effettivo di 28 osservazioni. La metrica di interesse è la proporzione di risposte corrette per ciascun operatore, con una proporzione attesa di 0.50 sotto l’ipotesi nulla di performance casuale.</p>
 <p>La domanda della ricerca centrale è se il campione nel suo complesso è in grado di ottenere una prestazione superiore a quella attesa in base al caso soltanto e, inoltre, se vi sono variazioni  nelle prestazioni individuali.</p>
 <p>Inizieremo importando i dati forniti da <span id="id4"></span>.</p>
@@ -1041,7 +1042,7 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7c8a448d6115604e5e0318d7294696aaa8fbc6d3db18cc77f324ee8d0281f0ce.svg" src="../_images/7c8a448d6115604e5e0318d7294696aaa8fbc6d3db18cc77f324ee8d0281f0ce.svg" /></div>
+<img alt="../_images/3938696bd24d9fa98115cbb253870afa4d20f76b278b45ff9bdf6f127f20fe87.svg" src="../_images/3938696bd24d9fa98115cbb253870afa4d20f76b278b45ff9bdf6f127f20fe87.svg" /></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1083,31 +1084,22 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.904566
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:02.562442
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/3000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/3000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/3000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/3000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1116,7 +1108,7 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/3000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1125,7 +1117,7 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/3000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1134,7 +1126,7 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/3000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1143,19 +1135,7 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/3000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/3000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/3000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1164,7 +1144,7 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/3000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/3000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1173,31 +1153,73 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/3000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/3000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 3000/3000 [00:01&lt;00:00, 1601.18it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 3000/3000 [00:01&lt;00:00, 1602.27it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/3000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 3000/3000 [00:01&lt;00:00, 1603.55it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 3000/3000 [00:01&lt;00:00, 1604.57it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/3000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.203416
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/3000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|████████████████████████████████████████████████████| 3000/3000 [00:03&lt;00:00, 29625.25it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  95%|█████████████████████████████████████████████████▍  | 2850/3000 [00:03&lt;00:00, 28193.84it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|████████████████████████████████████████████████████| 3000/3000 [00:03&lt;00:00, 28970.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 3000/3000 [00:03&lt;00:00, 978.14it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 3000/3000 [00:03&lt;00:00, 978.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 3000/3000 [00:03&lt;00:00, 979.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 3000/3000 [00:03&lt;00:00, 980.48it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:03.515166
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.097838
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.154665
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling: [Y_obs]
@@ -1224,8 +1246,8 @@ I parametri delle distribuzioni Gamma per <code class="docutils literal notransl
       <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
       100.00% [8000/8000 00:00&lt;00:00]
     </div>
-    </div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 3.85 s, sys: 211 ms, total: 4.06 s
-Wall time: 4.48 s
+    </div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CPU times: user 6.67 s, sys: 377 ms, total: 7.05 s
+Wall time: 6.78 s
 </pre></div>
 </div>
 </div>
@@ -1273,26 +1295,26 @@ Wall time: 4.48 s
   <tbody>
     <tr>
       <th>alpha</th>
-      <td>4.58</td>
-      <td>0.86</td>
-      <td>3.02</td>
-      <td>6.22</td>
+      <td>4.60</td>
+      <td>0.85</td>
+      <td>3.08</td>
+      <td>6.24</td>
       <td>0.01</td>
       <td>0.01</td>
-      <td>5405.75</td>
-      <td>5373.23</td>
+      <td>7228.27</td>
+      <td>5972.85</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>beta</th>
       <td>5.76</td>
-      <td>0.93</td>
-      <td>4.08</td>
-      <td>7.55</td>
+      <td>0.91</td>
+      <td>4.07</td>
+      <td>7.47</td>
       <td>0.01</td>
       <td>0.01</td>
-      <td>6175.99</td>
-      <td>5774.22</td>
+      <td>7871.49</td>
+      <td>6043.92</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1300,11 +1322,11 @@ Wall time: 4.48 s
       <td>0.27</td>
       <td>0.10</td>
       <td>0.10</td>
-      <td>0.47</td>
+      <td>0.46</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>9702.50</td>
-      <td>5766.54</td>
+      <td>12799.19</td>
+      <td>6008.13</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1312,23 +1334,23 @@ Wall time: 4.48 s
       <td>0.32</td>
       <td>0.10</td>
       <td>0.14</td>
-      <td>0.52</td>
+      <td>0.51</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10477.24</td>
-      <td>5702.37</td>
+      <td>12412.91</td>
+      <td>5766.49</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[2]</th>
       <td>0.37</td>
-      <td>0.11</td>
+      <td>0.10</td>
       <td>0.18</td>
       <td>0.57</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>9970.73</td>
-      <td>5923.66</td>
+      <td>12648.82</td>
+      <td>6294.55</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1339,8 +1361,8 @@ Wall time: 4.48 s
       <td>0.58</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10604.50</td>
-      <td>6021.03</td>
+      <td>11759.61</td>
+      <td>5572.99</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1348,35 +1370,35 @@ Wall time: 4.48 s
       <td>0.37</td>
       <td>0.11</td>
       <td>0.18</td>
-      <td>0.57</td>
+      <td>0.58</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11541.79</td>
-      <td>6057.84</td>
+      <td>13162.40</td>
+      <td>6082.81</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[5]</th>
       <td>0.37</td>
       <td>0.11</td>
-      <td>0.17</td>
-      <td>0.57</td>
+      <td>0.18</td>
+      <td>0.58</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10691.91</td>
-      <td>5924.42</td>
+      <td>13319.84</td>
+      <td>5705.38</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[6]</th>
       <td>0.37</td>
       <td>0.11</td>
-      <td>0.17</td>
-      <td>0.57</td>
+      <td>0.18</td>
+      <td>0.58</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>12391.36</td>
-      <td>6139.70</td>
+      <td>12549.54</td>
+      <td>5331.58</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1387,44 +1409,44 @@ Wall time: 4.48 s
       <td>0.58</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10740.07</td>
-      <td>5933.36</td>
+      <td>12581.33</td>
+      <td>5002.09</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[8]</th>
       <td>0.37</td>
       <td>0.11</td>
-      <td>0.17</td>
-      <td>0.57</td>
+      <td>0.18</td>
+      <td>0.58</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10546.69</td>
-      <td>5627.65</td>
+      <td>11812.34</td>
+      <td>6373.71</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[9]</th>
       <td>0.37</td>
       <td>0.11</td>
-      <td>0.17</td>
-      <td>0.57</td>
+      <td>0.18</td>
+      <td>0.58</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11769.81</td>
-      <td>5454.57</td>
+      <td>12720.90</td>
+      <td>6062.91</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[10]</th>
       <td>0.42</td>
       <td>0.11</td>
-      <td>0.21</td>
+      <td>0.23</td>
       <td>0.62</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10867.32</td>
-      <td>5623.17</td>
+      <td>12517.31</td>
+      <td>6099.85</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1432,11 +1454,11 @@ Wall time: 4.48 s
       <td>0.42</td>
       <td>0.11</td>
       <td>0.22</td>
-      <td>0.63</td>
+      <td>0.62</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11364.56</td>
-      <td>5741.81</td>
+      <td>12706.56</td>
+      <td>4974.55</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1447,20 +1469,20 @@ Wall time: 4.48 s
       <td>0.63</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10203.89</td>
-      <td>5060.09</td>
+      <td>12071.33</td>
+      <td>5843.52</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[13]</th>
       <td>0.42</td>
       <td>0.11</td>
-      <td>0.23</td>
-      <td>0.63</td>
+      <td>0.22</td>
+      <td>0.62</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10742.87</td>
-      <td>6130.84</td>
+      <td>11687.67</td>
+      <td>5629.31</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1471,104 +1493,104 @@ Wall time: 4.48 s
       <td>0.62</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11798.36</td>
-      <td>6103.62</td>
+      <td>12452.79</td>
+      <td>6229.96</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[15]</th>
       <td>0.47</td>
       <td>0.11</td>
-      <td>0.27</td>
-      <td>0.68</td>
+      <td>0.26</td>
+      <td>0.67</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11291.10</td>
-      <td>5641.64</td>
+      <td>12188.90</td>
+      <td>6079.74</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[16]</th>
       <td>0.47</td>
       <td>0.11</td>
-      <td>0.27</td>
+      <td>0.28</td>
       <td>0.68</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10969.96</td>
-      <td>6041.83</td>
+      <td>11442.77</td>
+      <td>5623.71</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[17]</th>
       <td>0.47</td>
       <td>0.11</td>
-      <td>0.26</td>
-      <td>0.67</td>
+      <td>0.27</td>
+      <td>0.68</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11374.12</td>
-      <td>5640.78</td>
+      <td>11871.49</td>
+      <td>6084.64</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[18]</th>
       <td>0.47</td>
       <td>0.11</td>
-      <td>0.26</td>
-      <td>0.67</td>
+      <td>0.27</td>
+      <td>0.68</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11316.97</td>
-      <td>6096.70</td>
+      <td>12410.24</td>
+      <td>6028.15</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[19]</th>
       <td>0.47</td>
       <td>0.11</td>
-      <td>0.27</td>
+      <td>0.26</td>
       <td>0.67</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10364.34</td>
-      <td>5728.30</td>
+      <td>12167.69</td>
+      <td>6735.99</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[20]</th>
       <td>0.47</td>
       <td>0.11</td>
-      <td>0.27</td>
+      <td>0.26</td>
       <td>0.67</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10267.16</td>
-      <td>6168.16</td>
+      <td>13105.47</td>
+      <td>5841.06</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[21]</th>
       <td>0.47</td>
       <td>0.11</td>
-      <td>0.25</td>
-      <td>0.67</td>
+      <td>0.28</td>
+      <td>0.68</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10891.24</td>
-      <td>6096.89</td>
+      <td>12972.78</td>
+      <td>5918.89</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[22]</th>
       <td>0.52</td>
       <td>0.11</td>
-      <td>0.31</td>
+      <td>0.32</td>
       <td>0.72</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>11011.23</td>
-      <td>5542.25</td>
+      <td>13698.23</td>
+      <td>6055.35</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1579,8 +1601,8 @@ Wall time: 4.48 s
       <td>0.72</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>12202.36</td>
-      <td>5722.82</td>
+      <td>13126.58</td>
+      <td>5928.52</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1588,11 +1610,11 @@ Wall time: 4.48 s
       <td>0.57</td>
       <td>0.11</td>
       <td>0.37</td>
-      <td>0.78</td>
+      <td>0.77</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>12183.97</td>
-      <td>5061.62</td>
+      <td>12665.56</td>
+      <td>6046.00</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1600,35 +1622,35 @@ Wall time: 4.48 s
       <td>0.57</td>
       <td>0.11</td>
       <td>0.37</td>
-      <td>0.77</td>
+      <td>0.78</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>10273.21</td>
-      <td>6211.28</td>
+      <td>13164.80</td>
+      <td>5783.00</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[26]</th>
       <td>0.57</td>
       <td>0.11</td>
-      <td>0.37</td>
+      <td>0.36</td>
       <td>0.77</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>9781.89</td>
-      <td>5928.30</td>
+      <td>14112.50</td>
+      <td>5861.67</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>p[27]</th>
       <td>0.62</td>
       <td>0.11</td>
-      <td>0.41</td>
+      <td>0.43</td>
       <td>0.82</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>12341.57</td>
-      <td>5861.35</td>
+      <td>12345.47</td>
+      <td>5769.86</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1646,11 +1668,11 @@ Wall time: 4.48 s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.27309171 0.32304673 0.37109359 0.37262413 0.37100314 0.37302832
- 0.37223781 0.37442891 0.37319522 0.3709448  0.42059703 0.42052307
- 0.42210436 0.42298889 0.42165917 0.47097332 0.47227771 0.471909
- 0.47019706 0.47101551 0.47129408 0.47030551 0.521094   0.51971916
- 0.57103997 0.56921821 0.56986933 0.6192088 ]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.2746663  0.32272399 0.37153844 0.37334714 0.37267767 0.3708056
+ 0.37317561 0.3729219  0.37267138 0.37296727 0.42147107 0.42219395
+ 0.42128351 0.4220853  0.42171367 0.47228108 0.46943152 0.47071722
+ 0.47262232 0.47023165 0.47023848 0.47120048 0.52092505 0.52161
+ 0.57093968 0.56937963 0.57007057 0.6180142 ]
 </pre></div>
 </div>
 </div>
@@ -1703,7 +1725,7 @@ Wall time: 4.48 s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/29b45db860bf583534a474178944d354999854720ab8ba757cb054118225423b.png" src="../_images/29b45db860bf583534a474178944d354999854720ab8ba757cb054118225423b.png" />
+<img alt="../_images/7c3857ef5ca1ce7d75d1e9acbec0d4583037a3671bfec63e7ac8a307c7186179.png" src="../_images/7c3857ef5ca1ce7d75d1e9acbec0d4583037a3671bfec63e7ac8a307c7186179.png" />
 </div>
 </div>
 <p>Esaminiamo la distribuzione a posteriori dei parametri <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>.</p>
@@ -1715,7 +1737,7 @@ Wall time: 4.48 s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/36cf866814b878952b8511666d4e79114e5e28eef3117a8acabe0de453a53309.png" src="../_images/36cf866814b878952b8511666d4e79114e5e28eef3117a8acabe0de453a53309.png" />
+<img alt="../_images/63e7a982fc6d412bacf7f6d4feb6c6bc4757bfbf24ef354b90ca0591fabe52bd.png" src="../_images/63e7a982fc6d412bacf7f6d4feb6c6bc4757bfbf24ef354b90ca0591fabe52bd.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1725,7 +1747,7 @@ Wall time: 4.48 s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cd8f8165fcd06eddc79c212c79a879c62d307529d8509414a596a15f50fa3a33.png" src="../_images/cd8f8165fcd06eddc79c212c79a879c62d307529d8509414a596a15f50fa3a33.png" />
+<img alt="../_images/ce394c79632acb65c3ae3b35c83a270128437ac45745d2e90264cb3428620a59.png" src="../_images/ce394c79632acb65c3ae3b35c83a270128437ac45745d2e90264cb3428620a59.png" />
 </div>
 </div>
 <p>Le distribuzioni posteriori degli iperparametri, prese da sole, non hanno un significato chiaro. Tuttavia, possiamo utilizzarle per calcolare la distribuzione a posteriori della probabilità di una risposta corretta per tutto il gruppo.</p>
@@ -1741,14 +1763,14 @@ Wall time: 4.48 s
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;xarray.DataArray &#39;alpha&#39; (chain: 4, draw: 2000)&gt; Size: 64kB
-array([[4.55028636, 3.1850694 , 3.87641671, ..., 4.0006891 , 3.49632085,
-        4.81123235],
-       [2.42506929, 3.32081621, 5.853673  , ..., 3.84403303, 3.53976956,
-        3.99032981],
-       [4.52700287, 4.87380933, 4.80856551, ..., 6.13061292, 4.33458836,
-        4.08422679],
-       [3.02336106, 4.17964116, 4.22960533, ..., 2.76873581, 2.71389781,
-        4.6627277 ]])
+array([[4.36745436, 5.19510091, 3.9254521 , ..., 4.74128736, 4.40869036,
+        3.76424731],
+       [5.610285  , 4.06710733, 5.08505457, ..., 5.29985805, 4.60387558,
+        5.1519969 ],
+       [6.88154495, 5.97610708, 4.01359209, ..., 4.26116826, 5.19788916,
+        3.74969763],
+       [4.64947123, 5.97617264, 3.23447871, ..., 2.91951895, 4.05389883,
+        5.65438121]])
 Coordinates:
   * chain    (chain) int64 32B 0 1 2 3
   * draw     (draw) int64 16kB 0 1 2 3 4 5 6 ... 1994 1995 1996 1997 1998 1999
@@ -1789,14 +1811,14 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.4587572 , 0.41759774, 0.45244113, ..., 0.46003457, 0.40743996,
-        0.38969777],
-       [0.35521084, 0.46630843, 0.43337264, ..., 0.40505151, 0.40791639,
-        0.47506683],
-       [0.47599635, 0.45082929, 0.46158963, ..., 0.4582398 , 0.43154342,
-        0.39358348],
-       [0.42939406, 0.46036542, 0.45044761, ..., 0.45677487, 0.37219893,
-        0.44853952]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.4840795 , 0.4052196 , 0.47439359, ..., 0.48998473, 0.46359321,
+        0.42005757],
+       [0.51589817, 0.44236266, 0.45267771, ..., 0.44775719, 0.38789825,
+        0.43914423],
+       [0.4680217 , 0.42267541, 0.40398386, ..., 0.46053002, 0.44383886,
+        0.41010808],
+       [0.4691554 , 0.46682268, 0.40695723, ..., 0.42537275, 0.41712018,
+        0.43040098]])
 </pre></div>
 </div>
 </div>
@@ -1808,7 +1830,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4421986157033599
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4430806342042386
 </pre></div>
 </div>
 </div>
@@ -1821,7 +1843,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/26ece8d008e69bf4b130956c7266ab74a26fb9876aba9d78f35b0f8260ccc1b2.png" src="../_images/26ece8d008e69bf4b130956c7266ab74a26fb9876aba9d78f35b0f8260ccc1b2.png" />
+<img alt="../_images/d2ecbf32f810a9c0a06a39854a8256188b78c092984a7b6e4fba7e803cc95607.png" src="../_images/d2ecbf32f810a9c0a06a39854a8256188b78c092984a7b6e4fba7e803cc95607.png" />
 </div>
 </div>
 <p>L’intervallo [0.37, 0.51] rappresenta l’intervallo di credibilità al 94% per la probabilità di risposta corretta <code class="docutils literal notranslate"><span class="pre">p</span></code>, considerando l’insieme del gruppo degli operatori. Questo intervallo ci fornisce un’indicazione sulla variabilità delle probabilità di successo tra gli operatori, considerando sia le differenze tra di loro che le somiglianze all’interno del gruppo.</p>
@@ -2145,31 +2167,22 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.245044
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:04.772696
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2178,7 +2191,7 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2187,7 +2200,7 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2196,7 +2209,7 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2205,7 +2218,7 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2214,7 +2227,7 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2223,7 +2236,19 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2232,34 +2257,31 @@ Coordinates:
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 660.11it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1176.18it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 660.60it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1176.73it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 661.06it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1177.48it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 661.55it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1178.43it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.842140
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:03.305244
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.196477
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.170335
 </pre></div>
 </div>
 </div>
@@ -2276,7 +2298,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/57cb30b9f09e8226028fa0641e2331a06c350a16d77e68a4e9ae48d92808ca6f.png" src="../_images/57cb30b9f09e8226028fa0641e2331a06c350a16d77e68a4e9ae48d92808ca6f.png" />
+<img alt="../_images/3fe087e06626babccede78f414a5efa26f4894f3d6ef1419060b4b489f84ddd5.png" src="../_images/3fe087e06626babccede78f414a5efa26f4894f3d6ef1419060b4b489f84ddd5.png" />
 </div>
 </div>
 <p>Generiamo un sommario numerico.</p>
@@ -2319,14 +2341,14 @@ Coordinates:
   <tbody>
     <tr>
       <th>overall_p</th>
-      <td>0.418</td>
-      <td>0.059</td>
-      <td>0.306</td>
-      <td>0.528</td>
+      <td>0.419</td>
+      <td>0.06</td>
+      <td>0.311</td>
+      <td>0.533</td>
       <td>0.001</td>
       <td>0.001</td>
-      <td>4297.0</td>
-      <td>3356.0</td>
+      <td>4606.0</td>
+      <td>3800.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -2349,7 +2371,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 01 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 03 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -2359,20 +2381,20 @@ jax: 0.4.25
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
-Release     : 23.3.0
+Release     : 23.0.0
 Machine     : x86_64
 Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
+requests  : 2.31.0
 matplotlib: 3.8.3
 pymc      : 5.10.4
-scipy     : 1.12.0
-numpy     : 1.26.4
 pandas    : 2.2.1
-seaborn   : 0.13.2
+scipy     : 1.12.0
 arviz     : 0.17.0
-requests  : 2.31.0
+numpy     : 1.26.4
+seaborn   : 0.13.2
 
 Watermark: 2.4.3
 </pre></div>

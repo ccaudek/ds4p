@@ -231,6 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
@@ -254,7 +255,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
@@ -280,11 +281,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">1. Perdita di Dati Casuale e Indipendente dalle Cause</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_stan_beta_binomial.html">CmdStanPy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -312,6 +312,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mediation.html">Modello di mediazione con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -588,7 +589,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>Questo tutorial presenta un esercizio di analisi di regressione utilizzando il linguaggio di programmazione Python. In questo esempio analizzeremo i dati di Sahlins sull’economia delle società “primitive”. <span id="id1">Sahlins [<a class="reference internal" href="../references/bibliography.html#id59" title="Marshall Sahlins. Stone age economics. Routledge, 2013.">Sah13</a>]</span> ha studiato la relazione tra la produzione per lavoratore e la proporzione di consumatori rispetto ai lavoratori nelle famiglie utilizzando i dati raccolti nel villaggio di Mazulu, in Africa centrale. La variabile <code class="docutils literal notranslate"><span class="pre">acres</span></code> rappresenta l’area coltivata da ciascuna famiglia, mentre <code class="docutils literal notranslate"><span class="pre">consumers</span></code> indica il rapporto tra il numero di consumatori e il numero di lavoratori in ogni famiglia. I dati sono contenuti nel DataFrame <code class="docutils literal notranslate"><span class="pre">Sahlins</span></code> del pacchetto R <code class="docutils literal notranslate"><span class="pre">carData</span></code> e possono essere importati in questo Notebook utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">get_rdataset</span></code>.</p>
+<p>Questo tutorial presenta un esercizio di analisi di regressione utilizzando il linguaggio di programmazione Python. In questo esempio analizzeremo i dati di Sahlins sull’economia delle società “primitive”. <span id="id1">Sahlins [<a class="reference internal" href="../references/bibliography.html#id58" title="Marshall Sahlins. Stone age economics. Routledge, 2013.">Sah13</a>]</span> ha studiato la relazione tra la produzione per lavoratore e la proporzione di consumatori rispetto ai lavoratori nelle famiglie utilizzando i dati raccolti nel villaggio di Mazulu, in Africa centrale. La variabile <code class="docutils literal notranslate"><span class="pre">acres</span></code> rappresenta l’area coltivata da ciascuna famiglia, mentre <code class="docutils literal notranslate"><span class="pre">consumers</span></code> indica il rapporto tra il numero di consumatori e il numero di lavoratori in ogni famiglia. I dati sono contenuti nel DataFrame <code class="docutils literal notranslate"><span class="pre">Sahlins</span></code> del pacchetto R <code class="docutils literal notranslate"><span class="pre">carData</span></code> e possono essere importati in questo Notebook utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">get_rdataset</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">get_rdataset</span><span class="p">(</span><span class="s2">&quot;Sahlins&quot;</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="s2">&quot;carData&quot;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
@@ -742,7 +743,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b5bdec8692dbbcf9fee0e0d421a3000b4ca0e14b9e4fb1ee8c139b4ff5d46611.png" src="../_images/b5bdec8692dbbcf9fee0e0d421a3000b4ca0e14b9e4fb1ee8c139b4ff5d46611.png" />
+<img alt="../_images/0c46e7f9bcc0169cadfaaec326f4a51f08aca4f1ff667fbae088e021026c6b8a.png" src="../_images/0c46e7f9bcc0169cadfaaec326f4a51f08aca4f1ff667fbae088e021026c6b8a.png" />
 </div>
 </div>
 <p>Troviamo i coefficienti dei minimi quadrati con la funzione <code class="docutils literal notranslate"><span class="pre">linregress</span></code>.</p>
@@ -1025,8 +1026,8 @@ a = \bar{y} - b \cdot \bar{x}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Slope: 0.3756561199682135
-Intercept: 2.778908383242775e-16
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Slope: 0.37565611996821363
+Intercept: 2.7789083832427757e-16
 </pre></div>
 </div>
 </div>
@@ -1132,7 +1133,7 @@ DEV_{\text{tot}} = \sum_i{(y_i - \bar{y})^2}
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Coefficiente di determinazione: 0.14111752046957282
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Coefficiente di determinazione: 0.14111752046957288
 </pre></div>
 </div>
 </div>
@@ -1191,7 +1192,7 @@ s_e = \sqrt{\frac{\sum_i e^2}{n - 2}}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Feb 29 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 03 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1199,20 +1200,20 @@ IPython version      : 8.22.1
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
-Release     : 23.3.0
+Release     : 23.0.0
 Machine     : x86_64
 Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-scipy      : 1.12.0
 matplotlib : 3.8.3
-seaborn    : 0.13.2
-arviz      : 0.17.0
 pandas     : 2.2.1
-numpy      : 1.26.4
+seaborn    : 0.13.2
 xarray     : 2024.2.0
+arviz      : 0.17.0
+scipy      : 1.12.0
 statsmodels: 0.14.1
+numpy      : 1.26.4
 
 Watermark: 2.4.3
 </pre></div>

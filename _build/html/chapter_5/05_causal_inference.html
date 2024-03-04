@@ -231,6 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
@@ -640,7 +641,7 @@ document.write(`
 <p>Per illustrare questo concetto, consideriamo due tipi di strutture causalità. Nel primo caso, abbiamo una struttura a catena, rappresentata come <span class="math notranslate nohighlight">\(X \rightarrow C \rightarrow Y\)</span>, dove <span class="math notranslate nohighlight">\(X\)</span> causa <span class="math notranslate nohighlight">\(C\)</span> che a sua volta causa <span class="math notranslate nohighlight">\(Y\)</span>. In questa situazione, sarebbe inappropriato aggiustare per <span class="math notranslate nohighlight">\(C\)</span>, ossia condizionare su <span class="math notranslate nohighlight">\(C\)</span>, poiché <span class="math notranslate nohighlight">\(C\)</span> funge da mediatore nell’effetto di <span class="math notranslate nohighlight">\(X\)</span> su <span class="math notranslate nohighlight">\(Y\)</span>. Condizionare su <span class="math notranslate nohighlight">\(C\)</span> comporterebbe la rimozione di parte dell’effetto causale che intendiamo misurare.</p>
 <p>Nel secondo caso, abbiamo una struttura a forcella, rappresentata come <span class="math notranslate nohighlight">\(X \leftarrow C \rightarrow Y\)</span>, in cui <span class="math notranslate nohighlight">\(C\)</span> è la causa comune di <span class="math notranslate nohighlight">\(X\)</span> e <span class="math notranslate nohighlight">\(Y\)</span>. In questa configurazione, è essenziale aggiustare per <span class="math notranslate nohighlight">\(C\)</span> al fine di rimuovere l’effetto confondente e isolare l’effetto diretto di <span class="math notranslate nohighlight">\(X\)</span> su <span class="math notranslate nohighlight">\(Y\)</span>.</p>
 <p>Il principio di base che guida questo approccio è che dobbiamo bloccare i percorsi non causali utilizzando la distribuzione condizionata e aprire i percorsi causali attraverso l’uso della distribuzione marginale. Questo ci aiuta a decidere quali covariate includere o escludere dal modello di regressione al fine di ottenere una stima più accurata dell’effetto causale.</p>
-<p>Per chiarire ulteriormente questi concetti, utilizzeremo esempi simulati che mostrano chiaramente quando l’aggiustamento per determinate covariate è necessario per rivelare l’effetto causale reale e quando potrebbe portare a una distorsione nella nostra comprensione della relazione causale. Questa discussione è di particolare rilevanza nel campo della psicologia, dove la comprensione delle relazioni causali tra variabili è fondamentale per lo sviluppo di teorie solide e la conduzione di ricerche empiriche affidabili. La discussione che segue è stata ispirata dall’articolo di riferimento di <span id="id1">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id14" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span>.</p>
+<p>Per chiarire ulteriormente questi concetti, utilizzeremo esempi simulati che mostrano chiaramente quando l’aggiustamento per determinate covariate è necessario per rivelare l’effetto causale reale e quando potrebbe portare a una distorsione nella nostra comprensione della relazione causale. Questa discussione è di particolare rilevanza nel campo della psicologia, dove la comprensione delle relazioni causali tra variabili è fondamentale per lo sviluppo di teorie solide e la conduzione di ricerche empiriche affidabili. La discussione che segue è stata ispirata dall’articolo di riferimento di <span id="id1">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span>.</p>
 <section id="esempio-1-catena">
 <h3>Esempio 1: Catena<a class="headerlink" href="#esempio-1-catena" title="Link to this heading">#</a></h3>
 <p>Consideriamo le seguenti variabilili: apprendimento, conoscenza e comprensione. Iniziamo con l’apprendimento (<span class="math notranslate nohighlight">\(X\)</span>), il quale ha un effetto sull’acquisizione di conoscenza (<span class="math notranslate nohighlight">\(C\)</span>). Successivamente, la conoscenza a sua volta incide sulla comprensione (<span class="math notranslate nohighlight">\(Y\)</span>). È importante notare che la comprensione (“understanding”) è influenzata anche da fattori esterni (<span class="math notranslate nohighlight">\(U\)</span>), che in modelli di regressione vengono rappresentati tramite il termine di errore.</p>
@@ -721,33 +722,33 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
   <tbody>
     <tr>
       <th>0</th>
-      <td>-2.684974</td>
-      <td>-13.821383</td>
-      <td>-42.209599</td>
+      <td>0.160799</td>
+      <td>1.257965</td>
+      <td>3.981918</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.482465</td>
-      <td>-3.500967</td>
-      <td>-10.842323</td>
+      <td>0.784468</td>
+      <td>2.916168</td>
+      <td>7.784965</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.699246</td>
-      <td>4.691952</td>
-      <td>13.157468</td>
+      <td>0.126908</td>
+      <td>-0.548029</td>
+      <td>-3.371410</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.914609</td>
-      <td>4.771647</td>
-      <td>13.511728</td>
+      <td>-0.317499</td>
+      <td>-1.952782</td>
+      <td>-6.150507</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>1.192239</td>
-      <td>5.256679</td>
-      <td>16.294730</td>
+      <td>-0.446460</td>
+      <td>-2.033243</td>
+      <td>-5.196317</td>
     </tr>
   </tbody>
 </table>
@@ -770,31 +771,22 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:03.076501
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:02.516773
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -803,7 +795,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -812,7 +804,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -821,7 +813,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -830,7 +822,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -839,19 +831,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -860,37 +840,58 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1607.50it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1609.43it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1611.13it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1612.62it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.532728
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 934.50it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 935.18it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 936.02it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 937.16it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.477358
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.063447
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.103385
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.132738
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.227158
 </pre></div>
 </div>
 </div>
@@ -935,38 +936,38 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>-0.22</td>
+      <td>-0.06</td>
       <td>0.10</td>
-      <td>-0.40</td>
-      <td>-0.03</td>
+      <td>-0.26</td>
+      <td>0.13</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4235.49</td>
-      <td>2997.86</td>
+      <td>4094.66</td>
+      <td>2809.83</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>X</th>
-      <td>15.00</td>
-      <td>0.11</td>
-      <td>14.79</td>
-      <td>15.19</td>
+      <td>14.99</td>
+      <td>0.10</td>
+      <td>14.80</td>
+      <td>15.17</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4069.08</td>
-      <td>2652.66</td>
+      <td>4165.28</td>
+      <td>2770.99</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Y_sigma</th>
-      <td>3.14</td>
+      <td>3.30</td>
       <td>0.07</td>
-      <td>3.01</td>
-      <td>3.27</td>
+      <td>3.17</td>
+      <td>3.44</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4544.10</td>
-      <td>3428.53</td>
+      <td>4353.31</td>
+      <td>3298.17</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -996,31 +997,22 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.850006
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.432437
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1029,7 +1021,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1038,7 +1030,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1047,7 +1039,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1056,7 +1048,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1065,7 +1057,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1074,7 +1066,19 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1083,31 +1087,7 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  50%|███████████████████████████████▌                               | 1000/2000 [00:01&lt;00:00, 9785.42it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  50%|███████████████████████████████▌                               | 1000/2000 [00:01&lt;00:00, 9821.53it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  50%|███████████████████████████████▌                               | 1000/2000 [00:01&lt;00:00, 9285.41it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1116,40 +1096,118 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  55%|██████████████████████████████████                            | 1100/2000 [00:01&lt;00:00, 10047.05it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  30%|████████████████▏                                     | 600/2000 [00:02&lt;00:00, 5922.18it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 9592.97it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  30%|████████████████▏                                     | 600/2000 [00:02&lt;00:00, 5642.17it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1278.59it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1279.37it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  25%|█████████████▌                                        | 500/2000 [00:02&lt;00:00, 4637.83it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1280.38it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1281.39it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.629070
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  30%|████████████████▏                                     | 600/2000 [00:02&lt;00:00, 5355.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  65%|██████████████████████████████████▍                  | 1300/2000 [00:02&lt;00:00, 6473.24it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  60%|███████████████████████████████▊                     | 1200/2000 [00:02&lt;00:00, 5794.82it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  65%|██████████████████████████████████▍                  | 1300/2000 [00:02&lt;00:00, 6177.18it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  70%|█████████████████████████████████████                | 1400/2000 [00:02&lt;00:00, 6333.53it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  90%|███████████████████████████████████████████████▋     | 1800/2000 [00:02&lt;00:00, 5874.24it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|█████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 6290.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|█████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 6252.82it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|█████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 6128.56it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 746.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 747.29it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 747.78it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 748.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.809717
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.042097
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.071831
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.113707
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.209384
 </pre></div>
 </div>
 </div>
@@ -1194,50 +1252,50 @@ Y = 3 \cdot C + UY, \quad UY \sim \mathcal{N}(0,1)
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>-0.07</td>
-      <td>0.03</td>
-      <td>-0.13</td>
       <td>-0.01</td>
+      <td>0.03</td>
+      <td>-0.07</td>
+      <td>0.04</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>2944.19</td>
-      <td>2292.37</td>
+      <td>2748.46</td>
+      <td>2214.73</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>X</th>
-      <td>0.35</td>
-      <td>0.17</td>
-      <td>0.03</td>
-      <td>0.66</td>
+      <td>-0.35</td>
+      <td>0.16</td>
+      <td>-0.63</td>
+      <td>-0.03</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>1817.14</td>
-      <td>2006.69</td>
+      <td>1704.43</td>
+      <td>1613.37</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>C</th>
-      <td>2.93</td>
+      <td>3.07</td>
       <td>0.03</td>
-      <td>2.87</td>
-      <td>2.99</td>
+      <td>3.01</td>
+      <td>3.13</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>1804.33</td>
-      <td>2042.55</td>
+      <td>1730.59</td>
+      <td>1558.57</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>Y_sigma</th>
-      <td>1.02</td>
-      <td>0.02</td>
       <td>0.97</td>
-      <td>1.06</td>
+      <td>0.02</td>
+      <td>0.93</td>
+      <td>1.01</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>2231.66</td>
-      <td>1949.96</td>
+      <td>2863.77</td>
+      <td>1891.32</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1328,39 +1386,39 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
   <tbody>
     <tr>
       <th>0</th>
-      <td>84.572918</td>
-      <td>116.286992</td>
-      <td>52.722727</td>
+      <td>113.916490</td>
+      <td>85.680621</td>
+      <td>65.928643</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>82.992667</td>
-      <td>118.605176</td>
-      <td>53.657918</td>
+      <td>80.438015</td>
+      <td>119.789565</td>
+      <td>51.275371</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>103.448660</td>
-      <td>95.403513</td>
-      <td>61.886093</td>
+      <td>107.850514</td>
+      <td>94.010633</td>
+      <td>64.212183</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>82.911656</td>
-      <td>117.524969</td>
-      <td>54.585588</td>
+      <td>96.324832</td>
+      <td>103.625780</td>
+      <td>58.209287</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>71.266973</td>
-      <td>127.865806</td>
-      <td>48.483302</td>
+      <td>94.495976</td>
+      <td>105.837558</td>
+      <td>55.221121</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>Se il modello per la valutazione del punteggio del test non considera l’influenza dell’intelligenza, si può verificare un errore nella stima addirittura nella direzione dell’effetto vero di X (Tempo di Apprendimento) su Y (Punteggio del Test). Questo fenomeno è noto come il “paradosso di Simpson” <span id="id3">[<a class="reference internal" href="../references/bibliography.html#id37" title="Edward H Simpson. The interpretation of interaction in contingency tables. Journal of the Royal Statistical Society: Series B (Methodological), 13(2):238–241, 1951.">Sim51</a>]</span>, dove le relazioni tra le variabili possono invertirsi quando non si tiene conto di una variabile confondente come l’intelligenza.</p>
+<p>Se il modello per la valutazione del punteggio del test non considera l’influenza dell’intelligenza, si può verificare un errore nella stima addirittura nella direzione dell’effetto vero di X (Tempo di Apprendimento) su Y (Punteggio del Test). Questo fenomeno è noto come il “paradosso di Simpson” <span id="id3">[<a class="reference internal" href="../references/bibliography.html#id36" title="Edward H Simpson. The interpretation of interaction in contingency tables. Journal of the Royal Statistical Society: Series B (Methodological), 13(2):238–241, 1951.">Sim51</a>]</span>, dove le relazioni tra le variabili possono invertirsi quando non si tiene conto di una variabile confondente come l’intelligenza.</p>
 <div class="cell tag_hide-output docutils container">
 <div class="cell_input above-output-prompt docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mod3</span> <span class="o">=</span> <span class="n">bmb</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;S ~ T&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
@@ -1377,31 +1435,22 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.668957
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.379444
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1410,7 +1459,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1419,7 +1468,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1428,7 +1477,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1437,7 +1486,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1446,7 +1495,19 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1455,7 +1516,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1464,40 +1525,37 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 874.34it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1647.61it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 874.95it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1648.81it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 875.78it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1651.21it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 876.86it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1652.70it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.275369
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.438401
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.037664
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.059533
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.101873
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.179792
 </pre></div>
 </div>
 </div>
@@ -1542,14 +1600,14 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>99.86</td>
-      <td>0.22</td>
-      <td>99.46</td>
-      <td>100.29</td>
+      <td>99.64</td>
+      <td>0.24</td>
+      <td>99.22</td>
+      <td>100.11</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4472.31</td>
-      <td>2558.20</td>
+      <td>5033.99</td>
+      <td>3194.39</td>
       <td>1.0</td>
     </tr>
     <tr>
@@ -1560,20 +1618,20 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
       <td>-0.39</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4636.23</td>
-      <td>2685.07</td>
+      <td>5130.75</td>
+      <td>3187.00</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>S_sigma</th>
-      <td>1.11</td>
+      <td>1.14</td>
       <td>0.03</td>
-      <td>1.06</td>
-      <td>1.16</td>
+      <td>1.10</td>
+      <td>1.19</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>3029.32</td>
-      <td>2474.53</td>
+      <td>2543.10</td>
+      <td>1956.57</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1597,31 +1655,22 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.734098
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.104439
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1630,7 +1679,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1639,7 +1688,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1648,7 +1697,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1657,7 +1706,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1666,19 +1715,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1687,28 +1724,19 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  20%|████████████▊                                                   | 400/2000 [00:01&lt;00:00, 3364.63it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  20%|████████████▊                                                   | 400/2000 [00:01&lt;00:00, 3275.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  25%|████████████████                                                | 500/2000 [00:01&lt;00:00, 4005.86it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1717,7 +1745,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  20%|████████████▊                                                   | 400/2000 [00:01&lt;00:00, 3091.21it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1726,7 +1754,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  40%|█████████████████████████▌                                      | 800/2000 [00:01&lt;00:00, 3612.15it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  10%|█████▍                                                | 200/2000 [00:02&lt;00:01, 1751.59it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1735,40 +1763,19 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  40%|█████████████████████████▌                                      | 800/2000 [00:01&lt;00:00, 3435.28it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  10%|█████▍                                                | 200/2000 [00:02&lt;00:01, 1572.82it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  45%|████████████████████████████▊                                   | 900/2000 [00:01&lt;00:00, 3816.26it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  10%|█████▍                                                | 200/2000 [00:03&lt;00:01, 1382.34it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  50%|███████████████████████████████▌                               | 1000/2000 [00:01&lt;00:00, 4050.88it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 3710.79it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 3453.68it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  60%|█████████████████████████████████████▊                         | 1200/2000 [00:01&lt;00:00, 3448.01it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  10%|█████▍                                                | 200/2000 [00:03&lt;00:01, 1261.19it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1777,7 +1784,7 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  70%|████████████████████████████████████████████                   | 1400/2000 [00:01&lt;00:00, 3864.35it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  20%|██████████▊                                           | 400/2000 [00:03&lt;00:01, 1595.13it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1786,19 +1793,19 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  85%|█████████████████████████████████████████████████████▌         | 1700/2000 [00:01&lt;00:00, 3823.31it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  20%|██████████▊                                           | 400/2000 [00:03&lt;00:01, 1525.47it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  75%|███████████████████████████████████████████████▎               | 1500/2000 [00:01&lt;00:00, 3133.88it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  20%|██████████▊                                           | 400/2000 [00:03&lt;00:01, 1228.01it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  90%|████████████████████████████████████████████████████████▋      | 1800/2000 [00:01&lt;00:00, 3823.95it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  20%|██████████▊                                           | 400/2000 [00:03&lt;00:01, 1186.58it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1807,49 +1814,223 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  80%|██████████████████████████████████████████████████▍            | 1600/2000 [00:01&lt;00:00, 3409.18it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  30%|████████████████▏                                     | 600/2000 [00:03&lt;00:00, 1566.96it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  90%|████████████████████████████████████████████████████████▋      | 1800/2000 [00:01&lt;00:00, 2960.50it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  30%|████████████████▏                                     | 600/2000 [00:03&lt;00:00, 1461.89it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 3352.29it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  30%|████████████████▏                                     | 600/2000 [00:03&lt;00:01, 1386.62it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1068.53it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  30%|████████████████▏                                     | 600/2000 [00:03&lt;00:01, 1374.25it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1069.11it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1069.76it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1070.41it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  45%|████████████████████████▎                             | 900/2000 [00:03&lt;00:00, 1864.95it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.934485
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  45%|████████████████████████▎                             | 900/2000 [00:03&lt;00:00, 1767.29it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  40%|█████████████████████▌                                | 800/2000 [00:03&lt;00:00, 1573.64it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  40%|█████████████████████▌                                | 800/2000 [00:03&lt;00:00, 1486.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  55%|█████████████████████████████▏                       | 1100/2000 [00:03&lt;00:00, 1851.80it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  60%|███████████████████████████████▊                     | 1200/2000 [00:03&lt;00:00, 1913.41it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  55%|█████████████████████████████▏                       | 1100/2000 [00:03&lt;00:00, 1708.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  65%|██████████████████████████████████▍                  | 1300/2000 [00:03&lt;00:00, 1879.41it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  55%|█████████████████████████████▏                       | 1100/2000 [00:03&lt;00:00, 1654.14it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  75%|███████████████████████████████████████▊             | 1500/2000 [00:03&lt;00:00, 2036.62it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  65%|██████████████████████████████████▍                  | 1300/2000 [00:03&lt;00:00, 1645.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  75%|███████████████████████████████████████▊             | 1500/2000 [00:03&lt;00:00, 1854.05it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  65%|██████████████████████████████████▍                  | 1300/2000 [00:03&lt;00:00, 1631.68it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:  90%|███████████████████████████████████████████████▋     | 1800/2000 [00:03&lt;00:00, 2128.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  85%|█████████████████████████████████████████████        | 1700/2000 [00:03&lt;00:00, 1884.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  75%|███████████████████████████████████████▊             | 1500/2000 [00:03&lt;00:00, 1701.48it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  75%|███████████████████████████████████████▊             | 1500/2000 [00:03&lt;00:00, 1647.98it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  85%|█████████████████████████████████████████████        | 1700/2000 [00:03&lt;00:00, 1731.41it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:  95%|██████████████████████████████████████████████████▎  | 1900/2000 [00:03&lt;00:00, 1851.69it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  85%|█████████████████████████████████████████████        | 1700/2000 [00:03&lt;00:00, 1606.68it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:  95%|██████████████████████████████████████████████████▎  | 1900/2000 [00:04&lt;00:00, 1746.49it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:  95%|██████████████████████████████████████████████████▎  | 1900/2000 [00:04&lt;00:00, 1690.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:04&lt;00:00, 483.86it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:04&lt;00:00, 483.99it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:04&lt;00:00, 484.12it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:04&lt;00:00, 484.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:04.279641
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.042411
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.122869
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.109261
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.585743
 </pre></div>
 </div>
 </div>
@@ -1894,51 +2075,51 @@ Y = 0.5 \cdot C + 0.1 \cdot X + UY, \quad UY \sim \mathcal{N}(0, 1)
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>0.41</td>
-      <td>6.16</td>
-      <td>-12.01</td>
-      <td>11.36</td>
-      <td>0.15</td>
+      <td>-8.76</td>
+      <td>6.47</td>
+      <td>-21.18</td>
+      <td>3.03</td>
+      <td>0.17</td>
       <td>0.12</td>
-      <td>1595.39</td>
-      <td>1632.31</td>
-      <td>1.0</td>
+      <td>1504.74</td>
+      <td>1449.52</td>
+      <td>1.01</td>
     </tr>
     <tr>
       <th>T</th>
-      <td>0.10</td>
+      <td>0.14</td>
       <td>0.03</td>
-      <td>0.04</td>
-      <td>0.16</td>
+      <td>0.09</td>
+      <td>0.21</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>1597.81</td>
-      <td>1657.49</td>
-      <td>1.0</td>
+      <td>1504.17</td>
+      <td>1425.96</td>
+      <td>1.01</td>
     </tr>
     <tr>
       <th>I</th>
-      <td>0.50</td>
+      <td>0.54</td>
       <td>0.03</td>
-      <td>0.44</td>
-      <td>0.56</td>
+      <td>0.48</td>
+      <td>0.60</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>1595.44</td>
-      <td>1611.80</td>
-      <td>1.0</td>
+      <td>1503.79</td>
+      <td>1478.65</td>
+      <td>1.01</td>
     </tr>
     <tr>
       <th>S_sigma</th>
-      <td>0.99</td>
+      <td>1.01</td>
       <td>0.02</td>
-      <td>0.95</td>
-      <td>1.03</td>
+      <td>0.96</td>
+      <td>1.05</td>
       <td>0.00</td>
       <td>0.00</td>
-      <td>2396.80</td>
-      <td>2226.90</td>
-      <td>1.0</td>
+      <td>2384.99</td>
+      <td>2260.54</td>
+      <td>1.00</td>
     </tr>
   </tbody>
 </table>
@@ -2016,32 +2197,32 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.292963</td>
-      <td>-0.487185</td>
+      <td>-0.499673</td>
+      <td>-0.321200</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>1</td>
-      <td>1.091366</td>
-      <td>-0.437387</td>
+      <td>0</td>
+      <td>0.872871</td>
+      <td>-1.475194</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>1</td>
-      <td>-1.331426</td>
-      <td>1.002193</td>
+      <td>0</td>
+      <td>-0.674627</td>
+      <td>0.511447</td>
     </tr>
     <tr>
       <th>3</th>
       <td>0</td>
-      <td>-0.941748</td>
-      <td>0.029830</td>
+      <td>-0.263362</td>
+      <td>-1.605773</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0</td>
-      <td>-1.452691</td>
-      <td>0.771110</td>
+      <td>1</td>
+      <td>2.057973</td>
+      <td>0.567367</td>
     </tr>
   </tbody>
 </table>
@@ -2076,31 +2257,22 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.663862
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.768356
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2109,7 +2281,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2118,7 +2290,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2127,7 +2299,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2136,7 +2308,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2145,19 +2317,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2166,37 +2326,58 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1518.24it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1519.47it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1520.97it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1523.18it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.379526
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 567.69it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 568.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 568.64it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 569.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:03.735255
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.036583
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.078835
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.101939
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.257390
 </pre></div>
 </div>
 </div>
@@ -2241,38 +2422,38 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>-0.02</td>
+      <td>-0.05</td>
       <td>0.03</td>
-      <td>-0.08</td>
-      <td>0.04</td>
+      <td>-0.11</td>
+      <td>0.00</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4135.00</td>
-      <td>2712.06</td>
+      <td>3766.41</td>
+      <td>2414.29</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>N</th>
-      <td>0.01</td>
+      <td>-0.01</td>
       <td>0.03</td>
-      <td>-0.05</td>
-      <td>0.07</td>
+      <td>-0.06</td>
+      <td>0.05</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>3822.06</td>
-      <td>2757.62</td>
+      <td>3760.88</td>
+      <td>2963.52</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>C_sigma</th>
-      <td>1.01</td>
+      <td>0.99</td>
       <td>0.02</td>
-      <td>0.96</td>
-      <td>1.05</td>
+      <td>0.95</td>
+      <td>1.03</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>3901.24</td>
-      <td>2895.64</td>
+      <td>4043.93</td>
+      <td>2961.62</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -2296,31 +2477,22 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.625690
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.699114
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2329,7 +2501,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2338,7 +2510,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2347,7 +2519,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2356,7 +2528,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2365,7 +2537,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2374,49 +2546,58 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1544.04it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:03&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1545.26it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 640.35it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1546.66it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 641.05it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1548.04it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 641.80it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.361384
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:03&lt;00:00, 643.43it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:03.306199
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.041904
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.078627
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.110147
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.278021
 </pre></div>
 </div>
 </div>
@@ -2461,50 +2642,50 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
   <tbody>
     <tr>
       <th>Intercept</th>
-      <td>-0.36</td>
+      <td>-0.34</td>
       <td>0.04</td>
-      <td>-0.42</td>
-      <td>-0.29</td>
+      <td>-0.41</td>
+      <td>-0.27</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4585.28</td>
-      <td>3437.83</td>
+      <td>3561.77</td>
+      <td>3071.16</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>N</th>
-      <td>-0.17</td>
+      <td>-0.19</td>
       <td>0.03</td>
-      <td>-0.22</td>
-      <td>-0.11</td>
+      <td>-0.24</td>
+      <td>-0.12</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4181.23</td>
-      <td>3355.34</td>
+      <td>3820.59</td>
+      <td>2599.02</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>P</th>
-      <td>1.04</td>
+      <td>0.95</td>
       <td>0.07</td>
-      <td>0.92</td>
-      <td>1.17</td>
+      <td>0.81</td>
+      <td>1.08</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4292.83</td>
-      <td>3107.56</td>
+      <td>3726.34</td>
+      <td>2848.55</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>C_sigma</th>
-      <td>0.90</td>
+      <td>0.91</td>
       <td>0.02</td>
-      <td>0.86</td>
+      <td>0.87</td>
       <td>0.94</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4513.72</td>
-      <td>3090.22</td>
+      <td>4217.97</td>
+      <td>2934.85</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -2535,31 +2716,22 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.751039
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:01.366879
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2568,7 +2740,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2577,7 +2749,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2586,7 +2758,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                             | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2595,7 +2767,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                               | 0/2000 [00:00&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                   | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2604,7 +2776,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling.. :   0%|                                                                     | 0/2000 [00:00&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2613,7 +2785,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -2622,40 +2794,49 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                            | 0/2000 [00:01&lt;?, ?it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1748.91it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1750.23it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1751.90it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0:   0%|                                                                  | 0/2000 [00:02&lt;?, ?it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|███████████████████████████████████████████████████████████████| 2000/2000 [00:01&lt;00:00, 1753.94it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 0: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 794.10it/s]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:01.204761
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 1: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 794.83it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 2: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 795.47it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running chain 3: 100%|██████████████████████████████████████████████████████| 2000/2000 [00:02&lt;00:00, 796.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling time = 0:00:02.674701
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transforming variables...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.036147
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Transformation time = 0:00:00.062772
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computing Log Likelihood...
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.108883
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Log Likelihood time = 0:00:00.193748
 </pre></div>
 </div>
 </div>
@@ -2701,37 +2882,37 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
     <tr>
       <th>Intercept</th>
       <td>0.76</td>
-      <td>0.06</td>
-      <td>0.65</td>
-      <td>0.88</td>
+      <td>0.07</td>
+      <td>0.63</td>
+      <td>0.89</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>3799.45</td>
-      <td>3275.33</td>
+      <td>3807.39</td>
+      <td>2790.41</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>N</th>
-      <td>-0.34</td>
+      <td>-0.42</td>
       <td>0.05</td>
-      <td>-0.43</td>
-      <td>-0.25</td>
+      <td>-0.52</td>
+      <td>-0.32</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>4117.61</td>
-      <td>2928.72</td>
+      <td>4174.23</td>
+      <td>3076.68</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>C_sigma</th>
-      <td>0.99</td>
+      <td>1.02</td>
       <td>0.04</td>
-      <td>0.92</td>
-      <td>1.06</td>
+      <td>0.94</td>
+      <td>1.10</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>3946.16</td>
-      <td>2781.25</td>
+      <td>3913.41</td>
+      <td>2645.02</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -2743,13 +2924,13 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 </section>
 </section>
 <section id="riflessioni-sulle-simulazioni-di-lubke2020we">
-<h2>Riflessioni sulle Simulazioni di <span id="id4">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id14" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span><a class="headerlink" href="#riflessioni-sulle-simulazioni-di-lubke2020we" title="Link to this heading">#</a></h2>
-<p>Le simulazioni presentate nell’articolo di <span id="id5">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id14" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span> evidenziano importanti questioni metodologiche, mettendo in luce criticità fondamentali relative all’uso dei modelli di regressione convenzionali. La prassi comune di integrare nel modello di regressione un ampio numero di variabili senza una selezione criteriata si è dimostrata non solo inadeguata ma anche potenzialmente ingannevole. Questo approccio, spesso adottato nella speranza di ottenere un modello ottimale, trascura l’importanza cruciale di analizzare le relazioni causali tra le variabili.</p>
-<p>Specificatamente, le simulazioni di <span id="id6">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id14" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span> illustrano come l’inserimento indiscriminato di covariate possa generare associazioni spurie, minando così la validità dei risultati ottenuti. Se l’intento è sviluppare un modello di regressione che non solo si adatti bene ai dati a disposizione ma che anche rifletta fedelmente la struttura causale sottostante, è necessario procedere con un’accurata selezione delle covariate da includere. Tale selezione deve essere guidata da una solida comprensione teorica del processo generativo dei dati. Come sottolineato efficacemente nell’articolo di <span id="id7">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> che discuteremo in seguito, la scelta delle variabili da incorporare in un modello di regressione non può essere affidata esclusivamente a tecniche statistiche.</p>
+<h2>Riflessioni sulle Simulazioni di <span id="id4">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span><a class="headerlink" href="#riflessioni-sulle-simulazioni-di-lubke2020we" title="Link to this heading">#</a></h2>
+<p>Le simulazioni presentate nell’articolo di <span id="id5">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span> evidenziano importanti questioni metodologiche, mettendo in luce criticità fondamentali relative all’uso dei modelli di regressione convenzionali. La prassi comune di integrare nel modello di regressione un ampio numero di variabili senza una selezione criteriata si è dimostrata non solo inadeguata ma anche potenzialmente ingannevole. Questo approccio, spesso adottato nella speranza di ottenere un modello ottimale, trascura l’importanza cruciale di analizzare le relazioni causali tra le variabili.</p>
+<p>Specificatamente, le simulazioni di <span id="id6">Lübke <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Karsten Lübke, Matthias Gehrke, Jörg Horst, and Gero Szepannek. Why we should teach causal inference: examples in linear regression with simulated data. Journal of Statistics Education, 28(2):133–139, 2020.">LubkeGHS20</a>]</span> illustrano come l’inserimento indiscriminato di covariate possa generare associazioni spurie, minando così la validità dei risultati ottenuti. Se l’intento è sviluppare un modello di regressione che non solo si adatti bene ai dati a disposizione ma che anche rifletta fedelmente la struttura causale sottostante, è necessario procedere con un’accurata selezione delle covariate da includere. Tale selezione deve essere guidata da una solida comprensione teorica del processo generativo dei dati. Come sottolineato efficacemente nell’articolo di <span id="id7">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id12" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> che discuteremo in seguito, la scelta delle variabili da incorporare in un modello di regressione non può essere affidata esclusivamente a tecniche statistiche.</p>
 </section>
 <section id="l-inferenza-causale-non-e-solo-un-problema-statistico">
 <h2>L’inferenza Causale non è Solo un Problema Statistico<a class="headerlink" href="#l-inferenza-causale-non-e-solo-un-problema-statistico" title="Link to this heading">#</a></h2>
-<p>Per dimostre il punto indicato dal titolo del loro articolo “Causal Inference Is Not Just a Statistics Problem”, <span id="id8">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> propongono un <code class="docutils literal notranslate"><span class="pre">causal</span> <span class="pre">quartet</span></code> simile al quartetto di Anscombe. Il Quartetto di Anscombe è un insieme di quattro dataset che hanno le stesse proprietà statistiche (media, varianza, correlazione, ecc.) ma appaiono molto diversi quando rappresentati graficamente. Questo quartetto è spesso utilizzato per dimostrare l’importanza dell’analisi grafica dei dati, oltre all’analisi statistica.</p>
+<p>Per dimostre il punto indicato dal titolo del loro articolo “Causal Inference Is Not Just a Statistics Problem”, <span id="id8">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id12" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> propongono un <code class="docutils literal notranslate"><span class="pre">causal</span> <span class="pre">quartet</span></code> simile al quartetto di Anscombe. Il Quartetto di Anscombe è un insieme di quattro dataset che hanno le stesse proprietà statistiche (media, varianza, correlazione, ecc.) ma appaiono molto diversi quando rappresentati graficamente. Questo quartetto è spesso utilizzato per dimostrare l’importanza dell’analisi grafica dei dati, oltre all’analisi statistica.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Caricare il dataset di Anscombe da seaborn</span>
@@ -2779,9 +2960,9 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 <img alt="../_images/9934bdf1ac03b8e9dfdf8c927d0a5167a26873e2adc36c9a411ed104dae35a78.png" src="../_images/9934bdf1ac03b8e9dfdf8c927d0a5167a26873e2adc36c9a411ed104dae35a78.png" />
 </div>
 </div>
-<p>Il lavoro di <span id="id9">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> introduce un innovativo quartetto di dataset, simile al celebre quartetto di Anscombe, ma con una differenza fondamentale: sebbene i quattro dataset presentino gli stessi indici statistici e producano visualizzazioni grafiche simili, ciascuno di essi è stato generato seguendo differenti strutture causali. Questa peculiarità dimostra che, nonostante l’apparente indistinguibilità basata su statistiche descrittive e rappresentazioni grafiche, i dataset possono derivare da cause sottostanti diverse. In alcuni casi, le associazioni tra le variabili rivelate dai grafici riflettono le vere relazioni causali; in altri, invece, queste associazioni possono ingannare o nascondere le dinamiche causali reali.</p>
-<p>L’analisi statistica convenzionale e le visualizzazioni dei dati, da sole, si rivelano insufficienti per discernere i meccanismi causali che governano le relazioni tra le variabili. I sommari statistici e le rappresentazioni grafiche non riescono a fornire una comprensione profonda dei processi che generano i dati. Di conseguenza, <span id="id10">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> sottolineano l’importanza di integrare nell’analisi le conoscenze sui meccanismi di generazione dei dati. Questa integrazione è cruciale per rivelare le vere relazioni causali tra le variabili, ma tali informazioni non sono ricavabili direttamente dai dati osservati.</p>
-<p>Il messaggio centrale del lavoro è che per identificare correttamente gli effetti causali è indispensabile andare oltre gli strumenti statistici tradizionali, incorporando nella ricerca un’analisi informata sui meccanismi generativi dei dati. Questo approccio richiede quindi una comprensione e un’applicazione di metodologie che tengano conto delle strutture causali sottostanti, le quali non sono immediatamente evidenti attraverso l’osservazione dei soli dati. Il quartetto proposto da <span id="id11">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> si rivela così uno strumento didattico prezioso per insegnare agli studenti la complessità dell’inferenza causale e l’importanza di integrare le analisi statistiche con un’approfondita conoscenza del contesto e dei processi che stanno alla base della generazione dei dati.</p>
+<p>Il lavoro di <span id="id9">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id12" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> introduce un innovativo quartetto di dataset, simile al celebre quartetto di Anscombe, ma con una differenza fondamentale: sebbene i quattro dataset presentino gli stessi indici statistici e producano visualizzazioni grafiche simili, ciascuno di essi è stato generato seguendo differenti strutture causali. Questa peculiarità dimostra che, nonostante l’apparente indistinguibilità basata su statistiche descrittive e rappresentazioni grafiche, i dataset possono derivare da cause sottostanti diverse. In alcuni casi, le associazioni tra le variabili rivelate dai grafici riflettono le vere relazioni causali; in altri, invece, queste associazioni possono ingannare o nascondere le dinamiche causali reali.</p>
+<p>L’analisi statistica convenzionale e le visualizzazioni dei dati, da sole, si rivelano insufficienti per discernere i meccanismi causali che governano le relazioni tra le variabili. I sommari statistici e le rappresentazioni grafiche non riescono a fornire una comprensione profonda dei processi che generano i dati. Di conseguenza, <span id="id10">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id12" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> sottolineano l’importanza di integrare nell’analisi le conoscenze sui meccanismi di generazione dei dati. Questa integrazione è cruciale per rivelare le vere relazioni causali tra le variabili, ma tali informazioni non sono ricavabili direttamente dai dati osservati.</p>
+<p>Il messaggio centrale del lavoro è che per identificare correttamente gli effetti causali è indispensabile andare oltre gli strumenti statistici tradizionali, incorporando nella ricerca un’analisi informata sui meccanismi generativi dei dati. Questo approccio richiede quindi una comprensione e un’applicazione di metodologie che tengano conto delle strutture causali sottostanti, le quali non sono immediatamente evidenti attraverso l’osservazione dei soli dati. Il quartetto proposto da <span id="id11">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id12" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> si rivela così uno strumento didattico prezioso per insegnare agli studenti la complessità dell’inferenza causale e l’importanza di integrare le analisi statistiche con un’approfondita conoscenza del contesto e dei processi che stanno alla base della generazione dei dati.</p>
 <p>Le caratteristiche dei quatto set di dati sono descritte di seguito.</p>
 <table class="table">
 <thead>
@@ -2827,7 +3008,7 @@ C = (1 - U_C) \cdot \tilde{C} + U_C \cdot (1 - \tilde{C}), \quad U_C \sim \text{
 </section>
 <section id="il-quartetto-causale">
 <h2>Il Quartetto Causale<a class="headerlink" href="#il-quartetto-causale" title="Link to this heading">#</a></h2>
-<p>I dati forniti da <span id="id12">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> sono disponibili nel pacchetto R “quartets”. È possibile effettuare l’importazione di tali dati nell’ambiente Python attraverso la seguente procedura. Tuttavia, è importante notare che è necessario aver precedentemente installato il modulo “rpy2”.</p>
+<p>I dati forniti da <span id="id12">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id12" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> sono disponibili nel pacchetto R “quartets”. È possibile effettuare l’importazione di tali dati nell’ambiente Python attraverso la seguente procedura. Tuttavia, è importante notare che è necessario aver precedentemente installato il modulo “rpy2”.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rpy2</span>
@@ -4206,8 +4387,8 @@ Log Likelihood time = 0:00:00.193922
 <p>In conclusione, analizzando i quattro insiemi di dati, se non teniamo conto di <code class="docutils literal notranslate"><span class="pre">covariate</span></code>, otteniamo sempre una stima dell‘“effetto medio del trattamento” (ATE) pari a 1. Tuttavia, l’effetto causale reale è pari a 1 solo quando i dati provengono dalla struttura causale del collider e dell’M-bias. In queste situazioni, quindi, senza considerare <code class="docutils literal notranslate"><span class="pre">covariate</span></code>, otteniamo una stima corretta dell’effetto causale dell’<code class="docutils literal notranslate"><span class="pre">esposizione</span></code> sull’<code class="docutils literal notranslate"><span class="pre">esito</span></code>. Se invece includiamo <code class="docutils literal notranslate"><span class="pre">covariate</span></code> nell’analisi, le stime di ATE risultano distorte: 0.55 nel caso del collider e 0.88 nel caso dell’M-bias.</p>
 <p>Quando i dati sono generati dalla struttura causale del confounder, l’effetto causale corretto è 0.5. Senza considerare <code class="docutils literal notranslate"><span class="pre">covariate</span></code>, la stima ottenuta è distorta e pari a 1. Includendo <code class="docutils literal notranslate"><span class="pre">covariate</span></code>, otteniamo invece una stima non distorta dell’effetto causale reale.</p>
 <p>Nel contesto della struttura causale della mediazione, l’effetto totale dell’<code class="docutils literal notranslate"><span class="pre">esposizione</span></code> sull’<code class="docutils literal notranslate"><span class="pre">esito</span></code> è 1, ma l’effetto diretto è 0. Senza tenere conto di <code class="docutils literal notranslate"><span class="pre">covariate</span></code>, la stima dell’effetto totale non è distorta. Considerando <code class="docutils literal notranslate"><span class="pre">covariate</span></code>, otteniamo una stima distorta (0) dell’effetto totale.</p>
-<p>Questi esempi di <span id="id19">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> dimostrano che l’inferenza causale non è solamente un problema di statistica. In altre parole, senza conoscenze supplementari, che non possono essere derivate unicamente dai dati osservati, non è possibile ottenere una stima non distorta degli effetti causali. Come suggerisce il titolo dell’articolo: l’inferenza causale va oltre la statistica. Non è una questione che può essere risolta solo con le tecniche di analisi dei dati, ma richiede informazioni aggiuntive sulle caratteristiche del fenomeno in esame.</p>
-<p>Sono necessarie informazioni aggiuntive riguardo al meccanismo di generazione dei dati per trarre conclusioni corrette. Sebbene la conoscenza del processo di generazione dei dati sia essenziale per stimare l’effetto causale corretto in ciascuno dei casi presentati, e non sempre questa conoscenza è disponibile, i ricercatori possono adottare alcune misure per ridurre la probabilità di commettere errori come quelli illustrati. Il primo passo è sicuramente quello di riflettere su quali potrebbero essere i meccanismi causali alla luce delle conoscenze nel campo; questo deve essere fatto prima di cercare di stimare gli effetti causali in maniera ingenua. Disegnare le relazioni proposte tramite diagrammi causali, come i grafici aciclici diretti, prima di calcolare qualsiasi quantità statistica, può aiutare i ricercarori a garantire di aggiustare solo per fattori che soddisfano il “backdoor criterion” <span id="id20">[<a class="reference internal" href="../references/bibliography.html#id12" title="Judea Pearl. Causality. Cambridge University Press, 2009.">Pea09</a>]</span>, ovvero correggere solo per fattori che chiudono tutti i percorsi indiretti tra l’esposizione e l’esito di interesse.</p>
+<p>Questi esempi di <span id="id19">D’Agostino McGowan <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id12" title="Lucy D’Agostino McGowan, Travis Gerke, and Malcolm Barrett. Causal inference is not just a statistics problem. Journal of Statistics and Data Science Education, pages 1–6, 2024.">DAgostinoMGB24</a>]</span> dimostrano che l’inferenza causale non è solamente un problema di statistica. In altre parole, senza conoscenze supplementari, che non possono essere derivate unicamente dai dati osservati, non è possibile ottenere una stima non distorta degli effetti causali. Come suggerisce il titolo dell’articolo: l’inferenza causale va oltre la statistica. Non è una questione che può essere risolta solo con le tecniche di analisi dei dati, ma richiede informazioni aggiuntive sulle caratteristiche del fenomeno in esame.</p>
+<p>Sono necessarie informazioni aggiuntive riguardo al meccanismo di generazione dei dati per trarre conclusioni corrette. Sebbene la conoscenza del processo di generazione dei dati sia essenziale per stimare l’effetto causale corretto in ciascuno dei casi presentati, e non sempre questa conoscenza è disponibile, i ricercatori possono adottare alcune misure per ridurre la probabilità di commettere errori come quelli illustrati. Il primo passo è sicuramente quello di riflettere su quali potrebbero essere i meccanismi causali alla luce delle conoscenze nel campo; questo deve essere fatto prima di cercare di stimare gli effetti causali in maniera ingenua. Disegnare le relazioni proposte tramite diagrammi causali, come i grafici aciclici diretti, prima di calcolare qualsiasi quantità statistica, può aiutare i ricercarori a garantire di aggiustare solo per fattori che soddisfano il “backdoor criterion” <span id="id20">[<a class="reference internal" href="../references/bibliography.html#id11" title="Judea Pearl. Causality. Cambridge University Press, 2009.">Pea09</a>]</span>, ovvero correggere solo per fattori che chiudono tutti i percorsi indiretti tra l’esposizione e l’esito di interesse.</p>
 <p>In assenza di competenze specifiche sul tema, è fondamentale che i ricercatori considerino l’ordine temporale dei fattori disponibili. Questo approccio si basa sui principi fondamentali dell’inferenza causale, che richiedono che l’esposizione di interesse avvenga prima dell’esito per stabilire una relazione causale plausibile. Pertanto, per evitare potenziali confondimenti, è essenziale che qualsiasi covariata presa in considerazione nell’analisi preceda temporalmente l’esposizione. L’inclusione di queste informazioni temporali aiuta a prevenire l’errata specificazione di modelli, in particolare nei casi del “collider” e del “mediatore”. Se le informazioni temporali indicano che il fattore Z si verifica dopo l’esposizione e l’esito (nel caso del collider) o si colloca temporalmente tra l’esposizione e l’esito (nel caso del mediatore), l’analisi può essere adeguatamente orientata per evitare conclusioni erronee.</p>
 <p>La correzione per fattori misurati prima dell’esposizione è una pratica ampiamente raccomandata e sostenuta da molti metodologi dell’inferenza causale. Questi esperti suggeriscono di condizionare l’analisi su tutti i fattori rilevati prima dell’esposizione, al fine di isolare l’effetto causale dell’esposizione sull’esito da eventuali altri fattori confondenti.</p>
 <p>Tuttavia, le informazioni temporali da sole non sono sufficienti per affrontare adeguatamente il modello sotto il quarto meccanismo di generazione dei dati, noto come M-bias. Questo perché il fattore Z può essere temporalmente antecedente sia a X (esposizione) che a Y (esito) e, nonostante ciò, introdurre un bias nell’analisi. È importante notare che il dibattito scientifico attuale considera questo specifico scenario di M-bias come relativamente raro nella pratica. La maggior parte delle situazioni reali presenta una complessità tale che l’assunzione di un M-bias stretto (ossia, un bias derivante esclusivamente da una configurazione in cui le variabili non hanno relazioni dirette l’una con l’altra al di fuori di quelle mediate da U1 e U2) appare poco probabile.</p>
