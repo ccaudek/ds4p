@@ -1,0 +1,1090 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Usare JAX per un campionamento più veloce &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VMXNE4BCDL"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/12_jax';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_4/12_jax.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Metodi di sintesi della distribuzione a posteriori" href="16_summary_posterior_pymc.html" />
+    <link rel="prev" title="Inferenza bayesiana con PyMC" href="11_beta_binomial_pymc.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_illusion.html">Incertezza inferenziale e variabilità dei risultati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Usare JAX per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_prediction.html">La predizione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_poisson_model.html">Modello di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_poisson_sim.html">Modello di Poisson: derivazione analitica e MCMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_freq.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_normal_normal_model.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_one_mean.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_one_mean_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_data_containers.html">Contenitori di dati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="45_missing.html">Dati mancanti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="50_stan_beta_binomial.html">CmdStanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_intro.html">Il modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_2.html">Analisi bayesiana del modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_params_recovery.html">Analisi di simulazione per la stima dei parametri nel modello di regressione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_3.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_4.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_5.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_7.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_logistic_reg.html">Modello di regressione logistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_binomial_reg.html">Regressione binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_covid.html">Inferenza controfattuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_counterfactual.html">Analisi causale con PyMC</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_simpson.html">Paradosso di Simpson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_stab.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_repeated_measures.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mediation.html">Modello di mediazione con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a52_reglin_2.html">Regressione lineare con Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a53_reglin_4.html">Posterior Predictive Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/12_jax.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/12_jax.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Usare JAX per un campionamento più veloce</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni">Applicazioni</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definire-il-modello">Definire il modello</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#esecuzione-del-campionamento">Esecuzione del campionamento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/11a_jax.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="usare-jax-per-un-campionamento-piu-veloce">
+<span id="jax-notebook"></span><h1>Usare JAX per un campionamento più veloce<a class="headerlink" href="#usare-jax-per-un-campionamento-piu-veloce" title="Link to this heading">#</a></h1>
+<p>In precedenza, abbiamo utilizzato il campionatore predefinito fornito da PyMC. Tuttavia, esiste un’alternativa più efficiente che utilizza l’algoritmo NUTS (No-U-Turn Sampler) implementato con la libreria JAX. Questo campionatore è noto per la sua capacità di eseguire il campionamento in modo più veloce e efficiente. Per utilizzare queste opzione, è possibile seguire la procedura descritta in questo capitolo.</p>
+<p>Prima di procedere, è necessario installare JAX e le librerie associate. Poiché NumPyro è una libreria che dipende da JAX, si può installare con il seguente comando Conda nell’ambiente virtuale dove abbiamo installato PyMC:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>jax
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>numpyro
+</pre></div>
+</div>
+<p>Dopo aver completato l’installazione, è possibile importare il modulo per il campionamento basato su JAX:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymc.sampling_jax</span>
+</pre></div>
+</div>
+<p>Con questi passaggi, è possibile utilizzare il campionatore basato su JAX per effettuare analisi più rapide ed efficienti.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">pymc.sampling_jax</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">Warning</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/mambaforge/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="c1"># Initialize random number generator</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="applicazioni">
+<h2>Applicazioni<a class="headerlink" href="#applicazioni" title="Link to this heading">#</a></h2>
+<p>Per fare un esempio pratico, consideriamo nuovamente i dati relativi agli artisti della Generazione X nel MOMA. Ricordiamo che i dati corrispondono a 14 successi su 100 prove. Come in precedenza, imposteremo sul parametro <span class="math notranslate nohighlight">\(\theta\)</span> (probabilità di appartenere alla Generazione X o successive) una distribuzione Beta(4, 6). Il modello, dunque, si presenta come:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+y &amp;\sim Bin(n, \theta) \notag\\
+\theta &amp;\sim Beta(4, 6)
+\end{align}
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dati</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">ntrials</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Distribuzione a priori</span>
+<span class="n">alpha_prior</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">beta_prior</span> <span class="o">=</span> <span class="mi">6</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="definire-il-modello">
+<h2>Definire il modello<a class="headerlink" href="#definire-il-modello" title="Link to this heading">#</a></h2>
+<p>Il modello PyMC viene specificato esattamente come abbiamo fatto in precedenza.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="c1"># Prior</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Beta</span><span class="p">(</span><span class="s2">&quot;theta&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha_prior</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta_prior</span><span class="p">)</span>
+    <span class="c1"># Likelihood</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Binomial</span><span class="p">(</span><span class="s2">&quot;obs&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ntrials</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pm</span><span class="o">.</span><span class="n">model_to_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/12c5588ed28bd0aa9387da23095755f75efa2b8aa4a2a13c756cc661f282973c.svg" src="../_images/12c5588ed28bd0aa9387da23095755f75efa2b8aa4a2a13c756cc661f282973c.svg" /></div>
+</div>
+</section>
+<section id="esecuzione-del-campionamento">
+<h2>Esecuzione del campionamento<a class="headerlink" href="#esecuzione-del-campionamento" title="Link to this heading">#</a></h2>
+<p>In precedenza, per il campionamento abbiamo usato la funzione <code class="docutils literal notranslate"><span class="pre">pm.sample()</span></code>.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">idata1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [theta]
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">File</span> <span class="o">&lt;</span><span class="n">timed</span> <span class="n">exec</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">2</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:795,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, nuts_sampler_kwargs, callback, mp_ctx, model, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span> <span class="n">_print_step_hierarchy</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">795</span>     <span class="n">_mp_sample</span><span class="p">(</span><span class="o">**</span><span class="n">sample_args</span><span class="p">,</span> <span class="o">**</span><span class="n">parallel_args</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">796</span> <span class="k">except</span> <span class="n">pickle</span><span class="o">.</span><span class="n">PickleError</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">797</span>     <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not pickle model, sampling singlethreaded.&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:1170,</span> in <span class="ni">_mp_sample</span><span class="nt">(draws, tune, step, chains, cores, random_seed, start, progressbar, traces, model, callback, mp_ctx, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1167</span> <span class="c1"># We did draws += tune in pm.sample</span>
+<span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="n">draws</span> <span class="o">-=</span> <span class="n">tune</span>
+<span class="ne">-&gt; </span><span class="mi">1170</span> <span class="n">sampler</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">ParallelSampler</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1171</span>     <span class="n">draws</span><span class="o">=</span><span class="n">draws</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1172</span>     <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1173</span>     <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1174</span>     <span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1175</span>     <span class="n">seeds</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1176</span>     <span class="n">start_points</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1177</span>     <span class="n">step_method</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1178</span>     <span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1179</span>     <span class="n">mp_ctx</span><span class="o">=</span><span class="n">mp_ctx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1180</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1181</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1182</span>     <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:402,</span> in <span class="ni">ParallelSampler.__init__</span><span class="nt">(self, draws, tune, chains, cores, seeds, start_points, step_method, progressbar, mp_ctx)</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">if</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">get_start_method</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;fork&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">step_method_pickled</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">step_method</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">402</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span> <span class="o">=</span> <span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">403</span>     <span class="n">ProcessAdapter</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span>         <span class="n">draws</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">405</span>         <span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span>         <span class="n">step_method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">407</span>         <span class="n">step_method_pickled</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">408</span>         <span class="n">chain</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span>         <span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span>         <span class="n">start</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span>         <span class="n">mp_ctx</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="p">)</span>
+<span class="nn">    413     for chain, seed, start</span> in <span class="ni">zip(range</span><span class="nt">(chains), seeds, start_points)</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finished</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProcessAdapter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:403,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">if</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">get_start_method</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;fork&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">step_method_pickled</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">step_method</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">402</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span> <span class="o">=</span> <span class="p">[</span>
+<span class="ne">--&gt; </span><span class="mi">403</span>     <span class="n">ProcessAdapter</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span>         <span class="n">draws</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">405</span>         <span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span>         <span class="n">step_method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">407</span>         <span class="n">step_method_pickled</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">408</span>         <span class="n">chain</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span>         <span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span>         <span class="n">start</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span>         <span class="n">mp_ctx</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="p">)</span>
+<span class="nn">    413     for chain, seed, start</span> in <span class="ni">zip(range</span><span class="nt">(chains), seeds, start_points)</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finished</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProcessAdapter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:259,</span> in <span class="ni">ProcessAdapter.__init__</span><span class="nt">(self, draws, tune, step_method, step_method_pickled, chain, seed, start, mp_ctx)</span>
+<span class="g g-Whitespace">    </span><span class="mi">242</span>     <span class="n">step_method_send</span> <span class="o">=</span> <span class="n">step_method</span>
+<span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">245</span>     <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">246</span>     <span class="n">name</span><span class="o">=</span><span class="n">process_name</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">259</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span> <span class="c1"># Close the remote pipe, so that we get notified if the other</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span> <span class="c1"># end is closed.</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span> <span class="n">remote_conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/process.py:121,</span> in <span class="ni">BaseProcess.start</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span> <span class="k">assert</span> <span class="ow">not</span> <span class="n">_current_process</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;daemon&#39;</span><span class="p">),</span> \
+<span class="g g-Whitespace">    </span><span class="mi">119</span>        <span class="s1">&#39;daemonic processes are not allowed to have children&#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span> <span class="n">_cleanup</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">121</span> <span class="bp">self</span><span class="o">.</span><span class="n">_popen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Popen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sentinel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_popen</span><span class="o">.</span><span class="n">sentinel</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span> <span class="c1"># Avoid a refcycle if the target function holds an indirect</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span> <span class="c1"># reference to the process object (see bpo-30775)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/context.py:300,</span> in <span class="ni">ForkServerProcess._Popen</span><span class="nt">(process_obj)</span>
+<span class="g g-Whitespace">    </span><span class="mi">297</span> <span class="nd">@staticmethod</span>
+<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">def</span> <span class="nf">_Popen</span><span class="p">(</span><span class="n">process_obj</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="kn">from</span> <span class="nn">.popen_forkserver</span> <span class="kn">import</span> <span class="n">Popen</span>
+<span class="ne">--&gt; </span><span class="mi">300</span>     <span class="k">return</span> <span class="n">Popen</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/popen_forkserver.py:35,</span> in <span class="ni">Popen.__init__</span><span class="nt">(self, process_obj)</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_obj</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_fds</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="ne">---&gt; </span><span class="mi">35</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/popen_fork.py:19,</span> in <span class="ni">Popen.__init__</span><span class="nt">(self, process_obj)</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalizer</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">---&gt; </span><span class="mi">19</span> <span class="bp">self</span><span class="o">.</span><span class="n">_launch</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/popen_forkserver.py:58,</span> in <span class="ni">Popen._launch</span><span class="nt">(self, process_obj)</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalizer</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">close_fds</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span>                                <span class="p">(</span><span class="n">_parent_w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">,</span> <span class="n">closefd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">58</span>     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">getbuffer</span><span class="p">())</span>
+<span class="g g-Whitespace">     </span><span class="mi">59</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">forkserver</span><span class="o">.</span><span class="n">read_signed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sentinel</span><span class="p">)</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>Nel mio computer, l’operazione richiede all’incirca 30 secondi. Ora procederemo con un altro campionamento utilizzando il campionatore JAX. Per implementare questa operazione nel codice, faremo uso dell’istruzione <code class="docutils literal notranslate"><span class="pre">pm.sampling_jax.sample_numpyro_nuts()</span></code>.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">idata2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sampling_jax</span><span class="o">.</span><span class="n">sample_numpyro_nuts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compilation time = 0:00:00.986108
+Sampling...
+Compiling.. :   0%|          | 0/2000 [00:00&lt;?, ?it/s]
+
+
+
+
+
+
+Running chain 0:   0%|          | 0/2000 [00:02&lt;?, ?it/s]
+
+Running chain 0: 100%|██████████| 2000/2000 [00:02&lt;00:00, 669.59it/s]
+Running chain 1: 100%|██████████| 2000/2000 [00:02&lt;00:00, 670.57it/s]
+Running chain 2: 100%|██████████| 2000/2000 [00:02&lt;00:00, 671.09it/s]
+Running chain 3: 100%|██████████| 2000/2000 [00:02&lt;00:00, 671.55it/s]
+Sampling time = 0:00:03.931796
+Transforming variables...
+Transformation time = 0:00:00.120949
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>Si osservi che, nel caso in esame, il processo di campionamento ha impiegato solamente 2 secondi. Sebbene questa accelerazione possa sembrare trascurabile per modelli di semplice costruzione, assume un’importanza significativa quando si tratta di modelli più complessi. In scenari in cui il campionamento può richiedere ore di elaborazione, una diminuzione anche solo del 50% del tempo necessario può avere un impatto considerevole dal punto di vista pratico.</p>
+<p>Una volta ottenuto l’oggetto <code class="docutils literal notranslate"><span class="pre">idata</span></code>, questo può essere manipolato come abbiamo fatto in precedenza. Per esempio, per produrre la traccia e la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> chiamiamo <code class="docutils literal notranslate"><span class="pre">az.plot_trace()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">idata2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fb970689ebc069240a478d9f963ad48cc64c6de0d26d860c1e67b21b46f185a6.png" src="../_images/fb970689ebc069240a478d9f963ad48cc64c6de0d26d860c1e67b21b46f185a6.png" />
+</div>
+</div>
+<p>Per un sommario della distribuzione a posteriori usiamo <code class="docutils literal notranslate"><span class="pre">az.summary()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">idata2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>theta</th>
+      <td>0.163</td>
+      <td>0.034</td>
+      <td>0.103</td>
+      <td>0.228</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>1152.0</td>
+      <td>1932.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="commenti-e-considerazioni-finali">
+<h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
+<p>L’implementazione di JAX rappresenta un notevole progresso nel processo di campionamento di PyMC, offrendo soluzioni più veloci ed efficienti rispetto ai metodi convenzionali. La capacità di accelerare le operazioni di campionamento da parte di JAX consente una maggiore agilità nell’analisi, riducendo i tempi di attesa e agevolando l’esplorazione di modelli più complessi. Inoltre, l’integrazione fluida con PyMC rende questi vantaggi accessibili senza richiedere modifiche al codice esistente.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -p jax -m
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 03 2024
+
+Python implementation: CPython
+Python version       : 3.11.8
+IPython version      : 8.22.1
+
+jax: 0.4.25
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.0.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
+scipy     : 1.12.0
+jax       : 0.4.25
+seaborn   : 0.13.2
+numpy     : 1.26.4
+matplotlib: 3.8.3
+arviz     : 0.17.0
+pymc      : 5.10.4
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_beta_binomial_pymc.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Inferenza bayesiana con PyMC</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="16_summary_posterior_pymc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Metodi di sintesi della distribuzione a posteriori</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni">Applicazioni</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definire-il-modello">Definire il modello</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#esecuzione-del-campionamento">Esecuzione del campionamento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,2376 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Inferenza controfattuale &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VMXNE4BCDL"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_5/05_covid';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_5/05_covid.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analisi causale con PyMC" href="05_counterfactual.html" />
+    <link rel="prev" title="Regressione binomiale" href="05_binomial_reg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_illusion.html">Incertezza inferenziale e variabilità dei risultati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/12_jax.html">Usare JAX per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_prediction.html">La predizione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/20_poisson_model.html">Modello di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/21_poisson_sim.html">Modello di Poisson: derivazione analitica e MCMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_freq.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_normal_normal_model.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_one_mean.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_one_mean_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_data_containers.html">Contenitori di dati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/32_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">Dati mancanti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_stan_beta_binomial.html">CmdStanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_intro.html">Il modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_2.html">Analisi bayesiana del modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_params_recovery.html">Analisi di simulazione per la stima dei parametri nel modello di regressione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_3.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_4.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_5.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_7.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_logistic_reg.html">Modello di regressione logistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_binomial_reg.html">Regressione binomiale</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Inferenza controfattuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_counterfactual.html">Analisi causale con PyMC</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="05_simpson.html">Paradosso di Simpson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_stab.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_repeated_measures.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_mediation.html">Modello di mediazione con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a52_reglin_2.html">Regressione lineare con Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a53_reglin_4.html">Posterior Predictive Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_5/05_covid.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_5/05_covid.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Inferenza controfattuale</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-delle-morti-in-eccesso-dovute-al-covid-19">Calcolo delle morti in eccesso dovute al COVID-19</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Inferenza controfattuale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numero-di-morti-in-eccesso-dall-onset-del-covid-19">Numero di morti in eccesso dall’onset del Covid-19</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/05_covid.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="inferenza-controfattuale">
+<span id="counterfactual-inference-covid-notebook"></span><h1>Inferenza controfattuale<a class="headerlink" href="#inferenza-controfattuale" title="Link to this heading">#</a></h1>
+<p>Il ragionamento causale e il pensiero controfattuale sono argomenti davvero interessanti, ma anche complessi. Tuttavia, possiamo progredire nella comprensione di queste idee attraverso esempi relativamente semplici. Questo notebook si concentra sui concetti e sull’implementazione pratica del ragionamento causale Bayesiano utilizzando PyMC.</p>
+<p>Per fare questo useremo un esempio importante ma triste relativo al calcolo delle morti in eccesso dovute al COVID-19. A tal proposito, le idee presentate in questo notebook si sovrappongono fortemente a quelle proposte da <span id="id1">Brodersen <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id31" title="Kay H Brodersen, Fabian Gallusser, Jim Koehler, Nicolas Remy, and Steven L Scott. Inferring causal impact using bayesian structural time-series models. Annals of Applied Statistics, 9:247–274, 2015.">BGK+15</a>]</span>. In pratica, cercheremo di stimare il numero di ‘morti in eccesso’ dall’inizio della pandemia di COVID-19, utilizzando dati provenienti dall’Inghilterra e dal Galles. Le morti in eccesso sono definite come:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Morti in eccesso} = \text{Morti osservate} - \text{Morti attese (controfattuali)}
+\]</div>
+<p>Fare un’affermazione sulle morti in eccesso richiede un ragionamento causale e controfattuale. Mentre il numero di morti segnalate non è altro che una misura (sicuramente rumorosa) di un fatto realmente osservabile nel mondo, le morti attese non sono misurabili perché non si realizzano mai nella nostra linea temporale. In altre parole, l’idea delle morti attese è un esperimento controfattuale in cui ci poniamo la domanda “Cosa sarebbe/succederà se?”.</p>
+<p>Questo notebook rappresenta una versione semplificata del <a class="reference external" href="https://www.pymc.io/projects/examples/en/latest/causal_inference/excess_deaths.html#id32">notebook originale</a> disponibile sul sito ufficiale di PyMC. La differenza fondamentale risiede nel numero di variabili predittive utilizzate. Nel notebook originale, il modello prende in considerazione tre predittori per il numero di morti nell’era pre-covid: l’anno, il mese e la temperatura. In questo tutorial, per ragioni di semplicità, la variabile del mese è stata omessa. Nonostante questa semplificazione, i risultati rimangono in gran parte analoghi a quelli presentati nel tutorial originale.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.dates</span> <span class="k">as</span> <span class="nn">mdates</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span> <span class="nn">statistics</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">pymc.sampling_jax</span>
+<span class="kn">import</span> <span class="nn">pytensor.tensor</span> <span class="k">as</span> <span class="nn">pt</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">Warning</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/mambaforge/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="c1"># Initialize random number generator</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizzeremo qui una serie di funzioni che consento di genereare i grafici delle quantità di interesse con maggiore facilità. Per i nostri scopi, non è importante capire come sono state scritte tali funzioni.</p>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ZeroSumNormal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">active_dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">modelcontext</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dims</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">dims</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">active_dims</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">active_dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">active_dims</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">active_dims</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">active_dims</span> <span class="o">=</span> <span class="n">dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">extend_axis</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
+        <span class="n">n_out</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">sum_vals</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">sum_vals</span> <span class="o">/</span> <span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_out</span><span class="p">)</span> <span class="o">+</span> <span class="n">n_out</span><span class="p">)</span>
+        <span class="n">fill_val</span> <span class="o">=</span> <span class="n">norm</span> <span class="o">-</span> <span class="n">sum_vals</span> <span class="o">/</span> <span class="n">pt</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">value</span><span class="p">,</span> <span class="n">fill_val</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span> <span class="o">-</span> <span class="n">norm</span>
+
+    <span class="n">dims_reduced</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">active_axes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">active_dims</span><span class="p">:</span>
+            <span class="n">active_axes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">dim_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">_reduced&quot;</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">coords</span><span class="p">:</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">add_coord</span><span class="p">(</span><span class="n">dim_name</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">dim</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mutable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">dims_reduced</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dim_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dims_reduced</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_raw&quot;</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims_reduced</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">active_axes</span><span class="p">:</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">extend_axis</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">format_x_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># major ticks</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mdates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s2">&quot;%Y %b&quot;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">mdates</span><span class="o">.</span><span class="n">YearLocator</span><span class="p">())</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="c1"># minor ticks</span>
+    <span class="k">if</span> <span class="n">minor</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">mdates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s2">&quot;%Y %b&quot;</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">mdates</span><span class="o">.</span><span class="n">MonthLocator</span><span class="p">())</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="c1"># rotate labels</span>
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">):</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_xY</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="n">quantiles</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">quantile</span><span class="p">((</span><span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.975</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;chain&quot;</span><span class="p">,</span> <span class="s2">&quot;draw&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="n">az</span><span class="o">.</span><span class="n">plot_hdi</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">hdi_data</span><span class="o">=</span><span class="n">quantiles</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="p">[</span><span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.975</span><span class="p">]),</span>
+        <span class="n">fill_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">},</span>
+        <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">az</span><span class="o">.</span><span class="n">plot_hdi</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">hdi_data</span><span class="o">=</span><span class="n">quantiles</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">]),</span>
+        <span class="n">fill_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+        <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+
+<span class="c1"># default figure sizes</span>
+<span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<section id="calcolo-delle-morti-in-eccesso-dovute-al-covid-19">
+<h2>Calcolo delle morti in eccesso dovute al COVID-19<a class="headerlink" href="#calcolo-delle-morti-in-eccesso-dovute-al-covid-19" title="Link to this heading">#</a></h2>
+<p>Esamineremo i dati resi disponibili sul sito ufficiale di PyMC. Sebbene sia possibile condurre l’analisi utilizzando dati italiani, opteremo per i dati forniti sul sito per motivi di semplicità.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/deaths_and_temps_england_wales.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>temp</th>
+      <th>deaths</th>
+      <th>year</th>
+      <th>month</th>
+      <th>t</th>
+      <th>pre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2006-01-01</td>
+      <td>3.8</td>
+      <td>49124</td>
+      <td>2006</td>
+      <td>1</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2006-02-01</td>
+      <td>3.4</td>
+      <td>42664</td>
+      <td>2006</td>
+      <td>2</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2006-03-01</td>
+      <td>3.9</td>
+      <td>49207</td>
+      <td>2006</td>
+      <td>3</td>
+      <td>2</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2006-04-01</td>
+      <td>7.4</td>
+      <td>40645</td>
+      <td>2006</td>
+      <td>4</td>
+      <td>3</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2006-05-01</td>
+      <td>10.7</td>
+      <td>42425</td>
+      <td>2006</td>
+      <td>5</td>
+      <td>4</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Lo scopo delle due righe precedenti è convertire una colonna del DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> in un formato data/tempo e impostarla come indice del DataFrame. Vediamo in dettaglio cosa fanno:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">df[&quot;date&quot;]</span> <span class="pre">=</span> <span class="pre">pd.to_datetime(df[&quot;date&quot;])</span></code>: Questa riga prende la colonna “date” del DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> e la converte in un formato data/tempo utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">pd.to_datetime()</span></code>. Questa funzione è molto utile quando si lavora con serie temporali, poiché facilita la manipolazione e l’analisi dei dati. Dopo questa operazione, la colonna “date” sarà di tipo <code class="docutils literal notranslate"><span class="pre">datetime64</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">df.set_index(&quot;date&quot;)</span></code>: Questa riga imposta la colonna “date” come indice del DataFrame. Gli indici in un DataFrame pandas servono per etichettare le righe, facilitando così il filtraggio, la selezione e altre operazioni. Impostare una colonna di date come indice è particolarmente utile quando si lavora con serie temporali, in quanto consente di eseguire facilmente operazioni come il riordinamento dei dati in base alla data o l’esecuzione di calcoli che coinvolgono intervalli di tempo.</p></li>
+</ol>
+<p>Ora dividiamo il DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> in due DataFrame distinti, corrispondenti al periodo pre e post insorgenza del COVID-19.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="s2">&quot;2020&quot;</span><span class="p">]</span>
+<span class="n">post</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="s2">&quot;2020&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>temp</th>
+      <th>deaths</th>
+      <th>year</th>
+      <th>month</th>
+      <th>t</th>
+      <th>pre</th>
+    </tr>
+    <tr>
+      <th>date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2006-01-01</th>
+      <td>3.8</td>
+      <td>49124</td>
+      <td>2006</td>
+      <td>1</td>
+      <td>0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2006-02-01</th>
+      <td>3.4</td>
+      <td>42664</td>
+      <td>2006</td>
+      <td>2</td>
+      <td>1</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2006-03-01</th>
+      <td>3.9</td>
+      <td>49207</td>
+      <td>2006</td>
+      <td>3</td>
+      <td>2</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2006-04-01</th>
+      <td>7.4</td>
+      <td>40645</td>
+      <td>2006</td>
+      <td>4</td>
+      <td>3</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2006-05-01</th>
+      <td>10.7</td>
+      <td>42425</td>
+      <td>2006</td>
+      <td>5</td>
+      <td>4</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La variabile <code class="docutils literal notranslate"><span class="pre">t</span></code> è un indice che identifica la sequenza temporale delle misurazioni: 12 mesi per 14 anni.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">14</span><span class="o">*</span><span class="mi">12</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>168
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>date
+2006-01-01      0
+2006-02-01      1
+2006-03-01      2
+2006-04-01      3
+2006-05-01      4
+             ... 
+2019-08-01    163
+2019-09-01    164
+2019-10-01    165
+2019-11-01    166
+2019-12-01    167
+Name: t, Length: 168, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Generiamo un grafico con il numero di morti in funzione del tempo, distinguendo tra prima e dopo l’insorgenza del COVID-19.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;deaths&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;pre&quot;</span><span class="p">)</span>
+<span class="n">format_x_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d9c803bfdbd512a00f8a166aed2ac6ada8b957be66986167b828e89da300c410.png" src="../_images/d9c803bfdbd512a00f8a166aed2ac6ada8b957be66986167b828e89da300c410.png" />
+</div>
+</div>
+<p>Esaminiamo i dati relativi al periodo pre-COVID-19. La serie temporale evidenzia una tendenza generale all’incremento del numero di decessi nel corso del tempo, oltre a un marcato effetto stagionale. Quest’ultimo è attribuibile alle fluttuazioni della temperatura.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">annual_deaths</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)[</span><span class="s2">&quot;deaths&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;deaths&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">annual_deaths</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d03f5b28a4b02feadbc947d29e7a65538353197ace67092f4add0372342080be.png" src="../_images/d03f5b28a4b02feadbc947d29e7a65538353197ace67092f4add0372342080be.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;temp&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;deaths&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">pre</span><span class="p">,</span> <span class="n">scatter_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">40</span><span class="p">},</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Linear fit (pre COVID-19 data)&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;temp&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;deaths&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">pre</span><span class="p">,</span> <span class="n">scatter_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">40</span><span class="p">},</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Quadratic fit (pre COVID-19 data)&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1a9a9e8b53ca1a73e17bff0a82c3651c12a6182209783ed0d6de091839e5083d.png" src="../_images/1a9a9e8b53ca1a73e17bff0a82c3651c12a6182209783ed0d6de091839e5083d.png" />
+</div>
+</div>
+<p>Per una descrizione più accurata, l’effetto della temperatura potrebbe essere modellato attraverso una funzione quadratica. Tuttavia, per semplicità, opteremo per una rappresentazione lineare. Nei dati relativi al periodo pre-COVID-19, un aumento di un grado nella temperatura è associato a una diminuzione media di 764 decessi.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">pre</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">],</span> <span class="n">pre</span><span class="p">[</span><span class="s2">&quot;deaths&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">slope</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> deaths/degree&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-764 deaths/degree
+</pre></div>
+</div>
+</div>
+</div>
+<p>Per il periodo pre-COVID-19, proponiamo dunque un modello di regressione multipla che considera due predittori: l’anno e la temperatura. L’anno è incluso nel modello per tener conto della tendenza lineare all’aumento del numero di morti nel tempo, mentre la temperatura è considerata in quanto fattore significativo.</p>
+<p>Il modello matematico è espresso come segue:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{deaths}_t \sim \text{TruncatedNormal}(\mu_t, \sigma), \quad \mu_t = \alpha + \beta_1 \cdot \text{time}_t + \beta_2 \cdot \text{temp}_t
+\]</div>
+<p>In questa formula, <span class="math notranslate nohighlight">\(\text{deaths}_t\)</span> rappresenta il numero di morti al tempo <span class="math notranslate nohighlight">\(t\)</span> e viene modellato come una variabile casuale con distribuzione TruncatedNormal avente media <span class="math notranslate nohighlight">\(\mu_t\)</span> e deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>. La media <span class="math notranslate nohighlight">\(\mu_t\)</span> è una funzione lineare del tempo (<span class="math notranslate nohighlight">\(\text{time}_t\)</span>) e della temperatura (<span class="math notranslate nohighlight">\(\text{temp}_t\)</span>), dove <span class="math notranslate nohighlight">\(\alpha\)</span> è il termine di intercetta e <span class="math notranslate nohighlight">\(\beta_1\)</span> e <span class="math notranslate nohighlight">\(\beta_2\)</span> sono i coefficienti di regressione.</p>
+<p>In un’ottica bayesiana, ciascun parametro del modello è trattato come una variabile casuale dotata di una distribuzione a priori. Utilizzeremo le seguenti distribuzioni a priori:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> (Intercept): distribuzione a priori Normale con media 40.000 e deviazione standard 10.000.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta_1\)</span> (Coefficiente temporale): distribuzione a priori TruncatedNormal con media 0 e deviazione standard 50, limitata a valori positivi.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta_2\)</span> (Coefficiente per la temperatura): distribuzione a priori Normale con media 0 e deviazione standard 200.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span>: distribuzione a priori HalfNormal con deviazione standard 2.000.</p></li>
+</ul>
+<p>L’obiettivo è quindi quello di stimare la distribuzione a posteriori di questi parametri alla luce dei dati osservati, permettendo così inferenze probabilistiche sul numero di morti in relazione al tempo e alla temperatura.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">model</span><span class="p">:</span>
+    <span class="c1"># observed predictors and outcome</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">MutableData</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">pre</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">MutableData</span><span class="p">(</span><span class="s2">&quot;temp&quot;</span><span class="p">,</span> <span class="n">pre</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+    <span class="n">deaths</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">MutableData</span><span class="p">(</span><span class="s2">&quot;deaths&quot;</span><span class="p">,</span> <span class="n">pre</span><span class="p">[</span><span class="s2">&quot;deaths&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+
+    <span class="c1"># priors</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;intercept&quot;</span><span class="p">,</span> <span class="mi">40_000</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">)</span>
+    <span class="n">beta_1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">TruncatedNormal</span><span class="p">(</span><span class="s2">&quot;linear trend&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">beta_2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;temp coeff&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+    <span class="c1"># the actual linear model</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Deterministic</span><span class="p">(</span>
+        <span class="s2">&quot;mu&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span> <span class="o">+</span> <span class="p">(</span><span class="n">beta_1</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">beta_2</span> <span class="o">*</span> <span class="n">temp</span><span class="p">),</span>
+        <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mi">2_000</span><span class="p">)</span>
+    <span class="c1"># likelihood</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">TruncatedNormal</span><span class="p">(</span><span class="s2">&quot;obs&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="n">deaths</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’utilizzo di una distribuzione TruncatedNormal con un limite inferiore di zero per il numero di morti è una scelta modellistica che riflette alcune considerazioni pratiche e teoriche. Il numero di morti non può essere negativo, quindi un limite inferiore di zero è una scelta naturale per rispettare questa restrizione. Inoltre, le distribuzioni troncate sono spesso più facili da gestire computazionalmente rispetto ad altre distribuzioni asimmetriche che potrebbero essere usate per modellare conteggi come il numero di morti (ad esempio, la distribuzione di Poisson o la distribuzione binomiale negativa). Troncare una distribuzione normale conserva molte delle sue proprietà matematiche desiderabili. Per queste ragioni, la distribuzione TruncatedNormal con un limite inferiore di zero è una scelta ragionevole quando si modellano variabili che non possono assumere valori negativi, come nel caso del numero di morti.</p>
+<p>Eseguiamo il campionamento usando i dati pre-COVID-19.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">random_seed</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [intercept, linear trend, temp coeff, sigma]
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">random_seed</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:795,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, nuts_sampler_kwargs, callback, mp_ctx, model, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span> <span class="n">_print_step_hierarchy</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">795</span>     <span class="n">_mp_sample</span><span class="p">(</span><span class="o">**</span><span class="n">sample_args</span><span class="p">,</span> <span class="o">**</span><span class="n">parallel_args</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">796</span> <span class="k">except</span> <span class="n">pickle</span><span class="o">.</span><span class="n">PickleError</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">797</span>     <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not pickle model, sampling singlethreaded.&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:1170,</span> in <span class="ni">_mp_sample</span><span class="nt">(draws, tune, step, chains, cores, random_seed, start, progressbar, traces, model, callback, mp_ctx, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1167</span> <span class="c1"># We did draws += tune in pm.sample</span>
+<span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="n">draws</span> <span class="o">-=</span> <span class="n">tune</span>
+<span class="ne">-&gt; </span><span class="mi">1170</span> <span class="n">sampler</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">ParallelSampler</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1171</span>     <span class="n">draws</span><span class="o">=</span><span class="n">draws</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1172</span>     <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1173</span>     <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1174</span>     <span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1175</span>     <span class="n">seeds</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1176</span>     <span class="n">start_points</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1177</span>     <span class="n">step_method</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1178</span>     <span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1179</span>     <span class="n">mp_ctx</span><span class="o">=</span><span class="n">mp_ctx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1180</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1181</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1182</span>     <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:402,</span> in <span class="ni">ParallelSampler.__init__</span><span class="nt">(self, draws, tune, chains, cores, seeds, start_points, step_method, progressbar, mp_ctx)</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">if</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">get_start_method</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;fork&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">step_method_pickled</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">step_method</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">402</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span> <span class="o">=</span> <span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">403</span>     <span class="n">ProcessAdapter</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span>         <span class="n">draws</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">405</span>         <span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span>         <span class="n">step_method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">407</span>         <span class="n">step_method_pickled</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">408</span>         <span class="n">chain</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span>         <span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span>         <span class="n">start</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span>         <span class="n">mp_ctx</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="p">)</span>
+<span class="nn">    413     for chain, seed, start</span> in <span class="ni">zip(range</span><span class="nt">(chains), seeds, start_points)</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finished</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProcessAdapter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:403,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">if</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">get_start_method</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;fork&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">step_method_pickled</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">step_method</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">402</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span> <span class="o">=</span> <span class="p">[</span>
+<span class="ne">--&gt; </span><span class="mi">403</span>     <span class="n">ProcessAdapter</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span>         <span class="n">draws</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">405</span>         <span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span>         <span class="n">step_method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">407</span>         <span class="n">step_method_pickled</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">408</span>         <span class="n">chain</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span>         <span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span>         <span class="n">start</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span>         <span class="n">mp_ctx</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="p">)</span>
+<span class="nn">    413     for chain, seed, start</span> in <span class="ni">zip(range</span><span class="nt">(chains), seeds, start_points)</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inactive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finished</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProcessAdapter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/parallel.py:259,</span> in <span class="ni">ProcessAdapter.__init__</span><span class="nt">(self, draws, tune, step_method, step_method_pickled, chain, seed, start, mp_ctx)</span>
+<span class="g g-Whitespace">    </span><span class="mi">242</span>     <span class="n">step_method_send</span> <span class="o">=</span> <span class="n">step_method</span>
+<span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="n">mp_ctx</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">245</span>     <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">246</span>     <span class="n">name</span><span class="o">=</span><span class="n">process_name</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">259</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span> <span class="c1"># Close the remote pipe, so that we get notified if the other</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span> <span class="c1"># end is closed.</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span> <span class="n">remote_conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/process.py:121,</span> in <span class="ni">BaseProcess.start</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span> <span class="k">assert</span> <span class="ow">not</span> <span class="n">_current_process</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;daemon&#39;</span><span class="p">),</span> \
+<span class="g g-Whitespace">    </span><span class="mi">119</span>        <span class="s1">&#39;daemonic processes are not allowed to have children&#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span> <span class="n">_cleanup</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">121</span> <span class="bp">self</span><span class="o">.</span><span class="n">_popen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Popen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sentinel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_popen</span><span class="o">.</span><span class="n">sentinel</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span> <span class="c1"># Avoid a refcycle if the target function holds an indirect</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span> <span class="c1"># reference to the process object (see bpo-30775)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/context.py:300,</span> in <span class="ni">ForkServerProcess._Popen</span><span class="nt">(process_obj)</span>
+<span class="g g-Whitespace">    </span><span class="mi">297</span> <span class="nd">@staticmethod</span>
+<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">def</span> <span class="nf">_Popen</span><span class="p">(</span><span class="n">process_obj</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="kn">from</span> <span class="nn">.popen_forkserver</span> <span class="kn">import</span> <span class="n">Popen</span>
+<span class="ne">--&gt; </span><span class="mi">300</span>     <span class="k">return</span> <span class="n">Popen</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/popen_forkserver.py:35,</span> in <span class="ni">Popen.__init__</span><span class="nt">(self, process_obj)</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_obj</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_fds</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="ne">---&gt; </span><span class="mi">35</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/popen_fork.py:19,</span> in <span class="ni">Popen.__init__</span><span class="nt">(self, process_obj)</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalizer</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">---&gt; </span><span class="mi">19</span> <span class="bp">self</span><span class="o">.</span><span class="n">_launch</span><span class="p">(</span><span class="n">process_obj</span><span class="p">)</span>
+
+<span class="nn">File ~/mambaforge/envs/pymc_env/lib/python3.11/multiprocessing/popen_forkserver.py:58,</span> in <span class="ni">Popen._launch</span><span class="nt">(self, process_obj)</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalizer</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">close_fds</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span>                                <span class="p">(</span><span class="n">_parent_w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">,</span> <span class="n">closefd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">58</span>     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">getbuffer</span><span class="p">())</span>
+<span class="g g-Whitespace">     </span><span class="mi">59</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">forkserver</span><span class="o">.</span><span class="n">read_signed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sentinel</span><span class="p">)</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>Esaminiamo ora l’adeguatezza del modello confrontando le predizioni del modello con i dati osservati.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">idata</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pm</span><span class="o">.</span><span class="n">sample_posterior_predictive</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="n">RANDOM_SEED</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling: [obs]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [4000/4000 00:00&lt;00:00]
+    </div>
+    </div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+
+<span class="n">az</span><span class="o">.</span><span class="n">plot_hdi</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">idata</span><span class="o">.</span><span class="n">posterior_predictive</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">plot_hdi</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">idata</span><span class="o">.</span><span class="n">posterior_predictive</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pre</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">pre</span><span class="p">[</span><span class="s2">&quot;deaths&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;observed&quot;</span><span class="p">)</span>
+<span class="n">format_x_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Posterior predictive distribution in the pre COVID-19 era&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6181bf040a8d4cbe32cd81f5430e0807079f31e082eac54a6c8244fa0b7a3591.png" src="../_images/6181bf040a8d4cbe32cd81f5430e0807079f31e082eac54a6c8244fa0b7a3591.png" />
+</div>
+</div>
+<p>Il modello, pur non essendo esente da limitazioni, dimostra un’alta capacità predittiva del numero di decessi in relazione al tempo, avvalendosi unicamente del tempo e della temperatura come variabili indipendenti.</p>
+<p>Ora focalizziamoci sui dati osservati, aggregati esclusivamente in base al fattore temporale e trascurando l’effetto della temperatura, per metterli a confronto con le stime fornite dal modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">temp</span> <span class="o">=</span> <span class="n">idata</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;chain&quot;</span><span class="p">,</span> <span class="s2">&quot;draw&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
+<span class="n">pre</span> <span class="o">=</span> <span class="n">pre</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">deaths_predicted</span><span class="o">=</span><span class="n">temp</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pre</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;deaths&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Observed&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pre</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;deaths_predicted&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Model predicted mean&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1b3c29631b3a110e3067260e10a176d60d4671b40a3d4fafb8413e2c305b41e4.png" src="../_images/1b3c29631b3a110e3067260e10a176d60d4671b40a3d4fafb8413e2c305b41e4.png" />
+</div>
+</div>
+<p>Possiamo notare una buona corrispondenza tra i dati osservati e le predizioni del modello.</p>
+</section>
+<section id="id2">
+<h2>Inferenza controfattuale<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>Ora utilizzeremo il metodo <code class="docutils literal notranslate"><span class="pre">sample_posterior_predictive</span></code> per generare campioni dalla distribuzione predittiva a posteriori del modello, dato un nuovo set di dati sui predittori (“time” e “temp” in questo caso, per gli anni 2006-2020). In altre parole, stiamo cercando di capire quale sarebbe la distribuzione del numero di morti in anni futuri (2021-2023) dati i nuovi valori per il tempo e la temperatura, assumendo che il “meccanismo generatore dei dati” non cambi nel tempo – ovvero assumiamo che il Covid-19 non si sia verificato, insieme a tutte le altre cose che lo hanno accompagnato, come la riduzione dei servizi sanitari che, normalmente, sarebbero stati presenti.</p>
+<p>Questo è un esempio di “estrapolazione” nel senso che stiamo utilizzando il modello addestrato su un certo set di dati per fare previsioni su un diverso set di dati che non è stato utilizzato durante l’addestramento del modello. Quindi, in termini semplici, stiamo cercando di prevedere come il numero di morti cambierà in funzione del tempo e della temperatura in anni futuri (2021-2023), sotto l’ipotesi che la relazione tra queste variabili e il numero di morti rimanga costante.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">pm</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">post</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+            <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="n">post</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">counterfactual</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample_posterior_predictive</span><span class="p">(</span>
+        <span class="n">idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">random_seed</span><span class="o">=</span><span class="n">rng</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling: [obs]
+</pre></div>
+</div>
+<div class="output text_html">
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div><div class="output text_html">
+    <div>
+      <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+      100.00% [4000/4000 00:00&lt;00:00]
+    </div>
+    </div></div>
+</div>
+<p>La figura illustra le previsioni sul numero di morti per gli anni 2021-2023, basate esclusivamente sui dati relativi al tempo e alla temperatura. Queste stime presuppongono che l’impatto di queste variabili sia analogo a quello osservato nel periodo 2006-2020.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+
+<span class="n">plot_xY</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">counterfactual</span><span class="o">.</span><span class="n">posterior_predictive</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">ax</span><span class="p">)</span>
+<span class="n">format_x_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">post</span><span class="p">[</span><span class="s2">&quot;deaths&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;reported deaths&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Counterfactual: Posterior predictive forecast of deaths if COVID-19 had not appeared&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/df90cb3a95499a4ee3108e05a4f08ca28416f327f1a02ce6a46d1e6592144fb8.png" src="../_images/df90cb3a95499a4ee3108e05a4f08ca28416f327f1a02ce6a46d1e6592144fb8.png" />
+</div>
+</div>
+<p>Alla figura è sovrapposta una spezzata (la linea blu) che, nel periodo post-covid, descrive il numero effettivo di morti.</p>
+<p>Ora abbiamo gli elementi necessari per calcolare il numero di morti in eccesso. In particolare, il numero di morti segnalato e la previsione controfattuale Bayesiana su quanti sarebbero morti se nulla fosse cambiato dal periodo pre a quello post-COVID-19.</p>
+</section>
+<section id="numero-di-morti-in-eccesso-dall-onset-del-covid-19">
+<h2>Numero di morti in eccesso dall’onset del Covid-19<a class="headerlink" href="#numero-di-morti-in-eccesso-dall-onset-del-covid-19" title="Link to this heading">#</a></h2>
+<p>Ora utilizzeremo il numero previsto di morti nello scenario controfattuale e lo confronteremo con il numero di morti effettivamente osservati per ottenere la nostra stima controfattuale delle morti in eccesso.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert deaths into an XArray object with a labelled dimension to help in the next step</span>
+<span class="n">deaths</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">post</span><span class="p">[</span><span class="s2">&quot;deaths&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">])</span>
+<span class="n">deaths</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewBox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewBox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class='xr-text-repr-fallback'>&lt;xarray.DataArray (t: 29)&gt; Size: 232B
+array([56704, 43650, 49723, 88141, 52363, 42614, 40778, 37184, 42494,
+       46282, 51317, 56672, 73315, 58767, 48624, 41513, 37864, 41223,
+       43264, 43151, 47520, 46511, 51602, 52859, 53158, 45869, 49489,
+       45919, 48611])
+Dimensions without coordinates: t</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'></div><ul class='xr-dim-list'><li><span>t</span>: 29</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-0f07109c-2369-466f-8561-cefae9f654f9' class='xr-array-in' type='checkbox' checked><label for='section-0f07109c-2369-466f-8561-cefae9f654f9' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>56704 43650 49723 88141 52363 42614 ... 53158 45869 49489 45919 48611</span></div><div class='xr-array-data'><pre>array([56704, 43650, 49723, 88141, 52363, 42614, 40778, 37184, 42494,
+       46282, 51317, 56672, 73315, 58767, 48624, 41513, 37864, 41223,
+       43264, 43151, 47520, 46511, 51602, 52859, 53158, 45869, 49489,
+       45919, 48611])</pre></div></div></li><li class='xr-section-item'><input id='section-efff224c-e917-4dbe-bb7d-0271ec11e8e3' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-efff224c-e917-4dbe-bb7d-0271ec11e8e3' class='xr-section-summary'  title='Expand/collapse section'>Coordinates: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-3e0abdb0-813f-493e-86f5-6ff297983f41' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-3e0abdb0-813f-493e-86f5-6ff297983f41' class='xr-section-summary'  title='Expand/collapse section'>Indexes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-b6a15c8d-285c-4e2e-9ee2-58a6c23e1a6b' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-b6a15c8d-285c-4e2e-9ee2-58a6c23e1a6b' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counterfactual</span><span class="o">.</span><span class="n">posterior_predictive</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewBox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewBox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class='xr-text-repr-fallback'>&lt;xarray.DataArray &#x27;obs&#x27; (chain: 4, draw: 1000, t: 29)&gt; Size: 928kB
+array([[[48152.75899184, 50294.95748082, 46848.34887964, ...,
+         44675.76398356, 49241.64232162, 44304.54987353],
+        [48727.7080539 , 41987.24687016, 45492.05291551, ...,
+         52477.53608768, 48118.00309785, 42279.56514752],
+        [46428.47742523, 49449.39568012, 44600.46575709, ...,
+         48100.34293625, 47684.54012245, 40273.00646477],
+        ...,
+        [46605.31215985, 40890.5987238 , 44892.06005117, ...,
+         46856.6265952 , 48189.00915932, 47266.42644048],
+        [37545.47239085, 47045.41249632, 46918.76897892, ...,
+         45814.18497647, 47915.40533541, 46862.30433897],
+        [42171.97271911, 42290.25233126, 43303.10634499, ...,
+         42133.97465134, 48042.16315407, 42990.92378607]],
+
+       [[46119.92320877, 50019.10395609, 49887.33931288, ...,
+         46763.82375909, 50946.62657244, 45425.16247781],
+        [45163.44537932, 41615.98546715, 46460.60940366, ...,
+         41832.63248948, 47007.25720883, 37123.9924852 ],
+        [52119.97654278, 42810.09200802, 41346.07229808, ...,
+         44192.1690984 , 48836.95453203, 38203.28718174],
+...
+        [53606.07884334, 52521.01616977, 43714.15795239, ...,
+         46805.87659101, 47565.71454669, 44960.3756466 ],
+        [50914.31093333, 48679.42351714, 47984.7059714 , ...,
+         44633.43772619, 49027.92375061, 40685.63473523],
+        [50099.4187396 , 50489.93880525, 49553.61290974, ...,
+         42011.45963149, 47069.26578997, 46145.22625728]],
+
+       [[55245.13227075, 45559.92881929, 49423.39391575, ...,
+         48031.81946984, 49989.57787202, 40953.06984358],
+        [45715.42817355, 44002.82658208, 49729.31777767, ...,
+         47538.89750403, 38646.41965929, 40616.16183887],
+        [48816.68568008, 52693.89105892, 49123.57773928, ...,
+         52850.95765236, 46868.88961938, 40994.32581777],
+        ...,
+        [43559.06799639, 48279.92281342, 46577.56748359, ...,
+         40756.07019898, 39043.08639229, 40576.86081157],
+        [46403.94182979, 46994.65213133, 46074.8744931 , ...,
+         44709.63052006, 40684.00377053, 45368.89714235],
+        [46621.90059107, 45226.02882315, 44143.96642714, ...,
+         45081.66332355, 50874.45923613, 48862.49207912]]])
+Coordinates:
+  * chain    (chain) int64 32B 0 1 2 3
+  * draw     (draw) int64 8kB 0 1 2 3 4 5 6 7 ... 993 994 995 996 997 998 999
+  * t        (t) int64 232B 0 1 2 3 4 5 6 7 8 9 ... 20 21 22 23 24 25 26 27 28</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'obs'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>chain</span>: 4</li><li><span class='xr-has-index'>draw</span>: 1000</li><li><span class='xr-has-index'>t</span>: 29</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-3aa730d8-22c8-4847-8b8f-1d4cf677834c' class='xr-array-in' type='checkbox' checked><label for='section-3aa730d8-22c8-4847-8b8f-1d4cf677834c' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>4.815e+04 5.029e+04 4.685e+04 ... 4.508e+04 5.087e+04 4.886e+04</span></div><div class='xr-array-data'><pre>array([[[48152.75899184, 50294.95748082, 46848.34887964, ...,
+         44675.76398356, 49241.64232162, 44304.54987353],
+        [48727.7080539 , 41987.24687016, 45492.05291551, ...,
+         52477.53608768, 48118.00309785, 42279.56514752],
+        [46428.47742523, 49449.39568012, 44600.46575709, ...,
+         48100.34293625, 47684.54012245, 40273.00646477],
+        ...,
+        [46605.31215985, 40890.5987238 , 44892.06005117, ...,
+         46856.6265952 , 48189.00915932, 47266.42644048],
+        [37545.47239085, 47045.41249632, 46918.76897892, ...,
+         45814.18497647, 47915.40533541, 46862.30433897],
+        [42171.97271911, 42290.25233126, 43303.10634499, ...,
+         42133.97465134, 48042.16315407, 42990.92378607]],
+
+       [[46119.92320877, 50019.10395609, 49887.33931288, ...,
+         46763.82375909, 50946.62657244, 45425.16247781],
+        [45163.44537932, 41615.98546715, 46460.60940366, ...,
+         41832.63248948, 47007.25720883, 37123.9924852 ],
+        [52119.97654278, 42810.09200802, 41346.07229808, ...,
+         44192.1690984 , 48836.95453203, 38203.28718174],
+...
+        [53606.07884334, 52521.01616977, 43714.15795239, ...,
+         46805.87659101, 47565.71454669, 44960.3756466 ],
+        [50914.31093333, 48679.42351714, 47984.7059714 , ...,
+         44633.43772619, 49027.92375061, 40685.63473523],
+        [50099.4187396 , 50489.93880525, 49553.61290974, ...,
+         42011.45963149, 47069.26578997, 46145.22625728]],
+
+       [[55245.13227075, 45559.92881929, 49423.39391575, ...,
+         48031.81946984, 49989.57787202, 40953.06984358],
+        [45715.42817355, 44002.82658208, 49729.31777767, ...,
+         47538.89750403, 38646.41965929, 40616.16183887],
+        [48816.68568008, 52693.89105892, 49123.57773928, ...,
+         52850.95765236, 46868.88961938, 40994.32581777],
+        ...,
+        [43559.06799639, 48279.92281342, 46577.56748359, ...,
+         40756.07019898, 39043.08639229, 40576.86081157],
+        [46403.94182979, 46994.65213133, 46074.8744931 , ...,
+         44709.63052006, 40684.00377053, 45368.89714235],
+        [46621.90059107, 45226.02882315, 44143.96642714, ...,
+         45081.66332355, 50874.45923613, 48862.49207912]]])</pre></div></div></li><li class='xr-section-item'><input id='section-c7466951-20dd-406b-98c7-8473ebe9e815' class='xr-section-summary-in' type='checkbox'  checked><label for='section-c7466951-20dd-406b-98c7-8473ebe9e815' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>chain</span></div><div class='xr-var-dims'>(chain)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3</div><input id='attrs-35672d1f-18eb-4c77-a87d-03798abb9559' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-35672d1f-18eb-4c77-a87d-03798abb9559' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-403b9bfe-ebff-41b3-8867-773c6b0aa780' class='xr-var-data-in' type='checkbox'><label for='data-403b9bfe-ebff-41b3-8867-773c6b0aa780' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0, 1, 2, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>draw</span></div><div class='xr-var-dims'>(draw)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 ... 995 996 997 998 999</div><input id='attrs-c924ad93-aed3-41de-985f-1465956f8f12' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-c924ad93-aed3-41de-985f-1465956f8f12' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5e3e7fbf-5748-42d8-945e-b42e1a4c2146' class='xr-var-data-in' type='checkbox'><label for='data-5e3e7fbf-5748-42d8-945e-b42e1a4c2146' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([  0,   1,   2, ..., 997, 998, 999])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>t</span></div><div class='xr-var-dims'>(t)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 6 ... 23 24 25 26 27 28</div><input id='attrs-551667e4-9cfc-4bd2-ba91-63da1e3a6474' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-551667e4-9cfc-4bd2-ba91-63da1e3a6474' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-978a10cd-9fcf-4382-9cfd-347169927ffa' class='xr-var-data-in' type='checkbox'><label for='data-978a10cd-9fcf-4382-9cfd-347169927ffa' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-a1eb6d5b-f11d-48a1-8cf0-be334ae8182b' class='xr-section-summary-in' type='checkbox'  ><label for='section-a1eb6d5b-f11d-48a1-8cf0-be334ae8182b' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>chain</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-bc253cf3-965d-42c2-b057-99616443e4c6' class='xr-index-data-in' type='checkbox'/><label for='index-bc253cf3-965d-42c2-b057-99616443e4c6' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([0, 1, 2, 3], dtype=&#x27;int64&#x27;, name=&#x27;chain&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>draw</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-4ebcd74b-bc75-479a-b81d-03af4f23bb09' class='xr-index-data-in' type='checkbox'/><label for='index-4ebcd74b-bc75-479a-b81d-03af4f23bb09' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,
+       ...
+       990, 991, 992, 993, 994, 995, 996, 997, 998, 999],
+      dtype=&#x27;int64&#x27;, name=&#x27;draw&#x27;, length=1000))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>t</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-36354f2e-0778-489a-bcfb-46dfd9deeb3f' class='xr-index-data-in' type='checkbox'/><label for='index-36354f2e-0778-489a-bcfb-46dfd9deeb3f' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
+      dtype=&#x27;int64&#x27;, name=&#x27;t&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-6483b50f-af5e-45b8-9650-bdf0ea06dbb3' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-6483b50f-af5e-45b8-9650-bdf0ea06dbb3' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># do the calculation by taking the difference</span>
+<span class="n">excess_deaths</span> <span class="o">=</span> <span class="n">deaths</span> <span class="o">-</span> <span class="n">counterfactual</span><span class="o">.</span><span class="n">posterior_predictive</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate the cumulative excess deaths</span>
+<span class="n">cumsum</span> <span class="o">=</span> <span class="n">excess_deaths</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">9</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Plot the excess deaths</span>
+<span class="c1"># The transpose is to keep arviz happy, ordering the dimensions as (chain, draw, t)</span>
+<span class="n">plot_xY</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">excess_deaths</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">format_x_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Excess deaths, since COVID-19 onset&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the cumulative excess deaths</span>
+<span class="n">plot_xY</span><span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">cumsum</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">),</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">format_x_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Cumulative excess deaths, since COVID-19 onset&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cd27a55ede5471889b82f1c7d0bf30f17263e95d1969972289a60bbb64056254.png" src="../_images/cd27a55ede5471889b82f1c7d0bf30f17263e95d1969972289a60bbb64056254.png" />
+</div>
+</div>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 01 2024
+
+Python implementation: CPython
+Python version       : 3.11.8
+IPython version      : 8.22.1
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.3.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
+pandas    : 2.2.1
+matplotlib: 3.8.3
+arviz     : 0.17.0
+numpy     : 1.26.4
+seaborn   : 0.13.2
+xarray    : 2024.2.0
+pytensor  : 2.18.6
+scipy     : 1.12.0
+pymc      : 5.10.4
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_binomial_reg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Regressione binomiale</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_counterfactual.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Analisi causale con PyMC</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-delle-morti-in-eccesso-dovute-al-covid-19">Calcolo delle morti in eccesso dovute al COVID-19</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Inferenza controfattuale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numero-di-morti-in-eccesso-dall-onset-del-covid-19">Numero di morti in eccesso dall’onset del Covid-19</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

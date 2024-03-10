@@ -1,0 +1,1876 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modelli misti con Stan &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VMXNE4BCDL"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_5/05_stan_mixed_models';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_5/05_stan_mixed_models.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Modello di mediazione con Stan" href="05_stan_mediation.html" />
+    <link rel="prev" title="Regressione logistica con Stan" href="05_stan_logistic_regression.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_illusion.html">Incertezza inferenziale e variabilità dei risultati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/12_jax.html">Usare JAX per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_prediction.html">La predizione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/20_poisson_model.html">Modello di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/21_poisson_sim.html">Modello di Poisson: derivazione analitica e MCMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_freq.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_normal_normal_model.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_one_mean.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_one_mean_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_data_containers.html">Contenitori di dati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/32_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">Dati mancanti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_stan_beta_binomial.html">CmdStanPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_intro.html">Il modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_2.html">Analisi bayesiana del modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_params_recovery.html">Analisi di simulazione per la stima dei parametri nel modello di regressione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_3.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_4.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_5.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_reglin_7.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_logistic_reg.html">Modello di regressione logistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_binomial_reg.html">Regressione binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_covid.html">Inferenza controfattuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_counterfactual.html">Analisi causale con PyMC</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="05_simpson.html">Paradosso di Simpson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_stab.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_repeated_measures.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_stan_mediation.html">Modello di mediazione con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a52_reglin_2.html">Regressione lineare con Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a53_reglin_4.html">Posterior Predictive Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_5/05_stan_mixed_models.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_5/05_stan_mixed_models.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modelli misti con Stan</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domanda-della-ricerca">Domanda della Ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#i-dati">I Dati</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-ad-effetti-fissi">Modello ad effetti fissi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-ad-intercette-casuali">Modello ad Intercette Casuali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-intercepts-random-slopes-model">Random Intercepts, Random Slopes Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-a-effetti-misti-con-pendenze-e-intercepce-casuali-correlate">Modello a Effetti Misti con Pendenze e Intercepce Casuali Correlate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/05_stan_mixed_models.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="modelli-misti-con-stan">
+<span id="stan-mixed-models-notebook"></span><h1>Modelli misti con Stan<a class="headerlink" href="#modelli-misti-con-stan" title="Link to this heading">#</a></h1>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">expit</span>  <span class="c1"># Funzione logistica</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">cmdstan_path</span><span class="p">,</span> <span class="n">CmdStanModel</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">expit</span>  <span class="c1"># Funzione logistica</span>
+<span class="ne">----&gt; </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">cmdstan_path</span><span class="p">,</span> <span class="n">CmdStanModel</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;cmdstanpy&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="c1"># Initialize random number generator</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il presente capitolo fornisce un riassunto della trattazione dei modelli misti fornita da <span id="id1">Sorensen and Vasishth [<a class="reference internal" href="../references/bibliography.html#id104" title="Tanner Sorensen and Shravan Vasishth. Bayesian linear mixed models using stan: a tutorial for psychologists, linguists, and cognitive scientists. arXiv preprint arXiv:1506.06201, 2015.">SV15</a>]</span>, a cui si rimanda per gli approfondimenti.</p>
+</section>
+<section id="domanda-della-ricerca">
+<h2>Domanda della Ricerca<a class="headerlink" href="#domanda-della-ricerca" title="Link to this heading">#</a></h2>
+<p>La questione scientifica riguarda la comprensione delle frasi nel caso di proposizioni relative di soggetto e di oggetto. Una proposizione relativa di soggetto è una frase in cui un sostantivo (ad esempio, “senatore”) viene modificato da una proposizione relativa (ad esempio, “che ha interrogato il giornalista”), e il sostantivo modificato è il soggetto grammaticale della proposizione relativa. In una proposizione relativa di oggetto, il sostantivo modificato dalla proposizione relativa è l’oggetto grammaticale della proposizione (per esempio, “Il senatore che il giornalista ha interrogato si è dimesso”). In entrambi i casi, il sostantivo modificato (“senatore”) è chiamato il sostantivo principale.</p>
+<p>Un risultato comune per l’inglese è che le proposizioni relative di soggetto sono più facili da elaborare rispetto a quelle di oggetto. Le lingue naturali in generale includono proposizioni relative, e fino a poco tempo fa il vantaggio delle proposizioni di soggetto è stato considerato valido a livello cross-linguistico. Tuttavia, le proposizioni relative in cinese rappresentano un interessante controesempio a questa generalizzazione; ricerche recenti condotte da Hsiao e Gibson (2003) hanno suggerito che in cinese, le proposizioni relative di oggetto sono più facili da elaborare rispetto a quelle di soggetto in un punto specifico della frase (il sostantivo principale della proposizione relativa). Viene presentata un’analisi di un insieme di dati successivamente pubblicata <span id="id2">[<a class="reference internal" href="../references/bibliography.html#id6" title="Edward Gibson and H-H Iris Wu. Processing chinese relative clauses in context. Language and Cognitive Processes, 28(1-2):125–155, 2013.">GW13</a>]</span> che valuta questa affermazione.</p>
+</section>
+<section id="i-dati">
+<h2>I Dati<a class="headerlink" href="#i-dati" title="Link to this heading">#</a></h2>
+<p>La variabile dipendente dell’esperimento di <span id="id3">Gibson and Wu [<a class="reference internal" href="../references/bibliography.html#id6" title="Edward Gibson and H-H Iris Wu. Processing chinese relative clauses in context. Language and Cognitive Processes, 28(1-2):125–155, 2013.">GW13</a>]</span> era il tempo di lettura (rt) in millisecondi del sostantivo principale della proposizione relativa. Questo è stato registrato in due condizioni (proposizione relativa di soggetto e proposizione relativa di oggetto), con 37 soggetti e 15 item, presentati in un disegno standard a quadrato latino. Originariamente c’erano 16 item, ma uno è stato rimosso, risultando in 37 × 15 = 555 punti dati. Tuttavia, otto punti dati da un soggetto (id 27) erano mancanti. Di conseguenza, abbiamo un totale di 555 - 8 = 547 punti dati. La condizione (object relative / subject relative) è codificata dalla variabile <code class="docutils literal notranslate"><span class="pre">so</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gibson_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data/gibson_wu_2013.csv&quot;</span><span class="p">)</span>
+<span class="n">gibson_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>subj</th>
+      <th>item</th>
+      <th>type</th>
+      <th>pos</th>
+      <th>word</th>
+      <th>correct</th>
+      <th>rt</th>
+      <th>region</th>
+      <th>type2</th>
+      <th>so</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>13</td>
+      <td>obj-ext</td>
+      <td>8</td>
+      <td>男人</td>
+      <td>-</td>
+      <td>1561</td>
+      <td>headnoun</td>
+      <td>object relative</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>6</td>
+      <td>subj-ext</td>
+      <td>8</td>
+      <td>女孩</td>
+      <td>-</td>
+      <td>959</td>
+      <td>headnoun</td>
+      <td>subject relative</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>5</td>
+      <td>obj-ext</td>
+      <td>8</td>
+      <td>轎車</td>
+      <td>-</td>
+      <td>582</td>
+      <td>headnoun</td>
+      <td>object relative</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>9</td>
+      <td>obj-ext</td>
+      <td>8</td>
+      <td>探員</td>
+      <td>-</td>
+      <td>294</td>
+      <td>headnoun</td>
+      <td>object relative</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>14</td>
+      <td>subj-ext</td>
+      <td>8</td>
+      <td>空服員</td>
+      <td>-</td>
+      <td>438</td>
+      <td>headnoun</td>
+      <td>subject relative</td>
+      <td>-1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gibson_data</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>subj</th>
+      <th>item</th>
+      <th>type</th>
+      <th>pos</th>
+      <th>word</th>
+      <th>correct</th>
+      <th>rt</th>
+      <th>region</th>
+      <th>type2</th>
+      <th>so</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>542</th>
+      <td>9</td>
+      <td>15</td>
+      <td>obj-ext</td>
+      <td>8</td>
+      <td>演員</td>
+      <td>-</td>
+      <td>406</td>
+      <td>headnoun</td>
+      <td>object relative</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>543</th>
+      <td>9</td>
+      <td>16</td>
+      <td>subj-ext</td>
+      <td>8</td>
+      <td>記者</td>
+      <td>-</td>
+      <td>342</td>
+      <td>headnoun</td>
+      <td>subject relative</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>544</th>
+      <td>9</td>
+      <td>7</td>
+      <td>obj-ext</td>
+      <td>8</td>
+      <td>狗</td>
+      <td>-</td>
+      <td>478</td>
+      <td>headnoun</td>
+      <td>object relative</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>545</th>
+      <td>9</td>
+      <td>8</td>
+      <td>subj-ext</td>
+      <td>8</td>
+      <td>業餘選手</td>
+      <td>-</td>
+      <td>510</td>
+      <td>headnoun</td>
+      <td>subject relative</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <th>546</th>
+      <td>9</td>
+      <td>11</td>
+      <td>obj-ext</td>
+      <td>8</td>
+      <td>球員</td>
+      <td>-</td>
+      <td>350</td>
+      <td>headnoun</td>
+      <td>object relative</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gibson_data</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(547, 10)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">gibson_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;so&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">common_norm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2784256708093b6dd0094000e10788edf5f4711a35968943dbf9ae3f809ec8cc.png" src="../_images/2784256708093b6dd0094000e10788edf5f4711a35968943dbf9ae3f809ec8cc.png" />
+</div>
+</div>
+</section>
+<section id="modello-ad-effetti-fissi">
+<h2>Modello ad effetti fissi<a class="headerlink" href="#modello-ad-effetti-fissi" title="Link to this heading">#</a></h2>
+<p>Iniziamo facendo l’assunzione che la variabile dipendente del tempo di lettura (rt) sul sostantivo principale sia distribuita approssimativamente in modo log-normale (Rouder, 2005). Questo presuppone che il logaritmo di rt sia distribuito approssimativamente in modo normale. Il logaritmo dei tempi di lettura, <code class="docutils literal notranslate"><span class="pre">logrt</span></code>, ha una media β0 sconosciuta. La media della distribuzione log-normale di <code class="docutils literal notranslate"><span class="pre">rt</span></code> è la somma di β0 e di uno scarto β1so il cui valore dipende dal predittore categoriale <code class="docutils literal notranslate"><span class="pre">so</span></code>, che assume il valore di -1 quando rt proviene dalla condizione di proposizione relativa di soggetto, e 1 quando rt proviene dalla condizione di proposizione relativa di oggetto.</p>
+<p>Il modello del logaritmo dei tempi di lettura è dunque il seguente:</p>
+<div class="math notranslate nohighlight">
+\[
+logrt_i = \beta_0 + \beta_1 so_i + \epsilon_i. 
+\]</div>
+<p>Questo è un modello a effetti fissi. L’indice i rappresenta la i-esima riga nel frame dati (in questo caso, i ∈ {1, … , 547}); il termine εi rappresenta l’errore nella i-esima riga. Con la variabile <code class="docutils literal notranslate"><span class="pre">so</span></code> codificata come indicato sopra indicato, β0 rappresenta la media di log rt, indipendentemente dal tipo di proposizione relativa. Il parametro β1 è lo scarto rispetto a β0 in modo che la media di log rt sia β0 + 1β1 quando log rt proviene dalla condizione di proposizione relativa di oggetto, e β0 - 1β1 quando log rt proviene dalla condizione di proposizione relativa di soggetto. In tali circostanze, 2β1 corrisponde alla differenza tra le medie nelle condizioni di proposizione relativa di oggetto e di soggetto. Insieme, β0 e β1 costituiscono le componenti del modello che caratterizzano l’effetto della manipolazione sperimentale (il tipo di proposizione relativa) sulla variabile dipendente rt. Questo è un modello ad effetti fissi perché i parametri β0 e β1 non variano da soggetto a soggetto o da item a item.</p>
+<p>Importiamo il codice Stan salvato nel file <code class="docutils literal notranslate"><span class="pre">fixed_effects.stan</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;fixed_effects.stan&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=1&gt; N;                // Number of data points
+  vector[N] rt;                  // Reading time
+  vector[N] so;                  // Predictor, constrained between -1 and 1
+}
+parameters {
+  vector[2] beta;                // Intercept and slope
+  real&lt;lower=0&gt; sigma_e;         // Error standard deviation
+}
+model {
+  vector[N] mu;
+
+  // Define the model for mu using vectorized operations
+  mu = beta[1] + beta[2] * so;
+
+  // Vectorized likelihood
+  rt ~ lognormal(mu, sigma_e);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creiamo un dizionario che include i dati nel formato atteso dal precedente codice Stan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;N&quot;</span> <span class="p">:</span> <span class="n">gibson_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;rt&quot;</span> <span class="p">:</span> <span class="n">gibson_data</span><span class="p">[</span><span class="s2">&quot;rt&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;so&quot;</span> <span class="p">:</span> <span class="n">gibson_data</span><span class="p">[</span><span class="s2">&quot;so&quot;</span><span class="p">]</span> 
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Compiliamo il modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:39:28 - cmdstanpy - INFO - compiling stan file /Users/corrado/_repositories/ds4p/chapter_5/stan/fixed_effects.stan to exe file /Users/corrado/_repositories/ds4p/chapter_5/stan/fixed_effects
+06:39:42 - cmdstanpy - INFO - compiled model executable: /Users/corrado/_repositories/ds4p/chapter_5/stan/fixed_effects
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CmdStanModel: name=fixed_effects
+	 stan_file=/Users/corrado/_repositories/ds4p/chapter_5/stan/fixed_effects.stan
+	 exe_file=/Users/corrado/_repositories/ds4p/chapter_5/stan/fixed_effects
+	 compiler_options=stanc_options={}, cpp_options={}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:39:44 - cmdstanpy - INFO - CmdStan start processing
+chain 1 |<span class=" -Color -Color-Yellow">          </span>| 00:00 Status
+
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████▉    </span>| 00:00 Iteration: 1001 / 2000 [ 50%]  (Sampling)
+
+chain 1 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                       
+chain 2 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                       
+chain 3 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                     
+chain 4 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                       
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                                                                                                                                                                                                                                                                
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:39:44 - cmdstanpy - INFO - CmdStan done processing.
+06:39:44 - cmdstanpy - WARNING - Non-fatal error during sampling:
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is 0, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;fixed_effects.stan&#39;, line 17, column 2 to column 30)
+Consider re-running with show_console=True if the above output is unclear!
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>Esaminiamo le tracce.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_e&quot;</span><span class="p">]),</span> <span class="n">compact</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cdb9dad25016b2e8f8576da7ff337b64dde6db5a29a00528eab3a880783c5d3d.png" src="../_images/cdb9dad25016b2e8f8576da7ff337b64dde6db5a29a00528eab3a880783c5d3d.png" />
+</div>
+</div>
+<p>Esaminiamo le medie a posteriori e gli intervalli di credibilità dei parametri.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_e&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_2.5%</th>
+      <th>hdi_97.5%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beta[0]</th>
+      <td>6.06</td>
+      <td>0.03</td>
+      <td>6.01</td>
+      <td>6.11</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3551.32</td>
+      <td>2754.39</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta[1]</th>
+      <td>-0.04</td>
+      <td>0.02</td>
+      <td>-0.09</td>
+      <td>0.01</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3773.57</td>
+      <td>2988.80</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma_e</th>
+      <td>0.60</td>
+      <td>0.02</td>
+      <td>0.56</td>
+      <td>0.63</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>4100.84</td>
+      <td>2849.68</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>L’analisi della distribuzione di β1 indica che approssimativamente il 94% della densità di probabilità a posteriori è al di sotto dello zero, suggerendo che, in cinese, ci sia qualche evidenza che le proposizioni relative oggetto siano più facili da elaborare rispetto alle proposizioni relative soggetto, dati i dati di <span id="id4">Gibson and Wu [<a class="reference internal" href="../references/bibliography.html#id6" title="Edward Gibson and H-H Iris Wu. Processing chinese relative clauses in context. Language and Cognitive Processes, 28(1-2):125–155, 2013.">GW13</a>]</span>. Tuttavia, poiché l’intervallo di credibilità al 95% include lo zero, potremmo essere riluttanti a trarre questa conclusione, se vogliamo adottare un approccio “quasi frequentista” di test di ipotesi.</p>
+<p>Tuttavia, è importante notare che il modello ad effetti fissi presentato qui non è comunque appropriato per i dati attuali. L’assunzione di indipendenza degli errori viene violata, perché abbiamo misure ripetute per ciascun soggetto e per ciascun item. I modelli lineari misti estendono il modello lineare per risolvere precisamente questo problema.</p>
+</section>
+<section id="modello-ad-intercette-casuali">
+<h2>Modello ad Intercette Casuali<a class="headerlink" href="#modello-ad-intercette-casuali" title="Link to this heading">#</a></h2>
+<p>Il modello degli effetti fissi non è adatto per i dati di <span id="id5">Gibson and Wu [<a class="reference internal" href="../references/bibliography.html#id6" title="Edward Gibson and H-H Iris Wu. Processing chinese relative clauses in context. Language and Cognitive Processes, 28(1-2):125–155, 2013.">GW13</a>]</span> poiché non tiene conto del fatto che abbiamo misurazioni multiple per ciascun soggetto e item. Come già accennato, queste misurazioni multiple portano a una violazione dell’assunzione di indipendenza degli errori. Inoltre, i coefficienti degli effetti fissi β0 e β1 rappresentano medie su tutti i soggetti e gli item, ignorando il fatto che alcuni soggetti saranno più veloci e alcuni più lenti della media; allo stesso modo, alcuni item saranno letti più rapidamente della media e altri più lentamente.</p>
+<p>Nei modelli lineari misti, prendiamo in considerazione questa variabilità per soggetto e per item aggiungendo i termini di correzione u0j e w0k, che aggiustano β0 per il soggetto j e l’item k. Questo scompone parzialmente εi in una somma di termini u0j e w0k, che sono gli aggiustamenti dell’intercetta β0 per il soggetto j e l’item k associato a rt_i. Se il soggetto j è più lento della media di tutti i soggetti, uj sarà un numero positivo, e se l’item k viene letto più velocemente della durata media di tutti gli item, allora wk sarà un numero negativo. Ogni soggetto j ha il proprio aggiustamento u0j, e ogni item ha il proprio aggiustamento w0k. Questi aggiustamenti u0j e w0k sono chiamati <em>intercette casuali</em> (<em>random intercepts</em>) da Pinheiro e Bates (2000) e <em>intercette variabili</em> (<em>varying intercepts</em>) da Gelman e Hill (2007), e aggiustando β0 con questi termini miglioriamo la nostra capacità di tener conto della variabilità per i soggetti e per gli item.</p>
+<p>Il modello statistico ad intercette casuali assume che questi aggiustamenti sono distribuiti normalmente intorno allo zero con deviazione standard sconosciuta:</p>
+<div class="math notranslate nohighlight">
+\[
+u_0 \sim N(0, \sigma_u), 
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+w_0 ∼ N(0, \sigma_w). 
+\]</div>
+<p>Avendo specificato il modello in questo modo, ci sono tre fonti di varianza: la deviazione standard degli errori σe, la deviazione standard delle intercette casuali per i soggetti, σu, e la deviazione standard delle intercette casuali per gli item, σw. Ci riferiamo a questi valori come alle componenti della varianza.</p>
+<p>Esprimiamo ora il logaritmo del tempo di lettura, prodotto dai soggetti j ∈ {1, … , 37} che leggono gli item k ∈ {1,…, 15}, nelle condizioni i ∈ {1, 2} (1 si riferisce alle proposizioni soggetto, 2 alle proposizioni oggetto), come la seguente somma.</p>
+<div class="math notranslate nohighlight">
+\[
+\log rt_{ijk} = \beta_0 + \beta_{1i} + u_{0j} + w_{0k} + \varepsilon_{ijk}.
+\]</div>
+<p>Notiamo che stiamo utilizzando un modo leggermente diverso per descrivere il modello, rispetto al modello degli effetti fissi. Stiamo utilizzando indici per soggetto, item e condizione per identificare ciascuna riga del data frame. Inoltre, anziché scrivere <span class="math notranslate nohighlight">\(\beta_1 so_i\)</span>, indicizziamo direttamente β1 in funzione della condizione i (essendo <code class="docutils literal notranslate"><span class="pre">so</span></code> <span class="math notranslate nohighlight">\(\in \{-1, 1\}\)</span>).</p>
+<p>Questo è un modello è un modello ad effetti misti, e più specificamente un modello ad intercette casuali. Il coefficiente <span class="math notranslate nohighlight">\(\beta_{1i}\)</span> è quello di maggior interesse; avrà un valore medio −β1 per le proposizioni soggetto e β1 per le proposizioni oggetto a causa della codifica del contrasto. Quindi, se la nostra media a posteriori per β1 è negativa, ciò suggerirebbe che le proposizioni oggetto vengono lette più velocemente delle proposizioni soggetto.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;random_intercepts.stan&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N;                  // Number of data points
+  vector[N] rt;                    // Reading time
+  vector[N] so;                    // Predictor, constrained between -1 and 1
+  int&lt;lower=0&gt; J;                  // Number of subjects
+  int&lt;lower=0&gt; K;                  // Number of items
+  array[N] int&lt;lower=0, upper=J&gt; subj;
+  array[N] int&lt;lower=0, upper=K&gt; item;
+}
+parameters {
+  vector[2] beta;                  // Fixed intercept and slope
+  vector[J] u;                     // Subject intercepts
+  vector[K] w;                     // Item intercepts
+  real&lt;lower=0&gt; sigma_e;           // Error standard deviation
+  real&lt;lower=0&gt; sigma_u;           // Subject standard deviation
+  real&lt;lower=0&gt; sigma_w;           // Item standard deviation
+}
+model {
+  vector[N] mu;
+
+  // Priors
+  beta ~ normal(0, 5);             // Assuming a weakly informative prior for beta
+  u ~ normal(0, sigma_u);
+  w ~ normal(0, sigma_w);
+  sigma_e ~ exponential(1);
+  sigma_u ~ exponential(1);
+  sigma_w ~ exponential(1);
+
+  // Likelihood
+  mu = beta[1] + beta[2] * so + u[subj] + w[item];  // Vectorized computation of mu
+  rt ~ lognormal(mu, sigma_e);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;subj&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">gibson_data</span><span class="p">[</span><span class="s1">&#39;subj&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;item&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">gibson_data</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;rt&#39;</span><span class="p">:</span> <span class="n">gibson_data</span><span class="p">[</span><span class="s1">&#39;rt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="s1">&#39;so&#39;</span><span class="p">:</span> <span class="n">gibson_data</span><span class="p">[</span><span class="s1">&#39;so&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">gibson_data</span><span class="p">),</span>
+    <span class="s1">&#39;J&#39;</span><span class="p">:</span> <span class="n">gibson_data</span><span class="p">[</span><span class="s1">&#39;subj&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+    <span class="s1">&#39;K&#39;</span><span class="p">:</span> <span class="n">gibson_data</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CmdStanModel: name=random_intercepts
+	 stan_file=/Users/corrado/_repositories/ds4p/chapter_5/stan/random_intercepts.stan
+	 exe_file=/Users/corrado/_repositories/ds4p/chapter_5/stan/random_intercepts
+	 compiler_options=stanc_options={}, cpp_options={}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:40:20 - cmdstanpy - INFO - CmdStan start processing
+chain 1 |<span class=" -Color -Color-Yellow">          </span>| 00:00 Status
+
+
+
+chain 1 |<span class=" -Color -Color-Yellow">▉         </span>| 00:00 Iteration:    1 / 2000 [  0%]  (Warmup)
+
+chain 1 |<span class=" -Color -Color-Yellow">█▊        </span>| 00:00 Iteration:  200 / 2000 [ 10%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Yellow">███▏      </span>| 00:00 Iteration:  500 / 2000 [ 25%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Yellow">█████     </span>| 00:00 Iteration:  900 / 2000 [ 45%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████▊   </span>| 00:00 Iteration: 1200 / 2000 [ 60%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">████████▏ </span>| 00:00 Iteration: 1500 / 2000 [ 75%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████████▌</span>| 00:00 Iteration: 1800 / 2000 [ 90%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                       
+chain 2 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                       
+chain 3 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                       
+chain 4 |<span class=" -Color -Color-Blue">██████████</span>| 00:00 Sampling completed                       
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                                                                                                                                                                                                                                                                
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:40:20 - cmdstanpy - INFO - CmdStan done processing.
+06:40:20 - cmdstanpy - WARNING - Non-fatal error during sampling:
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: normal_lpdf: Scale parameter is 0, but must be positive! (in &#39;random_intercepts.stan&#39;, line 24, column 2 to column 25)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: normal_lpdf: Scale parameter is 0, but must be positive! (in &#39;random_intercepts.stan&#39;, line 24, column 2 to column 25)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: normal_lpdf: Scale parameter is 0, but must be positive! (in &#39;random_intercepts.stan&#39;, line 24, column 2 to column 25)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_intercepts.stan&#39;, line 31, column 2 to column 30)
+Consider re-running with show_console=True if the above output is unclear!
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_e&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_u&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_w&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_2.5%</th>
+      <th>hdi_97.5%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beta[0]</th>
+      <td>6.06</td>
+      <td>0.07</td>
+      <td>5.92</td>
+      <td>6.20</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>923.22</td>
+      <td>1257.34</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta[1]</th>
+      <td>-0.04</td>
+      <td>0.02</td>
+      <td>-0.08</td>
+      <td>0.01</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>8188.02</td>
+      <td>2744.71</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma_e</th>
+      <td>0.52</td>
+      <td>0.02</td>
+      <td>0.49</td>
+      <td>0.55</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6587.75</td>
+      <td>2519.21</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma_u</th>
+      <td>0.25</td>
+      <td>0.04</td>
+      <td>0.18</td>
+      <td>0.33</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3297.22</td>
+      <td>3411.03</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma_w</th>
+      <td>0.20</td>
+      <td>0.05</td>
+      <td>0.11</td>
+      <td>0.30</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3590.42</td>
+      <td>3410.62</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Si noti che rispetto al Modello ad effetti fissi, la stima di σe è più piccola; questo perché ora vengono stimate due componenti di varianza aggiuntive. Si noti inoltre che l’intervallo di credibilità al 95% per la stima di β1 include lo zero; quindi, c’è ancora qualche evidenza che le proposizioni oggetto siano più facili delle proposizioni soggetto, ma non possiamo escludere la possibilità che non ci sia una differenza credibile nei tempi di lettura tra i due tipi di proposizioni relative.</p>
+<p>Il presente modello con intercette casuali assume che l’effetto della variabile <code class="docutils literal notranslate"><span class="pre">so</span></code> sia lo stesso per ciascun <a class="reference external" href="http://soggetto.Ma">soggetto.Ma</a> questo non è necessariamente vero. Per consentire al modello di tenere conto che l’effetto della variabile <code class="docutils literal notranslate"><span class="pre">so</span></code> possa variare tra i soggetti, dobbiamo estendere il presente modello e trasformarlo in un modello che include sia intercette sia pendenze casuali.</p>
+</section>
+<section id="random-intercepts-random-slopes-model">
+<h2>Random Intercepts, Random Slopes Model<a class="headerlink" href="#random-intercepts-random-slopes-model" title="Link to this heading">#</a></h2>
+<p>Per esprimere la struttura descritta sopra nel modello lineare misto, dobbiamo specificare le pendenze casuali. Il primo cambiamento consiste nel permettere che la dimensione dell’effetto per <code class="docutils literal notranslate"><span class="pre">so</span></code> varii per soggetto e per item. Consentiamo che la dimensione dell’effetto vari per soggetto e per item includendo nel modello pendenze variabili per soggetto e per item, che costituiscono degli scarti rispetto alla pendenza fissa β1, allo stesso modo in cui le intercette variabili per soggetto e per item aggiustano l’intercetta fissa β0. Questo aggiustamento della pendenza per soggetto e per item è espresso aggiustando β1 tramite due termini u1j e w1k. Questi termini rappresentano le pendenze casuali. Aggiungendo al modello tali termini aggiuntivi possiamo rendere conto del fatto che l’effetto del tipo di proposizione relativa varia per soggetto j e per item k.</p>
+<p>Esprimiamo il logaritmo del tempo di lettura, prodotto dal soggetto j che legge l’item k, come la seguente somma.</p>
+<div class="math notranslate nohighlight">
+\[
+\text{log } rt_{ijk} = \beta_0 + u_{0j} + w_{0k} + \beta_{1i} + u_{1ij} + w_{1ik} + \epsilon_{ijk},
+\]</div>
+<p>dove il pedice <span class="math notranslate nohighlight">\(i\)</span> indica le condizioni. Questo è un modello di intercette variabili e pendenze variabili.</p>
+<p>Il modello è specificato in linguaggio Stan come indicato nel file <code class="docutils literal notranslate"><span class="pre">random_slopes.stan</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;random_slopes.stan&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N;                  // Number of data points
+  vector[N] rt;                    // Reading time
+  vector[N] so;                    // Predictor, constrained between -1 and 1
+  int&lt;lower=0&gt; J;                  // Number of subjects
+  int&lt;lower=0&gt; K;                  // Number of items
+  array[N] int&lt;lower=0, upper=J&gt; subj;
+  array[N] int&lt;lower=0, upper=K&gt; item;
+}
+parameters {
+  vector[2] beta;                  // Fixed intercept and slope
+  real&lt;lower=0&gt; sigma_e;           // Error standard deviation
+  matrix[2,J] u;                   // Subject intercepts and slopes
+  vector&lt;lower=0&gt;[2] sigma_u;      // Subject standard deviations
+  matrix[2,K] w;                   // Item intercepts and slopes
+  vector&lt;lower=0&gt;[2] sigma_w;      // Item standard deviations
+}
+model {
+  // Priors
+  for (j in 1:J) {
+    u[1,j] ~ normal(0, sigma_u[1]); // Prior for subject intercepts
+    u[2,j] ~ normal(0, sigma_u[2]); // Prior for subject slopes
+  }
+  
+  for (k in 1:K) {
+    w[1,k] ~ normal(0, sigma_w[1]); // Prior for item intercepts
+    w[2,k] ~ normal(0, sigma_w[2]); // Prior for item slopes
+  }
+  
+  // Likelihood
+  for (i in 1:N) {
+    real mu = beta[1] + u[1, subj[i]] + w[1, item[i]]
+              + (beta[2] + u[2, subj[i]] + w[2, item[i]]) * so[i];
+    rt[i] ~ lognormal(mu, sigma_e);
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CmdStanModel: name=random_slopes
+	 stan_file=/Users/corrado/_repositories/ds4p/chapter_5/stan/random_slopes.stan
+	 exe_file=/Users/corrado/_repositories/ds4p/chapter_5/stan/random_slopes
+	 compiler_options=stanc_options={}, cpp_options={}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_sampling</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
+    <span class="n">iter_warmup</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:49:58 - cmdstanpy - INFO - CmdStan start processing
+chain 1 |<span class=" -Color -Color-Yellow">          </span>| 00:00 Status
+
+
+chain 1 |<span class=" -Color -Color-Yellow">▋         </span>| 00:00 Iteration:    1 / 3000 [  0%]  (Warmup)
+
+chain 1 |<span class=" -Color -Color-Yellow">▉         </span>| 00:00 Iteration:  100 / 3000 [  3%]  (Warmup)
+
+chain 1 |<span class=" -Color -Color-Yellow">█▌        </span>| 00:00 Iteration:  300 / 3000 [ 10%]  (Warmup)
+
+
+
+
+chain 1 |<span class=" -Color -Color-Yellow">█▉        </span>| 00:01 Iteration:  400 / 3000 [ 13%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Yellow">██▏       </span>| 00:01 Iteration:  500 / 3000 [ 16%]  (Warmup)
+chain 1 |<span class=" -Color -Color-Yellow">██▌       </span>| 00:01 Iteration:  600 / 3000 [ 20%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Yellow">██▊       </span>| 00:01 Iteration:  700 / 3000 [ 23%]  (Warmup)
+
+chain 1 |<span class=" -Color -Color-Yellow">███▏      </span>| 00:02 Iteration:  800 / 3000 [ 26%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Yellow">███▍      </span>| 00:02 Iteration:  900 / 3000 [ 30%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Blue">████      </span>| 00:02 Iteration: 1001 / 3000 [ 33%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">████▍     </span>| 00:02 Iteration: 1100 / 3000 [ 36%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">████▋     </span>| 00:02 Iteration: 1200 / 3000 [ 40%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████     </span>| 00:03 Iteration: 1300 / 3000 [ 43%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████▎    </span>| 00:03 Iteration: 1400 / 3000 [ 46%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████▋    </span>| 00:03 Iteration: 1500 / 3000 [ 50%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████▉    </span>| 00:03 Iteration: 1600 / 3000 [ 53%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████▎   </span>| 00:04 Iteration: 1700 / 3000 [ 56%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████▌   </span>| 00:04 Iteration: 1800 / 3000 [ 60%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████▉   </span>| 00:04 Iteration: 1900 / 3000 [ 63%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">███████▏  </span>| 00:04 Iteration: 2000 / 3000 [ 66%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">███████▌  </span>| 00:05 Iteration: 2100 / 3000 [ 70%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">███████▊  </span>| 00:05 Iteration: 2200 / 3000 [ 73%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">████████▏ </span>| 00:05 Iteration: 2300 / 3000 [ 76%]  (Sampling)
+
+chain 1 |<span class=" -Color -Color-Blue">████████▍ </span>| 00:05 Iteration: 2400 / 3000 [ 80%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">████████▊ </span>| 00:06 Iteration: 2500 / 3000 [ 83%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████████ </span>| 00:06 Iteration: 2600 / 3000 [ 86%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████████▍</span>| 00:06 Iteration: 2700 / 3000 [ 90%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████████▋</span>| 00:06 Iteration: 2800 / 3000 [ 93%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████████</span>| 00:06 Iteration: 2900 / 3000 [ 96%]  (Sampling)
+
+
+
+
+
+
+
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████████</span>| 00:08 Sampling completed                       
+chain 2 |<span class=" -Color -Color-Blue">██████████</span>| 00:08 Sampling completed                       
+chain 3 |<span class=" -Color -Color-Blue">██████████</span>| 00:08 Sampling completed                       
+chain 4 |<span class=" -Color -Color-Blue">██████████</span>| 00:08 Sampling completed                       
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                                                                                                                                                                                                                                                                
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:50:06 - cmdstanpy - INFO - CmdStan done processing.
+06:50:06 - cmdstanpy - WARNING - Non-fatal error during sampling:
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: normal_lpdf: Scale parameter is 0, but must be positive! (in &#39;random_slopes.stan&#39;, line 22, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: normal_lpdf: Scale parameter is 0, but must be positive! (in &#39;random_slopes.stan&#39;, line 22, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: normal_lpdf: Scale parameter is 0, but must be positive! (in &#39;random_slopes.stan&#39;, line 21, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+	Exception: normal_lpdf: Scale parameter is 0, but must be positive! (in &#39;random_slopes.stan&#39;, line 21, column 4 to column 35)
+	Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in &#39;random_slopes.stan&#39;, line 34, column 4 to column 35)
+Consider re-running with show_console=True if the above output is unclear!
+06:50:06 - cmdstanpy - WARNING - Some chains may have failed to converge.
+	Chain 1 had 2 divergent transitions (0.1%)
+	Chain 4 had 1 divergent transitions (0.1%)
+	Use the &quot;diagnose()&quot; method on the CmdStanMCMC object to see further information.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_e&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_u&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_w&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_2.5%</th>
+      <th>hdi_97.5%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beta[0]</th>
+      <td>6.06</td>
+      <td>0.07</td>
+      <td>5.92</td>
+      <td>6.20</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2052.34</td>
+      <td>3035.75</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>beta[1]</th>
+      <td>-0.04</td>
+      <td>0.03</td>
+      <td>-0.09</td>
+      <td>0.02</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>5944.94</td>
+      <td>4900.00</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>sigma_e</th>
+      <td>0.52</td>
+      <td>0.02</td>
+      <td>0.48</td>
+      <td>0.55</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7777.89</td>
+      <td>5958.13</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>sigma_u[0]</th>
+      <td>0.25</td>
+      <td>0.04</td>
+      <td>0.18</td>
+      <td>0.34</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>5742.88</td>
+      <td>4832.95</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>sigma_u[1]</th>
+      <td>0.06</td>
+      <td>0.03</td>
+      <td>0.01</td>
+      <td>0.12</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>171.35</td>
+      <td>251.05</td>
+      <td>1.02</td>
+    </tr>
+    <tr>
+      <th>sigma_w[0]</th>
+      <td>0.20</td>
+      <td>0.05</td>
+      <td>0.11</td>
+      <td>0.30</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7036.31</td>
+      <td>5081.11</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>sigma_w[1]</th>
+      <td>0.04</td>
+      <td>0.03</td>
+      <td>0.00</td>
+      <td>0.09</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>298.07</td>
+      <td>401.10</td>
+      <td>1.02</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Anche in questo caso, <span id="id6">Sorensen and Vasishth [<a class="reference internal" href="../references/bibliography.html#id104" title="Tanner Sorensen and Shravan Vasishth. Bayesian linear mixed models using stan: a tutorial for psychologists, linguists, and cognitive scientists. arXiv preprint arXiv:1506.06201, 2015.">SV15</a>]</span> commentano che l’intervallo di credibilità al 95% per <span class="math notranslate nohighlight">\(\beta_1\)</span> include lo zero.</p>
+</section>
+<section id="modello-a-effetti-misti-con-pendenze-e-intercepce-casuali-correlate">
+<h2>Modello a Effetti Misti con Pendenze e Intercepce Casuali Correlate<a class="headerlink" href="#modello-a-effetti-misti-con-pendenze-e-intercepce-casuali-correlate" title="Link to this heading">#</a></h2>
+<p><span id="id7">Sorensen and Vasishth [<a class="reference internal" href="../references/bibliography.html#id104" title="Tanner Sorensen and Shravan Vasishth. Bayesian linear mixed models using stan: a tutorial for psychologists, linguists, and cognitive scientists. arXiv preprint arXiv:1506.06201, 2015.">SV15</a>]</span>, nell’approfondire l’analisi dei dati presentati da <span id="id8">[<a class="reference internal" href="../references/bibliography.html#id6" title="Edward Gibson and H-H Iris Wu. Processing chinese relative clauses in context. Language and Cognitive Processes, 28(1-2):125–155, 2013.">GW13</a>]</span>, propongono un avanzamento metodologico nel modello preso in considerazione, introducendo un modello a effetti misti che incorpora intercette e pendenze casuali correlate. La logica dietro questo approccio consiste nell’esaminare la possibilità che vi sia una relazione tra la velocità di lettura dei soggetti (espressa attraverso intercette casuali) e la loro reazione alle diverse tipologie di proposizioni (oggetto vs. soggetto), ipotizzando che soggetti con una velocità di lettura superiore alla media possano esperire un rallentamento maggiore nel leggere proposizioni oggetto rispetto alle proposizioni soggetto, e viceversa. Questa ipotesi suggerisce l’esistenza di correlazioni tra le intercette casuali (che rappresentano variazioni individuali nella velocità di base di lettura) e le pendenze casuali (che rappresentano la variazione nella risposta al tipo di proposizione).</p>
+<p>Per integrare questa struttura nel modello lineare misto (LMM), è essenziale modellare la correlazione tra intercette casuali e pendenze casuali. La formula del modello, la quale rimane inalterata rispetto alla versione precedente, è rappresentata come segue:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{log } rt_{ijk} = \beta_0 + u_{0j} + w_{0k} + \beta_1 + u_{1ij} + w_{1ik} + \epsilon_{ijk}.
+\]</div>
+<p>L’introduzione di correlazioni tra intercette e pendenze casuali trasforma il modello in un approccio di intercette e pendenze correlate, richiedendo la definizione di una matrice di varianza-covarianza per gli effetti casuali. Questo implica la necessità di stabilire una relazione di covarianza tra le intercette casuali (per soggetto e per item) e le pendenze casuali (per soggetto e per item), suggerendo che le pendenze per soggetto (u1) potrebbero correlare con le intercette per soggetto (u0), così come le pendenze per item (w1) potrebbero correlare con le intercette per item (w0). Questo approccio offre una visione più dettagliata e accurata della dinamica tra velocità di lettura individuale e reazione alle differenti strutture sintattiche, arricchendo significativamente l’analisi statistica dei dati comportamentali.</p>
+<p>Nel contesto di questo insegnamento, non approfondiremo la formulazione del modello Stan che include la correlazione tra pendenze e intercette, data la sua complessità tecnica. Tuttavia, è importante sottolineare che è possibile ottenere risultati analoghi con un approccio più accessibile utilizzando il pacchetto Bambi per Python. Questo strumento consente di specificare modelli statistici in maniera intuitiva e diretta. Per esempio, per incorporare la correlazione tra pendenze e intercette nel nostro modello, possiamo utilizzare la seguente sintassi con Bambi:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">bmb</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;rt ~ so + (so | subject) + (so | item)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Questa espressione crea un modello in cui <code class="docutils literal notranslate"><span class="pre">rt</span></code> (il tempo di risposta) è modellato come una funzione del tipo di proposizione <code class="docutils literal notranslate"><span class="pre">so</span></code>, con pendenze e intercette casuali correlate sia per <code class="docutils literal notranslate"><span class="pre">subject</span></code> che per <code class="docutils literal notranslate"><span class="pre">item</span></code>. L’uso di <code class="docutils literal notranslate"><span class="pre">(so</span> <span class="pre">|</span> <span class="pre">subject)</span></code> e <code class="docutils literal notranslate"><span class="pre">(so</span> <span class="pre">|</span> <span class="pre">item)</span></code> permette di modellare specificamente le variazioni nelle risposte attribuibili a differenze individuali tra i soggetti e caratteristiche uniche degli item, rispettivamente. Questa sintassi semplifica notevolmente l’implementazione di modelli complessi, rendendo l’analisi accessibile anche a chi possiede una conoscenza di base della statistica bayesiana e della modellazione statistica.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m -p cmdstanp
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_stan_logistic_regression.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Regressione logistica con Stan</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_stan_mediation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Modello di mediazione con Stan</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domanda-della-ricerca">Domanda della Ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#i-dati">I Dati</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-ad-effetti-fissi">Modello ad effetti fissi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-ad-intercette-casuali">Modello ad Intercette Casuali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-intercepts-random-slopes-model">Random Intercepts, Random Slopes Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-a-effetti-misti-con-pendenze-e-intercepce-casuali-correlate">Modello a Effetti Misti con Pendenze e Intercepce Casuali Correlate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1401 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Inferenza sull’apprendimento associativo con Stan &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VMXNE4BCDL"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-VMXNE4BCDL');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/51_stan_rescorla_wagner';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_4/51_stan_rescorla_wagner.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Modello gerarchico beta-binomiale con Stan" href="52_stan_hier_beta_binom.html" />
+    <link rel="prev" title="CmdStanPy" href="50_stan_beta_binomial.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_illusion.html">Incertezza inferenziale e variabilità dei risultati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_beta_binomial_pymc.html">Inferenza bayesiana con PyMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_jax.html">Usare JAX per un campionamento più veloce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_summary_posterior_pymc.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_prediction.html">La predizione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_mcmc_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_poisson_model.html">Modello di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_poisson_sim.html">Modello di Poisson: derivazione analitica e MCMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_freq.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_normal_normal_model.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_one_mean.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_one_mean_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_data_containers.html">Contenitori di dati</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="40_hier_beta_binom.html">Modello gerarchico beta-binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="41_hier_poisson.html">Modello gerarchico di Poisson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="45_missing.html">Dati mancanti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="50_stan_beta_binomial.html">CmdStanPy</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_intro.html">Il modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_2.html">Analisi bayesiana del modello di regressione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_params_recovery.html">Analisi di simulazione per la stima dei parametri nel modello di regressione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_3.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_4.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_5.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_reglin_7.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_logistic_reg.html">Modello di regressione logistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_binomial_reg.html">Regressione binomiale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_covid.html">Inferenza controfattuale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_counterfactual.html">Analisi causale con PyMC</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_simpson.html">Paradosso di Simpson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_stab.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_repeated_measures.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mediation.html">Modello di mediazione con Stan</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/08_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a52_reglin_2.html">Regressione lineare con Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a53_reglin_4.html">Posterior Predictive Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/51_stan_rescorla_wagner.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/51_stan_rescorla_wagner.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Inferenza sull’apprendimento associativo con Stan</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fondamenti-del-modello-di-rescorla-wagner">Fondamenti del Modello di Rescorla-Wagner</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aggiornamento-del-valore-di-associazione">Aggiornamento del Valore di Associazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-di-decisione-softmax">Criterio di Decisione Softmax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni-del-modello">Applicazioni del Modello</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dal-modello-di-rescorla-wagner-all-apprendimento-al-rinforzo">Dal Modello di Rescorla-Wagner all’Apprendimento al Rinforzo</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compito-2-armed-bandit">Compito 2-armed bandit</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#struttura-del-compito">Struttura del Compito</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazione-del-modello-di-rescorla-wagner">Applicazione del Modello di Rescorla-Wagner</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#componenti-del-modello-di-rescorla-wagner">Componenti del Modello di Rescorla-Wagner</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-numerico">Esempio Numerico</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementazione-in-stan">Implementazione in Stan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-dei-dati">Simulazione dei Dati</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri-della-simulazione">Parametri della Simulazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processo-di-simulazione">Processo di Simulazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integrazione-con-stan">Integrazione con Stan</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/51_rescorla_wagner.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="inferenza-sull-apprendimento-associativo-con-stan">
+<span id="stan-rescorla-wagner-notebook"></span><h1>Inferenza sull’apprendimento associativo con Stan<a class="headerlink" href="#inferenza-sull-apprendimento-associativo-con-stan" title="Link to this heading">#</a></h1>
+<p>L’apprendimento associativo è un principio fondamentale della psicologia che spiega come gli esseri viventi apprendono le relazioni tra gli elementi del loro ambiente. Un modello influente per descrivere questo processo è il modello di Rescorla-Wagner <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id2" title="Robert A Rescorla and Allan R Wagner. A theory of pavlovian conditioning: variations in the effectiveness of reinforcement and nonreinforcement. In Abram H Black and William F Prokasy, editors, Classical Conditioning II: Current Research and Theory, pages 64–99. Appleton-Century-Crofts, New York, 1972.">RW72</a>]</span>. Questo modello fornisce un framework matematico per comprendere come gli stimoli vengano associati a determinate conseguenze, come ricompense o punizioni, attraverso il processo di apprendimento.</p>
+<p>Mentre nel capitolo <a class="reference internal" href="../chapter_3/10_rescorla_wagner.html#notebook-rescorla-wagner"><span class="std std-ref">Apprendimento per rinforzo</span></a> abbiamo stimato il parametri del modello Rescorla-Wagner utilizzando la procedura della massima verosimiglianza, in questo capitolo, esploreremo la stima bayesiana dei parametri del modello Rescorla-Wagner utilizzando Stan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">cmdstan_path</span><span class="p">,</span> <span class="n">CmdStanModel</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="ne">----&gt; </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">cmdstan_path</span><span class="p">,</span> <span class="n">CmdStanModel</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;cmdstanpy&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="c1"># Initialize random number generator</span>
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="fondamenti-del-modello-di-rescorla-wagner">
+<h2>Fondamenti del Modello di Rescorla-Wagner<a class="headerlink" href="#fondamenti-del-modello-di-rescorla-wagner" title="Link to this heading">#</a></h2>
+<p>Riprendiamo qui la logica del modello dell’apprendimento associativo discussa nel capitolo <a class="reference internal" href="../chapter_3/10_rescorla_wagner.html#notebook-rescorla-wagner"><span class="std std-ref">Apprendimento per rinforzo</span></a>. Come spiegato in precedenza, il modello di Rescorla-Wagner si concentra sulla nozione di sorpresa o novità di un evento e su come questa influenzi l’apprendimento. Secondo il modello, l’apprendimento avviene quando l’evento effettivo differisce dalle aspettative precedenti. La differenza tra l’evento atteso e quello effettivamente verificatosi è definita errore di previsione. Questo errore di previsione guida l’aggiornamento delle aspettative future, permettendo all’individuo di adattare il proprio comportamento in base alle esperienze passate.</p>
+<p>Il modello utilizza due componenti principali per descrivere il processo di apprendimento:</p>
+<ol class="arabic simple">
+<li><p><strong>Valore dell’associazione (V)</strong>: rappresenta la forza dell’associazione tra uno stimolo e la sua conseguenza. Un valore più alto indica un’associazione più forte e una maggiore aspettativa che lo stimolo porti alla conseguenza.</p></li>
+<li><p><strong>Errore di previsione (ΔV)</strong>: la differenza tra la ricompensa attesa e quella effettivamente ricevuta. Questo errore viene utilizzato per aggiornare il valore dell’associazione, permettendo all’organismo di apprendere dalla sua esperienza.</p></li>
+</ol>
+<p>Il modello di Rescorla-Wagner si basa su due componenti principali: l’aggiornamento del valore di associazione tra uno stimolo e la sua conseguenza, e il criterio di decisione, che in molti casi viene rappresentato dalla funzione softmax. Queste componenti insieme formano un quadro per comprendere come gli agenti apprendono e prendono decisioni basate su stimoli e ricompense.</p>
+<section id="aggiornamento-del-valore-di-associazione">
+<h3>Aggiornamento del Valore di Associazione<a class="headerlink" href="#aggiornamento-del-valore-di-associazione" title="Link to this heading">#</a></h3>
+<p>Il modello di Rescorla-Wagner descrive l’apprendimento come un processo di aggiornamento dei valori di associazione (<span class="math notranslate nohighlight">\(V\)</span>) basato sugli errori di previsione. L’aggiornamento avviene secondo la seguente formula:</p>
+<div class="math notranslate nohighlight">
+\[
+V_{t+1}(s) = V_t(s) + \alpha \cdot \delta,
+\]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(V_{t+1}(s)\)</span> è il valore aggiornato dell’associazione per lo stimolo <span class="math notranslate nohighlight">\(s\)</span> dopo il trial <span class="math notranslate nohighlight">\(t\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(V_t(s)\)</span> è il valore corrente dell’associazione per lo stimolo <span class="math notranslate nohighlight">\(s\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> è il tasso di apprendimento, che determina quanto l’errore di previsione influisce sull’aggiornamento del valore,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\delta\)</span> è l’errore di previsione, calcolato come la differenza tra la ricompensa ricevuta (<span class="math notranslate nohighlight">\(R\)</span>) e la ricompensa prevista (<span class="math notranslate nohighlight">\(V_t(s)\)</span>), ovvero <span class="math notranslate nohighlight">\(\delta = R - V_t(s)\)</span>.</p></li>
+</ul>
+<p><strong>Esempio Numerico dell’Aggiornamento del Valore:</strong></p>
+<p>Consideriamo un agente che sta apprendendo l’associazione tra un certo stimolo <span class="math notranslate nohighlight">\(s\)</span> e la sua ricompensa. Supponiamo che il valore corrente dell’associazione (<span class="math notranslate nohighlight">\(V_t(s)\)</span>) sia 0.5, la ricompensa ricevuta (<span class="math notranslate nohighlight">\(R\)</span>) sia 1, e il tasso di apprendimento (<span class="math notranslate nohighlight">\(\alpha\)</span>) sia 0.1. L’errore di previsione (<span class="math notranslate nohighlight">\(\delta\)</span>) sarà <span class="math notranslate nohighlight">\(1 - 0.5 = 0.5\)</span>. L’aggiornamento del valore sarà:</p>
+<div class="math notranslate nohighlight">
+\[
+V_{t+1}(s) = 0.5 + 0.1 \cdot 0.5 = 0.55
+\]</div>
+</section>
+<section id="criterio-di-decisione-softmax">
+<h3>Criterio di Decisione Softmax<a class="headerlink" href="#criterio-di-decisione-softmax" title="Link to this heading">#</a></h3>
+<p>Il criterio di decisione determina come l’agente sceglie tra diverse opzioni basate sui valori di associazione aggiornati. La funzione softmax è comunemente utilizzata in questo contesto perché trasforma i valori di associazione in probabilità di scelta, rendendo possibile la selezione probabilistica delle opzioni. La funzione softmax per l’opzione <span class="math notranslate nohighlight">\(i\)</span> è definita come:</p>
+<div class="math notranslate nohighlight">
+\[
+P(i) = \frac{e^{V(i) \cdot \tau}}{\sum_{j} e^{V(j) \cdot \tau}}
+\]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P(i)\)</span> è la probabilità di scegliere l’opzione <span class="math notranslate nohighlight">\(i\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(V(i)\)</span> è il valore di associazione per l’opzione <span class="math notranslate nohighlight">\(i\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau\)</span> è il parametro di temperatura, che regola il grado di esplorazione o sfruttamento nelle scelte,</p></li>
+<li><p>il denominatore è la somma delle esponenziali dei valori di tutte le opzioni disponibili, che normalizza le probabilità.</p></li>
+</ul>
+<p><strong>Esempio Numerico del Criterio di Decisione Softmax:</strong></p>
+<p>Immaginiamo che un agente debba scegliere tra due opzioni con valori di associazione <span class="math notranslate nohighlight">\(V(1) = 0.55\)</span> e <span class="math notranslate nohighlight">\(V(2) = 0.45\)</span>, e che il parametro di temperatura (<span class="math notranslate nohighlight">\(\tau\)</span>) sia 1. Le probabilità di scelta per ciascuna opzione sono calcolate come segue:</p>
+<div class="math notranslate nohighlight">
+\[
+P(1) = \frac{e^{0.55 \cdot 1}}{e^{0.55 \cdot 1} + e^{0.45 \cdot 1}} \approx \frac{e^{0.55}}{e^{0.55} + e^{0.45}}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+P(2) = \frac{e^{0.45 \cdot 1}}{e^{0.55 \cdot 1} + e^{0.45 \cdot 1}} \approx \frac{e^{0.45}}{e^{0.55} + e^{0.45}}
+\]</div>
+<p>Queste probabilità guidano l’agente nella scelta tra le due opzioni, bilanciando tra l’esplorazione di nuove opzioni e lo sfruttamento delle opzioni conosciute per massimizzare la ricompensa.</p>
+</section>
+<section id="applicazioni-del-modello">
+<h3>Applicazioni del Modello<a class="headerlink" href="#applicazioni-del-modello" title="Link to this heading">#</a></h3>
+<p>Il modello di Rescorla-Wagner ha trovato applicazione in una vasta gamma di contesti all’interno della psicologia e delle neuroscienze, dalla comprensione di come gli animali si adattano ai cambiamenti nel loro ambiente di apprendimento, alla spiegazione di fenomeni più complessi come la fobia e la dipendenza. Inoltre, il concetto di errore di previsione è stato fondamentale per lo sviluppo di teorie nell’apprendimento al rinforzo e nella psicologia cognitiva, evidenziando il ruolo centrale delle aspettative nell’apprendimento.</p>
+</section>
+<section id="dal-modello-di-rescorla-wagner-all-apprendimento-al-rinforzo">
+<h3>Dal Modello di Rescorla-Wagner all’Apprendimento al Rinforzo<a class="headerlink" href="#dal-modello-di-rescorla-wagner-all-apprendimento-al-rinforzo" title="Link to this heading">#</a></h3>
+<p>L’apprendimento al rinforzo, un campo di studio interdisciplinare che coinvolge psicologia, neuroscienze, e intelligenza artificiale, estende i principi dell’apprendimento associativo per comprendere come gli agenti (siano essi animali o algoritmi) prendono decisioni ottimali per massimizzare la ricompensa totale. Nel contesto dell’apprendimento al rinforzo, il modello di Rescorla-Wagner può essere visto come un caso particolare, dove l’aggiornamento dei valori di aspettativa in risposta agli errori di previsione guida la scelta degli agenti.</p>
+<p>Il modello di Rescorla-Wagner rappresenta una pietra miliare nella comprensione dell’apprendimento associativo, fornendo un meccanismo chiaro e quantificabile per spiegare come gli esseri viventi adattano il loro comportamento in risposta agli esiti delle loro azioni. La sua influenza si estende ben oltre la psicologia sperimentale, arricchendo il nostro approccio a studi più ampi sull’apprendimento, la decisione, e l’adattamento comportamentale.</p>
+</section>
+</section>
+<section id="compito-2-armed-bandit">
+<h2>Compito 2-armed bandit<a class="headerlink" href="#compito-2-armed-bandit" title="Link to this heading">#</a></h2>
+<p>Il paradigma sperimentale noto come “2-armed bandit” rappresenta uno strumento comune nella ricerca psicologica e neuroscientifica per investigare il processo decisionale in condizioni di incertezza e apprendimento tramite rinforzo. Questo nome trae origine dalle antiche slot machine, comunemente chiamate “banditi a un braccio” per via della leva utilizzata per azionarle, che richiamava l’immagine di un bandito, e per il fatto che spesso portavano alla perdita di denaro. In una versione semplificata di tale paradigma, vengono presentate due opzioni (o “leve”) tra cui il partecipante deve scegliere, ognuna con una probabilità associata di fornire una vincita. L’obiettivo dei partecipanti consiste nel massimizzare il proprio guadagno attraverso ripetute scelte tra le due opzioni disponibili.</p>
+<section id="struttura-del-compito">
+<h3>Struttura del Compito<a class="headerlink" href="#struttura-del-compito" title="Link to this heading">#</a></h3>
+<p>Nel 2-armed bandit task, ogni leva ha una distribuzione di probabilità differente per la ricompensa. Queste distribuzioni sono tipicamente sconosciute al partecipante, che deve quindi imparare tramite prove ed errore quale leva offre, in media, le migliori ricompense. Le probabilità di vincita possono rimanere costanti o variare nel tempo, rendendo il compito più semplice o più complesso.</p>
+</section>
+<section id="applicazione-del-modello-di-rescorla-wagner">
+<h3>Applicazione del Modello di Rescorla-Wagner<a class="headerlink" href="#applicazione-del-modello-di-rescorla-wagner" title="Link to this heading">#</a></h3>
+<p>Il modello di Rescorla-Wagner può essere impiegato in questo contesto per descrivere come i partecipanti aggiornano le loro aspettative riguardo al valore delle due leve in funzione delle ricompense ottenute. Dopo ogni tentativo, il valore attribuito a ciascuna leva viene aggiornato in base all’errore di previsione, ossia alla discrepanza tra la ricompensa attesa e quella effettivamente ottenuta.</p>
+</section>
+<section id="componenti-del-modello-di-rescorla-wagner">
+<h3>Componenti del Modello di Rescorla-Wagner<a class="headerlink" href="#componenti-del-modello-di-rescorla-wagner" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p><strong>Aggiornamento del Valore</strong>: Il valore <span class="math notranslate nohighlight">\(V\)</span> associato a ciascuna opzione viene aggiornato in seguito all’errore di previsione <span class="math notranslate nohighlight">\(δ\)</span>, secondo la formula:</p>
+<div class="math notranslate nohighlight">
+\[V_{nuovo} = V_{vecchio} + \alpha \times δ,\]</div>
+<p>dove <span class="math notranslate nohighlight">\(\alpha\)</span> è il tasso di apprendimento e <span class="math notranslate nohighlight">\(δ = R - V_{vecchio}\)</span>, con <span class="math notranslate nohighlight">\(R\)</span> che rappresenta la ricompensa ricevuta.</p>
+</li>
+<li><p><strong>Criterio di Decisione Softmax</strong>: La probabilità di scegliere una delle due leve si basa sul criterio softmax, che utilizza i valori attuali <span class="math notranslate nohighlight">\(V\)</span> per calcolare le probabilità relative di selezionare ciascuna opzione:</p>
+<div class="math notranslate nohighlight">
+\[P(leve_i) = \frac{e^{V_i \times \tau}}{\sum_{j} e^{V_j \times \tau}},\]</div>
+<p>dove <span class="math notranslate nohighlight">\(\tau\)</span> è un parametro di temperatura che regola il grado di esplorazione versus sfruttamento: valori più bassi di <span class="math notranslate nohighlight">\(\tau\)</span> portano a una scelta più deterministica basata sul valore più alto, mentre valori più alti aumentano la probabilità di esplorare opzioni meno valutate.</p>
+</li>
+</ol>
+</section>
+<section id="esempio-numerico">
+<h3>Esempio Numerico<a class="headerlink" href="#esempio-numerico" title="Link to this heading">#</a></h3>
+<p>Immaginiamo un semplice scenario in cui un partecipante si trova di fronte a due leve con probabilità di vincita del 60% e del 40%, rispettivamente. All’inizio, entrambe le leve hanno un valore iniziale di 0. Dopo ogni scelta e il conseguente risultato, il partecipante aggiorna il valore della leva scelta usando il tasso di apprendimento <span class="math notranslate nohighlight">\(\alpha = 0.1\)</span>.</p>
+<p>Se sceglie la prima leva e vince (ricompensa = 1), l’errore di previsione per quella leva sarà <span class="math notranslate nohighlight">\(δ = 1 - 0 = 1\)</span>. L’aggiornamento del valore sarà quindi:</p>
+<div class="math notranslate nohighlight">
+\[V_{nuovo} = 0 + 0.1 \times 1 = 0.1\]</div>
+<p>Utilizzando il criterio di decisione softmax con <span class="math notranslate nohighlight">\(\tau = 1\)</span>, la probabilità di scegliere nuovamente quella leva aumenterà, incentivando il partecipante a sfruttare la leva con il valore percepito più alto, pur mantenendo una certa probabilità di esplorare l’altra opzione.</p>
+</section>
+</section>
+<section id="implementazione-in-stan">
+<h2>Implementazione in Stan<a class="headerlink" href="#implementazione-in-stan" title="Link to this heading">#</a></h2>
+<p>Di seguito descriviamo la simulazione dei dati, l’aggiornamento dei valori di scelta tramite il tasso di apprendimento e la temperatura inversa e l’integrazione di tali elementi nel framework di modellazione Stan.</p>
+<section id="simulazione-dei-dati">
+<h3>Simulazione dei Dati<a class="headerlink" href="#simulazione-dei-dati" title="Link to this heading">#</a></h3>
+<p>La simulazione dei dati si basa su un modello di scelta sequenziale dove un agente sceglie tra due opzioni in ciascuno dei <code class="docutils literal notranslate"><span class="pre">nt</span></code> tentativi. La probabilità che l’opzione 1 fornisca una ricompensa è <code class="docutils literal notranslate"><span class="pre">p</span></code>, mentre l’opzione 2 ha una probabilità <code class="docutils literal notranslate"><span class="pre">1-p</span></code> di fornire una ricompensa. Le ricompense sono rappresentate come <code class="docutils literal notranslate"><span class="pre">1</span></code> per il successo e <code class="docutils literal notranslate"><span class="pre">-1</span></code> per il fallimento.</p>
+</section>
+<section id="parametri-della-simulazione">
+<h3>Parametri della Simulazione<a class="headerlink" href="#parametri-della-simulazione" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Tasso di apprendimento (<span class="math notranslate nohighlight">\(\alpha\)</span>)</strong>: determina quanto velocemente l’agente aggiorna le sue aspettative di valore basate sull’errore di previsione.</p></li>
+<li><p><strong>Temperatura inversa (<span class="math notranslate nohighlight">\(\tau\)</span>)</strong>: controlla il grado di esplorazione rispetto all’esploitation nelle scelte dell’agente. Un valore più alto indica una maggiore esplorazione.</p></li>
+</ul>
+</section>
+<section id="processo-di-simulazione">
+<h3>Processo di Simulazione<a class="headerlink" href="#processo-di-simulazione" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p><strong>Inizializzazione</strong>: Si iniziano con valori iniziali di <code class="docutils literal notranslate"><span class="pre">0</span></code> per entrambe le opzioni.</p></li>
+<li><p><strong>Calcolo delle Probabilità di Azione</strong>: Utilizzando la funzione softmax, si calcolano le probabilità di scegliere ciascuna opzione. La probabilità di scegliere l’opzione 1 è data da</p>
+<div class="math notranslate nohighlight">
+\[P(\text{opzione 1}) = \frac{e^{\tau V_1}}{e^{\tau V_1} + e^{\tau V_2}},\]</div>
+<p>dove <span class="math notranslate nohighlight">\(V_1\)</span> e <span class="math notranslate nohighlight">\(V_2\)</span> sono i valori attuali per le opzioni 1 e 2, rispettivamente.</p>
+</li>
+<li><p><strong>Selezione e Ricompensa</strong>: L’agente fa una scelta basata sulle probabilità calcolate. La ricompensa è determinata dalla corrispondenza tra la scelta dell’agente e l’opzione vincente, che è stabilita secondo la probabilità <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></li>
+<li><p><strong>Aggiornamento dei Valori</strong>: Dopo ogni scelta, l’agente aggiorna il valore dell’opzione scelta utilizzando l’errore di previsione (<span class="math notranslate nohighlight">\(PE\)</span>) e il tasso di apprendimento (<span class="math notranslate nohighlight">\(\alpha\)</span>). L’errore di previsione è calcolato come la differenza tra la ricompensa ottenuta (<span class="math notranslate nohighlight">\(R\)</span>) e il valore corrente dell’opzione scelta (<span class="math notranslate nohighlight">\(V\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[PE = R - V.\]</div>
+<p>Il valore viene poi aggiornato come segue:</p>
+<div class="math notranslate nohighlight">
+\[V_{\text{nuovo}} = V + \alpha \times PE.\]</div>
+</li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># learning rate</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="mi">1</span>      <span class="c1"># inverse temperature</span>
+<span class="n">nt</span> <span class="o">=</span> <span class="mi">100</span>     <span class="c1"># number of trials</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.8</span>      <span class="c1"># reward probability for option 1</span>
+
+<span class="c1"># Initialize choices and rewards</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Rewards should be able to hold -1 and 1</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>  <span class="c1"># Initial values for both options</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+    <span class="c1"># Compute action probabilities using the softmax function</span>
+    <span class="n">prob_of_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">prob_of_1</span> <span class="k">else</span> <span class="mi">2</span>
+    
+    <span class="c1"># Determine if option 1 is the winner based on reward probability</span>
+    <span class="n">is_winner_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">p</span>
+    <span class="c1"># Assign rewards based on choice correctness and winner</span>
+    <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">r</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">is_winner_1</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Choice was option 2</span>
+        <span class="n">r</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_winner_1</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="c1"># Calculate prediction error</span>
+    <span class="n">pe</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># Update value based on prediction error</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pe</span>
+
+<span class="c1"># Convert choices and rewards to DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;choice&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s1">&#39;reward&#39;</span><span class="p">:</span> <span class="n">r</span><span class="p">})</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>choice</th>
+      <th>reward</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>-1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>-1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>-1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Il codice seguente consente di generare un grafico con l’evoluzione del valore atteso di uno stimolo in funzione del numero di prove e dei feedback (rewards) ottenuti.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>  <span class="c1"># Initial values for both options</span>
+<span class="n">v_history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># Per tenere traccia dei valori di entrambe le opzioni ad ogni prova</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+    <span class="n">prob_of_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">prob_of_1</span> <span class="k">else</span> <span class="mi">2</span>
+    
+    <span class="n">is_winner_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">p</span>
+    <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">r</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">is_winner_1</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">r</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_winner_1</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="n">pe</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">pe</span>
+    <span class="n">v_history</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>  <span class="c1"># Aggiorna la cronologia dei valori</span>
+
+<span class="c1"># Ora, v_history contiene i valori per entrambe le opzioni ad ogni prova</span>
+<span class="c1"># Generiamo il grafico</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v_history</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Opzione 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v_history</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Opzione 2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Numero di prove&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Valore atteso&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Valore atteso per opzione in funzione del numero di prove&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ef6f7ffa78f28488080dd74bff8cb7ba80bae3e20133cd383a8cd1ece02f950b.png" src="../_images/ef6f7ffa78f28488080dd74bff8cb7ba80bae3e20133cd383a8cd1ece02f950b.png" />
+</div>
+</div>
+<p>Predisponiamo i dati per il modello Stan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nTrials&quot;</span><span class="p">:</span> <span class="n">nt</span><span class="p">,</span>
+    <span class="s2">&quot;choice&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;choice&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+    <span class="s2">&quot;reward&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="integrazione-con-stan">
+<h3>Integrazione con Stan<a class="headerlink" href="#integrazione-con-stan" title="Link to this heading">#</a></h3>
+<p>Nel modello Stan, questi principi sono implementati nel blocco <code class="docutils literal notranslate"><span class="pre">model</span></code>, dove il comportamento di scelta dell’agente viene modellato attraverso la funzione <code class="docutils literal notranslate"><span class="pre">categorical_logit</span></code> che utilizza le probabilità di azione calcolate tramite la temperatura inversa e i valori di aspettativa. I parametri <code class="docutils literal notranslate"><span class="pre">lr</span></code> (tasso di apprendimento) e <code class="docutils literal notranslate"><span class="pre">tau</span></code> (temperatura inversa) sono stimati basandosi sui dati simulati.</p>
+<p>Il modello utilizza priori per <code class="docutils literal notranslate"><span class="pre">lr</span></code> e <code class="docutils literal notranslate"><span class="pre">tau</span></code> per esprimere le conoscenze pregresse o le aspettative su questi parametri. Per esempio, <code class="docutils literal notranslate"><span class="pre">lr</span> <span class="pre">~</span> <span class="pre">beta(2,</span> <span class="pre">2)</span></code> implica una conoscenza pregressa che il tasso di apprendimento è probabilmente distribuito uniformemente tra 0 e 1, mentre <code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">~</span> <span class="pre">normal(1,</span> <span class="pre">0.5)</span></code> suggerisce che ci aspettiamo che la temperatura inversa sia vicino a 1 con una certa dispersione.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;reinforcement_learning_sp_ss_model.stan&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=1&gt; nTrials;               
+  array[nTrials] int&lt;lower=1,upper=2&gt; choice;     
+  array[nTrials] real&lt;lower=-1, upper=1&gt; reward; 
+}
+
+transformed data {
+  vector[2] initV = rep_vector(0.0, 2);  // initial values for V
+}
+
+parameters {
+  real&lt;lower=0,upper=1&gt; lr; // learning rate
+  real&lt;lower=0,upper=3&gt; tau; // temperature
+}
+
+model {
+  // Priors for the learning rate and temperature
+  lr ~ beta(2, 2); 
+  tau ~ normal(1, 0.5); // Assuming most values around 1 with some dispersion
+ 
+  vector[2] v = initV; // Initial value for V
+  real pe; // prediction error for each trial
+
+  for (t in 1:nTrials) {
+    // Compute action probabilities and model choice behavior
+    choice[t] ~ categorical_logit(tau * v);
+
+    // Calculate prediction error
+    pe = reward[t] - v[choice[t]];
+
+    // Update values based on prediction error and learning rate
+    v[choice[t]] = v[choice[t]] + lr * pe;
+  }
+}
+
+generated quantities {
+  array[nTrials] real log_lik; // log-likelihood for each trial for model comparison or evaluation
+  vector[2] v = initV; // Re-initialize v for generated quantities
+  
+  for (t in 1:nTrials) {
+    log_lik[t] = categorical_logit_lpmf(choice[t] | tau * v); // Calculate log-likelihood
+    if (t &lt; nTrials) {
+      real pe = reward[t] - v[choice[t]]; // Recalculate prediction error
+      v[choice[t]] = v[choice[t]] + lr * pe; // Update v for next trial&#39;s log-likelihood calculation
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">choice[t]</span> <span class="pre">~</span> <span class="pre">categorical_logit(tau</span> <span class="pre">*</span> <span class="pre">v);</span></code> specifica una relazione probabilistica per la variabile “choice[t]” al tempo t. La distribuzione di “choice[t]” è modellata come una distribuzione categorica, dove le categorie sono determinate dai valori di input “tau * v”.</p>
+<ul class="simple">
+<li><p>“tau” rappresenta la temperatura inversa, che regola la probabilità delle scelte. Una temperatura più alta porta a una distribuzione delle probabilità più uniforme tra le categorie, mentre una temperatura più bassa enfatizza le differenze tra i valori di input.</p></li>
+<li><p>“v” è un vettore di valori di input che influenzano le probabilità di scelta.</p></li>
+<li><p>“categorical_logit” indica che le probabilità delle categorie sono calcolate utilizzando la funzione logit, che converte i valori di input in probabilità tramite la funzione softmax.</p></li>
+</ul>
+<p>In sintesi, questo comando assegna la probabilità di “choice[t]” basata sui valori di input “tau * v”, con la temperatura inversa che regola la dispersione delle probabilità tra le categorie.</p>
+<p>Facciamo un esempio numerico. Nel 2-armed bandit task ci sono solo due categorie possibili per “choice[t]”. Utilizziamo i seguenti valori:</p>
+<ul class="simple">
+<li><p>“tau” = 0.5</p></li>
+<li><p>“v” = [2, 3]</p></li>
+</ul>
+<p>Utilizzando il comando Stan:</p>
+<div class="highlight-stan notranslate"><div class="highlight"><pre><span></span><span class="n">choice</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">~</span><span class="w"> </span><span class="nb">categorical_logit</span><span class="p">(</span><span class="n">tau</span> <span class="o">*</span> <span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>calcoliamo le probabilità delle due categorie per “choice[t]” al tempo t:</p>
+<ol class="arabic">
+<li><p>Calcoliamo il prodotto tra “tau” e ciascun elemento di “v”:</p>
+<p>tau * v = 0.5 * [2, 3] = [1, 1.5]</p>
+</li>
+<li><p>Applichiamo la funzione logit a ciascun elemento del vettore ottenuto:</p>
+<p>logit([1, 1.5]) = [0, 0.405]</p>
+</li>
+<li><p>Applichiamo la funzione softmax per ottenere le probabilità normalizzate:</p>
+<p>softmax([0, 0.405]) = [0.307, 0.693]</p>
+</li>
+</ol>
+<p>Quindi, le probabilità delle due categorie per “choice[t]” sono approssimativamente 30.7% per la prima categoria e 69.3% per la seconda categoria.</p>
+<p>Consideriamo ora comando in Stan che calcola l’errore di previsione (PE - Prediction Error) per un dato momento t.</p>
+<ul class="simple">
+<li><p>“reward[t]” rappresenta la ricompensa ottenuta al tempo t.</p></li>
+<li><p>“v[choice[t]]” indica il valore associato alla scelta effettuata al tempo t. “choice[t]” è l’indice della scelta fatta, e viene utilizzato per accedere al valore corrispondente nel vettore “v”.</p></li>
+</ul>
+<p>Quindi, l’errore di previsione viene calcolato sottraendo il valore associato alla scelta effettuata (“v[choice[t]]”) dalla ricompensa ottenuta (“reward[t]”). Questo fornisce una misura di quanto la previsione del valore della scelta sia deviata dalla ricompensa effettivamente ottenuta. Un errore positivo indica che la ricompensa ottenuta è maggiore della previsione, mentre un errore negativo indica il contrario.</p>
+<p>Per fare un esempio numerico, supponiamo di avere i seguenti valori:</p>
+<ul class="simple">
+<li><p>Al tempo t, la ricompensa ottenuta è “reward[t]” = 1.</p></li>
+<li><p>La scelta effettuata al tempo t è indicata da “choice[t]” = 1.</p></li>
+<li><p>I valori associati alle scelte sono “v” = [2, 3].</p></li>
+</ul>
+<p>Utilizzando il comando Stan:</p>
+<div class="highlight-stan notranslate"><div class="highlight"><pre><span></span><span class="n">pe</span> <span class="o">=</span> <span class="n">reward</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="n">choice</span><span class="p">[</span><span class="n">t</span><span class="p">]];</span>
+</pre></div>
+</div>
+<p>calcoliamo l’errore di previsione:</p>
+<ol class="arabic">
+<li><p>Determiniamo il valore associato alla scelta effettuata al tempo t, ovvero “v[choice[t]]”:</p>
+<p>v[choice[t]] = v[1] = 3</p>
+</li>
+<li><p>Calcoliamo l’errore di previsione sottraendo il valore associato alla scelta effettuata dalla ricompensa ottenuta:</p>
+<p>pe = 1 - 3 = -2</p>
+</li>
+</ol>
+<p>Quindi, l’errore di previsione (PE) al tempo t è -2. Questo significa che la previsione del valore della scelta è superiore di 2 rispetto alla ricompensa effettivamente ottenuta, indicando una discrepanza negativa tra la previsione e la realtà. In questo contesto, un errore di previsione negativo indica che la previsione del valore della scelta è stata troppo ottimistica rispetto alla ricompensa effettivamente ottenuta.</p>
+<p>Infine, consideriamo l’istruzione in Stan che aggiorna il valore associato alla scelta effettuata al tempo t utilizzando l’errore di previsione (PE) moltiplicato per il tasso di apprendimento (lr): <code class="docutils literal notranslate"><span class="pre">v[choice[t]]</span> <span class="pre">=</span> <span class="pre">v[choice[t]]</span> <span class="pre">+</span> <span class="pre">lr</span> <span class="pre">*</span> <span class="pre">pe;</span></code>.</p>
+<ul class="simple">
+<li><p>“v[choice[t]]” rappresenta il valore associato alla scelta effettuata al tempo t.</p></li>
+<li><p>“lr” è il tasso di apprendimento (learning rate), che determina la velocità con cui il valore associato viene aggiornato.</p></li>
+<li><p>“pe” è l’errore di previsione al tempo t.</p></li>
+</ul>
+<p>Quindi, questa istruzione calcola il nuovo valore associato alla scelta effettuata aggiungendo al valore precedente il prodotto del tasso di apprendimento per l’errore di previsione.</p>
+<p>Per fare un esempio numerico, supponiamo di avere i seguenti valori:</p>
+<ul class="simple">
+<li><p>L’errore di previsione al tempo t è “pe” = -2.</p></li>
+<li><p>Il tasso di apprendimento è “lr” = 0.1.</p></li>
+<li><p>Il valore associato alla scelta effettuata al tempo t prima dell’aggiornamento è “v[choice[t]]” = 3.</p></li>
+</ul>
+<p>Utilizzando l’istruzione Stan:</p>
+<div class="highlight-stan notranslate"><div class="highlight"><pre><span></span><span class="n">v</span><span class="p">[</span><span class="n">choice</span><span class="p">[</span><span class="n">t</span><span class="p">]]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">choice</span><span class="p">[</span><span class="n">t</span><span class="p">]]</span> <span class="o">+</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">pe</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Calcoliamo il nuovo valore associato alla scelta effettuata:</p>
+<ol class="arabic">
+<li><p>Moltiplichiamo il tasso di apprendimento per l’errore di previsione:</p>
+<p>lr * pe = 0.1 * (-2) = -0.2</p>
+</li>
+<li><p>Aggiungiamo questo valore al valore associato precedente alla scelta effettuata:</p>
+<p>v[choice[t]] = 3 + (-0.2) = 2.8</p>
+</li>
+</ol>
+<p>Quindi, il nuovo valore associato alla scelta effettuata al tempo t è 2.8, dopo aver applicato l’aggiornamento basato sull’errore di previsione e il tasso di apprendimento.</p>
+<p>Una volta definito il processo generativo dei dati, l’obiettivo è inferire i valori dei parametri del modello. Questa inferenza si basa sulle distribuzioni a priori impostate sui parametri, integrate con i dati osservati. Il blocco di codice Stan denominato <code class="docutils literal notranslate"><span class="pre">model</span></code> comprende sia le distribuzioni a priori sui parametri che la definizione della verosimiglianza, che rappresenta il processo generativo dei dati. Utilizzando queste informazioni insieme ai dati in ingresso, Stan genera campioni dalle distribuzioni a posteriori dei parametri.</p>
+<p>Compiliamo il modello Stan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CmdStanModel: name=reinforcement_learning_sp_ss_model
+	 stan_file=/Users/corrado/_repositories/ds4p/chapter_4/stan/reinforcement_learning_sp_ss_model.stan
+	 exe_file=/Users/corrado/_repositories/ds4p/chapter_4/stan/reinforcement_learning_sp_ss_model
+	 compiler_options=stanc_options={}, cpp_options={}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">iter_sampling</span> <span class="o">=</span> <span class="mi">4000</span><span class="p">,</span>
+    <span class="n">iter_warmup</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">84735</span><span class="p">,</span>
+    <span class="n">chains</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:38:36 - cmdstanpy - INFO - CmdStan start processing
+chain 1 |<span class=" -Color -Color-Yellow">          </span>| 00:00 Status
+
+
+
+
+
+chain 1 |<span class=" -Color -Color-Yellow">██▍       </span>| 00:00 Iteration: 1300 / 6000 [ 21%]  (Warmup)
+
+
+chain 1 |<span class=" -Color -Color-Blue">███▊      </span>| 00:00 Iteration: 2100 / 6000 [ 35%]  (Sampling)
+
+
+
+
+
+chain 1 |<span class=" -Color -Color-Blue">█████▎    </span>| 00:00 Iteration: 3000 / 6000 [ 50%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████▌   </span>| 00:00 Iteration: 3800 / 6000 [ 63%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">███████▋  </span>| 00:00 Iteration: 4500 / 6000 [ 75%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">████████▊ </span>| 00:00 Iteration: 5200 / 6000 [ 86%]  (Sampling)
+
+
+chain 1 |<span class=" -Color -Color-Blue">██████████</span>| 00:01 Sampling completed                       
+chain 2 |<span class=" -Color -Color-Blue">██████████</span>| 00:01 Sampling completed                       
+chain 3 |<span class=" -Color -Color-Blue">██████████</span>| 00:01 Sampling completed                       
+chain 4 |<span class=" -Color -Color-Blue">██████████</span>| 00:01 Sampling completed                       
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                                                                                                                                                                                                                                                                
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>06:38:38 - cmdstanpy - INFO - CmdStan done processing.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">diagnose</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing csv files: /var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/tmpv1j2br0v/reinforcement_learning_sp_ss_modela6ywpivm/reinforcement_learning_sp_ss_model-20240301063837_1.csv, /var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/tmpv1j2br0v/reinforcement_learning_sp_ss_modela6ywpivm/reinforcement_learning_sp_ss_model-20240301063837_2.csv, /var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/tmpv1j2br0v/reinforcement_learning_sp_ss_modela6ywpivm/reinforcement_learning_sp_ss_model-20240301063837_3.csv, /var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/tmpv1j2br0v/reinforcement_learning_sp_ss_modela6ywpivm/reinforcement_learning_sp_ss_model-20240301063837_4.csv
+
+Checking sampler transitions treedepth.
+Treedepth satisfactory for all transitions.
+
+Checking sampler transitions for divergences.
+No divergent transitions found.
+
+Checking E-BFMI - sampler transitions HMC potential energy.
+E-BFMI satisfactory.
+
+Effective sample size satisfactory.
+
+Split R-hat values satisfactory all parameters.
+
+Processing complete, no problems detected.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo la distribuzione a posteriori dei parametri.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;tau&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.89</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_5.5%</th>
+      <th>hdi_94.5%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>lr</th>
+      <td>0.312</td>
+      <td>0.146</td>
+      <td>0.072</td>
+      <td>0.522</td>
+      <td>0.002</td>
+      <td>0.001</td>
+      <td>7983.0</td>
+      <td>7312.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>tau</th>
+      <td>0.918</td>
+      <td>0.233</td>
+      <td>0.539</td>
+      <td>1.269</td>
+      <td>0.003</td>
+      <td>0.002</td>
+      <td>7769.0</td>
+      <td>8329.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Con solamente 100 prove per ciascun singolo soggetto, il modello è stato in grado di recuperare in modo accurato i valori dei parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\tau\)</span> utilizzati per generare i dati forniti in input.</p>
+</section>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m -p cmdstanpy
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 01 2024
+
+Python implementation: CPython
+Python version       : 3.12.2
+IPython version      : 8.22.1
+
+cmdstanpy: 1.2.1
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.3.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
+numpy     : 1.26.4
+pandas    : 2.2.1
+arviz     : 0.17.0
+scipy     : 1.12.0
+seaborn   : 0.13.2
+matplotlib: 3.8.3
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="50_stan_beta_binomial.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CmdStanPy</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="52_stan_hier_beta_binom.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Modello gerarchico beta-binomiale con Stan</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fondamenti-del-modello-di-rescorla-wagner">Fondamenti del Modello di Rescorla-Wagner</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aggiornamento-del-valore-di-associazione">Aggiornamento del Valore di Associazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-di-decisione-softmax">Criterio di Decisione Softmax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni-del-modello">Applicazioni del Modello</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dal-modello-di-rescorla-wagner-all-apprendimento-al-rinforzo">Dal Modello di Rescorla-Wagner all’Apprendimento al Rinforzo</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compito-2-armed-bandit">Compito 2-armed bandit</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#struttura-del-compito">Struttura del Compito</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazione-del-modello-di-rescorla-wagner">Applicazione del Modello di Rescorla-Wagner</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#componenti-del-modello-di-rescorla-wagner">Componenti del Modello di Rescorla-Wagner</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-numerico">Esempio Numerico</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementazione-in-stan">Implementazione in Stan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-dei-dati">Simulazione dei Dati</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri-della-simulazione">Parametri della Simulazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processo-di-simulazione">Processo di Simulazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integrazione-con-stan">Integrazione con Stan</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
