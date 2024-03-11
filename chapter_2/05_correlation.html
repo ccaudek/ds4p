@@ -342,7 +342,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -568,31 +569,25 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <a target="_blank" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/070_correlation.ipynb">
+  <a target="_blank" href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/chapter_2/05_correlation.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 <section class="tex2jax_ignore mathjax_ignore" id="le-relazioni-tra-variabili">
 <span id="associations-notebook"></span><h1>Le relazioni tra variabili<a class="headerlink" href="#le-relazioni-tra-variabili" title="Link to this heading">#</a></h1>
 <p>In questo capitolo esamineremo due indicatori statistici utilizzati per misurare la relazione lineare tra due variabili: la covarianza e la correlazione. Questi due strumenti sono fondamentali per comprendere il grado e la direzione dell’associazione tra le variabili, consentendoci di quantificare quanto variano insieme e in che modo.</p>
-<p>In questo capitolo, esploreremo le strategie per sintetizzare grandi quantità di dati. Discuteremo il calcolo e l’interpretazione delle distribuzioni di frequenza e dei quantili, oltre alle tecniche di visualizzazione che ci permettono di rappresentare graficamente queste sintesi di dati. Prima di procedere con il presente capitolo, è indispensabile leggere l’appendice dedicata al <a class="reference internal" href="../chapter_7/a12_sum_notation.html#sec-appendix-sums"><span class="std std-ref">Simbolo di somma (sommatorie)</span></a>.</p>
 <div class="tip admonition">
 <p class="admonition-title">Obiettivi di apprendimento</p>
 <p>Dopo la lettura di questo capitolo gli studenti sapranno</p>
 <ul class="simple">
-<li><p>calcolare e interpretare la correlazione e la covarianza.</p></li>
+<li><p>calcolare la correlazione e la covarianza;</p></li>
+<li><p>interpretare gli indici di correlazione e covarianza.</p></li>
 </ul>
 </div>
 <section id="i-dati-grezzi">
 <h2>I dati grezzi<a class="headerlink" href="#i-dati-grezzi" title="Link to this heading">#</a></h2>
-<p>Per illustrare i principali strumenti della statistica descrittiva, analizzeremo i dati raccolti da <span id="id1">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id71" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span> in uno studio che indaga le aspettative negative come meccanismo chiave nel mantenimento e nella reiterazione della depressione. Nello specifico, i ricercatori si sono proposti di determinare se gli individui depressi sviluppano aspettative accurate riguardo al loro umore futuro o se tali aspettative sono distortamente negative.</p>
+<p>Per illustrare la correlazione e la covarianza, analizzeremo i dati raccolti da <span id="id1">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id71" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span> in uno studio che indaga le aspettative negative come meccanismo chiave nel mantenimento e nella reiterazione della depressione. Nello specifico, i ricercatori si sono proposti di determinare se gli individui depressi sviluppano aspettative accurate riguardo al loro umore futuro o se tali aspettative sono distortamente negative.</p>
 <p>Uno dei loro studi ha coinvolto un campione di 30 soggetti con almeno un episodio depressivo maggiore, confrontati con un gruppo di controllo composto da 37 individui sani. La misurazione del livello di depressione è stata effettuata tramite il <em>Beck Depression Inventory</em> (BDI-II).</p>
-<p>Il BDI-II è uno strumento di autovalutazione utilizzato per valutare la gravità della depressione in adulti e adolescenti. Il test è stato sviluppato per identificare e misurare l’intensità dei sintomi depressivi sperimentati nelle ultime due settimane. I 21 item del test sono valutati su una scala a 4 punti, dove 0 rappresenta il grado più basso e 3 il grado più elevato di sintomatologia depressiva. Il punteggio totale ottenuto nel test viene valutato secondo i seguenti intervalli:</p>
-<ul class="simple">
-<li><p>0-13: punteggio normale o livelli minimi di depressione considerati clinicamente non significativi;</p></li>
-<li><p>14-19: depressione lieve-moderata;</p></li>
-<li><p>20-28: depressione moderata-severa;</p></li>
-<li><p>29-63: livelli estremamente severi di depressione.</p></li>
-</ul>
+<p>Il BDI-II è uno strumento di autovalutazione utilizzato per valutare la gravità della depressione in adulti e adolescenti. Il test è stato sviluppato per identificare e misurare l’intensità dei sintomi depressivi sperimentati nelle ultime due settimane. I 21 item del test sono valutati su una scala a 4 punti, dove 0 rappresenta il grado più basso e 3 il grado più elevato di sintomatologia depressiva.</p>
 <p>Nell’esercizio successivo, ci proponiamo di analizzare i punteggi di depressione BDI-II nel campione di dati fornito da <span id="id2">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id71" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
 </section>
 <section id="preparazione-del-notebook">
@@ -629,7 +624,7 @@ document.write(`
 <p>Non si tratta solo di relazioni positive o negative; ci sono anche situazioni in cui le variabili non hanno alcuna relazione tra loro, definendo così una relazione nulla. Inoltre, le relazioni possono variare nel tempo, passando da positive a negative o da fortemente positive a appena positiva. In alcuni casi, una delle variabili può essere categorica, rendendo difficile parlare di “maggioranza” o “minoranza” ma piuttosto di “differente” (ad esempio, i bambini più grandi potrebbero semplicemente avere diverse preferenze rispetto ai bambini più piccoli, senza necessariamente essere “migliori” o “peggiori”).</p>
 </section>
 <section id="grafico-a-dispersione">
-<h2>Grafico a dispersione<a class="headerlink" href="#grafico-a-dispersione" title="Link to this heading">#</a></h2>
+<span id="sec-zetsche-scatter"></span><h2>Grafico a dispersione<a class="headerlink" href="#grafico-a-dispersione" title="Link to this heading">#</a></h2>
 <p>Il metodo più diretto per visualizzare la relazione tra due variabili continue è tramite un grafico a dispersione, comunemente noto come “scatterplot”. Questo tipo di diagramma rappresenta le coppie di dati ottenute da due variabili, posizionandole sull’asse delle ascisse (orizzontale) e delle ordinate (verticale).</p>
 <p>Per rendere l’idea più chiara, consideriamo i dati di uno studio condotto da <span id="id3"></span>, in cui i ricercatori hanno utilizzato due scale psicometriche, il Beck Depression Inventory II (BDI-II) e la Center for Epidemiologic Studies Depression Scale (CES-D), per misurare il livello di depressione nei partecipanti. Il BDI-II è uno strumento di autovalutazione che valuta la presenza e l’intensità dei sintomi depressivi in pazienti adulti e adolescenti con diagnosi psichiatrica, mentre la CES-D è una scala di autovalutazione progettata per misurare i sintomi depressivi sperimentati nella settimana precedente nella popolazione generale, in particolare negli adolescenti e nei giovani adulti. Poiché entrambe le scale misurano lo stesso costrutto, ovvero la depressione, ci aspettiamo una relazione tra i punteggi ottenuti dal BDI-II e dalla CES-D. Un diagramma a dispersione ci consente di esaminare questa relazione in modo visuale e intuitivo.</p>
 <div class="cell docutils container">
@@ -713,7 +708,7 @@ S_{XY} = \frac{1}{n} \sum_{i=1}^n(X_i - \bar{X}) (Y_i - \bar{Y}).
 <p>L’eq. <a class="reference internal" href="#equation-eq-cov-def">(8)</a> ci fornisce la definizione della covarianza.</p>
 <section id="interpretazione">
 <h3>Interpretazione<a class="headerlink" href="#interpretazione" title="Link to this heading">#</a></h3>
-<p>Per capire il significato dell’eq. <a class="reference internal" href="#equation-eq-cov-def">(8)</a>, supponiamo di dividere il grafico riportato nella sezione <span class="xref std std-ref">sec-zetsche-scatter</span> in quattro quadranti definiti da una retta verticale passante per la media dei valori BDI-II e da una retta orizzontale passante per la media dei valori CES-D. Numeriamo i quadranti partendo da quello in basso a sinistra e muovendoci in senso antiorario.</p>
+<p>Per capire il significato dell’eq. <a class="reference internal" href="#equation-eq-cov-def">(8)</a>, supponiamo di dividere il grafico riportato nella sezione <a class="reference internal" href="#sec-zetsche-scatter"><span class="std std-ref">Grafico a dispersione</span></a> in quattro quadranti definiti da una retta verticale passante per la media dei valori BDI-II e da una retta orizzontale passante per la media dei valori CES-D. Numeriamo i quadranti partendo da quello in basso a sinistra e muovendoci in senso antiorario.</p>
 <p>Se prevalgono punti nel I e III quadrante, allora la nuvola di punti avrà un andamento crescente (per cui a valori bassi di <span class="math notranslate nohighlight">\(X\)</span> tendono ad associarsi valori bassi di <span class="math notranslate nohighlight">\(Y\)</span> e a valori elevati di <span class="math notranslate nohighlight">\(X\)</span> tendono ad associarsi valori elevati di <span class="math notranslate nohighlight">\(Y\)</span>) e la covarianza avrà segno positivo. Mentre se prevalgono punti nel II e IV quadrante la nuvola di punti avrà un andamento decrescente (per cui a valori bassi di <span class="math notranslate nohighlight">\(X\)</span> tendono ad associarsi valori elevati di <span class="math notranslate nohighlight">\(Y\)</span> e a valori elevati di <span class="math notranslate nohighlight">\(X\)</span> tendono ad associarsi valori bassi di <span class="math notranslate nohighlight">\(Y\)</span>) e la covarianza avrà segno negativo. Dunque, il segno della covarianza ci informa sulla direzione della relazione lineare tra due variabili: l’associazione lineare si dice positiva se la covarianza è positiva, negativa se la covarianza è negativa.</p>
 <p><strong>Esercizio.</strong> Implemento la <a class="reference internal" href="#equation-eq-cov-def">(8)</a> in Python.</p>
 <div class="cell docutils container">
@@ -778,6 +773,14 @@ S_{XY} = \frac{1}{n} \sum_{i=1}^n(X_i - \bar{X}) (Y_i - \bar{Y}).
 </div>
 </div>
 </div>
+<p>La funzione <code class="docutils literal notranslate"><span class="pre">np.cov(x,</span> <span class="pre">y,</span> <span class="pre">ddof=0)</span></code> in Python, utilizzata tramite la libreria NumPy, calcola la covarianza tra due array, <code class="docutils literal notranslate"><span class="pre">x</span></code> e <code class="docutils literal notranslate"><span class="pre">y</span></code>. L’argomento <code class="docutils literal notranslate"><span class="pre">ddof</span></code> (Delta Degrees of Freedom) specifica il “correttore” da applicare al denominatore della formula di covarianza.</p>
+<p>Quando si imposta <code class="docutils literal notranslate"><span class="pre">ddof=0</span></code>, la formula utilizzata per il calcolo della covarianza divide la somma dei prodotti delle deviazioni dalla media per <code class="docutils literal notranslate"><span class="pre">n</span></code>, dove <code class="docutils literal notranslate"><span class="pre">n</span></code> è il numero totale degli elementi nel campione (ovvero, la dimensione del campione). Questo approccio assume che i dati forniti rappresentino l’intera popolazione da cui si vuole stimare la covarianza, producendo una stima non corretta (bias) se i dati sono effettivamente un campione di una popolazione più ampia. Il “bias” in questo contesto si riferisce al fatto che la stima tende sistematicamente a essere più piccola rispetto alla vera covarianza della popolazione da cui il campione è stato estratto.</p>
+<p>Per correggere questo errore sistematico e ottenere una stima non distorta (unbiased) della covarianza di una popolazione più ampia basandosi su un campione, si utilizza <code class="docutils literal notranslate"><span class="pre">ddof=1</span></code>. Questo significa che al denominatore della formula si sottrae 1 a <code class="docutils literal notranslate"><span class="pre">n</span></code>, dividendo quindi per <code class="docutils literal notranslate"><span class="pre">n-1</span></code>. Il correttore <code class="docutils literal notranslate"><span class="pre">n-1</span></code> è noto come correttore di Bessel, e l’uso di <code class="docutils literal notranslate"><span class="pre">ddof=1</span></code> rende la stima della covarianza non distorta nel contesto di un campione prelevato da una popolazione. La correzione è importante in statistica perché fornisce una stima più accurata delle proprietà della popolazione, soprattutto quando la dimensione del campione è piccola.</p>
+<p>In sintesi:</p>
+<ul class="simple">
+<li><p>Con <code class="docutils literal notranslate"><span class="pre">ddof=0</span></code>, si divide per <code class="docutils literal notranslate"><span class="pre">n</span></code>, assumendo che i dati rappresentino l’intera popolazione. Questo può introdurre un bias nella stima della covarianza se i dati sono in realtà un campione.</p></li>
+<li><p>Con <code class="docutils literal notranslate"><span class="pre">ddof=1</span></code>, si divide per <code class="docutils literal notranslate"><span class="pre">n-1</span></code>, correggendo il bias e ottenendo una stima non distorta (unbiased) della covarianza se i dati rappresentano un campione di una popolazione più grande. Questo approccio è generalmente preferito per la stima delle proprietà della popolazione basata su campioni.</p></li>
+</ul>
 </section>
 </section>
 <section id="correlazione">
@@ -807,7 +810,7 @@ r_{XY} = \frac{S_{XY}}{S_X S_Y}.
 <li><p><span class="math notranslate nohighlight">\(-1 &lt; r_{XY} &lt; +1\)</span> <span class="math notranslate nohighlight">\(\rightarrow\)</span> presenza di una relazione lineare di intensità diversa;</p></li>
 <li><p><span class="math notranslate nohighlight">\(r_{XY} = 0\)</span> <span class="math notranslate nohighlight">\(\rightarrow\)</span> assenza di relazione lineare tra <span class="math notranslate nohighlight">\(X\)</span> e <span class="math notranslate nohighlight">\(Y\)</span>.</p></li>
 </ol>
-<p><strong>Esercizio.</strong> Per i dati riportati nel diagramma della sezione <span class="xref std std-ref">sec-zetsche-scatter</span>, la covarianza è 207.4. Il segno positivo della covarianza ci dice che tra le due variabili c’è un’associazione lineare positiva. Per capire quale sia l’intensità della relazione lineare calcoliamo la correlazione. Essendo le deviazioni standard del BDI-II e del CES-D rispettavamente uguali a 15.37 e 14.93, la correlazione diventa uguale a <span class="math notranslate nohighlight">\(\frac{207.426}{15.38 \cdot 14.93} = 0.904.\)</span> Tale valore è prossimo a 1.0, il che vuol dire che i punti del diagramma a dispersione non si discostano troppo da una retta con una pendenza positiva.</p>
+<p><strong>Esercizio.</strong> Per i dati riportati nel diagramma della sezione <a class="reference internal" href="#sec-zetsche-scatter"><span class="std std-ref">Grafico a dispersione</span></a>, la covarianza è 207.4. Il segno positivo della covarianza ci dice che tra le due variabili c’è un’associazione lineare positiva. Per capire quale sia l’intensità della relazione lineare calcoliamo la correlazione. Essendo le deviazioni standard del BDI-II e del CES-D rispettavamente uguali a 15.37 e 14.93, la correlazione diventa uguale a <span class="math notranslate nohighlight">\(\frac{207.426}{15.38 \cdot 14.93} = 0.904.\)</span> Tale valore è prossimo a 1.0, il che vuol dire che i punti del diagramma a dispersione non si discostano troppo da una retta con una pendenza positiva.</p>
 <p>Troviamo la correlazione con la funzione <code class="docutils literal notranslate"><span class="pre">corrcoef()</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
