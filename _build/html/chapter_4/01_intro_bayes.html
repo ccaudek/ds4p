@@ -554,6 +554,8 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notazione">Notazione</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-di-stima-della-distribuzione-a-posteriori">Metodi di Stima della Distribuzione a Posteriori</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-likelihood-marginale">La Likelihood Marginale</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-per-determinare-la-distribuzione-a-posteriori">Metodi per determinare la distribuzione a posteriori</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linguaggi-di-programmazione-probabilistici">Linguaggi di programmazione probabilistici</a></li>
 </ul>
 </li>
@@ -589,6 +591,8 @@ document.write(`
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">uniform</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">factorial</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">comb</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">quad</span>
 </pre></div>
 </div>
 </div>
@@ -791,14 +795,68 @@ p(\theta \mid y) = \frac{p(y \mid \theta) \cdot p(\theta)}{\int_{\Theta} p(y \mi
 \]</div>
 <p>in cui <span class="math notranslate nohighlight">\(\Theta\)</span> denota l’insieme di tutti i possibili valori del parametro <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
 <p>Il calcolo di <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span> richiede la normalizzazione del prodotto tra la funzione di verosimiglianza <span class="math notranslate nohighlight">\(p(y \mid \theta)\)</span> e la distribuzione a priori <span class="math notranslate nohighlight">\(p(\theta)\)</span> attraverso una costante di normalizzazione. Questa costante, nota come <em>verosimiglianza marginale</em>, assicura che l’integrale di <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span> su tutto lo spazio dei parametri <span class="math notranslate nohighlight">\(\Theta\)</span> sia pari a uno.</p>
+<section id="la-likelihood-marginale">
+<h3>La Likelihood Marginale<a class="headerlink" href="#la-likelihood-marginale" title="Link to this heading">#</a></h3>
+<p>In questa sezione, approfondiremo il concetto di likelihood marginale attraverso il processo noto come <em>integrazione di un parametro</em>. Tale processo consente il calcolo della likelihood marginale, rimuovendo effettivamente il parametro incognito dalla distribuzione in esame. Sebbene utilizzeremo la distribuzione binomiale per illustrare questo concetto, è importante sottolineare che l’applicabilità di questa tecnica si estende ben oltre, coprendo una vasta gamma di distribuzioni.</p>
+<p>Consideriamo una variabile casuale binomiale <span class="math notranslate nohighlight">\(Y\)</span> caratterizzata da una funzione di massa di probabilità (PMF) <span class="math notranslate nohighlight">\(p(Y)\)</span>, definita in relazione a un parametro <span class="math notranslate nohighlight">\(\theta\)</span>. Supponiamo che quest’ultimo può assumere uno di tre valori specifici: 0.1, 0.5, o 0.9, ognuno dei quali ha identica probabilità di verificarsi, ossia <span class="math notranslate nohighlight">\(\frac{1}{3}\)</span>.</p>
+<p>Fissiamo i dati a <span class="math notranslate nohighlight">\(n = 10\)</span> prove e <span class="math notranslate nohighlight">\(k = 7\)</span> successi, ottenendo la seguente funzione di likelihood:</p>
+<div class="math notranslate nohighlight">
+\[
+p(k = 7, n = 10 | \theta) = \binom{10}{7} \theta^7 (1 - \theta)^3.
+\]</div>
+<p>Per calcolare la <em>likelihood marginale</em>, denotata con <span class="math notranslate nohighlight">\(p(k = 7, n = 10)\)</span>, “marginalizziamo” il parametro <span class="math notranslate nohighlight">\(\theta\)</span>. Questo si realizza valutando la likelihood per ciascun valore possibile di <span class="math notranslate nohighlight">\(\theta\)</span>, moltiplicandola per la probabilità/densità di quel particolare valore di <span class="math notranslate nohighlight">\(\theta\)</span> e sommando i risultati ottenuti.</p>
+<p>Dati i valori di <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(\theta_1 = 0.1\)</span>, <span class="math notranslate nohighlight">\(\theta_2 = 0.5\)</span>, e <span class="math notranslate nohighlight">\(\theta_3 = 0.9\)</span>, ciascuno con una probabilità di <span class="math notranslate nohighlight">\(\frac{1}{3}\)</span>, calcoliamo la likelihood marginale nel seguente modo:</p>
+<div class="math notranslate nohighlight">
+\[
+p(k = 7, n = 10) = \sum_{i=1}^{3} p(k = 7, n = 10 | \theta_i) \cdot p(\theta_i).
+\]</div>
+<p>Sostituendo i valori di <span class="math notranslate nohighlight">\(\theta\)</span> e la loro probabilità di <span class="math notranslate nohighlight">\(\frac{1}{3}\)</span>, otteniamo:</p>
+<div class="math notranslate nohighlight">
+\[
+p(k = 7, n = 10) = \frac{1}{3} \binom{10}{7} 0.1^7 (1 - 0.1)^3 + \frac{1}{3} \binom{10}{7} 0.5^7 (1 - 0.5)^3 + \frac{1}{3} \binom{10}{7} 0.9^7 (1 - 0.9)^3.
+\]</div>
+<p>Questa espressione ci consente di calcolare la likelihood marginale, basandoci sui valori discreti di <span class="math notranslate nohighlight">\(\theta\)</span>. Tale processo evidenzia come la marginalizzazione faccia emergere una comprensione globale della likelihood, incorporando tutte le possibili variazioni del parametro <span class="math notranslate nohighlight">\(\theta\)</span> per ottenere una misura complessiva che tenga conto dell’incertezza su <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>In questo esempio abbiamo mostrato come sia possibile applicare la marginalizzazine (ovvero, l’integrazione di un parametro) non solo in contesti continui, tramite l’uso dell’integrale, ma anche in scenari discreti, sommando semplicemente i valori di likelihood moltiplicati per le rispettive probabilità di occorrenza del parametro.</p>
+<p>Per implementare un calcolo analogo in Python, possiamo definire una funzione che calcoli la likelihood per i valori discreti di <span class="math notranslate nohighlight">\(\theta\)</span> e poi sommare i risultati. Per l’integrazione su un intervallo continuo tra 0 e 1, invece, possiamo utilizzare la libreria <code class="docutils literal notranslate"><span class="pre">scipy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Funzione di likelihood</span>
+<span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">theta</span><span class="o">**</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="p">))</span>
+
+<span class="c1"># Likelihood marginale per valori discreti di theta</span>
+<span class="n">theta_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="n">prob_theta</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
+<span class="n">marginal_likelihood_discrete</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">prob_theta</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="n">theta_vals</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Likelihood Marginale (discreta): </span><span class="si">{</span><span class="n">marginal_likelihood_discrete</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Likelihood marginale su un intervallo continuo [0, 1]</span>
+<span class="n">marginal_likelihood_continuous</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">theta</span><span class="p">:</span> <span class="n">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Likelihood Marginale (continua): </span><span class="si">{</span><span class="n">marginal_likelihood_continuous</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Likelihood Marginale (discreta): 0.05819729199999999
+Likelihood Marginale (continua): 0.09090909090909091
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="metodi-per-determinare-la-distribuzione-a-posteriori">
+<h3>Metodi per determinare la distribuzione a posteriori<a class="headerlink" href="#metodi-per-determinare-la-distribuzione-a-posteriori" title="Link to this heading">#</a></h3>
 <p>Per determinare la distribuzione posteriore, si possono adottare due approcci principali:</p>
 <ol class="arabic simple">
 <li><p><strong>Approccio Analitico</strong>: Questa strategia si applica quando la distribuzione a priori e la funzione di verosimiglianza appartengono alla stessa famiglia di distribuzioni, dette <em>coniugate</em>. In tali circostanze, è possibile calcolare analiticamente la distribuzione posteriore. Questo metodo si distingue per la sua eleganza e efficienza computazionale, ma è limitato alle situazioni in cui esiste una coniugazione tra le distribuzioni a priori e le funzioni di verosimiglianza.</p></li>
-<li><p><strong>Approccio Numerico</strong>: Quando l’approccio analitico non è applicabile, ad esempio a causa dell’assenza di coniugazione tra distribuzioni a priori e funzioni di verosimiglianza, l’integrale al denominatore non può essere risolto con metodi analitici. In questi casi, l’inferenza bayesiana procede attraverso tecniche di approssimazione numerica. Tecniche come le catene di Markov Monte Carlo (MCMC) vengono impiegate per stimare numericamente la distribuzione posteriore. Questo metodo è più versatile e adattabile a un’ampia gamma di problemi, ma richiede un maggiore impegno computazionale e può essere più oneroso in termini di tempo rispetto all’approccio analitico.</p></li>
+<li><p><strong>Approccio Numerico</strong>: Quando l’approccio analitico non è applicabile, ad esempio a causa dell’assenza di coniugazione tra distribuzioni a priori e funzioni di verosimiglianza, l’integrale al denominatore (la likelihood marginale) della regola di Bayes non può essere risolto con metodi analitici. In questi casi, l’inferenza bayesiana procede attraverso tecniche di approssimazione numerica. Tecniche come le catene di Markov Monte Carlo (MCMC) vengono impiegate per stimare numericamente la distribuzione posteriore. Questo metodo è più versatile e adattabile a un’ampia gamma di problemi, ma richiede un maggiore impegno computazionale e può essere più oneroso in termini di tempo rispetto all’approccio analitico.</p></li>
 </ol>
+</section>
 <section id="linguaggi-di-programmazione-probabilistici">
 <h3>Linguaggi di programmazione probabilistici<a class="headerlink" href="#linguaggi-di-programmazione-probabilistici" title="Link to this heading">#</a></h3>
-<p>È fondamentale evidenziare che l’approccio moderno alla statistica bayesiana si avvale ampiamente di tecniche di approssimazione numerica per stimare le distribuzioni posteriori. In questo contesto, si fa largo uso di linguaggi di programmazione probabilistica, noti come “Probabilistic Programming Languages” (PPL), che facilitano l’implementazione computazionale dell’aggiornamento bayesiano.</p>
+<p>L’approccio moderno alla statistica bayesiana si avvale ampiamente di tecniche di approssimazione numerica per stimare le distribuzioni posteriori. In questo contesto, si fa largo uso di linguaggi di programmazione probabilistica, noti come “Probabilistic Programming Languages” (PPL), che facilitano l’implementazione computazionale dell’aggiornamento bayesiano.</p>
 <p>Questo sviluppo ha trasformato radicalmente il modo in cui si effettuano le analisi statistiche bayesiane, democratizzando l’accesso a modelli statistici avanzati. L’introduzione di metodi computazionali ha reso la modellazione bayesiana più accessibile, riducendo le barriere di competenza matematica e computazionale precedentemente necessarie. Questi strumenti hanno inoltre ampliato le possibilità di affrontare questioni analitiche complesse, che prima sarebbero state difficili da gestire. Utilizzando i linguaggi di programmazione probabilistica, gli analisti possono formulare modelli probabilistici con maggiore chiarezza e flessibilità, facilitando l’esplorazione delle distribuzioni posteriori e l’analisi di questioni complesse con tecniche bayesiane. Questo ha aperto nuovi orizzonti nell’analisi bayesiana, permettendo di affrontare e risolvere problemi in modi precedentemente impensabili.</p>
 </section>
 </section>
@@ -886,6 +944,8 @@ p(\theta \mid y) = \frac{p(y \mid \theta) \cdot p(\theta)}{\int_{\Theta} p(y \mi
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notazione">Notazione</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-di-stima-della-distribuzione-a-posteriori">Metodi di Stima della Distribuzione a Posteriori</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-likelihood-marginale">La Likelihood Marginale</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-per-determinare-la-distribuzione-a-posteriori">Metodi per determinare la distribuzione a posteriori</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linguaggi-di-programmazione-probabilistici">Linguaggi di programmazione probabilistici</a></li>
 </ul>
 </li>
