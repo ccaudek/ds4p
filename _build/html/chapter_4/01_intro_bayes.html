@@ -342,7 +342,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -647,16 +648,23 @@ document.write(`
 </section>
 <section id="riesame-del-teorema-di-bayes">
 <h2>Riesame del Teorema di Bayes<a class="headerlink" href="#riesame-del-teorema-di-bayes" title="Link to this heading">#</a></h2>
-<p>Prima di approfondire il flusso di lavoro bayesiano, è opportuno rivisitare il teorema di Bayes, questa volta contestualizzandolo nel quadro delle densità di probabilità. In questa prospettiva, il teorema di Bayes articola il meccanismo con cui le nostre credenze iniziali, o probabilità a priori, sono aggiornate in funzione dei nuovi dati osservati. La formula fondamentale del teorema di Bayes, espressa in termini di densità di probabilità, è la seguente:</p>
+<p>Prima di approfondire il flusso di lavoro bayesiano, è opportuno rivisitare il teorema di Bayes. Quando ci riferiamo ad eventi osservabili discreti, possiamo esprimere la regola nel modo seguente:</p>
+<div class="math notranslate nohighlight">
+\[ P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)} \tag{2.1} \]</div>
+<p>Dato un vettore di dati <span class="math notranslate nohighlight">\( y \)</span>, il teorema di Bayes ci permette di calcolare le distribuzioni posteriori dei parametri di interesse, che possiamo rappresentare con il vettore dei parametri <span class="math notranslate nohighlight">\( \Theta \)</span>. Questo calcolo si realizza riformulando la formula precedente come quella scritta di seguito. La differenza qui consiste nel fatto che il teorema di Bayes è scritto in termini di distribuzioni di probabilità. In questo contesto, <span class="math notranslate nohighlight">\( p(\cdot) \)</span> rappresenta una funzione di densità di probabilità (nel caso continuo) o una funzione di massa di probabilità (nel caso discreto).</p>
+<div class="math notranslate nohighlight">
+\[ p(\Theta|y) = \frac{p(y|\Theta) \times p(\Theta)}{p(y)} \tag{2.2} \]</div>
+<p>La suddetta affermazione può essere riscritta in parole nel modo seguente:</p>
 <div class="math notranslate nohighlight">
 \[
-p(\theta \mid \text{data}) = \frac{p(\text{data} \mid \theta)p(\theta)}{p(\text{data})} \propto p(\text{data} \mid \theta)p(\theta),
+\text{Posteriore} = \frac{\text{Verosimiglianza × A Priori}}{Verosimiglianza Marginale}  
 \]</div>
-<p>dove:</p>
+<p>I termini qui presentati hanno il seguente significato.</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\theta\)</span> indica l’insieme dei parametri di interesse (per esempio, i coefficienti di una regressione).</p></li>
-<li><p><span class="math notranslate nohighlight">\(p(\theta \mid \text{data})\)</span> è la distribuzione posteriore dei parametri, risultato dell’aggiornamento della distribuzione a priori <span class="math notranslate nohighlight">\(p(\theta)\)</span> mediante la funzione di verosimiglianza <span class="math notranslate nohighlight">\(p(\text{data} \mid \theta)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(p(\text{data})\)</span> rappresenta la probabilità marginale dei dati, agendo da costante di normalizzazione per garantire che la distribuzione posteriore integri a 1.</p></li>
+<li><p>Il Posteriore, <span class="math notranslate nohighlight">\( p(\theta|y) \)</span>, è la distribuzione di probabilità dei parametri condizionata ai dati.</p></li>
+<li><p>La Verosimiglianza, <span class="math notranslate nohighlight">\( p(y|\theta) \)</span>, come descritto nel capitolo 1, è la PMF (nel caso discreto) o la PDF (nel caso continuo) espressa come funzione di <span class="math notranslate nohighlight">\( \theta \)</span>.</p></li>
+<li><p>L’A Priori, <span class="math notranslate nohighlight">\( p(\theta) \)</span>, è la distribuzione di probabilità iniziale dei parametri, prima di osservare i dati.</p></li>
+<li><p>La Verosimiglianza Marginale, <span class="math notranslate nohighlight">\( p(y) \)</span> standardizza la distribuzione posteriore per garantire che l’area sotto la curva della distribuzione sommi a 1, ossia, si assicura che il posteriore sia una distribuzione di probabilità valida.</p></li>
 </ul>
 <p>Nell’ambito bayesiano, si utilizzano le distribuzioni posteriori aggiornate dei parametri per l’inferenza, ad esempio per calcolare la probabilità che un parametro si trovi entro un determinato intervallo.</p>
 <p>Le distribuzioni a priori, indicate con <span class="math notranslate nohighlight">\(p(\theta)\)</span>, sono basate su risultati precedenti, meta-analisi, l’expertise di esperti, o possono assumere la forma di “distribuzioni di regolarizzazione” non informative. Un vantaggio significativo delle distribuzioni a priori emerge quando si lavora con campioni di dati di piccole dimensioni; in tali contesti, le distribuzioni a priori di regolarizzazione possono esercitare un effetto moderatore, attenuando le fluttuazioni causate dalla limitata numerosità del campione.</p>
