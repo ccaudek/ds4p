@@ -286,8 +286,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/42_hier_gaussian.html">Modello gerarchico gaussiano</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/45_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/50_stan_beta_binomial.html">CmdStanPy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_4/52_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/51_stan_two_groups_binom.html">Due gruppi binomiali con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/52_stan_rescorla_wagner.html">Inferenza sull’apprendimento associativo con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/53_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -314,6 +315,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_repeated_measures.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_linreg_1.html">Regressione lineare con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_logistic_regression.html">Regressione logistica con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_radon.html">Regressione multilivello con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mixed_models.html">Modelli misti con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_stan_mediation.html">Modello di mediazione con Stan</a></li>
 </ul>
@@ -342,7 +344,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
@@ -623,6 +626,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
 <span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -637,7 +641,6 @@ document.write(`
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
 <span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -738,7 +741,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b65d619e053770225ee04b3269ce0d98c5aa45808dea62375b02b2ff04c3f698.png" src="../_images/b65d619e053770225ee04b3269ce0d98c5aa45808dea62375b02b2ff04c3f698.png" />
+<img alt="../_images/1184811abf75d561bc24030807eff180c5ba71b66a77df9b170f24eceefb1bff.png" src="../_images/1184811abf75d561bc24030807eff180c5ba71b66a77df9b170f24eceefb1bff.png" />
 </div>
 </div>
 <section id="problema-del-caso-singolo">
@@ -1059,7 +1062,7 @@ Z = Y_1 + Y_2 + Y_3.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/05e83f0fd78b079fd437af304fca60a2460ac20338580850f412bd3dcc4991e5.png" src="../_images/05e83f0fd78b079fd437af304fca60a2460ac20338580850f412bd3dcc4991e5.png" />
+<img alt="../_images/3088589d4ee0b314d3df4fd9974abd43ff413da697ba1328d36c3c4bb8a345bb.png" src="../_images/3088589d4ee0b314d3df4fd9974abd43ff413da697ba1328d36c3c4bb8a345bb.png" />
 </div>
 </div>
 <p>Nel corso di questo esercizio, abbiamo calcolato le probabilità determinando il numero di casi favorevoli, cioè le occorrenze di ogni possibile somma <span class="math notranslate nohighlight">\(D_1 + D_2\)</span>, all’interno dello spazio campionario dell’esperimento di lancio di due dadi. Queste probabilità si ottengono dividendo il numero di tali occorrenze per il numero totale di combinazioni possibili nello spazio campionario. In termini formali, la probabilità di ogni valore specifico di <span class="math notranslate nohighlight">\( Z \)</span> è indicata come <span class="math notranslate nohighlight">\( P_Z(z) = P(Z = z) \)</span>, dove <span class="math notranslate nohighlight">\( P_Z(z) \)</span> rappresenta “la probabilità che la variabile casuale <span class="math notranslate nohighlight">\( Z \)</span> assuma il valore <span class="math notranslate nohighlight">\( z \)</span>“. La funzione che associa a ogni valore <span class="math notranslate nohighlight">\( u \)</span> di <span class="math notranslate nohighlight">\( Z \)</span> la probabilità dell’evento <span class="math notranslate nohighlight">\( Z = u \)</span> è nota come <em>funzione di massa di probabilità</em> della variabile casuale <span class="math notranslate nohighlight">\( Z \)</span>.</p>
@@ -1288,84 +1291,104 @@ P(p)=1-{\frac  {364!}{365^{{p-1}}(365-p)!}},
 \]</div>
 <p>dove <span class="math notranslate nohighlight">\(P(p)\)</span> rappresenta la probabilità che almeno due persone abbiano lo stesso compleanno in un gruppo di <span class="math notranslate nohighlight">\(p\)</span> persone. La spiegazione dettagliata può essere trovata su Wikipedia o in altre fonti di teoria delle probabilità.</p>
 <p>Tuttavia, esiste anche un metodo più semplice per risolvere il problema del compleanno, che consiste nell’utilizzare una simulazione. Questo approccio coinvolge la scrittura di codice per simulare un gran numero di gruppi di persone e controllare quanti di essi hanno almeno due persone con la stessa data di compleanno. Il codice di esempio può essere trovato nel libro “Introduction to Computation and Programming Using Python” di <span id="id10">Guttag [<a class="reference internal" href="../references/bibliography.html#id56" title="John V Guttag. Introduction to computation and programming using Python. Mit Press, 2021.">Gut21</a>]</span> e in altre risorse.</p>
-<ol class="arabic simple">
-<li><p><strong>La funzione <code class="docutils literal notranslate"><span class="pre">same_date(num_people,</span> <span class="pre">num_same)</span></code>:</strong></p>
-<ul class="simple">
-<li><p>Crea un elenco per rappresentare tutti i giorni dell’anno (366 per includere l’anno bisestile).</p></li>
-<li><p>Inizializza un altro elenco per tenere traccia del numero di persone che hanno il compleanno in ogni giorno dell’anno; all’inizio, nessuno ha ancora compiuto gli anni.</p></li>
-<li><p>Per ogni persona nel gruppo, sceglie casualmente un giorno dell’anno come il suo compleanno e aumenta di uno il conteggio di quel giorno.</p></li>
-<li><p>Alla fine, verifica se c’è almeno un giorno in cui il numero di compleanni è uguale o superiore a <code class="docutils literal notranslate"><span class="pre">num_same</span></code>. Restituisce <code class="docutils literal notranslate"><span class="pre">True</span></code> se tale giorno esiste, altrimenti <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-</ul>
-</li>
-<li><p><strong>La funzione <code class="docutils literal notranslate"><span class="pre">birthday_prob(num_people,</span> <span class="pre">num_same,</span> <span class="pre">num_trials)</span></code>:</strong></p>
-<ul class="simple">
-<li><p>Esegue la simulazione descritta in <code class="docutils literal notranslate"><span class="pre">same_date</span></code> un numero specificato di volte (<code class="docutils literal notranslate"><span class="pre">num_trials</span></code>).</p></li>
-<li><p>Conta quante volte, su queste ripetizioni, si verifica la condizione che almeno <code class="docutils literal notranslate"><span class="pre">num_same</span></code> persone condividano lo stesso compleanno.</p></li>
-<li><p>Calcola la probabilità dividendo il numero di “successi” (ossia, le volte in cui almeno <code class="docutils literal notranslate"><span class="pre">num_same</span></code> persone hanno condiviso lo stesso compleanno) per il numero totale di tentativi, fornendo una stima della probabilità che questo evento si verifichi.</p></li>
-</ul>
-</li>
-</ol>
-<p>Il codice poi esegue questa simulazione per diversi gruppi di persone (10, 23, 30) e confronta la probabilità stimata con quella calcolata tramite un approccio matematico diretto, basato su formule combinatorie, per mostrare come la probabilità di avere almeno due persone con lo stesso compleanno aumenta con la dimensione del gruppo.</p>
 <p>Questo esempio dimostra non solo il principio intuitivo che, anche in gruppi relativamente piccoli, la probabilità di coincidenza di compleanni è sorprendentemente alta, ma mostra anche come la simulazione possa essere utilizzata per approssimare probabilità complesse che altrimenti sarebbero difficili da calcolare direttamente.</p>
+<p>Esaminiamo la funzione seguente.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">same_date</span><span class="p">(</span><span class="n">num_people</span><span class="p">,</span> <span class="n">num_same</span><span class="p">):</span>
-    <span class="c1"># initialize list from 0 to 365</span>
-    <span class="n">possible_dates</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">366</span><span class="p">)</span>
-    <span class="c1"># list of zeros</span>
-    <span class="n">birthdays</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">366</span>
-    <span class="c1"># increments by 1 the days corresponding to to the randomly chosen</span>
-    <span class="c1"># birthdays of num_people individuals</span>
-    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_people</span><span class="p">):</span>
-        <span class="n">birth_date</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">possible_dates</span><span class="p">)</span>
-        <span class="n">birthdays</span><span class="p">[</span><span class="n">birth_date</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="c1"># True if at least one day records a number of birthdays &gt;= num_same;</span>
-    <span class="c1"># False otherwise</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">simulate_birthday_problem</span><span class="p">(</span><span class="n">num_people</span><span class="p">,</span> <span class="n">num_same</span><span class="p">,</span> <span class="n">num_trials</span><span class="p">):</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Numero di volte che troviamo almeno num_same compleanni lo stesso giorno</span>
     
-    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">birthdays</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">num_same</span>
+    <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_trials</span><span class="p">):</span>
+        <span class="c1"># Creiamo una lista di 366 giorni (0 compleanni per ogni giorno)</span>
+        <span class="n">birthdays</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">366</span>
+        
+        <span class="c1"># Generiamo i compleanni per tutte le persone</span>
+        <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_people</span><span class="p">):</span>
+            <span class="c1"># Scegliamo un giorno a caso per il compleanno, da 0 a 365</span>
+            <span class="n">birth_date</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">365</span><span class="p">)</span>
+            <span class="c1"># Incrementiamo il numero di compleanni per quel giorno</span>
+            <span class="n">birthdays</span><span class="p">[</span><span class="n">birth_date</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+        <span class="c1"># Controlliamo se c&#39;è almeno un giorno con num_same o più compleanni</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Inizialmente non abbiamo trovato giorni con abbastanza compleanni</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">birthdays</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">day</span> <span class="o">&gt;=</span> <span class="n">num_same</span><span class="p">:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Abbiamo trovato un giorno con abbastanza compleanni</span>
+                <span class="k">break</span>  <span class="c1"># Interrompiamo il ciclo, non c&#39;è bisogno di controllare gli altri giorni</span>
+        
+        <span class="c1"># Se abbiamo trovato un giorno con abbastanza compleanni, contiamo questa prova come un &quot;hit&quot;</span>
+        <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+    <span class="c1"># Calcoliamo la probabilità stimata dividendo il numero di &quot;hits&quot; per il numero totale di prove</span>
+    <span class="n">estimated_probability</span> <span class="o">=</span> <span class="n">hits</span> <span class="o">/</span> <span class="n">num_trials</span>
+    
+    <span class="c1"># Restituiamo la probabilità stimata</span>
+    <span class="k">return</span> <span class="n">estimated_probability</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Consiseriamo con attenzione lo snippet centrale della funzione precedente.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
 
+<span class="n">num_people</span> <span class="o">=</span> <span class="mi">23</span>
 
-<span class="k">def</span> <span class="nf">birthday_prob</span><span class="p">(</span><span class="n">num_people</span><span class="p">,</span> <span class="n">num_same</span><span class="p">,</span> <span class="n">num_trials</span><span class="p">):</span>
-    <span class="n">num_hits</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1"># repeat the simulation num_trials times</span>
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_trials</span><span class="p">):</span>
-        <span class="c1"># if same_date() returns True, then increment num_hits by 1</span>
-        <span class="k">if</span> <span class="n">same_date</span><span class="p">(</span><span class="n">num_people</span><span class="p">,</span> <span class="n">num_same</span><span class="p">):</span>
-            <span class="n">num_hits</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">num_hits</span> <span class="o">/</span> <span class="n">num_trials</span>
-
-
-<span class="k">for</span> <span class="n">num_people</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">30</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;For&quot;</span><span class="p">,</span>
-        <span class="n">num_people</span><span class="p">,</span>
-        <span class="s2">&quot;est. prob. of a shared birthday is&quot;</span><span class="p">,</span>
-        <span class="n">birthday_prob</span><span class="p">(</span><span class="n">num_people</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="n">numerator</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="mi">366</span><span class="p">)</span>
-    <span class="n">denom</span> <span class="o">=</span> <span class="p">(</span><span class="mi">366</span><span class="o">**</span><span class="n">num_people</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="mi">366</span> <span class="o">-</span> <span class="n">num_people</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Actual prob. for N = 100 =&quot;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span>
+<span class="c1"># Creiamo una lista di 366 giorni (0 compleanni per ogni giorno)</span>
+<span class="n">birthdays</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">366</span>
+        
+<span class="c1"># Generiamo i compleanni per tutte le persone</span>
+<span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_people</span><span class="p">):</span>
+    <span class="c1"># Scegliamo un giorno a caso per il compleanno, da 0 a 365</span>
+    <span class="n">birth_date</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">365</span><span class="p">)</span>
+    <span class="c1"># Incrementiamo il numero di compleanni per quel giorno</span>
+    <span class="n">birthdays</span><span class="p">[</span><span class="n">birth_date</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">birthdays</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>For 10 est. prob. of a shared birthday is 0.1203
-Actual prob. for N = 100 = 0.1166454118039999
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>For 23 est. prob. of a shared birthday is 0.5122
-Actual prob. for N = 100 = 0.5063230118194599
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>For 30 est. prob. of a shared birthday is 0.707
-Actual prob. for N = 100 = 0.7053034120089917
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
 </pre></div>
 </div>
 </div>
 </div>
-<p>Si noti che sia la formula che la simulazione sono approssimazioni, poiché entrambe assumono che i compleanni siano egualmente probabili in tutti i giorni dell’anno, cosa che non è verificata nella realtà, come mostrato nella figura successiva.</p>
+<p>La logica dietro lo snippet di codice presentato sopra fa parte di una procedura per simulare la distribuzione dei compleanni in un gruppo di persone (nell’esempio sopra, 23) e viene usato per esplorare il famoso “Paradosso del compleanno”. Ecco i passaggi logici:</p>
+<ol class="arabic simple">
+<li><p><strong>Inizializzazione di una Lista per i Compleanni</strong>: Si inizia creando una lista (o array) che rappresenta ogni giorno dell’anno, inclusi i giorni di un possibile anno bisestile, per un totale di 366 giorni. Ogni elemento della lista tiene il conto di quanti individui hanno il compleanno in quel particolare giorno dell’anno. Inizialmente, questo conteggio è impostato a 0 per tutti i giorni, indicando che non ci sono ancora stati assegnati compleanni.</p></li>
+<li><p><strong>Simulazione dei Compleanni</strong>: Successivamente, si entra in una fase di simulazione dove per ogni persona nel gruppo (il numero di persone è definito dalla variabile <code class="docutils literal notranslate"><span class="pre">num_people</span></code>), si genera casualmente un giorno di compleanno. Questo è fatto selezionando un numero a caso tra 0 e 365, dove ciascun numero rappresenta un giorno dell’anno. Questo passo simula l’assegnazione di un giorno di compleanno casuale a ciascuna persona nel gruppo.</p></li>
+<li><p><strong>Aggiornamento dei Conteggi dei Compleanni</strong>: Dopo aver determinato casualmente il giorno di compleanno per una persona, si incrementa di 1 il conteggio dei compleanni per quel giorno specifico nella lista dei compleanni. Questo significa che si tiene traccia del numero di persone che hanno il compleanno in ciascun giorno dell’anno. L’operazione viene ripetuta per ogni persona nel gruppo, potenzialmente aumentando i conteggi per alcuni giorni più di una volta se più persone hanno il compleanno nello stesso giorno.</p></li>
+<li><p><strong>Visualizzazione dei Risultati</strong>: Alla fine della simulazione, si stampa il conteggio finale dei compleanni per ciascun giorno dell’anno. Questo mostra quanti individui, all’interno del gruppo simulato, hanno il loro compleanno in ogni giorno specifico dell’anno. Questo può rivelare giorni con più compleanni, supportando la discussione sul “Paradosso del compleanno” che in un gruppo relativamente piccolo di persone è sorprendentemente probabile trovare due individui che condividono lo stesso giorno di compleanno.</p></li>
+</ol>
+<p>La logica qui illustrata è un esempio di come modelli matematici e simulazioni possano essere usati per esplorare e spiegare fenomeni controintuitivi, come il Paradosso del compleanno, in modo visivo e interattivo.</p>
+<p>Di seguito viene utilizzata la funzione completa definita sopra per il caso di 23 persone e 10000 ripetizioni di questo processo, per determinare la probabilità che almeno due persone abbiano lo stesso compleanno.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_people</span> <span class="o">=</span> <span class="mi">23</span>
+<span class="n">num_same</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">num_trials</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">probability</span> <span class="o">=</span> <span class="n">simulate_birthday_problem</span><span class="p">(</span><span class="n">num_people</span><span class="p">,</span> <span class="n">num_same</span><span class="p">,</span> <span class="n">num_trials</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;La probabilità stimata che in un gruppo di </span><span class="si">{</span><span class="n">num_people</span><span class="si">}</span><span class="s2"> persone, almeno </span><span class="si">{</span><span class="n">num_same</span><span class="si">}</span><span class="s2"> abbiano il compleanno lo stesso giorno è: </span><span class="si">{</span><span class="n">probability</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La probabilità stimata che in un gruppo di 23 persone, almeno 2 abbiano il compleanno lo stesso giorno è: 0.5109
+</pre></div>
+</div>
+</div>
+</div>
+<p>Un primo punto da notare è che, per affrontare il problema della probabilità che, in un gruppo di <span class="math notranslate nohighlight">\(n\)</span> persone, almeno due condividano lo stesso compleanno, è essenziale seguire un approccio metodico che si divide in due fasi principali: la definizione della logica concettuale e l’implementazione computazionale.</p>
+<ol class="arabic simple">
+<li><p><strong>Definizione della Logica Concettuale</strong>: La prima fase riguarda la comprensione e la definizione del problema in termini astratti. Si deve elaborare una strategia che consenta di valutare la probabilità di coincidenza dei compleanni in un insieme di <span class="math notranslate nohighlight">\(n\)</span> individui. Questa fase include la decisione di modellare il problema attraverso una simulazione Monte Carlo, dove si riproducono numerose volte le condizioni del problema (la scelta casuale dei giorni di nascita per un dato numero di persone) per poi analizzare la frequenza con cui si verificano gli eventi di interesse (due o più persone che condividono lo stesso compleanno).</p></li>
+<li><p><strong>Implementazione Computazionale</strong>: La seconda fase implica la traduzione della strategia concettuale in un algoritmo eseguibile, utilizzando un linguaggio di programmazione specifico come Python. In questo contesto, si procede con la generazione di compleanni casuali per ciascun individuo nel gruppo e si tiene traccia della distribuzione dei compleanni per valutare la presenza di coincidenze. Questo richiede l’uso di strutture dati appropriate (ad esempio, un array dove ogni elemento rappresenta un giorno dell’anno e il suo valore il numero di persone nate in quel giorno) e di algoritmi per la generazione di numeri casuali. La ripetizione di questa procedura per un numero significativo di volte (simulazioni) permette di stimare la probabilità cercata.</p></li>
+</ol>
+<p>L’efficacia della soluzione dipende dalla precisione con cui la logica concettuale è definita e dalla correttezza dell’implementazione computazionale. Mentre la fase concettuale richiede una comprensione profonda del problema e della matematica/statistica sottostante, la fase di implementazione beneficia dell’uso di strumenti informatici avanzati, inclusi i moderni ambienti di programmazione e librerie specializzate, che possono facilitare la simulazione e l’analisi dei dati. La chiave del successo risiede nell’accurata definizione del problema e nella scelta di un modello di simulazione adeguato, seguiti da un’implementazione rigorosa e metodica.</p>
+<p>Un aspetto cruciale da considerare è che sia il calcolo analitico attraverso la formula, sia la metodologia simulativa rappresentano approcci approssimativi nel problema dei compleanni. Questo perché entrambi presuppongono una distribuzione uniforme dei compleanni lungo tutti i giorni dell’anno, ipotesi che non trova riscontro nella realtà. Tale discrepanza viene evidenziata nelle analisi empiriche, come illustrato nella figura successiva. È fondamentale, quindi, riconoscere che l’applicazione di modelli probabilistici a fenomeni empirici porta a conclusioni che mantengono la loro validità nella misura in cui le assunzioni modellistiche specchiano accuratamente le dinamiche e le peculiarità del contesto reale analizzato. Di conseguenza, le inferenze probabilistiche e le proiezioni fatte sulla base di questi modelli sono affidabili soltanto se le premesse su cui si basano sono verosimili e adeguatamente rappresentative del fenomeno sotto osservazione.</p>
 <a class="reference internal image-reference" href="../_images/birthdays.png"><img alt="../_images/birthdays.png" class="align-center" src="../_images/birthdays.png" style="height: 500px;" /></a>
-<p>In questo caso, così come in tutti gli altri in cui si utilizzano modelli probabilistici per descrivere fenomeni empirici, è importante tenere presente che la risposta ottenuta è plausibile solo se le assunzioni fatte nei modelli riflettono correttamente i vincoli e le caratteristiche del mondo reale. Le probabilità e le previsioni derivate da tali modelli sono valide solo nella misura in cui le ipotesi sottostanti sono realistiche e pertinenti al contesto specifico.</p>
 </section>
 <section id="la-legge-dei-grandi-numeri">
 <h3>La Legge dei Grandi Numeri<a class="headerlink" href="#la-legge-dei-grandi-numeri" title="Link to this heading">#</a></h3>
@@ -1464,7 +1487,7 @@ Compleanno giugno 12: Francesco Ferrari, Giovanna Romano
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 10 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Mar 13 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1478,12 +1501,12 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-scipy     : 1.12.0
 numpy     : 1.26.4
 pandas    : 2.2.1
 matplotlib: 3.8.3
-seaborn   : 0.13.2
 arviz     : 0.17.0
+seaborn   : 0.13.2
+scipy     : 1.12.0
 
 Watermark: 2.4.3
 </pre></div>
