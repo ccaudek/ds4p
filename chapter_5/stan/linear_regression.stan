@@ -2,7 +2,7 @@
 // all data should be scaled to mean 0 and std 1:
 data {
   int<lower=1> N;   // number of observations
-  int<lower=1> K;   // number of independent variables
+  int<lower=1> K;   // number of independent variables, including the intercept
   matrix[N, K] X;   // data matrix
   vector[N] y;      // dependent variable vector
 }
