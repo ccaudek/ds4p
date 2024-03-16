@@ -558,6 +558,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-di-poisson">Distribuzione di Poisson</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-beta-binomiale">Distribuzione Beta-Binomiale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-conclusive">Considerazioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
             </nav>
         </div>
@@ -589,21 +590,6 @@ che sono fondamentali per analizzare e modellare una vasta gamma di fenomeni cas
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">preliz</span> <span class="k">as</span> <span class="nn">pz</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">preliz</span> <span class="k">as</span> <span class="nn">pz</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;preliz&#39;
 </pre></div>
 </div>
 </div>
@@ -614,7 +600,6 @@ che sono fondamentali per analizzare e modellare una vasta gamma di fenomeni cas
 <span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
 <span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">palette</span><span class="o">=</span><span class="s2">&quot;colorblind&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -671,7 +656,7 @@ P(Y=y) = \binom{n}{y} \theta^{y} (1-\theta)^{n-y} = \frac{n!}{y!(n-y)!} \theta^{
 \overbrace{SS\dots S}^\text{$y$ volte} \overbrace{II\dots I}^\text{$n-y$ volte}
 \]</div>
 <p>Ogni sequenza con <span class="math notranslate nohighlight">\(y\)</span> successi specifici ha una probabilità di <span class="math notranslate nohighlight">\(\theta^y \cdot (1-\theta)^{n-y}\)</span>. Tuttavia, siamo interessati alla probabilità complessiva di osservare qualsiasi sequenza con <span class="math notranslate nohighlight">\(y\)</span> successi, che si ottiene moltiplicando la probabilità di una sequenza singola per il numero totale di sequenze possibili, dato dal coefficiente binomiale <span class="math notranslate nohighlight">\(\binom{n}{y}\)</span>.</p>
-<p>In questo modo, la distribuzione binomiale diventa uno strumento statistico potente per analizzare fenomeni che presentano esiti binari, con prove che sono indipendenti e identicamente distribuite. Questa distribuzione trova applicazione in una moltitudine di scenari, dalla valutazione del numero di successi in una serie di tentativi, come i lanci di moneta, fino a sondaggi di opinione e altro ancora. La sua universalità deriva dalla sua capacità di modellare efficacemente situazioni con esiti binari e dalla sua flessibilità nel gestire variabili <span class="math notranslate nohighlight">\(\theta\)</span> e <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<p>In questo modo, la distribuzione binomiale diventa uno strumento statistico per analizzare fenomeni che presentano esiti binari, con prove che sono indipendenti e identicamente distribuite. Questa distribuzione trova applicazione in una moltitudine di scenari, dalla valutazione del numero di successi in una serie di tentativi, come i lanci di moneta, fino a sondaggi di opinione e altro ancora.</p>
 </section>
 <section id="applicazioni-pratiche-della-distribuzione-binomiale">
 <h3>Applicazioni Pratiche della Distribuzione Binomiale<a class="headerlink" href="#applicazioni-pratiche-della-distribuzione-binomiale" title="Link to this heading">#</a></h3>
@@ -688,15 +673,46 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span>
 
 <span class="n">prob</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">theta</span><span class="o">**</span><span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.15360000000000007
 </pre></div>
 </div>
 </div>
 </div>
-<p>In alternativa, possiamo sfruttare la libreria SciPy per eseguire calcoli analoghi. SciPy offre una vasta gamma di funzioni per la gestione delle distribuzioni statistiche, tra cui la distribuzione binomiale. Utilizzando <code class="docutils literal notranslate"><span class="pre">scipy.stats.binom.pmf(y,</span> <span class="pre">n,</span> <span class="pre">p)</span></code>, possiamo trovare le probabilità per ogni possibile valore di <span class="math notranslate nohighlight">\(y\)</span> in una distribuzione binomiale di parametri <span class="math notranslate nohighlight">\(n = 4\)</span> e <span class="math notranslate nohighlight">\(\theta = 0.2\)</span>:</p>
+<p>In alternativa, possiamo sfruttare la libreria SciPy per eseguire calcoli analoghi. SciPy offre una vasta gamma di funzioni per la gestione delle distribuzioni statistiche, tra cui la distribuzione binomiale.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.15359999999999993
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizzando <code class="docutils literal notranslate"><span class="pre">scipy.stats.binom.pmf(y,</span> <span class="pre">n,</span> <span class="pre">p)</span></code>, possiamo trovare le probabilità per ogni possibile valore di <span class="math notranslate nohighlight">\(y\)</span> in una distribuzione binomiale di parametri <span class="math notranslate nohighlight">\(n = 4\)</span> e <span class="math notranslate nohighlight">\(\theta = 0.2\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">probabilities</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0 1 2 3 4]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">probabilities</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -717,21 +733,9 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/15d966f6f6d8190e230ed950f26594ec5dcff3e63073ef7ef869a3d0b90fce3c.png" src="../_images/15d966f6f6d8190e230ed950f26594ec5dcff3e63073ef7ef869a3d0b90fce3c.png" />
+<img alt="../_images/ed4dc3f51cc07f5bc084293d9e00a2c53cb12f3ec21047bc548404564483246c.png" src="../_images/ed4dc3f51cc07f5bc084293d9e00a2c53cb12f3ec21047bc548404564483246c.png" />
 </div>
 </div>
-<p>Usando <code class="docutils literal notranslate"><span class="pre">preliz</span></code> otteniamo:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pz</span><span class="o">.</span><span class="n">Binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">plot_pdf</span><span class="p">();</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/e30d48fd82f1199c7b814681c831d55bc3b435030481bfabebaa38bbbbcb7f0f.png" src="../_images/e30d48fd82f1199c7b814681c831d55bc3b435030481bfabebaa38bbbbcb7f0f.png" />
-</div>
-</div>
-<p>Un’altra proprietà interessante della distribuzione binomiale è la sua riproducibilità. Se abbiamo due variabili casuali indipendenti che seguono distribuzioni binomiali con lo stesso parametro <span class="math notranslate nohighlight">\(\theta\)</span> ma con diversi numeri di prove, la loro somma seguirà anch’essa una distribuzione binomiale. Questo può essere dimostrato analiticamente o sperimentato praticamente utilizzando strumenti come Python.</p>
 <p>Per esplorare ulteriormente, consideriamo la distribuzione di probabilità di diverse distribuzioni binomiali per due valori di <span class="math notranslate nohighlight">\(n\)</span> e <span class="math notranslate nohighlight">\(\theta\)</span>. La seguente visualizzazione mostra come cambia la distribuzione al variare di <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -751,10 +755,60 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/db50969c38633425a2c19add278b01b0f3ace2f2e2da47a7834980535b668eb7.png" src="../_images/db50969c38633425a2c19add278b01b0f3ace2f2e2da47a7834980535b668eb7.png" />
+<img alt="../_images/9be03274039c0d81a2029f7f3b10c21cc1a6f5adc494f38194ad988c44c3041c.png" src="../_images/9be03274039c0d81a2029f7f3b10c21cc1a6f5adc494f38194ad988c44c3041c.png" />
 </div>
 </div>
-<p>Questi esempi dimostrano come la distribuzione binomiale possa essere utilizzata per modellare e analizzare esperimenti con esiti binari in una varietà di contesti reali.</p>
+<p>Un’altra proprietà interessante della distribuzione binomiale è la sua riproducibilità. Se abbiamo due variabili casuali indipendenti che seguono distribuzioni binomiali con lo stesso parametro <span class="math notranslate nohighlight">\(\theta\)</span> ma con diversi numeri di prove, la loro somma seguirà anch’essa una distribuzione binomiale. Questo può essere dimostrato analiticamente o sperimentato praticamente utilizzando strumenti come Python.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Parametri</span>
+<span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mf">0.5</span>
+
+<span class="c1"># Simula le variabili casuali binomiali</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+
+<span class="c1"># Calcola la somma Z</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="n">Y</span>
+
+<span class="c1"># Visualizza la distribuzione di Z</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">Z</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">kde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione della somma di due variabili casuali binomiali&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Somma Z = X + Y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Densità&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b15c3a0f7e27f4d89e19f1e1183fcb44db9e38cd7f6b7d6b3153916ed8fe1699.png" src="../_images/b15c3a0f7e27f4d89e19f1e1183fcb44db9e38cd7f6b7d6b3153916ed8fe1699.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcola la PMF della distribuzione binomiale risultante</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span>  <span class="c1"># Totale delle prove</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">Z</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Possibili valori di successi</span>
+<span class="n">pmf</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+
+<span class="c1"># Visualizza l&#39;istogramma di Z e la PMF</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">Z</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">kde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Simulazioni&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">pmf</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">,</span> <span class="n">basefmt</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PMF teorica&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione della somma di due variabili casuali binomiali con PMF&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Somma Z = X + Y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Densità&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/046d5d6fc75a940235cb45db3b630f3c5d63b226da8a2e9869c38c1a505a6ae4.png" src="../_images/046d5d6fc75a940235cb45db3b630f3c5d63b226da8a2e9869c38c1a505a6ae4.png" />
+</div>
+</div>
+<p>Questi esempi mostrano come la distribuzione binomiale possa essere utilizzata per modellare e analizzare esperimenti con esiti binari in una varietà di contesti reali.</p>
 <p>Consideriamo un altro esempio. Lanciando <span class="math notranslate nohighlight">\(5\)</span> volte una moneta onesta, qual è la probabilità che esca testa almeno tre volte?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -763,7 +817,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.49999999999999983
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.49999999999999994
 </pre></div>
 </div>
 </div>
@@ -775,7 +829,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.49999999999999983
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.49999999999999994
 </pre></div>
 </div>
 </div>
@@ -814,18 +868,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Probabilità&#39;)
 </pre></div>
 </div>
-<img alt="../_images/89bd01c22380e520de587b7a87d8db35fd9cc915b144ebc15918a63f371a829d.png" src="../_images/89bd01c22380e520de587b7a87d8db35fd9cc915b144ebc15918a63f371a829d.png" />
-</div>
-</div>
-<p>Con <code class="docutils literal notranslate"><span class="pre">preliz</span></code> otteniamo:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pz</span><span class="o">.</span><span class="n">Binomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="o">.</span><span class="n">plot_cdf</span><span class="p">();</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/32fd0a8c3f5438ab665b79092c85a79738e96e0c84d662ddb013c0e839a70d80.png" src="../_images/32fd0a8c3f5438ab665b79092c85a79738e96e0c84d662ddb013c0e839a70d80.png" />
+<img alt="../_images/db83a1ed3f18868fb340967ec3ba48e704db20928b2f59c418fefae2d2224595.png" src="../_images/db83a1ed3f18868fb340967ec3ba48e704db20928b2f59c418fefae2d2224595.png" />
 </div>
 </div>
 <p>Per generare una sequenza di valori casuali seguendo una distribuzione binomiale, possiamo utilizzare il concetto di una variabile casuale ‘frozen’ (congelata). Una variabile casuale congelata rappresenta una specifica istanza di una distribuzione di probabilità con parametri fissi. In altre parole, una volta che la variabile casuale è stata definita e i suoi parametri (come il numero di prove e la probabilità di successo in una distribuzione binomiale) sono stati impostati, questi rimangono immutabili.</p>
@@ -849,7 +892,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4 1 2 1 4 4 2 2 0 2 3 4 5 4 4 0 4 4 3 2 1 3 5 2 2 3 1 1 4 3
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 1 2 3 2 3 4 1 3 2 2 1 1 2 2 4 3 5 3 2 2 2 2 3 3 2 1 0 2 1
 </pre></div>
 </div>
 </div>
@@ -863,7 +906,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4 2 2 4 3 1 2 2 5 3 1 0 3 3 0 4 3 4 3 1 3 3 2 2 4 1 2 1 2 2
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 1 3 2 1 4 3 2 4 1 2 3 3 2 1 4 2 2 3 4 1 3 3 2 3 4 2 1 4 3
 </pre></div>
 </div>
 </div>
@@ -922,7 +965,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.79965
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.79959
 </pre></div>
 </div>
 </div>
@@ -934,7 +977,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6351865775
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6353858319
 </pre></div>
 </div>
 </div>
@@ -1017,7 +1060,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 
 <span class="c1"># Plot della distribuzione di massa di probabilità</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">k_values</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">k_values</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Numero di Eventi (k)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probabilità&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione di Massa di Probabilità di Poisson&#39;</span><span class="p">)</span>
@@ -1026,18 +1069,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9c80d219e192709ba5eaf59b22db26dbc225711797b569cb1b7659083c7a58f2.png" src="../_images/9c80d219e192709ba5eaf59b22db26dbc225711797b569cb1b7659083c7a58f2.png" />
-</div>
-</div>
-<p>Usando <code class="docutils literal notranslate"><span class="pre">preliz</span></code> otteniamo:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pz</span><span class="o">.</span><span class="n">Poisson</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">plot_pdf</span><span class="p">();</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/52854c3189d170c9aec5cd42c607a1322c1343f0747594f3ea4d0e6effbc2dce.png" src="../_images/52854c3189d170c9aec5cd42c607a1322c1343f0747594f3ea4d0e6effbc2dce.png" />
+<img alt="../_images/d66d37f14f01baedd6a34e8d27de302d3648e3435c12b44ac988dd24eb6c4b0e.png" src="../_images/d66d37f14f01baedd6a34e8d27de302d3648e3435c12b44ac988dd24eb6c4b0e.png" />
 </div>
 </div>
 <p>La probabilità di un singolo valore <span class="math notranslate nohighlight">\(y\)</span> si ottiene utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">pmf</span></code>, in cui l’argomento <code class="docutils literal notranslate"><span class="pre">k</span></code> rappresenta il numero di eventi (<span class="math notranslate nohighlight">\(y\)</span>) e <code class="docutils literal notranslate"><span class="pre">mu</span></code> è uguale a <span class="math notranslate nohighlight">\(\lambda\)</span>. Ad esempio, la probabilità di osservare esattamente un evento (<span class="math notranslate nohighlight">\(y = 1\)</span>) dato un tasso di occorrenza <span class="math notranslate nohighlight">\(\lambda\)</span> = 2, è data da:</p>
@@ -1074,7 +1106,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6766764161830634
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6766764161830636
 </pre></div>
 </div>
 </div>
@@ -1113,7 +1145,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.9979
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.9971
 </pre></div>
 </div>
 </div>
@@ -1122,9 +1154,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 <p>Per prima cosa, calcoliamo la probabilità teorica di questo evento utilizzando dpois(). Il numero di successi che stiamo considerando è 6, quindi imposteremo x = 6. Inoltre, questa media storica di 4,5 nascite al giorno è il nostro valore per lambda, quindi imposteremo lambda = 6.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">poisson</span>
-
-<span class="c1"># Numero di successi considerati</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Numero di successi considerati</span>
 <span class="n">x</span> <span class="o">=</span> <span class="mi">6</span>
 
 <span class="c1"># Valore medio storico di nascite al giorno (lambda) </span>
@@ -1132,14 +1162,14 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">4.5</span>
 
 <span class="c1"># Calcoliamo la probabilità utilizzando la distribuzione di Poisson</span>
-<span class="n">probabilita</span> <span class="o">=</span> <span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">)</span>
+<span class="n">probabilita</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;La probabilità che saranno nati 6 bambini in questo ospedale domani è: </span><span class="si">{</span><span class="n">probabilita</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;La probabilità che domani nasceranno 6 bambini in questo ospedale è: </span><span class="si">{</span><span class="n">probabilita</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La probabilità che saranno nati 6 bambini in questo ospedale domani è: 0.1281
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La probabilità che domani nasceranno 6 bambini in questo ospedale è: 0.1281
 </pre></div>
 </div>
 </div>
@@ -1159,12 +1189,12 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 <span class="n">proportion_six_births</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">simulated_births</span> <span class="o">==</span> <span class="mi">6</span><span class="p">)</span>
 
 <span class="c1"># Stampiamo la proporzione calcolata</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;La proporzione di giorni in cui sono nati 6 bambini nella simulazione è: </span><span class="si">{</span><span class="n">proportion_six_births</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;La proporzione di giorni in cui, nella simulazione, sono nati 6 bambini è: </span><span class="si">{</span><span class="n">proportion_six_births</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La proporzione di giorni in cui sono nati 6 bambini nella simulazione è: 0.1260
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La proporzione di giorni in cui, nella simulazione, sono nati 6 bambini è: 0.1260
 </pre></div>
 </div>
 </div>
@@ -1173,7 +1203,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualizziamo l&#39;istogramma delle nascite simulate</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">simulated_births</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">simulated_births</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Numero di bambini nati per periodo&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Proporzione&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;365 nascite simulate in un ospedale con Poisson(lambda = 4.5)&#39;</span><span class="p">)</span>
@@ -1182,13 +1212,13 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a3b6f2e7ee039f35b0620e80b36a341085de7561fa9e8d48425d37c7ca5bf95a.png" src="../_images/a3b6f2e7ee039f35b0620e80b36a341085de7561fa9e8d48425d37c7ca5bf95a.png" />
+<img alt="../_images/a03649a26156bfc16b6081e1fe741561a2184b96bbb74eb4d3b96415a8586349.png" src="../_images/a03649a26156bfc16b6081e1fe741561a2184b96bbb74eb4d3b96415a8586349.png" />
 </div>
 </div>
 <p>Calcoliamo la probabilità teorica della nascita di più di 6 bambini in un giorno.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prob_more_than_six</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">poisson</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">mean_births_per_day</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prob_more_than_six</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">mean_births_per_day</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;La probabilità teorica di più di 6 bambini nati è: </span><span class="si">{</span><span class="n">prob_more_than_six</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1224,7 +1254,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>  <span class="c1"># Colore per x &gt; 6</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span>  <span class="c1"># Colore per x &lt;= 6</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hist</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hist</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="c1"># Imposta etichette e titolo</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Numero di bambini nati per periodo&#39;</span><span class="p">)</span>
@@ -1235,7 +1265,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4361bdc6e79b5eec00cacb4a728662d4b762a9960695825a4d79ddb8b137798f.png" src="../_images/4361bdc6e79b5eec00cacb4a728662d4b762a9960695825a4d79ddb8b137798f.png" />
+<img alt="../_images/3b71f3c91bcd396d3fc32b09c0d85104ac61a15c4f51c689d31d6eb78c3c074f.png" src="../_images/3b71f3c91bcd396d3fc32b09c0d85104ac61a15c4f51c689d31d6eb78c3c074f.png" />
 </div>
 </div>
 </section>
@@ -1263,6 +1293,9 @@ B(u, v) = \frac{\Gamma(u)\Gamma(v)}{\Gamma(u+v)},
 <p>Queste distribuzioni formano il cuore dell’analisi statistica discreta e trovano applicazione in un’ampia gamma di settori. In particolare, nel contesto dell’analisi bayesiana, la comprensione della distribuzione Binomiale e Beta-Binomiale è cruciale, poiché queste distribuzioni forniscono le basi per l’aggiornamento bayesiano, un concetto chiave che sarà esplorato nei capitoli successivi.</p>
 <p>Per coloro interessati a tecniche più avanzate, la generazione di valori casuali a partire da queste distribuzioni è trattata nell’appendice <span class="xref std std-ref">rng-appendix</span>. Questa sezione fornisce strumenti e approfondimenti utili per l’applicazione pratica di questi modelli probabilistici.</p>
 <p>In conclusione, le distribuzioni discrete forniscono strumenti essenziali e versatili per modellare e analizzare fenomeni caratterizzati da eventi distinti e quantificabili. La comprensione approfondita di queste distribuzioni è cruciale per chiunque desideri esplorare il vasto campo della probabilità e della statistica.</p>
+</section>
+<section id="watermark">
+<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -1271,27 +1304,26 @@ B(u, v) = \frac{\Gamma(u)\Gamma(v)}{\Gamma(u+v)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Feb 02 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Mar 16 2024
 
 Python implementation: CPython
-Python version       : 3.11.7
-IPython version      : 8.19.0
+Python version       : 3.11.8
+IPython version      : 8.22.2
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
-Release     : 23.3.0
-Machine     : x86_64
-Processor   : i386
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-pandas    : 2.1.4
-preliz    : 0.3.7
-seaborn   : 0.13.0
+seaborn   : 0.13.2
+numpy     : 1.26.4
+scipy     : 1.12.0
+matplotlib: 3.8.3
 arviz     : 0.17.0
-scipy     : 1.11.4
-numpy     : 1.26.2
-matplotlib: 3.8.2
+pandas    : 2.2.1
 
 Watermark: 2.4.3
 </pre></div>
@@ -1377,6 +1409,7 @@ Watermark: 2.4.3
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-di-poisson">Distribuzione di Poisson</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-beta-binomiale">Distribuzione Beta-Binomiale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-conclusive">Considerazioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
 </ul>
   </nav></div>
 
