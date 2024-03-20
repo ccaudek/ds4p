@@ -564,7 +564,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-t-di-student">Distribuzione <span class="math notranslate nohighlight">\(t\)</span> di Student</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Proprietà</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Proprietà</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#funzione-beta-di-eulero">Funzione beta di Eulero</a></li>
@@ -574,7 +574,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuizione-e-collegamento-con-la-distribuzione-binomiale">Intuizione e Collegamento con la Distribuzione Binomiale</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-dei-parametri-alpha-e-beta">Interpretazione dei Parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#costante-di-normalizzazione">Costante di normalizzazione</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Proprietà</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Proprietà</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-priori-coniugata">Distribuzione a priori coniugata</a></li>
 </ul>
 </li>
@@ -1011,7 +1011,7 @@ f(x) = \frac{1}{4} \exp^{-x/4}.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0de3703041703f05268c9fa544baa48d53e74e2923be3ca8f3199ee9b2115f53.png" src="../_images/0de3703041703f05268c9fa544baa48d53e74e2923be3ca8f3199ee9b2115f53.png" />
+<img alt="../_images/e8f4841c060be68c84e35f8c8188cdb7189a2556daf80c08f30d736d5ef812d4.png" src="../_images/e8f4841c060be68c84e35f8c8188cdb7189a2556daf80c08f30d736d5ef812d4.png" />
 </div>
 </div>
 </section>
@@ -1061,84 +1061,127 @@ f(x) = \frac{1}{4} \exp^{-x/4}.
 <section id="la-normale-prodotta-con-una-simulazione">
 <h2>La Normale prodotta con una simulazione<a class="headerlink" href="#la-normale-prodotta-con-una-simulazione" title="Link to this heading">#</a></h2>
 <p>Il libro “Rethinking Statistics” di <span id="id1">McElreath [<a class="reference internal" href="../references/bibliography.html#id3" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> spiega come sia possibile ottenere la distribuzione normale attraverso una simulazione. Immaginiamo di avere duemila persone che si trovano allineate su una linea di partenza. Quando viene dato il segnale di partenza, ogni persona lancia una moneta e compie un passo avanti o indietro a seconda del risultato del lancio. La lunghezza di ogni passo può variare da 0 a 1 metro. Ogni persona lancia la moneta 16 volte e quindi compie 16 passi.</p>
+<p>I risultati ottenuti da una serie di passeggiate casuali si traducono in varie distanze dall’origine, che è il punto da cui si parte, contrassegnato come zero, dopo un numero specificato di passi. Queste distanze sono rappresentate numericamente. Al termine di queste passeggiate, non è possibile determinare la posizione esatta di ogni individuo, ma è possibile descrivere accuratamente le caratteristiche della distribuzione delle 1000 distanze dall’origine.</p>
+<p>Ad esempio, è possibile prevedere con precisione la frazione di individui che si sono mossi verso in avanti o indietro, o la proporzione di persone che si troveranno a una distanza specifica dal punto di partenza, come a 1.5 metri dall’origine. Queste previsioni sono fattibili perché la distribuzione delle distanze segue una distribuzione Normale.</p>
+<p>Il codice presentato di seguito genera passeggiate casuali utilizzando un generatore di numeri casuali e ne traccia i percorsi risultanti. Il codice inizia inizializzando un oggetto generatore di numeri casuali con la funzione <code class="docutils literal notranslate"><span class="pre">np.random.default_rng()</span></code> della libreria <code class="docutils literal notranslate"><span class="pre">numpy</span></code>. Questo generatore sarà usato per produrre numeri casuali uniformemente distribuiti tra -1 e 1, simulando così il lancio di una moneta.</p>
+<p>La variabile <code class="docutils literal notranslate"><span class="pre">steps</span></code> specifica il numero di passi per ogni passeggiata casuale, mentre <code class="docutils literal notranslate"><span class="pre">repetitions</span></code> indica il numero di passeggiate da generare. La variabile <code class="docutils literal notranslate"><span class="pre">show_steps</span></code> è un elenco di numeri di passi in cui il codice traccerà linee verticali sul grafico.</p>
+<p>Successivamente, il codice crea un array bidimensionale di NumPy chiamato <code class="docutils literal notranslate"><span class="pre">x</span></code> con righe pari a <code class="docutils literal notranslate"><span class="pre">steps</span> <span class="pre">+</span> <span class="pre">1</span></code> e colonne pari a <code class="docutils literal notranslate"><span class="pre">repetitions</span></code>. La prima colonna di questo array è riempita di zeri, e le colonne rimanenti sono riempite con la somma cumulativa dei passi, ottenuti da numeri casuali uniformemente distribuiti generati dal generatore di numeri casuali. Questo array verrà utilizzato per memorizzare le posizioni della passeggiata casuale ad ogni passo.</p>
+<p>Il codice poi prepara una figura per tracciare tutte le passeggiate casuali. Il codice traccia anche la prima passeggiata casuale in nero.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">randomwalk</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="n">steps</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="n">rand</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">rand</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="n">walk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">walk</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>I valori ottenuti da una singola passeggiata casuale consistono nella distanza dall’origine (punto di partenza, indicato come 0) dopo un determinato numero di passi. Questi valori sono rappresentati da numeri. Per esempio:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">particularWalk</span> <span class="o">=</span> <span class="n">randomwalk</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">particularWalk</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.37531838354697544 1.0584896463887754 1.4534636834009325 1.2937899514171627 1.5447231066244227 1.3373023369291819 1.3254604685050029 0.7344137731826899 1.136894490699304 1.9684525255384093 1.8250625862950245 1.016357414464169 1.231202594793971 2.1991617340098744 2.3950630949221305 2.4013927428252604
-</pre></div>
-</div>
-</div>
-</div>
-<p>Alla conclusione di queste passeggiate casuali (<em>random walk</em>) non possiamo sapere con esattezza dove si troverà ciascuna persona, ma possiamo conoscere con certezza le caratteristiche della distribuzione delle 2000 distanze dall’origine.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
-    <span class="n">particularWalk</span> <span class="o">=</span> <span class="n">randomwalk</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span> <span class="n">particularWalk</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inizializza il generatore di numeri casuali</span>
+<span class="n">generatore_casuale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span> <span class="n">particularWalk</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="c1"># Parametri della simulazione</span>
+<span class="n">numero_passi</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c1"># Numero di passi per passeggiata</span>
+<span class="n">ripetizioni</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Numero di passeggiate da generare</span>
+<span class="n">punti_da_evidenziare</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">]</span>  <span class="c1"># Punti da evidenziare sul grafico</span>
+
+<span class="c1"># Inizializza l&#39;array per registrare le passeggiate casuali</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">numero_passi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ripetizioni</span><span class="p">))</span>
+
+<span class="c1"># Genera le passeggiate casuali</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ripetizioni</span><span class="p">):</span>
+    <span class="n">passi</span> <span class="o">=</span> <span class="n">generatore_casuale</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">numero_passi</span><span class="p">)</span>  <span class="c1"># Genera passi casuali</span>
+    <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">passi</span><span class="p">)</span>  <span class="c1"># Calcola la posizione cumulativa</span>
+
+<span class="c1"># Prepara il grafico</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># Disegna tutte le passeggiate</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>  <span class="c1"># Evidenzia la prima passeggiata</span>
+
+<span class="c1"># Evidenzia i punti specifici</span>
+<span class="k">for</span> <span class="n">punto</span> <span class="ow">in</span> <span class="n">punti_da_evidenziare</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">punto</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Imposta etichette e aspetti del grafico</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Numero di passi&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Distanza dall&#39;origine&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Distanza dall&#39;origine&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">punti_da_evidenziare</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numero_passi</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Mostra il grafico</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/36112e04815f4e5a8cf0b3b67aa1111640a8c3fdce9cc7d8e75d67fa6a21f731.png" src="../_images/36112e04815f4e5a8cf0b3b67aa1111640a8c3fdce9cc7d8e75d67fa6a21f731.png" />
+<img alt="../_images/aa400a6f43de3b3d9ca3c18ade7e5aba21df5793cd0decf1fbf34dc6a94962ed.png" src="../_images/aa400a6f43de3b3d9ca3c18ade7e5aba21df5793cd0decf1fbf34dc6a94962ed.png" />
 </div>
 </div>
-<p>Per esempio, possiamo predire in maniera accurata la proporzione di persone che si sono spostate in avanti oppure all’indietro. Oppure, possiamo predire accuratamente la proporzione di persone che si troveranno ad una certa distanza dalla linea di partenza (es., a 1.5 m dall’origine). Queste predizioni sono possibili perché tali distanze si distribuiscono secondo la legge Normale (la curva rossa nel grafico seguente).</p>
+<p>Il grafico riportato qui sotto visualizza la distribuzione dei passi a partire dalla linea mediana dopo 4, 8 e 16 lanci di moneta/passi. Quello che si nota è che, man mano che procediamo nel numero di passi, le densità iniziano a somigliare alla curva a campana associata alle distribuzioni Gaussiane.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
-    <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">randomwalk</span><span class="p">(</span><span class="mi">16</span><span class="p">)[</span><span class="mi">15</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crea una figura con 3 subplots in orizzontale, condividendo l&#39;asse X</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">avg_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
-<span class="n">std_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+<span class="c1"># Itera sui punti da evidenziare e sugli assi corrispondenti</span>
+<span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">punti_da_evidenziare</span><span class="p">,</span> <span class="n">axs</span><span class="p">):</span>
+    <span class="c1"># Estrae le posizioni al passo specificato per tutte le ripetizioni</span>
+    <span class="n">posizioni_al_passo</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">step</span><span class="p">,</span> <span class="p">:]</span>
+    
+    <span class="c1"># Utilizza ArviZ per disegnare la stima della densità kernel delle posizioni</span>
+    <span class="n">az</span><span class="o">.</span><span class="n">plot_kde</span><span class="p">(</span><span class="n">posizioni_al_passo</span><span class="p">,</span> <span class="n">bw</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    
+    <span class="c1"># Imposta titolo, etichette e limiti per l&#39;asse corrente</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2"> passi&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Densità&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Posizioni&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
-    <span class="n">distances</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;distanze&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span>
-<span class="p">)</span>
-
-<span class="n">x_pdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">distances</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">distances</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">y_pdf</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x_pdf</span><span class="p">,</span> <span class="n">avg_distances</span><span class="p">,</span> <span class="n">std_distances</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pdf</span><span class="p">,</span> <span class="n">y_pdf</span><span class="p">,</span> <span class="s2">&quot;C0&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distanza percorsa (m)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Densità&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+<span class="c1"># Mostra il grafico</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>  <span class="c1"># Aggiusta automaticamente il layout per evitare sovrapposizioni</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/be9447d49d5d59a593b2b428ee35acc4b53215e8da3f46f6075844b39136d51c.png" src="../_images/be9447d49d5d59a593b2b428ee35acc4b53215e8da3f46f6075844b39136d51c.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/s7/z86r4t9j6yx376cm120nln6w0000gn/T/ipykernel_81620/1037619127.py:20: UserWarning: The figure layout has changed to tight
+  plt.tight_layout()  # Aggiusta automaticamente il layout per evitare sovrapposizioni
+</pre></div>
+</div>
+<img alt="../_images/f6e038e191979ae41150c7ae2a5b6838f3761cc92f0e40ade3ed5a6e46f910b2.png" src="../_images/f6e038e191979ae41150c7ae2a5b6838f3761cc92f0e40ade3ed5a6e46f910b2.png" />
 </div>
 </div>
-<p>La simulazione discussa mette in luce un principio fondamentale della teoria delle probabilità: qualunque processo che comporti l’addizione di una serie di valori casuali, estratti dalla stessa distribuzione, tende inevitabilmente a convergere verso una distribuzione normale, comunemente nota come la curva a campana. Questo fenomeno si verifica indipendentemente dalla forma iniziale della distribuzione dei valori: essa può essere uniforme, come nell’esempio citato, o di qualunque altra natura. La caratteristica peculiare della distribuzione da cui si prelevano i campioni incide sulla rapidità con cui avviene la convergenza verso la distribuzione normale. Tale velocità di convergenza può variare notevolmente: in alcune situazioni si assiste a un processo lento, mentre in altri contesti, come illustrato nell’esempio, la convergenza è sorprendentemente veloce. Un’esemplificazione pratica di questo principio si può osservare attraverso il dispositivo noto come <a class="reference external" href="https://en.wikipedia.org/wiki/Galton_board">Galton box</a>.</p>
-<p>Per comprendere il motivo per cui l’addizione di valori casuali conduca a una distribuzione dei risultati che assume la forma di una curva a campana, può essere utile adottare una prospettiva concettuale. Considerando il valore medio della distribuzione originale come un punto di riferimento, ogni campione estratto può essere visto come una deviazione da tale media. Quando iniziamo a sommare queste deviazioni, esse tendono a neutralizzarsi a vicenda. Una deviazione positiva di grande entità annullerà l’effetto di una negativa altrettanto grande. Man mano che aumenta il numero di termini da sommare, crescono anche le possibilità che ogni deviazione venga compensata da un’altra o da una serie di deviazioni minori in direzione opposta. Pertanto, il risultato più probabile, nel senso che esistono più modi per ottenerlo, sarà una somma in cui ogni deviazione è bilanciata da un’altra, portando a un totale di zero rispetto alla media. Questo processo di bilanciamento e neutralizzazione delle deviazioni spiega la formazione della distribuzione normale attraverso l’addizione di variabili casuali <span id="id2">[<a class="reference internal" href="../references/bibliography.html#id3" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>.</p>
+<p>La chiarezza dell’informazione presentata nei grafici precedenti può essere migliorata utilizzando un KDE plot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Genera la distribuzione uniforme e calcola la somma come prima</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Calcola media e deviazione standard dei dati generati</span>
+<span class="n">media</span><span class="p">,</span> <span class="n">dev_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pos</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+
+<span class="c1"># Spazio dei valori per la distribuzione normale</span>
+<span class="n">valori</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">pos</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">pos</span><span class="p">),</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># Calcola la distribuzione normale con la stessa media e deviazione standard</span>
+<span class="n">distribuzione_normale</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">valori</span><span class="p">,</span> <span class="n">media</span><span class="p">,</span> <span class="n">dev_std</span><span class="p">)</span>
+
+<span class="c1"># Disegna la stima della densità kernel dei dati</span>
+<span class="n">az</span><span class="o">.</span><span class="n">plot_kde</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Distribuzione KDE&#39;</span><span class="p">)</span>
+
+<span class="c1"># Sovrappone la distribuzione normale</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">valori</span><span class="p">,</span> <span class="n">distribuzione_normale</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Distribuzione Normale&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+
+<span class="c1"># Aggiungi etichette e legenda</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Posizione&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Densità&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="c1"># Mostra il grafico</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d678f153cfa09cdcc260da1cff386a9a31fdea2f616323f4512288dbdbebf50f.png" src="../_images/d678f153cfa09cdcc260da1cff386a9a31fdea2f616323f4512288dbdbebf50f.png" />
+</div>
+</div>
+<p>Questa simulazione in luce un principio fondamentale della teoria delle probabilità: ogni processo che coinvolge la somma di una sequenza di valori casuali, tutti estratti dalla stessa distribuzione, inevitabilmente tende verso una distribuzione normale, comunemente conosciuta come curva gaussiana. Questa tendenza si verifica indipendentemente dalla configurazione iniziale della distribuzione di partenza, che può essere uniforme, come nell’esempio menzionato, o di qualsiasi altro tipo. La forma specifica della distribuzione iniziale influisce sulla velocità con cui si verifica questa convergenza verso il comportamento gaussiano, con variazioni significative nella velocità di convergenza: alcuni processi possono manifestare una convergenza lenta, mentre altri possono convergere estremamente rapidamente. Un esempio emblematico di questo fenomeno è rappresentato dal dispositivo conosciuto come <a class="reference external" href="https://en.wikipedia.org/wiki/Galton_board">Galton box</a>, il quale offre una rappresentazione visiva e fisica di come la somma di valori casuali generi una distribuzione normale.</p>
+<p>Un modo per razionalizzare la distribuzione Gaussiana è quello di pensare alle medie. Qualunque sia il valore medio della distribuzione di origine, ogni campione da essa può essere considerato una fluttuazione rispetto a quel valore medio. Tuttavia, quando sommiamo queste fluttuazioni insieme, esse si annullano a vicenda. E, facendo ciò, queste fluttuazioni convergono eventualmente alla media delle osservazioni collettive. Non importa quale sia la forma della distribuzione sottostante. A seconda della forma, le somme cumulative convergeranno inevitabilmente sulla media, alcune distribuzioni più lentamente di altre.</p>
 <p>Dal punto di vista formale, possiamo definire una variabile casuale continua <span class="math notranslate nohighlight">\(Y\)</span> come avente una distribuzione normale se la sua densità di probabilità è distribuita secondo la seguente equazione</p>
 <div class="math notranslate nohighlight" id="equation-eq-normal-formula">
 <span class="eqno">(42)<a class="headerlink" href="#equation-eq-normal-formula" title="Link to this equation">#</a></span>\[
@@ -1204,7 +1247,7 @@ F(y) = \int_{-\infty}^y {1 \over {\sigma\sqrt{2\pi} }} \exp \left\{-\frac{(y - \
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>109.41767258843085
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>111.8275825312954
 </pre></div>
 </div>
 </div>
@@ -1218,7 +1261,7 @@ F(y) = \int_{-\infty}^y {1 \over {\sigma\sqrt{2\pi} }} \exp \left\{-\frac{(y - \
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>110.38261125875945 106.02087760209477 82.30300200130227 123.32003508610441 94.41041087438641 104.75995476873703 85.14978570758313 106.20619050596764 72.86180051283984 95.4325466274394
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>111.27501979205225 127.61761048725225 72.69953207740893 118.5063758314818 104.85374989426168 83.49448613731676 117.03923813862326 95.62018374588583 87.03378578527821 83.06283601225626
 </pre></div>
 </div>
 </div>
@@ -1467,10 +1510,10 @@ f(x) = C_{\nu} x^{\nu/2-1} \exp (-x/2), \qquad \text{se } x &gt; 0,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([9.3074491 , 3.02557805, 3.31033442, 1.60161759, 8.72602815,
-       4.07890072, 3.53228468, 7.47704596, 7.87476353, 4.35482881,
-       7.1397583 , 2.60305857, 3.72863571, 6.37328086, 5.00059676,
-       3.44403505, 0.97814603, 3.01060105, 5.69285567, 2.88918917])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 1.50331524,  2.77612702,  8.75768581,  8.09012958,  4.6665453 ,
+        5.44396969,  7.49146564,  2.75934337,  3.58184028,  6.97571088,
+       10.13024346,  5.38421949,  2.99103493,  5.21930544,  4.78876935,
+        2.97553994,  1.08990432,  6.3980068 ,  3.15309234,  7.83624604])
 </pre></div>
 </div>
 </div>
@@ -1483,7 +1526,7 @@ f(x) = C_{\nu} x^{\nu/2-1} \exp (-x/2), \qquad \text{se } x &gt; 0,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.9977765641082765
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.999100719929389
 </pre></div>
 </div>
 </div>
@@ -1496,7 +1539,7 @@ f(x) = C_{\nu} x^{\nu/2-1} \exp (-x/2), \qquad \text{se } x &gt; 0,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10.00074031319064
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10.001569600844139
 </pre></div>
 </div>
 </div>
@@ -1533,8 +1576,8 @@ T = \frac{Z}{\Big( \frac{W}{\nu}\Big)^{\frac{1}{2}}}
 <img alt="../_images/e0654c492b1945156693edb9d0c04633b42f04ccf7a30287bf92cf099ca0166d.png" src="../_images/e0654c492b1945156693edb9d0c04633b42f04ccf7a30287bf92cf099ca0166d.png" />
 </div>
 </div>
-<section id="id3">
-<h3>Proprietà<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>Proprietà<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <p>La variabile casuale <span class="math notranslate nohighlight">\(t\)</span> di Student soddisfa le seguenti proprietà:</p>
 <ol class="arabic simple">
 <li><p>Per <span class="math notranslate nohighlight">\(\nu \rightarrow \infty\)</span>, <span class="math notranslate nohighlight">\(t_{\nu}\)</span> tende alla normale standard <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p></li>
@@ -1758,8 +1801,8 @@ B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}\,,
 </div>
 </div>
 </section>
-<section id="id4">
-<h3>Proprietà<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="id3">
+<h3>Proprietà<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <p>Il valore atteso, la moda e la varianza di una distribuzione Beta sono dati dalle seguenti equazioni:</p>
 <div class="math notranslate nohighlight" id="equation-eq-beta-mean">
 <span class="eqno">(46)<a class="headerlink" href="#equation-eq-beta-mean" title="Link to this equation">#</a></span>\[
@@ -2098,7 +2141,7 @@ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} \frac{1}{x} \exp \left\{-\frac{(\log x -  \
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Mar 16 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Mar 20 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -2112,12 +2155,12 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-arviz     : 0.17.0
-seaborn   : 0.13.2
-pandas    : 2.2.1
-numpy     : 1.26.4
-matplotlib: 3.8.3
 scipy     : 1.12.0
+numpy     : 1.26.4
+pandas    : 2.2.1
+arviz     : 0.17.1
+matplotlib: 3.8.3
+seaborn   : 0.13.2
 
 Watermark: 2.4.3
 </pre></div>
@@ -2209,7 +2252,7 @@ Watermark: 2.4.3
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-t-di-student">Distribuzione <span class="math notranslate nohighlight">\(t\)</span> di Student</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Proprietà</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Proprietà</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#funzione-beta-di-eulero">Funzione beta di Eulero</a></li>
@@ -2219,7 +2262,7 @@ Watermark: 2.4.3
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuizione-e-collegamento-con-la-distribuzione-binomiale">Intuizione e Collegamento con la Distribuzione Binomiale</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-dei-parametri-alpha-e-beta">Interpretazione dei Parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#costante-di-normalizzazione">Costante di normalizzazione</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Proprietà</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Proprietà</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-priori-coniugata">Distribuzione a priori coniugata</a></li>
 </ul>
 </li>
