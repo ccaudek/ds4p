@@ -258,6 +258,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
@@ -552,6 +553,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale">Verosimiglianza Congiunta di <span class="math notranslate nohighlight">\( n \)</span> Campioni IID da una Distribuzione Binomiale</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-verosimiglianza-marginale">La Verosimiglianza Marginale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caso-di-una-singola-osservazione">Caso di una Singola Osservazione</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">Campione indipendente di osservazioni da una distribuzione gaussiana</a></li>
@@ -563,7 +567,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
             </nav>
         </div>
@@ -601,6 +605,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 <span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">quad</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 </pre></div>
@@ -899,6 +904,46 @@ p(y_1, y_2, \ldots, y_n \mid \theta) &amp;= p(y_1 \mid \theta) \times p(y_2 \mid
 \]</div>
 <p>Questa funzione di verosimiglianza congiunta fornisce una misura complessiva di quanto bene il modello binomiale con un dato <span class="math notranslate nohighlight">\( \theta \)</span> spiega l’insieme completo delle <span class="math notranslate nohighlight">\( n \)</span> osservazioni. Essa gioca un ruolo cruciale nell’inferenza statistica, specialmente quando si tratta di stimare il parametro <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza la verosimiglianza congiunta a partire dai dati osservati.</p>
 </section>
+</section>
+<section id="la-verosimiglianza-marginale">
+<h2>La Verosimiglianza Marginale<a class="headerlink" href="#la-verosimiglianza-marginale" title="Link to this heading">#</a></h2>
+<p>L’argomento che affrontiamo qui è noto come “integrazione di un parametro”, un concetto che incontreremo frequentemente, in particolare quando tratteremo la regola di Bayes.</p>
+<p><strong>Integrare un parametro</strong> si riferisce alla procedura di calcolo della probabilità (o verosimiglianza) di un evento, prendendo in considerazione tutte le possibili valutazioni di un parametro, anziché fissarlo a un valore specifico. Questo processo è fondamentale in contesti dove il parametro di interesse non ha un valore noto e preciso, ma una distribuzione di valori possibili.</p>
+<p>Per esemplificare, immaginiamo di avere una variabile casuale Y che segue una distribuzione binomiale, definita in termini del parametro θ, il quale può assumere solo tre valori possibili: 0.1, 0.5, 0.9, ognuno con la stessa probabilità di 1/3.</p>
+<p>Supponiamo di osservare n=10 prove e k=7 successi. La funzione di verosimiglianza per un dato θ sarebbe:</p>
+<div class="math notranslate nohighlight">
+\[p(k=7, n=10 | θ) = \binom{10}{7} θ^7 (1-θ)^3\]</div>
+<p>Il <strong>calcolo della verosimiglianza marginale</strong> implica “integrare” (o marginalizzare) il parametro θ. Per ogni possibile valore di θ, calcoliamo la verosimiglianza e la moltiplichiamo per la probabilità di quel valore di θ, sommando poi tutti i prodotti ottenuti. Matematicamente, ciò si traduce nel calcolo seguente, per i tre valori possibili di θ:</p>
+<div class="math notranslate nohighlight">
+\[p(k=7, n=10) = \sum_{i=1}^{3} \binom{10}{7} θ_i^7 (1-θ_i)^3 \times p(θ_i)\]</div>
+<p>Nel caso specifico, calcolando per θ1=0.1, θ2=0.5, e θ3=0.9, e considerando che ogni θ ha probabilità 1/3:</p>
+<div class="math notranslate nohighlight">
+\[p(k=7, n=10) = \frac{1}{3} \binom{10}{7} [0.1^7 (1-0.1)^3 + 0.5^7 (1-0.5)^3 + 0.9^7 (1-0.9)^3]\]</div>
+<p>In realtà, poiché θ può assumere qualsiasi valore tra 0 e 1, dovremmo integrare su uno spazio continuo, utilizzando il simbolo di integrale:</p>
+<div class="math notranslate nohighlight">
+\[p(k=7, n=10) = \int_{0}^{1} \binom{10}{7} θ^7 (1-θ)^3 dθ\]</div>
+<p>Questa operazione calcola un concetto simile a quello sopra, ma su uno spazio continuo di valori di θ.</p>
+<p>Vediamo come potremmo eseguire questo calcolo in Python, utilizzando la libreria <code class="docutils literal notranslate"><span class="pre">scipy</span></code> per l’integrazione su uno spazio continuo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Definire la funzione di verosimiglianza</span>
+<span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">theta</span><span class="p">)</span>
+
+<span class="c1"># Calcolare la verosimiglianza marginale integrando su θ</span>
+<span class="n">marginal_likelihood</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">theta</span><span class="p">:</span> <span class="n">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;La verosimiglianza marginale è:&quot;</span><span class="p">,</span> <span class="n">marginal_likelihood</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La verosimiglianza marginale è: 0.09090909090909094
+</pre></div>
+</div>
+</div>
+</div>
+<p>Questo codice esegue l’integrazione della funzione di verosimiglianza binomiale su tutti i possibili valori di θ (da 0 a 1), fornendo così la verosimiglianza marginale per il nostro esempio. Questo processo ci permette di considerare l’incertezza su θ, offrendo una visione completa della verosimiglianza dell’evento osservato senza fissare θ a un singolo valore.</p>
 <section id="modello-gaussiano-e-verosimiglianza">
 <h3>Modello Gaussiano e Verosimiglianza<a class="headerlink" href="#modello-gaussiano-e-verosimiglianza" title="Link to this heading">#</a></h3>
 <p>Ampliamo ora la nostra analisi al caso della distribuzione gaussiana. Inizieremo con la verosimiglianza associata a una singola osservazione <span class="math notranslate nohighlight">\( Y \)</span>, per poi estendere la discussione a un insieme di osservazioni gaussiane indipendenti e identicamente distribuite (IID).</p>
@@ -1206,23 +1251,17 @@ f(y \mid \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \mid \mu, \sigma = 6.50).
 </ul>
 </div>
 </section>
-<section id="watermark">
-<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
 <span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m
 </pre></div>
 </div>
 </div>
-</details>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 10 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Mar 21 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1236,12 +1275,12 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-pandas    : 2.2.1
-arviz     : 0.17.0
-scipy     : 1.12.0
-seaborn   : 0.13.2
-numpy     : 1.26.4
 matplotlib: 3.8.3
+seaborn   : 0.13.2
+pandas    : 2.2.1
+scipy     : 1.12.0
+numpy     : 1.26.4
+arviz     : 0.17.1
 
 Watermark: 2.4.3
 </pre></div>
@@ -1321,6 +1360,9 @@ Watermark: 2.4.3
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale">Verosimiglianza Congiunta di <span class="math notranslate nohighlight">\( n \)</span> Campioni IID da una Distribuzione Binomiale</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-verosimiglianza-marginale">La Verosimiglianza Marginale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caso-di-una-singola-osservazione">Caso di una Singola Osservazione</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">Campione indipendente di osservazioni da una distribuzione gaussiana</a></li>
@@ -1332,7 +1374,7 @@ Watermark: 2.4.3
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
   </nav></div>
 
