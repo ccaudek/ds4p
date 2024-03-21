@@ -553,13 +553,14 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-delle-probabilita">Calcolo delle Probabilità</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni-pratiche-della-distribuzione-binomiale">Applicazioni Pratiche della Distribuzione Binomiale</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valore-atteso-e-deviazione-standard">Valore atteso e deviazione standard</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funzioni-python-associate-alle-distribuzioni-di-probabilita">Funzioni Python associate alle distribuzioni di probabilità</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-discreta-uniforme">Distribuzione Discreta Uniforme</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-di-poisson">Distribuzione di Poisson</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-beta-binomiale">Distribuzione Beta-Binomiale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-conclusive">Considerazioni Conclusive</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
             </nav>
         </div>
@@ -590,7 +591,12 @@ che sono fondamentali per analizzare e modellare una vasta gamma di fenomeni cas
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 <span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">quad</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="c1"># Ignora i warning di tipo UserWarning</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -860,11 +866,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/s7/z86r4t9j6yx376cm120nln6w0000gn/T/ipykernel_5733/3660854426.py:48: UserWarning: The figure layout has changed to tight
-  plt.tight_layout()
-</pre></div>
-</div>
-<img alt="../_images/e3328e3e9983e0707add04dc21fb02edcb306a52edde6ce7fb3335fdf9af1618.png" src="../_images/e3328e3e9983e0707add04dc21fb02edcb306a52edde6ce7fb3335fdf9af1618.png" />
+<img alt="../_images/cb9c5ba693353ad783552b544e1b158a6082d7d39610bdabc7b4c3eaefaada89.png" src="../_images/cb9c5ba693353ad783552b544e1b158a6082d7d39610bdabc7b4c3eaefaada89.png" />
 </div>
 </div>
 <p>Consideriamo un altro esempio. Lanciando <span class="math notranslate nohighlight">\(5\)</span> volte una moneta onesta, qual è la probabilità che esca testa almeno due volte? Troviamo la soluzione usando <code class="docutils literal notranslate"><span class="pre">stats.binom.pmf()</span></code>.</p>
@@ -918,14 +920,11 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Funzione di ripartizione binomiale: $n$=</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, $</span><span class="se">\\</span><span class="s2">theta$=</span><span class="si">{</span><span class="n">theta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probabilità&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probabilità&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Probabilità&#39;)
-</pre></div>
-</div>
 <img alt="../_images/db83a1ed3f18868fb340967ec3ba48e704db20928b2f59c418fefae2d2224595.png" src="../_images/db83a1ed3f18868fb340967ec3ba48e704db20928b2f59c418fefae2d2224595.png" />
 </div>
 </div>
@@ -992,7 +991,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 1 2 1 3 3 1 4 1 3 4 4 2 2 1 3 3 3 3 2 3 2 3 1 5 5 5 3 2 3
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 1 3 2 2 0 4 0 1 2 4 2 2 4 2 2 2 2 0 4 3 2 3 1 4 1 4 2 2 4
 </pre></div>
 </div>
 </div>
@@ -1006,7 +1005,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 2 4 2 2 2 2 4 3 3 3 1 2 0 2 3 5 2 3 4 5 2 1 1 1 4 4 1 2 2
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 2 3 1 1 3 3 3 1 1 2 2 3 2 3 2 1 1 3 3 2 4 5 3 4 3 3 3 4 4
 </pre></div>
 </div>
 </div>
@@ -1065,7 +1064,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.7996
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.80041
 </pre></div>
 </div>
 </div>
@@ -1077,11 +1076,46 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6399598400000001
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6424138319
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="funzioni-python-associate-alle-distribuzioni-di-probabilita">
+<h3>Funzioni Python associate alle distribuzioni di probabilità<a class="headerlink" href="#funzioni-python-associate-alle-distribuzioni-di-probabilita" title="Link to this heading">#</a></h3>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Tipo</p></th>
+<th class="head text-left"><p>Esempio: Binomiale (y | n, θ)</p></th>
+<th class="head text-left"><p>Esempio: Normale (y | μ, σ)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Funzione di verosimiglianza</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">binom.pmf(y,</span> <span class="pre">n,</span> <span class="pre">θ)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">norm.pdf(y,</span> <span class="pre">μ,</span> <span class="pre">σ)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Prob Y=y</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">binom.pmf(y,</span> <span class="pre">n,</span> <span class="pre">θ)</span></code></p></td>
+<td class="text-left"><p>sempre 0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Prob Y ≥ y, Y ≤ y, y1 &lt; Y &lt; y2</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">binom.cdf(y,</span> <span class="pre">n,</span> <span class="pre">θ)</span></code> o <code class="docutils literal notranslate"><span class="pre">binom.sf(y,</span> <span class="pre">n,</span> <span class="pre">θ)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">norm.cdf(y,</span> <span class="pre">μ,</span> <span class="pre">σ)</span></code> o <code class="docutils literal notranslate"><span class="pre">norm.sf(y,</span> <span class="pre">μ,</span> <span class="pre">σ)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Inversa della CDF</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">binom.ppf(q,</span> <span class="pre">n,</span> <span class="pre">θ)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">norm.ppf(q,</span> <span class="pre">μ,</span> <span class="pre">σ)</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Generazione di dati simulati</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">binom.rvs(n,</span> <span class="pre">θ,</span> <span class="pre">size=1)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">norm.rvs(μ,</span> <span class="pre">σ,</span> <span class="pre">size=1)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>In seguito, utilizzeremo altre distribuzioni, come Uniforme, Beta, ecc., e ognuna di queste ha il proprio insieme di funzioni in Python trovate in <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code>. È possibile consultare queste diverse distribuzioni in opere di riferimento o documentazione online.</p>
+<p>Si noti che <code class="docutils literal notranslate"><span class="pre">pmf</span></code> (funzione di massa di probabilità) è usato per le distribuzioni discrete come la binomiale, mentre <code class="docutils literal notranslate"><span class="pre">pdf</span></code> (funzione di densità di probabilità) è usata per le distribuzioni continue come la normale. <code class="docutils literal notranslate"><span class="pre">cdf</span></code> (funzione di distribuzione cumulativa) e <code class="docutils literal notranslate"><span class="pre">sf</span></code> (funzione di sopravvivenza, che è 1 - cdf) sono utilizzate per calcolare le probabilità cumulative. <code class="docutils literal notranslate"><span class="pre">ppf</span></code> (percent point function) è l’inverso della <code class="docutils literal notranslate"><span class="pre">cdf</span></code> e viene utilizzata per determinare il valore di variabile al di sotto del quale cade una certa percentuale delle osservazioni. <code class="docutils literal notranslate"><span class="pre">rvs</span></code> (random variates) è usata per generare dati simulati.</p>
 </section>
 </section>
 <section id="distribuzione-discreta-uniforme">
@@ -1101,47 +1135,73 @@ P(X = x) = \frac{1}{N},
 <p>Il valore atteso, o la media, di <span class="math notranslate nohighlight">\(X\)</span> ci dà un’idea del risultato medio atteso e si calcola come:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbb{E}(X) = \sum_{x=1}^N x \cdot \frac{1}{N} = \frac{1}{N} \cdot \sum_{x=1}^N x = \frac{N + 1}{2},
+\mathbb{E}(X) = \sum_{x=1}^N x \cdot \frac{1}{N} = \frac{1}{N} \cdot \sum_{x=1}^N x.
 \]</div>
-<p>sfruttando la somma aritmetica dei primi <span class="math notranslate nohighlight">\(N\)</span> numeri naturali.</p>
-<p>Per determinare quanto i valori di <span class="math notranslate nohighlight">\(X\)</span> si disperdono attorno al valore medio, calcoliamo la varianza. Iniziamo trovando <span class="math notranslate nohighlight">\(\mathbb{E}(X^2)\)</span>:</p>
+<p>A questo punto, dobbiamo calcolare la somma <span class="math notranslate nohighlight">\(\sum_{x=1}^{N} x\)</span>, che è la somma dei primi <span class="math notranslate nohighlight">\(N\)</span> numeri naturali. Questa somma è data dalla formula:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbb{E}(X^2) = \frac{1}{N} \cdot \sum_{x=1}^N x^2,
+\sum_{x=1}^{N} x = \frac{N(N + 1)}{2}.
 \]</div>
-<p>e poi applichiamo la formula della varianza:</p>
+<p>Sostituendo questa formula nel nostro calcolo del valore atteso, otteniamo:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbb{V}(X) = \mathbb{E}(X^2) - [\mathbb{E}(X)]^2.
+\mathbb{E}(X) = \frac{1}{N} \cdot \frac{N(N + 1)}{2} = \frac{N + 1}{2}.
 \]</div>
-<p>Utilizzando l’identità <span class="math notranslate nohighlight">\(1^2 + 2^2 + \dots + N^2 = \frac{N(N + 1)(2N + 1)}{6}\)</span>, otteniamo:</p>
+<p>Quindi, abbiamo dimostrato che il valore atteso <span class="math notranslate nohighlight">\( \mathbb{E}(X) \)</span> per una variabile casuale <span class="math notranslate nohighlight">\(X\)</span> che assume valori interi uniformemente distribuiti da 1 a <span class="math notranslate nohighlight">\(N\)</span> è <span class="math notranslate nohighlight">\(\frac{N + 1}{2}\)</span>.</p>
+<p>Per determinare quanto i valori di <span class="math notranslate nohighlight">\(X\)</span> si disperdono attorno al valore medio, calcoliamo la varianza. Il primo passo è calcolare <span class="math notranslate nohighlight">\(\mathbb{E}(X^2)\)</span>, il valore atteso del quadrato di <span class="math notranslate nohighlight">\(X\)</span>. Per una variabile casuale discreta uniforme, questo si ottiene moltiplicando ogni valore al quadrato per la sua probabilità (che è <span class="math notranslate nohighlight">\(1/N\)</span> per tutti i valori) e sommando i risultati:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbb{E}(X^2) = \frac{(N + 1)(2N + 1)}{6},
+\mathbb{E}(X^2) = \frac{1}{N} \cdot \sum_{x=1}^N x^2
 \]</div>
-<p>e quindi la varianza:</p>
+<p>Usando l’identità per la somma dei quadrati dei primi <span class="math notranslate nohighlight">\(N\)</span> numeri naturali:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbb{V}(X) = \frac{(N + 1)(2N + 1)}{6} - \left(\frac{N + 1}{2}\right)^2.
+1^2 + 2^2 + \dots + N^2 = \frac{N(N + 1)(2N + 1)}{6}
 \]</div>
-<p>Questa formula fornisce la varianza di una variabile casuale in una distribuzione discreta uniforme, offrendo una misura quantitativa della dispersione dei valori attorno al loro valore medio. Questa distribuzione è fondamentale in molti ambiti della probabilità e della statistica, offrendo un modello base per eventi equiprobabili.</p>
+<p>possiamo sostituirla per trovare <span class="math notranslate nohighlight">\(\mathbb{E}(X^2)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}(X^2) = \frac{1}{N} \cdot \frac{N(N + 1)(2N + 1)}{6} = \frac{(N + 1)(2N + 1)}{6}
+\]</div>
+<p>La varianza di <span class="math notranslate nohighlight">\(X\)</span>, denotata con <span class="math notranslate nohighlight">\(\mathbb{V}(X)\)</span>, si calcola usando la formula:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{V}(X) = \mathbb{E}(X^2) - [\mathbb{E}(X)]^2
+\]</div>
+<p>Abbiamo già stabilito che <span class="math notranslate nohighlight">\(\mathbb{E}(X) = \frac{N + 1}{2}\)</span> e <span class="math notranslate nohighlight">\(\mathbb{E}(X^2) = \frac{(N + 1)(2N + 1)}{6}\)</span>. Sostituendo questi valori nella formula della varianza, otteniamo:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{V}(X) = \frac{(N + 1)(2N + 1)}{6} - \left(\frac{N + 1}{2}\right)^2
+\]</div>
+<p>Per semplicare l’espressione della varianza, dobbiamo sottrarre il quadrato di <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> da <span class="math notranslate nohighlight">\(\mathbb{E}(X^2)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\mathbb{V}(X) &amp;= \frac{(N + 1)(2N + 1)}{6} - \left(\frac{N + 1}{2}\right)^2 \\
+&amp;= \frac{(N + 1)(2N + 1)}{6} - \frac{(N + 1)^2}{4} \\
+&amp;= \frac{2(N + 1)(2N + 1)}{12} - \frac{3(N + 1)^2}{12} \\
+&amp;= \frac{(N + 1)(2(2N + 1) - 3(N + 1))}{12} \\
+&amp;= \frac{(N + 1)(4N + 2 - 3N - 3)}{12} \\
+&amp;= \frac{(N + 1)(N - 1)}{12}
+\end{align*}
+\end{split}\]</div>
+<p>Quindi, la varianza <span class="math notranslate nohighlight">\(\mathbb{V}(X)\)</span> di una variabile casuale uniforme discreta <span class="math notranslate nohighlight">\(X\)</span> che assume valori da 1 a <span class="math notranslate nohighlight">\(N\)</span> è <span class="math notranslate nohighlight">\(\frac{(N + 1)(N - 1)}{12}\)</span>, il che mostra come la dispersione dei valori attorno al loro valore medio dipenda dalla grandezza di <span class="math notranslate nohighlight">\(N\)</span>. Questa formula fornisce la varianza di una variabile casuale in una distribuzione discreta uniforme, offrendo una misura quantitativa della dispersione dei valori attorno al loro valore medio.</p>
 </section>
 <section id="distribuzione-di-poisson">
 <h2>Distribuzione di Poisson<a class="headerlink" href="#distribuzione-di-poisson" title="Link to this heading">#</a></h2>
-<p>La distribuzione di Poisson si applica quando si vuole studiare il numero di eventi indipendenti che avvengono in un determinato intervallo di tempo o spazio. La variabile casuale discreta <span class="math notranslate nohighlight">\(Y\)</span> rappresenta questo numero di eventi, e <span class="math notranslate nohighlight">\(\lambda\)</span> è il parametro che indica il tasso medio con cui tali eventi si verificano in un dato intervallo.</p>
-<p>La funzione di massa di probabilità, che esprime la probabilità che si verifichino esattamente <span class="math notranslate nohighlight">\(y\)</span> eventi, è data dalla formula:</p>
+<p>La distribuzione di Poisson è utilizzata per modellare il numero di eventi indipendenti che si verificano in un intervallo di tempo o spazio prefissato. La variabile casuale discreta <span class="math notranslate nohighlight">\(Y\)</span> denota il numero di tali eventi, mentre il parametro <span class="math notranslate nohighlight">\(\lambda\)</span> rappresenta il tasso medio di occorrenza di questi eventi in un intervallo specifico.</p>
+<p>La funzione di massa di probabilità associata alla distribuzione di Poisson, che indica la probabilità che si verifichino esattamente <span class="math notranslate nohighlight">\(y\)</span> eventi, è definita come segue:</p>
 <div class="math notranslate nohighlight" id="equation-eq-poissondistribution">
 <span class="eqno">(39)<a class="headerlink" href="#equation-eq-poissondistribution" title="Link to this equation">#</a></span>\[
-f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \quad y \in \{0, 1, 2, \ldots\}.
+P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per} \quad y = 0, 1, 2, \ldots
 \]</div>
-<p>In questa espressione:</p>
+<p>Questa equazione illustra:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(f(y \mid \lambda)\)</span> descrive la probabilità che si verifichino esattamente <span class="math notranslate nohighlight">\(y\)</span> eventi in un dato intervallo.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\lambda\)</span> è il tasso medio di occorrenza degli eventi.</p></li>
-<li><p><span class="math notranslate nohighlight">\(y\)</span> rappresenta il conteggio degli eventi e può assumere solo valori interi non negativi.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(Y = y \mid \lambda)\)</span>, la probabilità che esattamente <span class="math notranslate nohighlight">\(y\)</span> eventi si verifichino.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda\)</span>, il tasso medio di occorrenza degli eventi per l’intervallo considerato.</p></li>
+<li><p><span class="math notranslate nohighlight">\(y\)</span>, il numero di eventi, che è limitato ai valori interi non negativi.</p></li>
 </ul>
-<p>Una caratteristica distintiva della distribuzione di Poisson è che il suo valore atteso e la varianza sono entrambi uguali a <span class="math notranslate nohighlight">\(\lambda\)</span>. Questo implica che, man mano che il tasso medio <span class="math notranslate nohighlight">\(\lambda\)</span> aumenta, anche la varianza (cioè la dispersione dei valori attorno al valore medio) aumenta di pari passo.</p>
-<p>La distribuzione di Poisson trova applicazione in svariati contesti dove è necessario modellare il numero di occorrenze di eventi rari in un intervallo fisso, come ad esempio il numero di chiamate ricevute da un centralino in un’ora o il numero di errori per pagina in un libro. La sua utilità risiede nella capacità di gestire eventi che avvengono in modo apparentemente casuale e indipendente l’uno dall’altro.</p>
+<p>Una peculiarità della distribuzione di Poisson è che sia il valore atteso (<span class="math notranslate nohighlight">\(E[Y]\)</span>) sia la varianza (<span class="math notranslate nohighlight">\(Var[Y]\)</span>) sono equivalenti a <span class="math notranslate nohighlight">\(\lambda\)</span>. Questo significa che con l’aumentare del valore di <span class="math notranslate nohighlight">\(\lambda\)</span>, aumenta anche la dispersione dei dati attorno al valore medio, evidenziando un incremento della variabilità degli eventi.</p>
 <p>Quale esempio, presentiamo qui sotto un grafico con la distribuzione di Poisson di parametro <span class="math notranslate nohighlight">\(\lambda\)</span> = 2.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1172,7 +1232,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 <img alt="../_images/d66d37f14f01baedd6a34e8d27de302d3648e3435c12b44ac988dd24eb6c4b0e.png" src="../_images/d66d37f14f01baedd6a34e8d27de302d3648e3435c12b44ac988dd24eb6c4b0e.png" />
 </div>
 </div>
-<p>La probabilità di un singolo valore <span class="math notranslate nohighlight">\(y\)</span> si ottiene utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">pmf</span></code>, in cui l’argomento <code class="docutils literal notranslate"><span class="pre">k</span></code> rappresenta il numero di eventi (<span class="math notranslate nohighlight">\(y\)</span>) e <code class="docutils literal notranslate"><span class="pre">mu</span></code> è uguale a <span class="math notranslate nohighlight">\(\lambda\)</span>. Ad esempio, la probabilità di osservare esattamente tre eventi (<span class="math notranslate nohighlight">\(y = 3\)</span>) dato un tasso di occorrenza <span class="math notranslate nohighlight">\(\lambda\)</span> = 2, è data da:</p>
+<p>La probabilità di ottenere un singolo valore <span class="math notranslate nohighlight">\(y\)</span> si calcola utilizzando la funzione di massa di probabilità (<code class="docutils literal notranslate"><span class="pre">pmf</span></code>), dove l’argomento <code class="docutils literal notranslate"><span class="pre">k</span></code> rappresenta il numero di eventi (<span class="math notranslate nohighlight">\(y\)</span>) e <code class="docutils literal notranslate"><span class="pre">mu</span></code> è uguale a <span class="math notranslate nohighlight">\(\lambda\)</span>. Ad esempio, per determinare la probabilità di osservare esattamente tre eventi (<span class="math notranslate nohighlight">\(y = 3\)</span>) con un tasso di occorrenza <span class="math notranslate nohighlight">\(\lambda\)</span> = 2, indicata come <span class="math notranslate nohighlight">\(P(Y = 3)\)</span>, si utilizza la seguente istruzione:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1185,21 +1245,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">La</span> <span class="n">probabilità</span> <span class="n">di</span> <span class="n">non</span> <span class="n">più</span> <span class="n">di</span> <span class="mi">3</span> <span class="n">eventi</span> <span class="n">è</span><span class="p">:</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>  <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">26</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-    <span class="n">La</span> <span class="n">probabilità</span> <span class="n">di</span> <span class="n">non</span> <span class="n">più</span> <span class="n">di</span> <span class="mi">3</span> <span class="n">eventi</span> <span class="n">è</span><span class="p">:</span>
-       <span class="o">^</span>
-<span class="ne">SyntaxError</span>: invalid syntax
-</pre></div>
-</div>
-</div>
-</div>
+<p>La probabilità di non più di 3 eventi, indicata come <span class="math notranslate nohighlight">\(P(Y \leq 3)\)</span>, si ottiene nel modo seguente:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1213,7 +1259,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 </div>
-<p>La funzione <code class="docutils literal notranslate"><span class="pre">ppf</span></code>, che richiede come argomenti la probabilità e <span class="math notranslate nohighlight">\(\lambda\)</span>, restituisce il quantile della distribuzione di Poisson. Ad esempio, nel caso precedente abbiamo:</p>
+<p>La funzione <code class="docutils literal notranslate"><span class="pre">ppf</span></code>, con la probabilità e <span class="math notranslate nohighlight">\(\lambda\)</span> come argomenti, restituisce il quantile della distribuzione di Poisson. Ad esempio, nel caso precedente, abbiamo:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1226,7 +1272,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 </div>
-<p>La funzione di ripartizione si ottiene utilizzando <code class="docutils literal notranslate"><span class="pre">cdf</span></code>. Per esempio:</p>
+<p>La funzione di distribuzione cumulativa si calcola utilizzando <code class="docutils literal notranslate"><span class="pre">cdf</span></code>. Ad esempio, per calcolare <span class="math notranslate nohighlight">\(P(Y \leq 3)\)</span> si utilizza:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1258,7 +1304,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.00127
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.9937
 </pre></div>
 </div>
 </div>
@@ -1270,7 +1316,7 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0064483870999994
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0087603100000004
 </pre></div>
 </div>
 </div>
@@ -1388,19 +1434,25 @@ f(y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!} \quad \text{per} \qu
 </section>
 <section id="distribuzione-beta-binomiale">
 <h2>Distribuzione Beta-Binomiale<a class="headerlink" href="#distribuzione-beta-binomiale" title="Link to this heading">#</a></h2>
-<p>La distribuzione beta-binomiale è una distribuzione di probabilità discreta estremamente utile in situazioni dove la probabilità di successo in una serie di esperimenti non è costante, ma varia seguendo una distribuzione beta. Questa distribuzione è parametrizzata da tre valori: <span class="math notranslate nohighlight">\(N\)</span>, <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>.</p>
-<p>La formula che definisce la funzione di massa di probabilità della distribuzione beta-binomiale è la seguente:</p>
+<p>La distribuzione beta-binomiale rappresenta una estensione della distribuzione binomiale che tiene conto della variabilità nella probabilità di successo tra i vari tentativi. Viene descritta da tre parametri principali: <span class="math notranslate nohighlight">\(N\)</span>, <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>.</p>
+<p>Nel dettaglio, la funzione di massa di probabilità per la distribuzione beta-binomiale è data da:</p>
 <div class="math notranslate nohighlight" id="equation-eq-beta-binom-formula">
 <span class="eqno">(40)<a class="headerlink" href="#equation-eq-beta-binom-formula" title="Link to this equation">#</a></span>\[
-BetaBinomial(y \mid N, \alpha, \beta) = \binom{N}{y} \frac{B(y + \alpha, N-y+\beta)}{B(\alpha, \beta)},
+\text{BetaBinomiale}(y | N, \alpha, \beta) = \binom{N}{y} \cdot \frac{B(y + \alpha, N - y + \beta)}{B(\alpha, \beta)},
 \]</div>
-<p>dove <span class="math notranslate nohighlight">\(y\)</span> rappresenta il numero di successi osservati, <span class="math notranslate nohighlight">\(N\)</span> è il numero totale di prove, e <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono i parametri della distribuzione beta che modellano la variazione nella probabilità di successo tra le prove. La funzione beta, indicata come <span class="math notranslate nohighlight">\(B(u, v)\)</span>, è definita come:</p>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(y\)</span> indica il numero di successi osservati.</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> rappresenta il numero totale di tentativi.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono i parametri della distribuzione beta, che modellano la variabilità nella probabilità di successo tra i tentativi.</p></li>
+</ul>
+<p>La funzione <span class="math notranslate nohighlight">\(B(u, v)\)</span>, nota come funzione beta, è definita tramite l’uso della funzione gamma <span class="math notranslate nohighlight">\(\Gamma\)</span>, secondo la formula:</p>
 <div class="math notranslate nohighlight">
 \[
-B(u, v) = \frac{\Gamma(u)\Gamma(v)}{\Gamma(u+v)},
+B(u, v) = \frac{\Gamma(u) \Gamma(v)}{\Gamma(u + v)},
 \]</div>
-<p>in cui <span class="math notranslate nohighlight">\(\Gamma\)</span> rappresenta la funzione gamma, un’estensione del concetto di fattoriale a numeri reali e complessi.</p>
-<p>Questa distribuzione è particolarmente utile in contesti dove le probabilità di successo variano in maniera casuale, ma seguendo una certa distribuzione, come può accadere in studi clinici o in ricerche comportamentali. La distribuzione beta-binomiale fornisce una modellazione più flessibile rispetto alla semplice distribuzione binomiale, adattandosi meglio a situazioni reali dove l’ipotesi di una probabilità di successo costante non è valida.</p>
+<p>dove la funzione gamma <span class="math notranslate nohighlight">\(\Gamma\)</span> generalizza il concetto di fattoriale a numeri reali e complessi.</p>
+<p>L’importanza della distribuzione beta-binomiale deriva dalla sua capacità di modellare situazioni in cui la probabilità di successo non è fissa, ma segue una distribuzione di probabilità, specificatamente una distribuzione beta. Ciò la rende particolarmente adatta per applicazioni in cui le probabilità di successo cambiano in maniera incerta da un tentativo all’altro, come può avvenire in contesti di ricerca clinica o in studi comportamentali. Rispetto alla distribuzione binomiale, che assume una probabilità di successo costante per tutti i tentativi, la beta-binomiale offre una rappresentazione più realistica e flessibile per dati empirici che presentano variabilità nelle probabilità di successo.</p>
 </section>
 <section id="considerazioni-conclusive">
 <h2>Considerazioni Conclusive<a class="headerlink" href="#considerazioni-conclusive" title="Link to this heading">#</a></h2>
@@ -1411,8 +1463,8 @@ B(u, v) = \frac{\Gamma(u)\Gamma(v)}{\Gamma(u+v)},
 <p>Per coloro interessati a tecniche più avanzate, la generazione di valori casuali a partire da queste distribuzioni è trattata nell’appendice <span class="xref std std-ref">rng-appendix</span>. Questa sezione fornisce strumenti e approfondimenti utili per l’applicazione pratica di questi modelli probabilistici.</p>
 <p>In conclusione, le distribuzioni discrete forniscono strumenti essenziali e versatili per modellare e analizzare fenomeni caratterizzati da eventi distinti e quantificabili. La comprensione approfondita di queste distribuzioni è cruciale per chiunque desideri esplorare il vasto campo della probabilità e della statistica.</p>
 </section>
-<section id="watermark">
-<h2>Watermark<a class="headerlink" href="#watermark" title="Link to this heading">#</a></h2>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
@@ -1421,7 +1473,7 @@ B(u, v) = \frac{\Gamma(u)\Gamma(v)}{\Gamma(u+v)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Mar 20 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Mar 21 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1435,11 +1487,11 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-matplotlib: 3.8.3
 numpy     : 1.26.4
+scipy     : 1.12.0
 pandas    : 2.2.1
 arviz     : 0.17.1
-scipy     : 1.12.0
+matplotlib: 3.8.3
 seaborn   : 0.13.2
 
 Watermark: 2.4.3
@@ -1520,13 +1572,14 @@ Watermark: 2.4.3
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-delle-probabilita">Calcolo delle Probabilità</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazioni-pratiche-della-distribuzione-binomiale">Applicazioni Pratiche della Distribuzione Binomiale</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valore-atteso-e-deviazione-standard">Valore atteso e deviazione standard</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funzioni-python-associate-alle-distribuzioni-di-probabilita">Funzioni Python associate alle distribuzioni di probabilità</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-discreta-uniforme">Distribuzione Discreta Uniforme</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-di-poisson">Distribuzione di Poisson</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-beta-binomiale">Distribuzione Beta-Binomiale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-conclusive">Considerazioni Conclusive</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#watermark">Watermark</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
   </nav></div>
 
