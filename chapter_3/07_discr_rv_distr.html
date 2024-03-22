@@ -828,8 +828,8 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 <span class="n">y_combined</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">x_combined</span><span class="p">,</span> <span class="n">n1</span><span class="o">+</span><span class="n">n2</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
 
 <span class="c1"># Simulated distributions</span>
-<span class="n">simulated1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
-<span class="n">simulated2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">simulated1</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">simulated2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
 <span class="n">simulated_combined</span> <span class="o">=</span> <span class="n">simulated1</span> <span class="o">+</span> <span class="n">simulated2</span>
 
 <span class="c1"># Plotting</span>
@@ -866,7 +866,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cb9c5ba693353ad783552b544e1b158a6082d7d39610bdabc7b4c3eaefaada89.png" src="../_images/cb9c5ba693353ad783552b544e1b158a6082d7d39610bdabc7b4c3eaefaada89.png" />
+<img alt="../_images/6d2818621243efe0967cf11a1b4c9100c431b2d0eadf8797c8a58a76e300171c.png" src="../_images/6d2818621243efe0967cf11a1b4c9100c431b2d0eadf8797c8a58a76e300171c.png" />
 </div>
 </div>
 <p>Consideriamo un altro esempio. Lanciando <span class="math notranslate nohighlight">\(5\)</span> volte una moneta onesta, qual è la probabilità che esca testa almeno due volte? Troviamo la soluzione usando <code class="docutils literal notranslate"><span class="pre">stats.binom.pmf()</span></code>.</p>
@@ -970,46 +970,29 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 </div>
-<p>Per generare una sequenza di valori casuali seguendo una distribuzione binomiale, possiamo utilizzare il concetto di una variabile casuale ‘frozen’ (congelata). Una variabile casuale frozen rappresenta una specifica istanza di una distribuzione di probabilità con parametri fissi. In altre parole, una volta che la variabile casuale è stata definita e i suoi parametri (come il numero di prove e la probabilità di successo in una distribuzione binomiale) sono stati impostati, questi rimangono immutabili.</p>
-<p>La creazione di una variabile casuale frozen è utile perché permette di simulare ripetutamente l’esperimento senza la necessità di riconfigurare i parametri ogni volta. Dopo aver definito la variabile casuale con i parametri desiderati, possiamo generare campioni dalla distribuzione associata utilizzando il metodo <code class="docutils literal notranslate"><span class="pre">rvs()</span></code>.</p>
-<p>Per esempio, in Python, possiamo creare una variabile casuale binomiale frozen specificando il numero di prove e la probabilità di successo. Una volta creata, possiamo utilizzare il metodo <code class="docutils literal notranslate"><span class="pre">rvs()</span></code> per generare una sequenza di valori casuali che segue la distribuzione binomiale con i parametri specificati. Questo processo facilita la simulazione e l’analisi di esperimenti che seguono un modello binomiale.</p>
+<p>Per generare una sequenza di valori casuali seguendo una distribuzione binomiale possiamo utilizzare la funzione <code class="docutils literal notranslate"><span class="pre">random()</span></code> di NumPy. Dopo aver inizializzato <code class="docutils literal notranslate"><span class="pre">rng</span> <span class="pre">=</span> <span class="pre">np.random.default_rng(RANDOM_SEED)</span></code>, per esempio,</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">p</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="n">rv</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Generiamo poi 30 realizzazioni della v.c. <code class="docutils literal notranslate"><span class="pre">rv</span></code>:</p>
+<p>possiamo impiegare <code class="docutils literal notranslate"><span class="pre">rng</span></code> per generare valori casuali da una distribuzione binomiale:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 1 3 2 2 0 4 0 1 2 4 2 2 4 2 2 2 2 0 4 3 2 3 1 4 1 4 2 2 4
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3 2 4 3 1 5 3 3 1 2 2 4 3 4 2 2 3 1 4 3 3 2 5 4 3 2 2 1 1 3
 </pre></div>
 </div>
 </div>
 </div>
-<p>Lo stesso risultato si può anche ottenere mediante la funzione <code class="docutils literal notranslate"><span class="pre">random.binomial()</span></code> di NumPy.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 2 3 1 1 3 3 3 1 1 2 2 3 2 3 2 1 1 3 3 2 4 5 3 4 3 3 3 4 4
-</pre></div>
-</div>
-</div>
-</div>
+<p>Per una discussione sulla generazione di numeri pseudo-casuali in Python, si veda il capitolo <a class="reference internal" href="../chapter_7/a40_rng.html#appendix-rng"><span class="std std-ref">Generazione di numeri casuali</span></a>.</p>
 </section>
 <section id="valore-atteso-e-deviazione-standard">
 <h3>Valore atteso e deviazione standard<a class="headerlink" href="#valore-atteso-e-deviazione-standard" title="Link to this heading">#</a></h3>
@@ -1048,11 +1031,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 <p>Per confermare queste aspettative teoriche, possiamo eseguire una simulazione. Creiamo una serie di esperimenti simulati in cui lanciamo quattro monete per un gran numero di volte, registrando il numero di teste ottenute in ogni serie. Calcoliamo poi la media e la varianza dei risultati ottenuti per vedere quanto si avvicinano ai valori teorici calcolati.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">p</span> <span class="o">=</span> <span class="mf">0.2</span>
-<span class="n">rv</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">.2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1064,7 +1043,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.80041
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.800159
 </pre></div>
 </div>
 </div>
@@ -1076,7 +1055,7 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6424138319
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.6402445747189999
 </pre></div>
 </div>
 </div>
@@ -1109,8 +1088,8 @@ P(Y=2) = \frac{4!}{2!(4-2)!} \cdot 0.2^{2} \cdot (1-0.2)^{4-2} = 0.1536.
 <td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">norm.ppf(q,</span> <span class="pre">μ,</span> <span class="pre">σ)</span></code></p></td>
 </tr>
 <tr class="row-even"><td class="text-left"><p>Generazione di dati simulati</p></td>
-<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">binom.rvs(n,</span> <span class="pre">θ,</span> <span class="pre">size=1)</span></code></p></td>
-<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">norm.rvs(μ,</span> <span class="pre">σ,</span> <span class="pre">size=1)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">rng.binomial(p,</span> <span class="pre">n,</span> <span class="pre">size)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">rng.normal(μ,</span> <span class="pre">σ,</span> <span class="pre">size</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -1289,9 +1268,7 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">rv</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1304,7 +1281,7 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.9937
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.998481
 </pre></div>
 </div>
 </div>
@@ -1316,7 +1293,7 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0087603100000004
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.9991306926389998
 </pre></div>
 </div>
 </div>
@@ -1339,14 +1316,10 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 <p>Simuliamo le nascite in questo ospedale per un anno (n = 365) utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">np.random.poisson</span></code> e confrontiamo la proporzione di giorni in cui ci sono stati 6 nascite con la probabilità teorica che abbiamo calcolato in precedenza.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Impostiamo il seed per la riproducibilità dei risultati</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
-
-<span class="c1"># Simuliamo le nascite in un anno (365 giorni) con una media storica di 4.5 nascite al giorno</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simuliamo le nascite in un anno (365 giorni) con una media storica di 4.5 nascite al giorno</span>
 <span class="n">n_days</span> <span class="o">=</span> <span class="mi">365</span>
 <span class="n">mean_births_per_day</span> <span class="o">=</span> <span class="mf">4.5</span>
-<span class="n">rv</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mean_births_per_day</span><span class="p">)</span>
-<span class="n">simulated_births</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">n_days</span><span class="p">)</span>
+<span class="n">simulated_births</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mean_births_per_day</span><span class="p">,</span> <span class="n">n_days</span><span class="p">)</span>
 
 <span class="c1"># Calcoliamo la proporzione di giorni in cui sono nati esattamente 6 bambini nella simulazione</span>
 <span class="n">proportion_six_births</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">simulated_births</span> <span class="o">==</span> <span class="mi">6</span><span class="p">)</span>
@@ -1357,7 +1330,7 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La proporzione di giorni in cui, nella simulazione, sono nati 6 bambini è: 0.1288
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La proporzione di giorni in cui, nella simulazione, sono nati 6 bambini è: 0.1151
 </pre></div>
 </div>
 </div>
@@ -1375,7 +1348,7 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e35d36ae61bc621bafca581fe70b09713ca3dbbc40ca5e5f50caed05a04c0caf.png" src="../_images/e35d36ae61bc621bafca581fe70b09713ca3dbbc40ca5e5f50caed05a04c0caf.png" />
+<img alt="../_images/eb469f7277ed26591bf337226a3f7825b30df67447eeb213dd17293dd29ce01a.png" src="../_images/eb469f7277ed26591bf337226a3f7825b30df67447eeb213dd17293dd29ce01a.png" />
 </div>
 </div>
 <p>Calcoliamo la probabilità teorica della nascita di più di 6 bambini in un giorno.</p>
@@ -1401,7 +1374,7 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La proporzione di giorni con più di 6 bambini nati nella simulazione è: 0.1863
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>La proporzione di giorni con più di 6 bambini nati nella simulazione è: 0.1945
 </pre></div>
 </div>
 </div>
@@ -1428,7 +1401,7 @@ P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c507205b0d6e78c785056a6facc50f390658c1b0934c1208cf5e2c52d34c30fd.png" src="../_images/c507205b0d6e78c785056a6facc50f390658c1b0934c1208cf5e2c52d34c30fd.png" />
+<img alt="../_images/5b1fdbae13cbb7b77a510bef24ea4c658faa89d16cec30759a59fb4915f4fe8e.png" src="../_images/5b1fdbae13cbb7b77a510bef24ea4c658faa89d16cec30759a59fb4915f4fe8e.png" />
 </div>
 </div>
 </section>
@@ -1473,7 +1446,7 @@ B(u, v) = \frac{\Gamma(u) \Gamma(v)}{\Gamma(u + v)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Mar 21 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 22 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1487,12 +1460,12 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-numpy     : 1.26.4
 scipy     : 1.12.0
-pandas    : 2.2.1
+numpy     : 1.26.4
+seaborn   : 0.13.2
 arviz     : 0.17.1
 matplotlib: 3.8.3
-seaborn   : 0.13.2
+pandas    : 2.2.1
 
 Watermark: 2.4.3
 </pre></div>
