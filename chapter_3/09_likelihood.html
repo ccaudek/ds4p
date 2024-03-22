@@ -549,21 +549,21 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione">Il Principio della Verosimiglianza e la sua Formalizzazione</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-nel-contesto-del-modello-binomiale">Verosimiglianza nel Contesto del Modello Binomiale</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-binomiale">Verosimiglianza Binomiale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale">Verosimiglianza Congiunta di <span class="math notranslate nohighlight">\( n \)</span> Campioni IID da una Distribuzione Binomiale</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta">Verosimiglianza Congiunta</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-verosimiglianza-marginale">La Verosimiglianza Marginale</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-verosimiglianza-marginale">La Verosimiglianza Marginale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caso-di-una-singola-osservazione">Caso di una Singola Osservazione</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">Campione indipendente di osservazioni da una distribuzione gaussiana</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-formale">Derivazione Formale</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-mu">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-sigma-2">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-formale-della-stima-di-massima-verosimiglianza-per-una-distribuzione-gaussiana">Derivazione Formale della Stima di Massima Verosimiglianza per una Distribuzione Gaussiana</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-mu">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-sigma-2">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
@@ -582,8 +582,8 @@ document.write(`
   <p><a target="_blank" rel="noopener noreferrer" href="https://colab.research.google.com/github/ccaudek/ds4psy_2023/blob/main/225_likelihood.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="la-verosimiglianza">
 <span id="notebook-likelihood"></span><h1>La verosimiglianza<a class="headerlink" href="#la-verosimiglianza" title="Link to this heading">#</a></h1>
-<p>Oltre agli approcci frequentisti e bayesiani, l’inferenza statistica include un terzo metodo fondamentale: la verosimiglianza. Questo approccio permette ai ricercatori di misurare l’evidenza relativa nel confronto tra due modelli o ipotesi, similmente alla metodologia bayesiana. Tuttavia, si distingue per il suo rifiuto di integrare informazioni a priori nelle analisi statistiche.</p>
-<p>Il fulcro di questo capitolo è la funzione di verosimiglianza, un concetto cardine che attraversa tutti e tre gli approcci statistici, agendo come ponte tra i dati osservati e i parametri di un dato modello statistico. La sua importanza risiede nella capacità di fornire una base solida per l’interpretazione e la quantificazione dell’adattamento dei dati ai modelli teorici, rendendola uno strumento indispensabile nell’arsenale dell’inferenza statistica.</p>
+<p>Oltre agli approcci frequentisti e bayesiani, esiste un terzo metodo fondamentale nell’ambito dell’inferenza statistica: la metodologia basata sulla verosimiglianza. Questo approccio consente ai ricercatori di valutare l’evidenza relativa quando si confrontano due modelli o ipotesi, in maniera simile alla metodologia bayesiana. Ciò che lo distingue è il suo esplicito rifiuto di incorporare informazioni pregresse (priori) nelle analisi statistiche.</p>
+<p>Questo capitolo si concentra sulla funzione di verosimiglianza, concetto centrale che si estende attraverso tutti e tre gli approcci statistici, fungendo da collegamento tra i dati osservati e i parametri di un modello statistico specifico. La rilevanza della funzione di verosimiglianza risiede nella sua capacità di fornire un fondamento robusto per l’interpretazione e la quantificazione dell’adeguatezza dei dati ai modelli teorici. Questo la rende uno strumento cruciale per l’inferenza statistica, indispensabile per comprendere e valutare la conformità dei dati rispetto alle teorie proposte.</p>
 <div class="admonition-obiettivi-di-apprendimento admonition">
 <p class="admonition-title">Obiettivi di apprendimento</p>
 <p>Dopo aver completato questo capitolo, sarete in grado di:</p>
@@ -625,55 +625,39 @@ document.write(`
 </section>
 <section id="il-principio-della-verosimiglianza-e-la-sua-formalizzazione">
 <h2>Il Principio della Verosimiglianza e la sua Formalizzazione<a class="headerlink" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione" title="Link to this heading">#</a></h2>
-<p>La funzione di verosimiglianza rappresenta un concetto chiave nell’inferenza statistica, fungendo da mezzo per quantificare quanto bene un modello parametrico, definito da parametri <span class="math notranslate nohighlight">\( \theta \)</span>, si adatti a un insieme di dati osservati <span class="math notranslate nohighlight">\( y \)</span>. La definizione matematica pone la verosimiglianza come direttamente proporzionale alla probabilità condizionata dei dati osservati dati i parametri:</p>
-<div class="math notranslate nohighlight" id="equation-eq-likelihood-def">
-<span class="eqno">(51)<a class="headerlink" href="#equation-eq-likelihood-def" title="Link to this equation">#</a></span>\[
-L(\theta | y) \propto p(y | \theta).
-\]</div>
-<p>Qui, <span class="math notranslate nohighlight">\( L(\theta | y) \)</span> indica la funzione di verosimiglianza e <span class="math notranslate nohighlight">\( p(y | \theta) \)</span> denota la densità di probabilità (o funzione di massa di probabilità per dati discreti) di osservare i dati <span class="math notranslate nohighlight">\( y \)</span> dato il set di parametri <span class="math notranslate nohighlight">\( \theta \)</span>.</p>
-<p>La costante di proporzionalità in questa relazione è tipicamente trascurata in quanto non influisce sull’analisi di ottimizzazione della verosimiglianza; essa non varia con i parametri <span class="math notranslate nohighlight">\( \theta \)</span> e, di conseguenza, non modifica il valore di <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza la funzione di verosimiglianza.</p>
-<p>Per illustrare con un esempio, consideriamo il caso di una moneta lanciata 10 volte, risultando in 7 teste. Questo scenario può essere modellato utilizzando la distribuzione binomiale, la cui funzione di massa di probabilità è espressa come:</p>
+<p>La funzione di verosimiglianza e la funzione di densità (o massa) di probabilità sono due concetti fondamentali in statistica che, nonostante condividano la stessa espressione matematica, rivestono ruoli e interpretazioni distinti a seconda del contesto in cui vengono applicati. La chiave per distinguere tra i due concetti risiede nel modo in cui trattiamo i dati e i parametri del modello.</p>
+<p>Nel caso della funzione di densità (o massa) di probabilità, i parametri del modello sono fissati e l’obiettivo è valutare la probabilità di osservare un certo insieme di dati. Qui, i dati sono variabili, mentre i parametri sono considerati costanti. Per esempio, in un esperimento in cui lanciamo una moneta diverse volte, potremmo usare una distribuzione binomiale per calcolare la probabilità di ottenere un certo numero di teste, assumendo un valore noto e fisso per la probabilità di ottenere testa in un singolo lancio.</p>
+<p>Al contrario, nella funzione di verosimiglianza, manteniamo i dati osservati come fissi e variamo i parametri del modello per valutare quanto bene questi ultimi si adattino ai dati osservati. Questo processo ci permette di esplorare la plausibilità di diversi valori dei parametri dati gli stessi dati. L’obiettivo è identificare il set di parametri che meglio spiega i dati osservati.</p>
+<p>Formalmente, la relazione tra la funzione di verosimiglianza e la funzione di densità di probabilità è espressa come segue:</p>
 <div class="math notranslate nohighlight">
 \[
-p(y | n, p) = \binom{n}{y} p^y (1 - p)^{(n - y)},
+L(\theta | y) \propto p(y | \theta),
 \]</div>
-<p>dove <span class="math notranslate nohighlight">\( n \)</span> rappresenta il numero totale di lanci, <span class="math notranslate nohighlight">\( y \)</span> il numero di teste osservate, e <span class="math notranslate nohighlight">\( p \)</span> la probabilità di osservare una testa in un singolo lancio.</p>
-<p>La verosimiglianza di ottenere 7 teste in 10 lanci con una moneta non distorta (<span class="math notranslate nohighlight">\( p = 0.5 \)</span>) si calcola come:</p>
-<div class="math notranslate nohighlight">
-\[
-L(p = 0.5 | y = 7, n = 10) \propto \binom{10}{7} \cdot 0.5^7 \cdot (1 - 0.5)^3.
-\]</div>
-<p>Questo calcolo ci permette di valutare la verosimiglianza di osservare tale esito assumendo che la moneta sia equilibrata. Analizzando la verosimiglianza per vari valori di <span class="math notranslate nohighlight">\( p \)</span>, si può identificare il valore che la massimizza, fornendo così una stima accurata della probabilità di ottenere una testa con la moneta in questione.</p>
-<p>Va sottolineato che, sebbene la funzione di verosimiglianza e la funzione di probabilità condividano la stessa forma matematica, differiscono significativamente in termini di interpretazione e scopo. Mentre la funzione di probabilità calcola la probabilità di osservare i dati <span class="math notranslate nohighlight">\( y \)</span> dati certi parametri <span class="math notranslate nohighlight">\( \theta \)</span>, la funzione di verosimiglianza valuta la plausibilità dei diversi valori dei parametri <span class="math notranslate nohighlight">\( \theta \)</span> alla luce dei dati osservati.</p>
-<p>In conclusione, la funzione di verosimiglianza è essenziale per l’inferenza statistica, offrendo un meccanismo per valutare e comparare la plausibilità di differenti set di parametri <span class="math notranslate nohighlight">\( \theta \)</span>. Essa costituisce la base per la stima di parametri tramite metodi puntuali o intervallari, facilitando una comprensione più profonda del modello e dei dati analizzati.</p>
+<p>dove <span class="math notranslate nohighlight">\(L(\theta | y)\)</span> rappresenta la funzione di verosimiglianza per i parametri <span class="math notranslate nohighlight">\(\theta\)</span> dati gli osservazioni <span class="math notranslate nohighlight">\(y\)</span>, e <span class="math notranslate nohighlight">\(p(y | \theta)\)</span> indica la probabilità (o densità) di osservare i dati <span class="math notranslate nohighlight">\(y\)</span> dato un certo set di parametri <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>Prendiamo l’esempio del lancio di una moneta. Se osserviamo 7 teste su 10 lanci, la funzione di massa di probabilità della distribuzione binomiale ci permette di calcolare la probabilità di questo esito per un dato valore di <span class="math notranslate nohighlight">\(p\)</span> (la probabilità di testa). In questo contesto, <span class="math notranslate nohighlight">\(p\)</span> è fisso e i dati (<span class="math notranslate nohighlight">\(y = 7\)</span> teste in <span class="math notranslate nohighlight">\(n = 10\)</span> lanci) sono variabili.</p>
+<p>Dall’altro lato, se consideriamo <span class="math notranslate nohighlight">\(p\)</span> variabile, la funzione di verosimiglianza ci permette di valutare come diversi valori di <span class="math notranslate nohighlight">\(p\)</span> si adattano all’esito osservato di 7 teste su 10 lanci, mantenendo i dati osservati fissi.</p>
+<p>È importante sottolineare che, benché le due funzioni condividano la stessa forma matematica, il loro utilizzo e interpretazione sono profondamente diversi. La funzione di densità di probabilità si concentra sulla probabilità degli esiti dati i parametri, mentre la funzione di verosimiglianza valuta la plausibilità dei parametri dati gli esiti. Questa distinzione è cruciale per l’inferenza statistica, permettendoci di stimare i parametri del modello che meglio si adattano ai dati osservati e di comprendere in modo più approfondito la struttura e le caratteristiche del fenomeno studiato.</p>
 </section>
-<section id="verosimiglianza-nel-contesto-del-modello-binomiale">
-<h2>Verosimiglianza nel Contesto del Modello Binomiale<a class="headerlink" href="#verosimiglianza-nel-contesto-del-modello-binomiale" title="Link to this heading">#</a></h2>
-<p>Esploriamo ulteriormente l’importanza della funzione di verosimiglianza mediante un esempio concreto basato sulla distribuzione binomiale. Immaginiamo di effettuare un esperimento composto da <span class="math notranslate nohighlight">\( n \)</span> prove indipendenti, ciascuna con due possibili esiti: successo o fallimento (ad esempio, lanci di una moneta). Supponiamo di aver registrato <span class="math notranslate nohighlight">\( y \)</span> successi e <span class="math notranslate nohighlight">\( n - y \)</span> fallimenti. In questo contesto, la funzione di massa di probabilità (FMP) binomiale che governa la probabilità di osservare esattamente <span class="math notranslate nohighlight">\( y \)</span> successi è:</p>
+<section id="verosimiglianza-binomiale">
+<h2>Verosimiglianza Binomiale<a class="headerlink" href="#verosimiglianza-binomiale" title="Link to this heading">#</a></h2>
+<p>Proseguendo con l’esempio della distribuzione binomiale, approfondiamo la rilevanza della funzione di verosimiglianza nell’analisi statistica attraverso uno scenario pratico. Supponiamo di condurre un esperimento con un numero definito di prove <span class="math notranslate nohighlight">\(n\)</span>, ognuna delle quali può terminare con un successo o un fallimento, come nel caso dei lanci di una moneta. Se registriamo <span class="math notranslate nohighlight">\(y\)</span> successi e <span class="math notranslate nohighlight">\(n - y\)</span> fallimenti, la probabilità di osservare esattamente <span class="math notranslate nohighlight">\(y\)</span> successi segue la funzione di massa di probabilità (FMP) binomiale, che è definita come:</p>
 <div class="math notranslate nohighlight">
 \[
 P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 \]</div>
-<p>dove <span class="math notranslate nohighlight">\( \theta \)</span> rappresenta la probabilità intrinseca di successo in ogni singola prova di Bernoulli.</p>
-<p>La funzione di verosimiglianza, invece, è utilizzata per esprimere la plausibilità relativa di osservare i dati <span class="math notranslate nohighlight">\( y \)</span> al variare del parametro <span class="math notranslate nohighlight">\( \theta \)</span>. Matematicamente, questa è formulata come:</p>
+<p>dove <span class="math notranslate nohighlight">\(\theta\)</span> è la probabilità di successo in una singola prova di Bernoulli.</p>
+<p>Nell’utilizzo della funzione di verosimiglianza, ci concentriamo su come i diversi valori di <span class="math notranslate nohighlight">\(\theta\)</span> possono spiegare i dati osservati <span class="math notranslate nohighlight">\(y\)</span>. La verosimiglianza è espressa come:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathcal{L}(\theta \mid y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y}.
+\mathcal{L}(\theta \mid y) = \theta^y (1 - \theta)^{n - y},
 \]</div>
-<p>Poiché il coefficiente binomiale <span class="math notranslate nohighlight">\(\binom{n}{y}\)</span> è indipendente da <span class="math notranslate nohighlight">\( \theta \)</span>, possiamo semplificare la funzione di verosimiglianza a:</p>
+<p>dato che il coefficiente binomiale <span class="math notranslate nohighlight">\(\binom{n}{y}\)</span>, non dipendendo da <span class="math notranslate nohighlight">\(\theta\)</span>, può essere omesso per la semplicità della formulazione.</p>
+<p>Per esemplificare, immaginiamo uno studio su un gruppo di 30 individui, di cui 23 presentano un atteggiamento negativo verso il futuro, un indicatore comune in pazienti con depressione <span id="id1">[<a class="reference internal" href="../references/bibliography.html#id71" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>. Qui, i nostri dati <span class="math notranslate nohighlight">\(y\)</span> e <span class="math notranslate nohighlight">\(n\)</span> sono fissi, e la funzione di verosimiglianza per <span class="math notranslate nohighlight">\(\theta\)</span> sconosciuto diventa:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathcal{L}(\theta \mid y) = \theta^y (1 - \theta)^{n - y}.
-\]</div>
-<p>Per illustrare con un esempio applicativo, facciamo riferimento allo studio di <span id="id1">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id71" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>. In questo studio, su un campione di 30 pazienti affetti da depressione clinica, 23 mostravano aspettative negativamente distorte riguardo al loro futuro stato d’animo. Pertanto, nel contesto di questi dati, la funzione di verosimiglianza è definita dalla distribuzione binomiale con un parametro <span class="math notranslate nohighlight">\( \theta \)</span> ignoto nell’intervallo [0, 1]. Avendo osservato <span class="math notranslate nohighlight">\( y = 23 \)</span> successi in <span class="math notranslate nohighlight">\( n = 30 \)</span> prove, la funzione di verosimiglianza assume la forma:</p>
-<div class="math notranslate nohighlight" id="equation-eq-likebino23">
-<span class="eqno">(52)<a class="headerlink" href="#equation-eq-likebino23" title="Link to this equation">#</a></span>\[
-\begin{equation}
 \mathcal{L}(\theta \mid y) = \frac{(23 + 7)!}{23!7!} \theta^{23} (1 - \theta)^7.
-\end{equation}
 \]</div>
-<p>Per costruire il profilo di verosimiglianza, è necessario valutare l’Equazione <span class="math notranslate nohighlight">\((\text{eq-likebino23})\)</span> per un insieme di possibili valori di <span class="math notranslate nohighlight">\( \theta \)</span> nell’intervallo [0, 1]. Per esempio, potremmo considerare 100 valori di <span class="math notranslate nohighlight">\( \theta \)</span> equidistanti in questo intervallo. I dati <span class="math notranslate nohighlight">\( y \)</span> e <span class="math notranslate nohighlight">\( n \)</span> rimangono fissi durante questo processo. In questo modo, otteniamo una panoramica della plausibilità relativa dei vari valori di <span class="math notranslate nohighlight">\( \theta \)</span>, permettendoci di identificare il valore che massimizza la funzione di verosimiglianza e, quindi, di effettuare una stima puntuale del parametro <span class="math notranslate nohighlight">\( \theta \)</span> più congruente con i dati osservati.</p>
-<p>Nella simulazione seguente, considereremo 100 valori possibili per <span class="math notranslate nohighlight">\(\theta\)</span> nell’intervallo [0, 1]. Iniziamo a definire i dati.</p>
+<p>Valutando questa funzione per una serie di valori di <span class="math notranslate nohighlight">\(\theta\)</span> possiamo determinare quale valore di <span class="math notranslate nohighlight">\(\theta\)</span> rende i dati osservati più probabili. Procediamo simulando 100 valori equidistanti di <span class="math notranslate nohighlight">\(\theta\)</span> nell’intervallo [0, 1] e calcoliamo la verosimiglianza per ciascuno di questi valori.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">30</span>
@@ -682,7 +666,7 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 </div>
 </div>
 </div>
-<p>Creiamo ora i possibili valori del parametro <span class="math notranslate nohighlight">\(\theta\)</span> per i quali calcoleremo la verosimiglianza.</p>
+<p>Creiamo i possibili valori del parametro <span class="math notranslate nohighlight">\(\theta\)</span> per i quali calcoleremo la verosimiglianza.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -772,9 +756,10 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 </div>
 <section id="interpretazione-della-funzione-di-verosimiglianza">
 <h3>Interpretazione della Funzione di Verosimiglianza<a class="headerlink" href="#interpretazione-della-funzione-di-verosimiglianza" title="Link to this heading">#</a></h3>
-<p>La funzione di verosimiglianza, denotata come <span class="math notranslate nohighlight">\( L(\theta) \)</span> o alternativamente <span class="math notranslate nohighlight">\( p(Y \mid \theta) \)</span>, è una funzione che varia in base al parametro <span class="math notranslate nohighlight">\( \theta \)</span>. Ogni valore specifico di <span class="math notranslate nohighlight">\( \theta \)</span> determina un valore corrispondente della funzione di verosimiglianza, permettendoci di valutare quanto quel particolare <span class="math notranslate nohighlight">\( \theta \)</span> sia coerente o plausibile alla luce dei dati osservati. In altre parole, la funzione di verosimiglianza agisce come un termometro che misura l’adeguatezza dei diversi valori del parametro <span class="math notranslate nohighlight">\( \theta \)</span> rispetto al campione di dati disponibile.</p>
-<p>Il valore di <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza questa funzione è particolarmente significativo, poiché rappresenta la stima più plausibile del parametro dato il set di dati osservato. Ad esempio, nel nostro caso pratico, il valore di <span class="math notranslate nohighlight">\( \theta \)</span> che emerge come più plausibile è <span class="math notranslate nohighlight">\( \frac{23}{30} = 0.767 \)</span>, il quale corrisponde al massimo (o modalità) della funzione di verosimiglianza.</p>
-<p>Per identificare numericamente questo valore ottimale di <span class="math notranslate nohighlight">\( \theta \)</span>, si può localizzare l’indice nel vettore dei valori di verosimiglianza dove questa raggiunge il suo picco. Metodi computazionali, come l’uso della funzione <code class="docutils literal notranslate"><span class="pre">argmax</span></code> in NumPy, possono automatizzare questo processo. Una volta individuato l’indice che massimizza la verosimiglianza, si può risalire al valore corrispondente di <span class="math notranslate nohighlight">\( \theta \)</span> nel vettore dei parametri, ottenendo così la stima di <span class="math notranslate nohighlight">\( \theta \)</span> che rende i dati osservati più probabili.</p>
+<p>L’interpretazione della funzione di verosimiglianza ci permette di misurare l’adattamento dei vari valori di <span class="math notranslate nohighlight">\(\theta\)</span> ai dati. Il valore che massimizza la funzione indica la stima più plausibile di <span class="math notranslate nohighlight">\(\theta\)</span> dati i dati osservati. In termini pratici, se per esempio il valore che massimizza la verosimiglianza è <span class="math notranslate nohighlight">\(\theta = 0.767\)</span>, ciò suggerisce che la probabilità più plausibile di successo (o atteggiamento negativo) nella nostra popolazione di studio è del 76.7%.</p>
+<p>La determinazione numerica di questo valore ottimale può avvenire attraverso tecniche computazionali, come l’identificazione del punto di massimo della funzione di verosimiglianza tramite metodi di ottimizzazione. L’uso di librerie statistiche e matematiche in linguaggi di programmazione come Python consente di effettuare queste analisi con precisione e efficienza, offrendo una stima accurata del parametro <span class="math notranslate nohighlight">\(\theta\)</span> che meglio si adatta ai dati osservati.</p>
+<p>Questa metodologia, basata sull’uso della funzione di verosimiglianza, è cruciale per l’inferenza statistica, permettendo agli scienziati di stimare i parametri dei modelli statistici in modo informato e di valutare l’adeguatezza di tali modelli in rappresentanza dei dati reali.</p>
+<p>In pratica, per identificare numericamente il valore ottimale di <span class="math notranslate nohighlight">\( \theta \)</span>, si può localizzare l’indice nel vettore dei valori di verosimiglianza dove questa raggiunge il suo picco. Metodi computazionali, come l’uso della funzione <code class="docutils literal notranslate"><span class="pre">argmax</span></code> in NumPy, possono automatizzare questo processo. Una volta individuato l’indice che massimizza la verosimiglianza, si può risalire al valore corrispondente di <span class="math notranslate nohighlight">\( \theta \)</span> nel vettore dei parametri, ottenendo così la stima di <span class="math notranslate nohighlight">\( \theta \)</span> che rende i dati osservati più plausibili.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="n">like</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">)</span>
@@ -818,30 +803,26 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 </section>
 <section id="la-funzione-di-log-verosimiglianza">
 <h3>La Funzione di Log-Verosimiglianza<a class="headerlink" href="#la-funzione-di-log-verosimiglianza" title="Link to this heading">#</a></h3>
-<p>Nelle applicazioni pratiche, si preferisce frequentemente lavorare con il logaritmo naturale della funzione di verosimiglianza, noto come funzione di log-verosimiglianza. Questa è definita come:</p>
+<p>Proseguendo con il nostro approfondimento sull’analisi statistica mediante la funzione di verosimiglianza, ci spostiamo verso una sua trasformazione matematica spesso preferita dagli statistici: la funzione di log-verosimiglianza. Il passaggio alla log-verosimiglianza, definita come il logaritmo naturale della funzione di verosimiglianza:</p>
 <div class="math notranslate nohighlight" id="equation-eq-loglike-definition">
 <span class="eqno">(53)<a class="headerlink" href="#equation-eq-loglike-definition" title="Link to this equation">#</a></span>\[
-\begin{equation}
-\ell(\theta) = \log \mathcal{L}(\theta).
-\end{equation}
+\ell(\theta) = \log \mathcal{L}(\theta \mid y),
 \]</div>
-<p>Grazie alla monotonicità del logaritmo (specificamente, essendo una funzione strettamente crescente), i punti di massimo per <span class="math notranslate nohighlight">\( \mathcal{L}(\theta) \)</span> e <span class="math notranslate nohighlight">\( \ell(\theta) \)</span> coincidono, ovvero:</p>
+<p>non altera la posizione del massimo della funzione originale grazie alla proprietà di monotonicità del logaritmo. In termini pratici, ciò significa che il valore di <span class="math notranslate nohighlight">\(\theta\)</span> che massimizza la log-verosimiglianza, <span class="math notranslate nohighlight">\(\hat{\theta}\)</span>, è lo stesso che massimizza la verosimiglianza originale:</p>
 <div class="math notranslate nohighlight">
 \[
 \hat{\theta} = \arg \max_{\theta \in \Theta} \ell(\theta) = \arg \max_{\theta \in \Theta} \mathcal{L}(\theta).
 \]</div>
-<p>La funzione di log-verosimiglianza per una distribuzione binomiale si articola come segue:</p>
+<p>Questo trasferisce il problema di massimizzazione da uno spesso complicato, a causa delle piccole magnitudini gestite nella verosimiglianza, a uno spesso più semplice e numericamente stabile grazie alla log-verosimiglianza. Quest’ultima esprime la relazione come una somma anziché come un prodotto:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{aligned}
-\ell(\theta \mid y) &amp;= \log \mathcal{L}(\theta \mid y) \\
-&amp;= \log \left( \theta^y (1-\theta)^{n-y} \right) \\
-&amp;= y \log \theta + (n-y) \log (1-\theta).
-\end{aligned}
-\end{split}\]</div>
-<p>Utilizzare la log-verosimiglianza piuttosto che la verosimiglianza diretta è consigliato per diverse ragioni pratiche. Una delle principali è legata alla stabilità numerica: i valori della funzione di verosimiglianza possono diventare molto piccoli—al punto da raggiungere l’ordine di <span class="math notranslate nohighlight">\( 10^{-34} \)</span> o inferiori—portando a potenziali problemi di arrotondamento e precisione numerica durante i calcoli. La trasformazione logaritmica mitiga questo problema trasformando i prodotti in somme e rendendo i valori più maneggevoli dal punto di vista numerico.</p>
-<p>Per illustrare questo concetto, possiamo riprendere l’esempio precedente e applicare la funzione di log-verosimiglianza per identificare il valore di <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza questa funzione. In pratica, potremmo utilizzare metodi computazionali come la funzione <code class="docutils literal notranslate"><span class="pre">binom.logpmf()</span></code> per eseguire questa operazione.</p>
-<p>La rappresentazione grafica della funzione di log-verosimiglianza fornisce ulteriori intuizioni sul comportamento di questa funzione.</p>
+\[
+\ell(\theta \mid y) = y \log(\theta) + (n - y) \log(1 - \theta),
+\]</div>
+<p>rappresentando una forma più trattabile, soprattutto per calcoli complessi o per dataset di grande dimensione.</p>
+<p>La preferenza per la log-verosimiglianza risiede in diverse ragioni pratiche e teoriche. Dal punto di vista numerico, lavorare con la log-verosimiglianza aiuta a evitare problemi di underflow, che possono verificarsi quando si moltiplicano tra loro probabilità molto piccole, tipiche di grandi set di dati. Convertendo i prodotti in somme, la log-verosimiglianza migliora la stabilità numerica dei calcoli.</p>
+<p>Ritornando all’esempio della distribuzione binomiale, l’applicazione della log-verosimiglianza per il calcolo del parametro <span class="math notranslate nohighlight">\(\theta\)</span> che meglio si adatta ai dati osservati può essere eseguita con efficienza attraverso metodi computazionali. Per esempio, l’utilizzo di funzioni specifiche disponibili in pacchetti statistici, come <code class="docutils literal notranslate"><span class="pre">binom.logpmf()</span></code> in Python, permette di calcolare direttamente la log-verosimiglianza di un dato set di osservazioni per diversi valori di <span class="math notranslate nohighlight">\(\theta\)</span>. Questo approccio facilita la ricerca del valore di <span class="math notranslate nohighlight">\(\theta\)</span> che massimizza la log-verosimiglianza, fornendo una stima accurata e computazionalmente efficiente del parametro.</p>
+<p>L’adozione della funzione di log-verosimiglianza, quindi, non solo consente di affrontare i limiti pratici legati alla manipolazione di piccole probabilità, ma offre anche un quadro concettuale chiaro per l’interpretazione della plausibilità dei parametri del modello alla luce dei dati osservati. Questa trasformazione logaritmica rappresenta un passaggio cruciale nell’analisi inferenziale, consentendo di stimare i parametri dei modelli statistici con maggiore precisione e affidabilità.</p>
+<p>Per illustrare questo concetto, riprendiamo l’esempio precedente e applichiamo la funzione di log-verosimiglianza per identificare il valore di <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza questa funzione. La rappresentazione grafica della funzione di log-verosimiglianza fornisce ulteriori intuizioni sul comportamento di questa funzione.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">30</span>
@@ -885,44 +866,36 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 </div>
 </div>
 </section>
-<section id="verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale">
-<h3>Verosimiglianza Congiunta di <span class="math notranslate nohighlight">\( n \)</span> Campioni IID da una Distribuzione Binomiale<a class="headerlink" href="#verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale" title="Link to this heading">#</a></h3>
-<p>Nella discussione precedente, abbiamo esaminato la verosimiglianza associata a una singola osservazione proveniente da una distribuzione binomiale. Ora estendiamo questo concetto a un contesto più generale, considerando <span class="math notranslate nohighlight">\( n \)</span> osservazioni indipendenti e identicamente distribuite (IID) da una distribuzione binomiale.</p>
-<p>Denotiamo con <span class="math notranslate nohighlight">\( Y = [y_1, y_2, \ldots, y_n] \)</span> il vettore che contiene queste <span class="math notranslate nohighlight">\( n \)</span> osservazioni. In questo caso, la probabilità congiunta delle osservazioni <span class="math notranslate nohighlight">\( y_1, y_2, \ldots, y_n \)</span> dato il parametro <span class="math notranslate nohighlight">\( \theta \)</span> si scrive come <span class="math notranslate nohighlight">\( p(y_1, y_2, \ldots, y_n \mid \theta) \)</span>.</p>
-<p>Grazie all’indipendenza delle osservazioni, la funzione di probabilità congiunta può essere fattorizzata nel prodotto delle funzioni di probabilità marginali, come segue:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{aligned}
-p(y_1, y_2, \ldots, y_n \mid \theta) &amp;= p(y_1 \mid \theta) \times p(y_2 \mid \theta) \times \cdots \times p(y_n \mid \theta) \\
-&amp;= \text{Binomiale}(y_1 \mid \theta) \times \text{Binomiale}(y_2 \mid \theta) \times \cdots \times \text{Binomiale}(y_n \mid \theta).
-\end{aligned}
-\end{split}\]</div>
-<p>In termini di verosimiglianza, quando inseriamo i valori osservati <span class="math notranslate nohighlight">\( Y[1], Y[2], \ldots, Y[n] \)</span> nella funzione di probabilità congiunta, otteniamo la funzione di verosimiglianza congiunta per le <span class="math notranslate nohighlight">\( n \)</span> osservazioni IID:</p>
+<section id="verosimiglianza-congiunta">
+<h3>Verosimiglianza Congiunta<a class="headerlink" href="#verosimiglianza-congiunta" title="Link to this heading">#</a></h3>
+<p>Proseguendo nella nostra esplorazione dell’inferenza statistica attraverso la funzione di verosimiglianza, ci concentriamo ora sul caso in cui abbiamo più osservazioni, tutte provenienti dalla stessa distribuzione binomiale e considerate indipendenti ed identicamente distribuite (IID). Tale scenario si presenta frequentemente nelle applicazioni pratiche, dove un insieme di <span class="math notranslate nohighlight">\(n\)</span> osservazioni <span class="math notranslate nohighlight">\(Y = [y_1, y_2, \ldots, y_n]\)</span> viene raccolto sotto le stesse condizioni sperimentali.</p>
+<p>La chiave per analizzare queste osservazioni congiuntamente risiede nel calcolo della probabilità congiunta di <span class="math notranslate nohighlight">\(y_1, y_2, \ldots, y_n\)</span> data un’unica probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span> comune a tutte le prove. L’indipendenza delle osservazioni ci consente di esprimere questa probabilità congiunta come il prodotto delle probabilità individuali di ciascuna osservazione:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathcal{L}(\theta \mid Y) = p(Y[1], Y[2], \ldots, Y[n] \mid \theta) = \prod_{i=1}^{n} p(Y[i] \mid \theta).
+p(y_1, y_2, \ldots, y_n \mid \theta) = \prod_{i=1}^{n} p(y_i \mid \theta) = \prod_{i=1}^{n} \text{Binomiale}(y_i \mid \theta).
 \]</div>
-<p>Questa funzione di verosimiglianza congiunta fornisce una misura complessiva di quanto bene il modello binomiale con un dato <span class="math notranslate nohighlight">\( \theta \)</span> spiega l’insieme completo delle <span class="math notranslate nohighlight">\( n \)</span> osservazioni. Essa gioca un ruolo cruciale nell’inferenza statistica, specialmente quando si tratta di stimare il parametro <span class="math notranslate nohighlight">\( \theta \)</span> che massimizza la verosimiglianza congiunta a partire dai dati osservati.</p>
+<p>La bellezza di questo approccio sta nel fatto che la verosimiglianza congiunta, che rappresenta la plausibilità complessiva di <span class="math notranslate nohighlight">\(\theta\)</span> data l’intera sequenza di osservazioni <span class="math notranslate nohighlight">\(Y\)</span>, è semplicemente il prodotto delle verosimiglianze individuali di ogni osservazione <span class="math notranslate nohighlight">\(y_i\)</span> rispetto a <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}(\theta \mid Y) = \prod_{i=1}^{n} \mathcal{L}(\theta \mid y_i) = \prod_{i=1}^{n} p(y_i \mid \theta).
+\]</div>
+<p>Questa formulazione della verosimiglianza congiunta non solo evidenzia quanto bene il parametro <span class="math notranslate nohighlight">\(\theta\)</span> si adatta all’intero set di dati <span class="math notranslate nohighlight">\(Y\)</span>, ma offre anche una base metodologica solida per stimare <span class="math notranslate nohighlight">\(\theta\)</span>. Il parametro che massimizza la verosimiglianza congiunta, noto come stimatore di massima verosimiglianza (MLE) di <span class="math notranslate nohighlight">\(\theta\)</span>, è quello che si ritiene essere il più plausibile data l’osservazione dei dati.</p>
+<p>L’analisi attraverso la funzione di verosimiglianza congiunta risulta particolarmente potente nell’inferenza statistica, poiché consente di combinare informazioni provenienti da molteplici osservazioni per formulare stime parametriche robuste e affidabili. Questo processo di aggregazione delle evidenze individuali in un’unica misura di plausibilità rappresenta un principio fondamentale nell’estrazione di insight quantitativi dai dati sperimentali.</p>
 </section>
 </section>
 <section id="la-verosimiglianza-marginale">
 <h2>La Verosimiglianza Marginale<a class="headerlink" href="#la-verosimiglianza-marginale" title="Link to this heading">#</a></h2>
-<p>L’argomento che affrontiamo qui è noto come “integrazione di un parametro”, un concetto che incontreremo frequentemente, in particolare quando tratteremo la regola di Bayes.</p>
-<p><strong>Integrare un parametro</strong> si riferisce alla procedura di calcolo della probabilità (o verosimiglianza) di un evento, prendendo in considerazione tutte le possibili valutazioni di un parametro, anziché fissarlo a un valore specifico. Questo processo è fondamentale in contesti dove il parametro di interesse non ha un valore noto e preciso, ma una distribuzione di valori possibili.</p>
-<p>Per esemplificare, immaginiamo di avere una variabile casuale Y che segue una distribuzione binomiale, definita in termini del parametro θ, il quale può assumere solo tre valori possibili: 0.1, 0.5, 0.9, ognuno con la stessa probabilità di 1/3.</p>
-<p>Supponiamo di osservare n=10 prove e k=7 successi. La funzione di verosimiglianza per un dato θ sarebbe:</p>
+<p>Avanzando nella nostra discussione sulla verosimiglianza, approfondiamo ora un passaggio cruciale nell’applicazione della teoria bayesiana: il concetto di verosimiglianza marginale. Questo approccio si rivela essenziale quando affrontiamo situazioni in cui il parametro di interesse, <span class="math notranslate nohighlight">\(\theta\)</span>, non è definito da un valore singolo e fisso, ma è invece descritto da una distribuzione di probabilità che riflette la nostra incertezza o variabilità su di esso.</p>
+<p>In contesti pratici, non è raro incontrare scenari in cui <span class="math notranslate nohighlight">\(\theta\)</span> può assumere una gamma di valori, ciascuno con una probabilità associata, piuttosto che un valore deterministico. L’integrazione del parametro <span class="math notranslate nohighlight">\(\theta\)</span> permette di calcolare la probabilità complessiva (o verosimiglianza) di osservare un determinato risultato dati tutti i possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span>, piuttosto che appoggiarsi a un’analisi basata su un singolo valore di <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>Consideriamo, per esempio, una situazione in cui stiamo osservando una sequenza di prove binomiali, con un risultato specifico di interesse (ad esempio, <span class="math notranslate nohighlight">\(k=7\)</span> successi su <span class="math notranslate nohighlight">\(n=10\)</span> prove). Se <span class="math notranslate nohighlight">\(\theta\)</span> rappresenta la probabilità di successo in ciascuna prova e può assumere un insieme discreto di valori (per esempio, 0.1, 0.5, e 0.9) con probabilità uniforme, la verosimiglianza di osservare il nostro risultato specifico può essere espressa come:</p>
 <div class="math notranslate nohighlight">
-\[p(k=7, n=10 | θ) = \binom{10}{7} θ^7 (1-θ)^3\]</div>
-<p>Il <strong>calcolo della verosimiglianza marginale</strong> implica “integrare” (o marginalizzare) il parametro θ. Per ogni possibile valore di θ, calcoliamo la verosimiglianza e la moltiplichiamo per la probabilità di quel valore di θ, sommando poi tutti i prodotti ottenuti. Matematicamente, ciò si traduce nel calcolo seguente, per i tre valori possibili di θ:</p>
+\[p(k=7, n=10) = \sum_{\theta \in \{0.1, 0.5, 0.9\}} \binom{10}{7} \theta^7 (1-\theta)^3 p(\theta),\]</div>
+<p>dove <span class="math notranslate nohighlight">\(p(\theta)\)</span> rappresenta la probabilità associata a ciascun possibile valore di <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>Tuttavia, in molte applicazioni reali, <span class="math notranslate nohighlight">\(\theta\)</span> può variare continuamente all’interno di un intervallo, come tra 0 e 1 per una distribuzione binomiale. In questi casi, il calcolo della verosimiglianza marginale richiede l’utilizzo dell’integrazione su tutto lo spazio dei valori possibili di <span class="math notranslate nohighlight">\(\theta\)</span>, riflettendo la gamma continua di possibili probabilità di successo. La formula si estende quindi a:</p>
 <div class="math notranslate nohighlight">
-\[p(k=7, n=10) = \sum_{i=1}^{3} \binom{10}{7} θ_i^7 (1-θ_i)^3 \times p(θ_i)\]</div>
-<p>Nel caso specifico, calcolando per θ1=0.1, θ2=0.5, e θ3=0.9, e considerando che ogni θ ha probabilità 1/3:</p>
-<div class="math notranslate nohighlight">
-\[p(k=7, n=10) = \frac{1}{3} \binom{10}{7} [0.1^7 (1-0.1)^3 + 0.5^7 (1-0.5)^3 + 0.9^7 (1-0.9)^3]\]</div>
-<p>In realtà, poiché θ può assumere qualsiasi valore tra 0 e 1, dovremmo integrare su uno spazio continuo, utilizzando il simbolo di integrale:</p>
-<div class="math notranslate nohighlight">
-\[p(k=7, n=10) = \int_{0}^{1} \binom{10}{7} θ^7 (1-θ)^3 dθ\]</div>
-<p>Questa operazione calcola un concetto simile a quello sopra, ma su uno spazio continuo di valori di θ.</p>
+\[p(k=7, n=10) = \int_{0}^{1} \binom{10}{7} \theta^7 (1-\theta)^3 p(\theta) d\theta,\]</div>
+<p>dove <span class="math notranslate nohighlight">\(p(\theta) d\theta\)</span> rappresenta la densità di probabilità di <span class="math notranslate nohighlight">\(\theta\)</span> su un intervallo infinitesimale, e l’integrale copre tutti i possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span> da 0 a 1.</p>
+<p>L’adozione di questa procedura non solo arricchisce la nostra comprensione dei dati osservati considerando l’intera distribuzione di <span class="math notranslate nohighlight">\(\theta\)</span>, ma fornisce anche una base più solida per l’inferenza statistica in presenza di incertezza. Implementare questo calcolo nell’ambito di uno spazio continuo richiede l’utilizzo di tecniche di integrazione numerica, per le quali librerie come <code class="docutils literal notranslate"><span class="pre">scipy</span></code> in Python offrono strumenti efficaci e versatili.</p>
 <p>Vediamo come potremmo eseguire questo calcolo in Python, utilizzando la libreria <code class="docutils literal notranslate"><span class="pre">scipy</span></code> per l’integrazione su uno spazio continuo:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -944,59 +917,50 @@ p(y_1, y_2, \ldots, y_n \mid \theta) &amp;= p(y_1 \mid \theta) \times p(y_2 \mid
 </div>
 </div>
 <p>Questo codice esegue l’integrazione della funzione di verosimiglianza binomiale su tutti i possibili valori di θ (da 0 a 1), fornendo così la verosimiglianza marginale per il nostro esempio. Questo processo ci permette di considerare l’incertezza su θ, offrendo una visione completa della verosimiglianza dell’evento osservato senza fissare θ a un singolo valore.</p>
-<section id="modello-gaussiano-e-verosimiglianza">
-<h3>Modello Gaussiano e Verosimiglianza<a class="headerlink" href="#modello-gaussiano-e-verosimiglianza" title="Link to this heading">#</a></h3>
-<p>Ampliamo ora la nostra analisi al caso della distribuzione gaussiana. Inizieremo con la verosimiglianza associata a una singola osservazione <span class="math notranslate nohighlight">\( Y \)</span>, per poi estendere la discussione a un insieme di osservazioni gaussiane indipendenti e identicamente distribuite (IID).</p>
-<p>Per una distribuzione gaussiana con media <span class="math notranslate nohighlight">\( \mu \)</span> e varianza <span class="math notranslate nohighlight">\( \sigma^2 \)</span>, la funzione di verosimiglianza <span class="math notranslate nohighlight">\( L \)</span> si può esprimere come:</p>
-<div class="math notranslate nohighlight" id="equation-eq-gaussian-likelihood">
-<span class="eqno">(54)<a class="headerlink" href="#equation-eq-gaussian-likelihood" title="Link to this equation">#</a></span>\[\begin{split}
-\begin{aligned}
-L(\theta \mid Y) &amp;= \prod_{i=1}^{n} f(y_i \mid \mu, \sigma^2) \\
-&amp;= (2\pi\sigma^2)^{-\frac{n}{2}} \exp \left( -\frac{1}{2\sigma^2} \sum_{i=1}^{n} (y_i - \mu)^2 \right).
-\end{aligned}
-\end{split}\]</div>
 </section>
+<section id="modello-gaussiano-e-verosimiglianza">
+<h2>Modello Gaussiano e Verosimiglianza<a class="headerlink" href="#modello-gaussiano-e-verosimiglianza" title="Link to this heading">#</a></h2>
+<p>Ampliamo ora la nostra analisi al caso della distribuzione gaussiana. Inizieremo con la verosimiglianza associata a una singola osservazione <span class="math notranslate nohighlight">\( Y \)</span>, per poi estendere la discussione a un insieme di osservazioni gaussiane indipendenti e identicamente distribuite (IID).</p>
 <section id="caso-di-una-singola-osservazione">
 <h3>Caso di una Singola Osservazione<a class="headerlink" href="#caso-di-una-singola-osservazione" title="Link to this heading">#</a></h3>
-<p>Per una migliore comprensione dell’equazione di verosimiglianza (eq-gaussian-likelihood), consideriamo prima il caso in cui abbiamo una singola osservazione <span class="math notranslate nohighlight">\( y \)</span>.</p>
-<p>Immaginiamo che la variabile casuale <span class="math notranslate nohighlight">\( y \)</span> rappresenti il Quoziente d’Intelligenza (QI) di un individuo. In questa circostanza, la funzione di verosimiglianza per una singola osservazione dalla distribuzione gaussiana è:</p>
-<div class="math notranslate nohighlight">
-\[
-L(\mu, \sigma^2 \mid y) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp \left( -\frac{1}{2\sigma^2} (y - \mu)^2 \right).
-\]</div>
-<p>Questa funzione di verosimiglianza quantifica quanto è probabile osservare un determinato valore di QI <span class="math notranslate nohighlight">\( y \)</span> data una distribuzione gaussiana con parametri <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma^2 \)</span>. In altre parole, fornisce una misura di quanto i parametri <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma^2 \)</span> siano coerenti con l’osservazione <span class="math notranslate nohighlight">\( y \)</span> effettuata.</p>
-<p>Poniamo</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="mi">114</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>L’eq. <code class="xref eq docutils literal notranslate"><span class="pre">eq-gaussian-sim-like</span></code> dipende dai parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> e dai dati <span class="math notranslate nohighlight">\(y\)</span>. Per semplicità, ipotizziamo <span class="math notranslate nohighlight">\(\sigma\)</span> noto e uguale a 15. Nell’esercizio considereremo 1000 valori <span class="math notranslate nohighlight">\(\mu\)</span> compresi tra 70 e 160.</p>
+<p>Iniziamo esaminiamo il caso di una singola osservazione. Quale esempio, prendiamo in considerazione la situazione in cui una variabile casuale rappresenta il Quoziente d’Intelligenza (QI) di un individuo. Se consideriamo la distribuzione del QI come gaussiana, possiamo esprimere la funzione di verosimiglianza per un singolo valore osservato di QI tramite la formula della distribuzione gaussiana, che misura la probabilità di osservare quel particolare valore di QI dato un insieme di parametri specifici, <span class="math notranslate nohighlight">\(\mu\)</span> (la media) e <span class="math notranslate nohighlight">\(\sigma\)</span> (la deviazione standard). La verosimiglianza offre quindi un modo per quantificare quanto bene i parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> si accordano con il valore osservato di QI.</p>
+<p>Supponiamo che il QI osservato sia 114 e, per semplicità, assumiamo che la deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span> sia conosciuta e pari a 15. Vogliamo esaminare un’ampia gamma di possibili valori per la media <span class="math notranslate nohighlight">\(\mu\)</span>, diciamo tra 70 e 160, e valutare quale di questi valori rende più plausibile l’osservazione fatta Definiamo quindi un insieme di 1000 valori per <span class="math notranslate nohighlight">\(\mu\)</span> da esplorare:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">70.0</span><span class="p">,</span> <span class="mf">160.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">114</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Nell’analisi che stiamo conducendo, esaminiamo 1000 diversi valori per il parametro <span class="math notranslate nohighlight">\( \mu \)</span>. Per costruire la funzione di verosimiglianza, applichiamo l’equazione (eq-gaussian-likelihood) per ciascuno di questi valori. In questo modo, otteniamo una valutazione della plausibilità relativa di ciascun valore di <span class="math notranslate nohighlight">\( \mu \)</span> alla luce dei dati osservati.</p>
-<p>Per essere precisi, in ogni iterazione del calcolo applichiamo l’equazione (eq-gaussian-likelihood) utilizzando:</p>
-<ul class="simple">
-<li><p>Il valore osservato <span class="math notranslate nohighlight">\( y \)</span>, che è costante per tutte le iterazioni.</p></li>
-<li><p>Un valore noto e costante per <span class="math notranslate nohighlight">\( \sigma \)</span>.</p></li>
-<li><p>Un valore specifico per <span class="math notranslate nohighlight">\( \mu \)</span> tratto dall’insieme dei 1000 valori che stiamo esaminando.</p></li>
-</ul>
-<p>Pertanto, tra le variabili nell’equazione, <span class="math notranslate nohighlight">\( \mu \)</span> è l’unica che cambia in ciascuna delle 1000 iterazioni, mentre <span class="math notranslate nohighlight">\( y \)</span> e <span class="math notranslate nohighlight">\( \sigma \)</span> rimangono invariati.</p>
-<p>In Python, la densità di probabilità della distribuzione gaussiana può essere calcolata utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">norm.pdf()</span></code> dalla libreria <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code>. Questa funzione accetta come argomenti:</p>
-<ul class="simple">
-<li><p>Il valore osservato <span class="math notranslate nohighlight">\( y \)</span> o un array di tali valori.</p></li>
-<li><p>La media <span class="math notranslate nohighlight">\( \mu \)</span> o un array di medie, nel caso si voglia valutare più di una distribuzione gaussiana.</p></li>
-<li><p>La deviazione standard <span class="math notranslate nohighlight">\( \sigma \)</span> o un array di deviazioni standard, analogamente al caso delle medie.</p></li>
-</ul>
-<p>In pratica, utilizzando la funzione <code class="docutils literal notranslate"><span class="pre">norm.pdf()</span></code> con un valore fisso di <span class="math notranslate nohighlight">\( y \)</span> (ad esempio, <span class="math notranslate nohighlight">\( y = 114 \)</span>) e <span class="math notranslate nohighlight">\( \sigma \)</span> (ad esempio, <span class="math notranslate nohighlight">\( \sigma = 15 \)</span>), e variando <span class="math notranslate nohighlight">\( \mu \)</span> attraverso i 1000 valori predefiniti, otteniamo un array di 1000 valori di densità di probabilità. Questi rappresentano la verosimiglianza di ciascun valore specifico di <span class="math notranslate nohighlight">\( \mu \)</span> dato l’osservato <span class="math notranslate nohighlight">\( y \)</span>.</p>
-<p>Applicando la funzione <code class="docutils literal notranslate"><span class="pre">norm.pdf()</span></code> 1000 volte, una volta per ciascuno dei valori <span class="math notranslate nohighlight">\(\mu\)</span> che abbiamo definito (e tenendo fissi <span class="math notranslate nohighlight">\(y = 114\)</span> e <span class="math notranslate nohighlight">\(\sigma = 15\)</span>), otteniamo 1000 valori <span class="math notranslate nohighlight">\(f(\mu)\)</span>.</p>
+<p>La nostra analisi consiste nell’applicare la funzione di densità di probabilità gaussiana a ciascuno di questi 1000 valori di <span class="math notranslate nohighlight">\(\mu\)</span>, mantenendo fisso il valore osservato di QI, <span class="math notranslate nohighlight">\(y=114\)</span>, e la deviazione standard, <span class="math notranslate nohighlight">\(\sigma=15\)</span>. In questo modo, possiamo costruire la funzione di verosimiglianza che esprime la plausibilità di ciascun valore di <span class="math notranslate nohighlight">\(\mu\)</span> alla luce del QI osservato.</p>
+<p>Il calcolo specifico della densità di probabilità per ogni valore di <span class="math notranslate nohighlight">\(\mu\)</span> può essere eseguito con la funzione <code class="docutils literal notranslate"><span class="pre">norm.pdf</span></code> di <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code>, che accetta il valore osservato <span class="math notranslate nohighlight">\(y\)</span>, un array di medie (i nostri valori di <span class="math notranslate nohighlight">\(\mu\)</span>) e la deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>. Per un singolo valore <code class="docutils literal notranslate"><span class="pre">mu</span></code> = 70, otteniamo</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.00036007041207962535
+</pre></div>
+</div>
+</div>
+</div>
+<p>Per il valore <code class="docutils literal notranslate"><span class="pre">mu</span></code> = 70.05 otteniamo</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">70.05</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.00036360634900376967
+</pre></div>
+</div>
+</div>
+</div>
+<p>e così via. Se usiamo utti i 1000 valori possibili di <code class="docutils literal notranslate"><span class="pre">mu</span></code>, otteniamo un vettore di 1000 risultati:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_mu</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -1004,109 +968,89 @@ L(\mu, \sigma^2 \mid y) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp \left( -\frac{1}{2\
 </div>
 </div>
 </div>
-<p>La funzione di verosimiglianza è la curva che interpola i punti <span class="math notranslate nohighlight">\(\big(\mu, f(\mu)\big)\)</span>.</p>
+<p>Questo passaggio ci fornisce un array di valori che rappresentano la verosimiglianza di ciascun valore di <span class="math notranslate nohighlight">\(\mu\)</span> data l’osservazione <span class="math notranslate nohighlight">\(y\)</span>. Tracciando questi valori <code class="docutils literal notranslate"><span class="pre">f_mu</span></code> in funzione di <span class="math notranslate nohighlight">\(\mu\)</span>, otteniamo una curva di verosimiglianza che illustra visivamente quanto bene ciascun valore di <span class="math notranslate nohighlight">\(\mu\)</span> si adatta al dato osservato <code class="docutils literal notranslate"><span class="pre">y</span></code> = 114:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">f_mu</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Funzione di verosimiglianza&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Valore della variabile casuale mu [70, 160]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Funzione di verosimiglianza per QI = 114&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Valore di mu [70, 160]&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Verosimiglianza&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">70</span><span class="p">,</span> <span class="mi">160</span><span class="p">]);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">70</span><span class="p">,</span> <span class="mi">160</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7dda04e29952e8b873c3fa72eb481531fdc4bb5301f68070f938ddb1a8d21ea5.png" src="../_images/7dda04e29952e8b873c3fa72eb481531fdc4bb5301f68070f938ddb1a8d21ea5.png" />
+<img alt="../_images/1cfe5421aa607bcc6bef9c75b827f8f3815031e515a7d9efb3eefec468dec618.png" src="../_images/1cfe5421aa607bcc6bef9c75b827f8f3815031e515a7d9efb3eefec468dec618.png" />
 </div>
 </div>
-<p>La funzione di verosimiglianza così trovata ha la forma della distribuzione Gaussiana. Nel caso di una singola osservazione, <em>ma solo in questo caso</em>, ha anche un’area unitaria. Per l’esempio presente, la moda della funzione di verosimiglianza è 114.</p>
+<p>Abbiamo dunque proceduto come nel caso della distribuzione binomiale esaminata in precedenza. Abbiamo utilizzato la formula</p>
+<div class="math notranslate nohighlight">
+\[
+f(x | \mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right),
+\]</div>
+<p>tenendo costante il valore <span class="math notranslate nohighlight">\(x\)</span> = 114 e considerando noto <span class="math notranslate nohighlight">\(\sigma\)</span> = 15, e abbiamo applicato la formula 1000 volte facendo variare <code class="docutils literal notranslate"><span class="pre">mu</span></code> ogni volta utilizziando ciascuno dei valori definiti con <code class="docutils literal notranslate"><span class="pre">np.linspace(70.0,</span> <span class="pre">160.0,</span> <span class="pre">num=1000)</span></code>.</p>
+<p>La moda della distribuzione, si trova con</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">mu</span><span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">argmax</span><span class="p">()]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimal_mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">[</span><span class="n">f_mu</span><span class="o">.</span><span class="n">argmax</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">optimal_mu</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>113.96396396396396
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>113.96396396396396
 </pre></div>
 </div>
 </div>
 </div>
+<p>In questo esempio, il valore di <span class="math notranslate nohighlight">\(\mu\)</span> che massimizza la verosimiglianza è 113.96.</p>
 </section>
 <section id="campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">
 <h3>Campione indipendente di osservazioni da una distribuzione gaussiana<a class="headerlink" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana" title="Link to this heading">#</a></h3>
-<p>Esaminiamo il caso più complesso di un campione di <span class="math notranslate nohighlight">\( n \)</span> osservazioni indipendenti estratte da una distribuzione gaussiana. Questo campione può essere concepito come una serie di <span class="math notranslate nohighlight">\( n \)</span> realizzazioni indipendenti e identicamente distribuite (i.i.d.) di una variabile casuale <span class="math notranslate nohighlight">\( Y \)</span> che segue una distribuzione normale <span class="math notranslate nohighlight">\( \mathcal{N}(\mu, \sigma^2) \)</span>. Gli elementi del campione sono quindi estratti da una popolazione che segue una distribuzione normale con parametri <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma \)</span>, entrambi sconosciuti, e che possiamo denotare con <span class="math notranslate nohighlight">\( \theta = \{\mu, \sigma\} \)</span>.</p>
-<p>Nel caso in cui le osservazioni <span class="math notranslate nohighlight">\( y_1, y_2, \ldots, y_n \)</span> siano i.i.d., la densità di probabilità congiunta del campione è espressa come:</p>
+<p>Passiamo ora all’esame di un contesto più complesso: quello di un campione composto da <span class="math notranslate nohighlight">\( n \)</span> osservazioni indipendenti, tutte provenienti da una distribuzione gaussiana. Consideriamo questo insieme di osservazioni come realizzazioni indipendenti ed identicamente distribuite (i.i.d.) di una variabile casuale <span class="math notranslate nohighlight">\( X \)</span>, che segue una distribuzione normale con media <span class="math notranslate nohighlight">\( \mu \)</span> e deviazione standard <span class="math notranslate nohighlight">\( \sigma \)</span>, entrambi parametri sconosciuti. Denotiamo questa situazione con la notazione <span class="math notranslate nohighlight">\( X \sim N(\mu, \sigma^2) \)</span>.</p>
+<p>In presenza di osservazioni i.i.d., la densità di probabilità congiunta del campione è il prodotto delle funzioni di densità per ogni singola osservazione. Matematicamente, ciò si esprime attraverso l’equazione:</p>
 <div class="math notranslate nohighlight">
-\[
-f(y \mid \theta) = \prod_{i=1}^{n} f(y_i \mid \theta),
-\]</div>
-<p>dove <span class="math notranslate nohighlight">\( f(\cdot) \)</span> rappresenta la funzione di densità di probabilità gaussiana parametrizzata da <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma \)</span>.</p>
-<p>Mantenendo i dati osservati <span class="math notranslate nohighlight">\( y \)</span> costanti, la funzione di verosimiglianza per il campione diventa equivalente all’equazione (eq-gaussian-sim-like).</p>
-<p>Per illustrare questo concetto concretamente, prendiamo in esame un esempio che utilizza i punteggi BDI-II (Beck Depression Inventory II) di trenta partecipanti in uno studio clinico, come descritto in <span id="id2">Zetsche <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id71" title="Ulrike Zetsche, Paul-Christian Buerkner, and Babette Renneberg. Future expectations in clinical depression: biased or realistic? Journal of Abnormal Psychology, 128(7):678, 2019.">ZBR19</a>]</span>.</p>
+\[ p(y_1, y_2, \ldots, y_n | \mu, \sigma) = \prod_{i=1}^{n} p(y_i | \mu, \sigma), \]</div>
+<p>dove <span class="math notranslate nohighlight">\( p(y_i | \mu, \sigma) \)</span> indica la funzione di densità gaussiana per l’osservazione <span class="math notranslate nohighlight">\( y_i \)</span>, parametrizzata da <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma \)</span>.</p>
+<p>Se manteniamo i dati osservati come costanti, ciò che cambia in questa equazione quando variamo <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma \)</span> sono le probabilità associate ad ogni configurazione dei parametri, portandoci così alla funzione di verosimiglianza congiunta per il campione.</p>
+<p>Consideriamo, per illustrare questa dinamica, il caso di uno studio clinico che misura i punteggi del Beck Depression Inventory II (BDI-II) su trenta partecipanti. Supponiamo che questi punteggi seguano una distribuzione normale. Dati i punteggi BDI-II per i trenta partecipanti, il nostro obiettivo è costruire una funzione di verosimiglianza per questi dati, assumendo che la deviazione standard <span class="math notranslate nohighlight">\( \sigma \)</span> sia nota e pari alla deviazione standard campionaria di 6.50.</p>
+<p>Per la totalità del campione, la densità di probabilità congiunta diventa quindi il prodotto delle densità per ogni osservazione. Di conseguenza, la funzione di verosimiglianza per il campione intero è rappresentata dal prodotto delle densità di probabilità di tutte le osservazioni.</p>
+<p>In questo contesto, ogni possibile valore di <span class="math notranslate nohighlight">\( \mu \)</span> viene valutato in termini di verosimiglianza. Per esemplificare, consideriamo un range di 1000 valori per <span class="math notranslate nohighlight">\( \mu \)</span> e calcoliamo la funzione di verosimiglianza per ognuno di questi. Per rendere più gestibili i calcoli, utilizziamo il logaritmo della funzione di verosimiglianza.</p>
+<p>Definendo una funzione <code class="docutils literal notranslate"><span class="pre">log_likelihood</span></code> in Python che accetta i punteggi BDI-II <span class="math notranslate nohighlight">\( y \)</span>, un valore medio <span class="math notranslate nohighlight">\( \mu \)</span>, e imposta <span class="math notranslate nohighlight">\( \sigma \)</span> al valore noto, possiamo calcolare la log-verosimiglianza per un’ampia gamma di valori di <span class="math notranslate nohighlight">\( \mu \)</span> entro un intervallo specifico. Ciò ci permette di visualizzare la credibilità relativa di ciascun valore di <span class="math notranslate nohighlight">\( \mu \)</span> alla luce dei dati osservati.</p>
+<p>Infine, il valore di <span class="math notranslate nohighlight">\( \mu \)</span> che massimizza la funzione di log-verosimiglianza corrisponde alla stima di massima verosimiglianza di <span class="math notranslate nohighlight">\( \mu \)</span> data la distribuzione dei punteggi BDI-II nel campione. Questo valore, nel nostro esempio, coincide con la media campionaria dei punteggi BDI-II, offrendo una stima concorde con l’intuizione che la media del campione sia un buon rappresentante del parametro <span class="math notranslate nohighlight">\( \mu \)</span> in una distribuzione normale.</p>
+<p>I dati sono:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="mi">26</span><span class="p">,</span>
-    <span class="mi">35</span><span class="p">,</span>
-    <span class="mi">30</span><span class="p">,</span>
-    <span class="mi">25</span><span class="p">,</span>
-    <span class="mi">44</span><span class="p">,</span>
-    <span class="mi">30</span><span class="p">,</span>
-    <span class="mi">33</span><span class="p">,</span>
-    <span class="mi">43</span><span class="p">,</span>
-    <span class="mi">22</span><span class="p">,</span>
-    <span class="mi">43</span><span class="p">,</span>
-    <span class="mi">24</span><span class="p">,</span>
-    <span class="mi">19</span><span class="p">,</span>
-    <span class="mi">39</span><span class="p">,</span>
-    <span class="mi">31</span><span class="p">,</span>
-    <span class="mi">25</span><span class="p">,</span>
-    <span class="mi">28</span><span class="p">,</span>
-    <span class="mi">35</span><span class="p">,</span>
-    <span class="mi">30</span><span class="p">,</span>
-    <span class="mi">26</span><span class="p">,</span>
-    <span class="mi">31</span><span class="p">,</span>
-    <span class="mi">41</span><span class="p">,</span>
-    <span class="mi">36</span><span class="p">,</span>
-    <span class="mi">26</span><span class="p">,</span>
-    <span class="mi">35</span><span class="p">,</span>
-    <span class="mi">33</span><span class="p">,</span>
-    <span class="mi">28</span><span class="p">,</span>
-    <span class="mi">27</span><span class="p">,</span>
-    <span class="mi">34</span><span class="p">,</span>
-    <span class="mi">27</span><span class="p">,</span>
-    <span class="mi">22</span><span class="p">,</span>
+    <span class="mi">26</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span>
+    <span class="mi">28</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Il nostro obiettivo è di costruire una funzione di verosimiglianza per i punteggi BDI-II di un campione di 30 partecipanti. Supponiamo, sulla base di ricerche precedenti, che questi punteggi siano distribuiti secondo una legge normale. Inoltre, assumiamo che la deviazione standard <span class="math notranslate nohighlight">\( \sigma \)</span> sia nota e pari alla deviazione standard del campione, che è 6.50.</p>
-<p>Per la prima osservazione del campione, <span class="math notranslate nohighlight">\( y_1 = 26 \)</span>, la funzione di densità di probabilità è data da:</p>
+<p>Il nostro scopo è sviluppare una funzione di verosimiglianza utilizzando le 30 osservazioni indicate sopra. Basandoci su studi precedenti, ipotizziamo che questi punteggi seguano una distribuzione normale. Assumiamo inoltre che la deviazione standard <span class="math notranslate nohighlight">\( \sigma \)</span> sia nota e corrisponda a quella osservata nel campione, ossia 6.50.</p>
+<p>Per la prima osservazione del campione, dove <span class="math notranslate nohighlight">\( y_1 = 26 \)</span>, la funzione di densità di probabilità si esprime come:</p>
 <div class="math notranslate nohighlight">
 \[
-f(26 \mid \mu_0, \sigma = 6.50) = \frac{1}{6.50 \sqrt{2\pi}} \exp \left\{ -\frac{(26 - \mu_0)^2}{2 \times 6.50^2} \right\}.
+f(26 \,|\, \mu, \sigma = 6.50) = \frac{1}{6.50\sqrt{2\pi}} \exp \left( -\frac{(26 - \mu)^2}{2 \cdot 6.50^2} \right).
 \]</div>
-<p>Per il campione completo, la densità di probabilità congiunta è il prodotto delle densità di tutte le singole osservazioni:</p>
+<p>Estendendo questo calcolo all’intero campione, la funzione di densità di probabilità congiunta si ottiene come il prodotto delle densità di tutte le osservazioni individuali:</p>
 <div class="math notranslate nohighlight">
 \[
-f(y \mid \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \mid \mu, \sigma = 6.50).
+f(y \,|\, \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \,|\, \mu, \sigma = 6.50).
 \]</div>
-<p>Quindi, la funzione di verosimiglianza, denotata come <span class="math notranslate nohighlight">\( \mathcal{L}(\mu_0, \sigma = 6.50 \mid y) \)</span>, è determinata dal prodotto delle densità di probabilità di tutte le osservazioni nel campione:</p>
+<p>Di conseguenza, la funzione di verosimiglianza, indicata con <span class="math notranslate nohighlight">\( \mathcal{L}(\mu, \sigma = 6.50 \,|\, y) \)</span>, si determina moltiplicando insieme le densità di probabilità di tutte le osservazioni nel campione:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{aligned}
-\mathcal{L}(\mu_0, \sigma=6.50 \mid y) &amp;= \prod_{i=1}^{30} \frac{1}{6.50 \sqrt{2\pi}} \exp \left\{ -\frac{(y_i - \mu_0)^2}{2 \times 6.50^2} \right\} \\
-&amp;= \frac{1}{6.50 \sqrt {2\pi}} \exp\left\{ -\frac{(26 - \mu_0)^2}{2 \times 6.50^2} \right\} \\
-&amp;\quad \times \frac{1}{6.50 \sqrt {2\pi}} \exp\left\{ -\frac{(35 - \mu_0)^2}{2 \times 6.50^2} \right\} \\
-&amp;\quad \times \vdots \\
-&amp;\quad \times \frac{1}{6.50 \sqrt {2\pi}} \exp\left\{ -\frac{(22 - \mu_0)^2}{2 \times 6.50^2} \right\}.
+\mathcal{L}(\mu, \sigma=6.50 \,|\, y) &amp;= \prod_{i=1}^{30} \frac{1}{6.50\sqrt{2\pi}} \exp \left( -\frac{(y_i - \mu)^2}{2 \cdot 6.50^2} \right) \\
+&amp;= \left( \frac{1}{6.50\sqrt{2\pi}} \right)^{30} \exp\left( -\sum_{i=1}^{30} \frac{(y_i - \mu)^2}{2 \cdot 6.50^2} \right).
 \end{aligned}
 \end{split}\]</div>
-<p>In questo contesto, <span class="math notranslate nohighlight">\( \mu_0 \)</span> è uno dei molti possibili valori del parametro <span class="math notranslate nohighlight">\( \mu \)</span>. Se consideriamo, ad esempio, 1000 diversi valori possibili per <span class="math notranslate nohighlight">\( \mu \)</span>, dovremmo calcolare la funzione di verosimiglianza 1000 volte, una per ciascun valore di <span class="math notranslate nohighlight">\( \mu \)</span>.</p>
+<p>In questa formula, <span class="math notranslate nohighlight">\( \mu \)</span> rappresenta il parametro di interesse, la media della distribuzione, la cui stima massimizza la funzione di verosimiglianza. Se si considerano 1000 valori differenti per <span class="math notranslate nohighlight">\( \mu \)</span>, dovremmo calcolare la funzione di verosimiglianza per ciascuno di questi valori.</p>
 <p>Per rendere i calcoli più gestibili, è consigliabile utilizzare il logaritmo della funzione di verosimiglianza. In Python, possiamo definire una funzione <code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code> che accetta come argomenti <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">mu</span></code> e <code class="docutils literal notranslate"><span class="pre">sigma</span> <span class="pre">=</span> <span class="pre">true_sigma</span></code>. Per semplificare, impostiamo <code class="docutils literal notranslate"><span class="pre">true_sigma</span></code> uguale alla deviazione standard osservata nel campione.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1191,9 +1135,8 @@ f(y \mid \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \mid \mu, \sigma = 6.50).
 <p>Il valore <span class="math notranslate nohighlight">\(\mu\)</span> più credibile corrisponde al massimo della funzione di log-verosimiglinza e viene detto <em>stima di massima verosimiglianza</em>.</p>
 <p>Il massimo della funzione di log-verosimiglianza, ovvero 30.93 per l’esempio in discussione, è identico alla media dei dati campionari.</p>
 </section>
-</section>
-<section id="derivazione-formale-della-stima-di-massima-verosimiglianza-per-una-distribuzione-gaussiana">
-<h2>Derivazione Formale della Stima di Massima Verosimiglianza per una Distribuzione Gaussiana<a class="headerlink" href="#derivazione-formale-della-stima-di-massima-verosimiglianza-per-una-distribuzione-gaussiana" title="Link to this heading">#</a></h2>
+<section id="derivazione-formale">
+<h3>Derivazione Formale<a class="headerlink" href="#derivazione-formale" title="Link to this heading">#</a></h3>
 <p>Per ottenere le stime di massima verosimiglianza (MLE) dei parametri <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma^2 \)</span> in una distribuzione gaussiana, ricorriamo all’analisi matematica, in particolare al calcolo delle derivate. La funzione di log-verosimiglianza <span class="math notranslate nohighlight">\( \ell(\theta) \)</span> per una distribuzione gaussiana è data da:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -1208,7 +1151,7 @@ f(y \mid \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \mid \mu, \sigma = 6.50).
 \max_{\mu, \sigma^2} \ell(\mu, \sigma^2 \mid Y).
 \]</div>
 <section id="stima-di-massima-verosimiglianza-per-mu">
-<h3>Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span><a class="headerlink" href="#stima-di-massima-verosimiglianza-per-mu" title="Link to this heading">#</a></h3>
+<h4>Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span><a class="headerlink" href="#stima-di-massima-verosimiglianza-per-mu" title="Link to this heading">#</a></h4>
 <p>Per trovare la stima di <span class="math notranslate nohighlight">\( \mu \)</span> che massimizza la funzione di log-verosimiglianza, calcoliamo la derivata parziale di <span class="math notranslate nohighlight">\( \ell \)</span> rispetto a <span class="math notranslate nohighlight">\( \mu \)</span> e la poniamo uguale a zero:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -1229,9 +1172,10 @@ f(y \mid \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \mid \mu, \sigma = 6.50).
 <p>La stima di massima verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span> corrisponde quindi alla media aritmetica delle osservazioni.</p>
 </section>
 <section id="stima-di-massima-verosimiglianza-per-sigma-2">
-<h3>Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span><a class="headerlink" href="#stima-di-massima-verosimiglianza-per-sigma-2" title="Link to this heading">#</a></h3>
+<h4>Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span><a class="headerlink" href="#stima-di-massima-verosimiglianza-per-sigma-2" title="Link to this heading">#</a></h4>
 <p>Una derivazione simile può essere effettuata per <span class="math notranslate nohighlight">\( \sigma^2 \)</span>, e si può dimostrare che la stima di massima verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span> è la varianza campionaria.</p>
 <p>In sintesi, le stime di massima verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma^2 \)</span> in una distribuzione gaussiana coincidono con la media e la varianza campionaria, rispettivamente.</p>
+</section>
 </section>
 </section>
 <section id="conclusione-e-riflessioni-finali">
@@ -1261,7 +1205,7 @@ f(y \mid \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \mid \mu, \sigma = 6.50).
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Mar 21 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 22 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1275,11 +1219,11 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
+scipy     : 1.12.0
 matplotlib: 3.8.3
+numpy     : 1.26.4
 seaborn   : 0.13.2
 pandas    : 2.2.1
-scipy     : 1.12.0
-numpy     : 1.26.4
 arviz     : 0.17.1
 
 Watermark: 2.4.3
@@ -1356,21 +1300,21 @@ Watermark: 2.4.3
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione">Il Principio della Verosimiglianza e la sua Formalizzazione</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-nel-contesto-del-modello-binomiale">Verosimiglianza nel Contesto del Modello Binomiale</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-binomiale">Verosimiglianza Binomiale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta-di-n-campioni-iid-da-una-distribuzione-binomiale">Verosimiglianza Congiunta di <span class="math notranslate nohighlight">\( n \)</span> Campioni IID da una Distribuzione Binomiale</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta">Verosimiglianza Congiunta</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-verosimiglianza-marginale">La Verosimiglianza Marginale</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-verosimiglianza-marginale">La Verosimiglianza Marginale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caso-di-una-singola-osservazione">Caso di una Singola Osservazione</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">Campione indipendente di osservazioni da una distribuzione gaussiana</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-formale">Derivazione Formale</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-mu">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-sigma-2">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-formale-della-stima-di-massima-verosimiglianza-per-una-distribuzione-gaussiana">Derivazione Formale della Stima di Massima Verosimiglianza per una Distribuzione Gaussiana</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-mu">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-sigma-2">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
