@@ -550,6 +550,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione">Il Principio della Verosimiglianza e la sua Formalizzazione</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-binomiale">Verosimiglianza Binomiale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#massima-verosimiglianza">Massima verosimiglianza</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta">Verosimiglianza Congiunta</a></li>
 </ul>
@@ -607,6 +610,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">quad</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
 </pre></div>
 </div>
 </div>
@@ -656,7 +660,7 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 \[
 \mathcal{L}(\theta \mid y) = \frac{(23 + 7)!}{23!7!} \theta^{23} (1 - \theta)^7.
 \]</div>
-<p>Valutando questa funzione per una serie di valori di <span class="math notranslate nohighlight">\(\theta\)</span> possiamo determinare quale valore di <span class="math notranslate nohighlight">\(\theta\)</span> rende i dati osservati più probabili. Procediamo simulando 100 valori equidistanti di <span class="math notranslate nohighlight">\(\theta\)</span> nell’intervallo [0, 1] e calcoliamo la verosimiglianza per ciascuno di questi valori.</p>
+<p>Valutando questa funzione per una serie di valori di <span class="math notranslate nohighlight">\(\theta\)</span> possiamo determinare quale valore di <span class="math notranslate nohighlight">\(\theta\)</span> rende i dati osservati più verosimili. Procediamo simulando 100 valori equidistanti di <span class="math notranslate nohighlight">\(\theta\)</span> nell’intervallo [0, 1] e calcoliamo la verosimiglianza per ciascuno di questi valori.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">30</span>
@@ -800,6 +804,49 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 </div>
 </div>
 </section>
+</section>
+<section id="massima-verosimiglianza">
+<h2>Massima verosimiglianza<a class="headerlink" href="#massima-verosimiglianza" title="Link to this heading">#</a></h2>
+<p>Tra tutti i possibili valori <span class="math notranslate nohighlight">\(\theta\)</span> cerchiao il valore che massimizzi la probabilità dei dati osservati, ovvero, cerchiamo il valore <span class="math notranslate nohighlight">\(\theta\)</span> che corrisponde al massimo della funzione di verosimiglianza.</p>
+<p>Parliamo di “minimizzazione” quando l ‘obiettivo è trovare il punto più basso in una valle (minimizzare) o di “massimizzazione”, quando l’obiettivo è quello di trovare il punto più alto su una collina, a seconda della funzione. Nel caso della funzione di verosimiglianza, cerchiamo il punto in cui questa funzione raggiunge il suo valore massimo, ma poiché molti algoritmi sono progettati per trovare minimi, possiamo cercare il minimo del negativo della funzione di verosimiglianza, che corrisponde al massimo della funzione stessa.</p>
+<p>La Strategia di Base</p>
+<ul class="simple">
+<li><p>Punto di Partenza: L’algoritmo inizia da un punto di partenza, che può essere scelto casualmente o basato su una qualche ipotesi ragionevole.</p></li>
+<li><p>Esplorazione: L’algoritmo esplora la “superficie” della funzione, muovendosi in direzioni che sembrano portare verso il punto più basso (o più alto, se stiamo massimizzando). Questo è simile a sentire la pendenza del terreno intorno a noi per decidere in quale direzione camminare.</p></li>
+<li><p>Aggiustamento: Man mano che procede, l’algoritmo aggiusta la sua traiettoria basandosi su ciò che ha “sentito” durante l’esplorazione. Se trova una discesa, continua in quella direzione; se incontra una salita, prova una direzione differente.</p></li>
+<li><p>Convergenza: Il processo continua finché l’algoritmo non trova un punto in cui non ci sono più discese significative in nessuna direzione, suggerendo che ha trovato il punto più basso (o il punto più alto, se stiamo massimizzando) raggiungibile da quel percorso.</p></li>
+</ul>
+<p>Esistono diversi metodi che l’algoritmo può utilizzare per decidere come muoversi. Alcuni esempi includono:</p>
+<ul class="simple">
+<li><p>Discesa più ripida (Gradient Descent): Utilizza il gradiente (la direzione e la pendenza della collina) per decidere in quale direzione muoversi.</p></li>
+<li><p>Newton-Raphson: Utilizza sia il gradiente sia la “curvatura” della funzione per fare passi più informati verso il minimo.</p></li>
+<li><p>Algoritmi Genetici: Ispirati dall’evoluzione biologica, questi algoritmi “evolvono” una soluzione attraverso iterazioni che simulano la selezione naturale.</p></li>
+</ul>
+<p>In termini intuitivi, dunque, l’ottimizzazione è un processo metodico di esplorazione e aggiustamento basato su feedback immediato dalla funzione che stiamo cercando di ottimizzare, con l’obiettivo di trovare il punto di massimo o minimo valore.</p>
+<p>Definiamo dunque il negativo della funzione di verosimiglianza per l’ottimizzazione (trovare il massimo della funzione):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">negative_likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># Calcolo del negativo della funzione di verosimiglianza</span>
+    <span class="k">return</span> <span class="o">-</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">theta</span><span class="o">**</span><span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizzoiamo ora <code class="docutils literal notranslate"><span class="pre">scipy.optimize.minimize</span></code> per trovare il valore di theta che massimizza la verosimiglianza. Bisogna specificare un valore iniziale per theta, qui assumiamo 0.5 come punto di partenza. I vincoli su theta sono che deve essere compreso tra 0 e 1.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">negative_likelihood</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+<span class="n">result</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.76666666])
+</pre></div>
+</div>
+</div>
+</div>
 <section id="la-funzione-di-log-verosimiglianza">
 <h3>La Funzione di Log-Verosimiglianza<a class="headerlink" href="#la-funzione-di-log-verosimiglianza" title="Link to this heading">#</a></h3>
 <p>Proseguendo con il nostro approfondimento sull’analisi statistica mediante la funzione di verosimiglianza, ci spostiamo verso una sua trasformazione matematica spesso preferita dagli statistici: la funzione di log-verosimiglianza. Il passaggio alla log-verosimiglianza, definita come il logaritmo naturale della funzione di verosimiglianza:</p>
@@ -812,7 +859,7 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 \[
 \hat{\theta} = \arg \max_{\theta \in \Theta} \ell(\theta) = \arg \max_{\theta \in \Theta} \mathcal{L}(\theta).
 \]</div>
-<p>Questo trasferisce il problema di massimizzazione da uno spesso complicato, a causa delle piccole magnitudini gestite nella verosimiglianza, a uno spesso più semplice e numericamente stabile grazie alla log-verosimiglianza. Quest’ultima esprime la relazione come una somma anziché come un prodotto:</p>
+<p>Nel caso di un campione di osservazioni, questo trasferisce il problema di massimizzazione da uno spesso complicato, a causa delle piccole grandezze gestite nella verosimiglianza, a uno spesso più semplice e numericamente stabile grazie alla log-verosimiglianza. Quest’ultima esprime la relazione come una somma anziché come un prodotto:</p>
 <div class="math notranslate nohighlight">
 \[
 \ell(\theta \mid y) = y \log(\theta) + (n - y) \log(1 - \theta),
@@ -864,6 +911,41 @@ P(Y = y) = \binom{n}{y} \theta^y (1 - \theta)^{n - y},
 </div>
 </div>
 </div>
+<p>Definizione della funzione del negativo della log-verosimiglianza con correzioni per evitare errori di dominio:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">corrected_negative_log_likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># Assicurarsi che theta sia all&#39;interno di un intervallo valido per evitare errori di logaritmo</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="mf">1e-10</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">-</span> <span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizzo di <code class="docutils literal notranslate"><span class="pre">scipy.optimize.minimize</span></code> per trovare il valore di theta che massimizza la log-verosimiglianza:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_log_likelihood_corrected</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+    <span class="n">corrected_negative_log_likelihood</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Il risultato ottimizzato per theta utilizzando la log-verosimiglianza corretta</span>
+<span class="n">optimized_theta</span> <span class="o">=</span> <span class="n">result_log_likelihood_corrected</span><span class="o">.</span><span class="n">x</span>
+<span class="n">optimized_theta</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.76666666])
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="verosimiglianza-congiunta">
 <h3>Verosimiglianza Congiunta<a class="headerlink" href="#verosimiglianza-congiunta" title="Link to this heading">#</a></h3>
@@ -879,7 +961,65 @@ p(y_1, y_2, \ldots, y_n \mid \theta) = \prod_{i=1}^{n} p(y_i \mid \theta) = \pro
 \mathcal{L}(\theta \mid Y) = \prod_{i=1}^{n} \mathcal{L}(\theta \mid y_i) = \prod_{i=1}^{n} p(y_i \mid \theta).
 \]</div>
 <p>Questa formulazione della verosimiglianza congiunta non solo evidenzia quanto bene il parametro <span class="math notranslate nohighlight">\(\theta\)</span> si adatta all’intero set di dati <span class="math notranslate nohighlight">\(Y\)</span>, ma offre anche una base metodologica solida per stimare <span class="math notranslate nohighlight">\(\theta\)</span>. Il parametro che massimizza la verosimiglianza congiunta, noto come stimatore di massima verosimiglianza (MLE) di <span class="math notranslate nohighlight">\(\theta\)</span>, è quello che si ritiene essere il più plausibile data l’osservazione dei dati.</p>
-<p>L’analisi attraverso la funzione di verosimiglianza congiunta risulta particolarmente potente nell’inferenza statistica, poiché consente di combinare informazioni provenienti da molteplici osservazioni per formulare stime parametriche robuste e affidabili. Questo processo di aggregazione delle evidenze individuali in un’unica misura di plausibilità rappresenta un principio fondamentale nell’estrazione di insight quantitativi dai dati sperimentali.</p>
+<p>Quando abbiamo più gruppi di osservazioni bernoulliane indipendenti ed identicamente distribuite (iid), la funzione di log-verosimiglianza congiunta per tutti i gruppi può essere espressa come la somma delle log-verosimiglianze di ciascun gruppo. Ciò è dovuto alla proprietà che il logaritmo del prodotto è la somma dei logaritmi.</p>
+<p>Supponiamo di avere i seguenti dati per 4 gruppi di osservazioni:</p>
+<ul class="simple">
+<li><p>Gruppo 1: 30 prove con 23 successi</p></li>
+<li><p>Gruppo 2: 28 prove con 21 successi</p></li>
+<li><p>Gruppo 3: 40 prove con 31 successi</p></li>
+<li><p>Gruppo 4: 36 prove con 29 successi</p></li>
+</ul>
+<p>La funzione di log-verosimiglianza congiunta per questi dati, assumendo una singola probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span> per tutti i gruppi, è data da:</p>
+<div class="math notranslate nohighlight">
+\[
+\log L(\theta) = \sum_{i=1}^{4} \left[ y_i \log(\theta) + (n_i - y_i) \log(1 - \theta) \right],
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\(n_i\)</span> e <span class="math notranslate nohighlight">\(y_i\)</span> sono rispettivamente il numero di prove e il numero di successi nel <span class="math notranslate nohighlight">\(i\)</span>-esimo gruppo.</p>
+<p>Per trovare il valore di <span class="math notranslate nohighlight">\(\theta\)</span> che massimizza questa funzione di log-verosimiglianza, possiamo usare il metodo di ottimizzazione <code class="docutils literal notranslate"><span class="pre">scipy.optimize.minimize</span></code>, come abbiamo fatto in precedenza. Definiamo prima la funzione di log-verosimiglianza congiunta (usiamo <code class="docutils literal notranslate"><span class="pre">np.clip</span></code> per evitare errori):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">log_verosimiglianza_congiunta</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">dati</span><span class="p">):</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="mf">1e-10</span><span class="p">)</span>  <span class="c1"># Evita valori esattamente 0 o 1</span>
+    <span class="n">log_likelihood</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dati</span><span class="p">:</span>
+        <span class="n">log_likelihood</span> <span class="o">+=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">log_likelihood</span>  <span class="c1"># Restituisce il negativo per l&#39;ottimizzazione</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dati dei gruppi: (prove, successi)</span>
+<span class="n">dati_gruppi</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">23</span><span class="p">),</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span> <span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mi">29</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dati_gruppi</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(30, 23), (28, 20), (40, 29), (36, 29)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ottimizzazione con la funzione <code class="docutils literal notranslate"><span class="pre">log_verosimiglianza_congiunta</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+    <span class="n">log_verosimiglianza_congiunta</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">dati_gruppi</span><span class="p">,),</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="p">)</span>
+
+<span class="c1"># Il risultato ottimizzato per theta con la funzione corretta</span>
+<span class="n">result</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.75373134])
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="la-verosimiglianza-marginale">
@@ -893,9 +1033,8 @@ p(y_1, y_2, \ldots, y_n \mid \theta) = \prod_{i=1}^{n} p(y_i \mid \theta) = \pro
 <p>Tuttavia, in molte applicazioni reali, <span class="math notranslate nohighlight">\(\theta\)</span> può variare continuamente all’interno di un intervallo, come tra 0 e 1 per una distribuzione binomiale. In questi casi, il calcolo della verosimiglianza marginale richiede l’utilizzo dell’integrazione su tutto lo spazio dei valori possibili di <span class="math notranslate nohighlight">\(\theta\)</span>, riflettendo la gamma continua di possibili probabilità di successo. La formula si estende quindi a:</p>
 <div class="math notranslate nohighlight">
 \[p(k=7, n=10) = \int_{0}^{1} \binom{10}{7} \theta^7 (1-\theta)^3 p(\theta) d\theta,\]</div>
-<p>dove <span class="math notranslate nohighlight">\(p(\theta) d\theta\)</span> rappresenta la densità di probabilità di <span class="math notranslate nohighlight">\(\theta\)</span> su un intervallo infinitesimale, e l’integrale copre tutti i possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span> da 0 a 1.</p>
-<p>L’adozione di questa procedura non solo arricchisce la nostra comprensione dei dati osservati considerando l’intera distribuzione di <span class="math notranslate nohighlight">\(\theta\)</span>, ma fornisce anche una base più solida per l’inferenza statistica in presenza di incertezza. Implementare questo calcolo nell’ambito di uno spazio continuo richiede l’utilizzo di tecniche di integrazione numerica, per le quali librerie come <code class="docutils literal notranslate"><span class="pre">scipy</span></code> in Python offrono strumenti efficaci e versatili.</p>
-<p>Vediamo come potremmo eseguire questo calcolo in Python, utilizzando la libreria <code class="docutils literal notranslate"><span class="pre">scipy</span></code> per l’integrazione su uno spazio continuo:</p>
+<p>dove <span class="math notranslate nohighlight">\(p(\theta) d\theta\)</span> rappresenta la densità di probabilità di <span class="math notranslate nohighlight">\(\theta\)</span> su un intervallo infinitesimale, e l’integrale copre tutti i possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span> da 0 a 1. Implementare questo calcolo nell’ambito di uno spazio continuo richiede l’utilizzo di tecniche di integrazione.</p>
+<p>Vediamo come sia possibile eseguire questo calcolo in Python, utilizzando la libreria <code class="docutils literal notranslate"><span class="pre">scipy</span></code> per l’integrazione su uno spazio continuo:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Definire la funzione di verosimiglianza</span>
@@ -916,6 +1055,8 @@ p(y_1, y_2, \ldots, y_n \mid \theta) = \prod_{i=1}^{n} p(y_i \mid \theta) = \pro
 </div>
 </div>
 <p>Questo codice esegue l’integrazione della funzione di verosimiglianza binomiale su tutti i possibili valori di θ (da 0 a 1), fornendo così la verosimiglianza marginale per il nostro esempio. Questo processo ci permette di considerare l’incertezza su θ, offrendo una visione completa della verosimiglianza dell’evento osservato senza fissare θ a un singolo valore.</p>
+<p>Numericamente, nell’esempio della verosimiglianza basata su una distribuzione binomiale precedente, la verosimiglianza marginale è effettivamente interpretata come l’area sottesa dalla funzione di verosimiglianza, calcolata integrandola su tutto l’intervallo dei possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span> (da 0 a 1, nel contesto di probabilità). Questa operazione di integrazione fornisce un valore che quantifica l’area sotto la curva della funzione di verosimiglianza. Importante sottolineare, questo valore non corrisponde alla probabilità dei dati dati i parametri, dato che la verosimiglianza non è una densità di probabilità sui parametri. Piuttosto, esso misura in che misura l’intero modello, considerando tutti i possibili valori del parametro, è in grado di spiegare i dati osservati.</p>
+<p>La vera importanza della verosimiglianza marginale emerge nel contesto dell’inferenza bayesiana: essa agisce come fattore di normalizzazione nella formula di Bayes. Nello specifico, la verosimiglianza marginale normalizza la funzione risultante dal prodotto tra la verosimiglianza e la distribuzione a priori dei parametri (il numeratore nella formula di Bayes), garantendo che il risultato sia una distribuzione di probabilità valida sullo spazio dei parametri. In altre parole, la verosimiglianza marginale assicura che l’area sotto la curva della distribuzione posteriore sia esattamente 1, rendendola così una vera distribuzione di probabilità.</p>
 </section>
 <section id="modello-gaussiano-e-verosimiglianza">
 <h2>Modello Gaussiano e Verosimiglianza<a class="headerlink" href="#modello-gaussiano-e-verosimiglianza" title="Link to this heading">#</a></h2>
@@ -1204,7 +1345,7 @@ f(y \,|\, \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \,|\, \mu, \sigma = 6.50).
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 22 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Mon Mar 25 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1218,12 +1359,12 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-scipy     : 1.12.0
 matplotlib: 3.8.3
 numpy     : 1.26.4
-seaborn   : 0.13.2
-pandas    : 2.2.1
 arviz     : 0.17.1
+scipy     : 1.12.0
+pandas    : 2.2.1
+seaborn   : 0.13.2
 
 Watermark: 2.4.3
 </pre></div>
@@ -1301,6 +1442,9 @@ Watermark: 2.4.3
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-principio-della-verosimiglianza-e-la-sua-formalizzazione">Il Principio della Verosimiglianza e la sua Formalizzazione</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-binomiale">Verosimiglianza Binomiale</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-funzione-di-verosimiglianza">Interpretazione della Funzione di Verosimiglianza</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#massima-verosimiglianza">Massima verosimiglianza</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-funzione-di-log-verosimiglianza">La Funzione di Log-Verosimiglianza</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza-congiunta">Verosimiglianza Congiunta</a></li>
 </ul>
