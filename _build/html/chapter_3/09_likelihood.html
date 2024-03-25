@@ -561,13 +561,11 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caso-di-una-singola-osservazione">Caso di una Singola Osservazione</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">Campione indipendente di osservazioni da una distribuzione gaussiana</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-formale">Derivazione Formale</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-mu">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-sigma-2">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-stima-di-massima-verosimiglianza-per-mu">La Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apprendimento-per-rinforzo">Apprendimento per rinforzo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-usando-la-distribuzione-esponenziale">Un esempio usando la distribuzione esponenziale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
@@ -1145,7 +1143,44 @@ f(x | \mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\s
 </div>
 </div>
 </div>
-<p>In questo esempio, il valore di <span class="math notranslate nohighlight">\(\mu\)</span> che massimizza la verosimiglianza è 113.96.</p>
+<p>In questo esempio, otteniamo il valore <span class="math notranslate nohighlight">\(\mu\)</span> = 113.96 che massimizza la verosimiglianza.</p>
+<p>Per calcolare il massimo della log-verosimiglianza per una distribuzione Gaussiana usando la funzione <code class="docutils literal notranslate"><span class="pre">optimize()</span></code> di SciPy, possiamo seguire questi passi. La log-verosimiglianza per una singola osservazione <span class="math notranslate nohighlight">\(y\)</span> da una distribuzione Gaussiana (normale) con media <span class="math notranslate nohighlight">\(\mu\)</span> e deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span> è data da:</p>
+<div class="math notranslate nohighlight">
+\[
+\log L(\mu; y, \sigma) = -\frac{1}{2} \log(2 \pi) - \log(\sigma) - \frac{(y - \mu)^2}{2 \sigma^2},
+\]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(y\)</span> è il valore osservato,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu\)</span> è la media della distribuzione, che vogliamo stimare,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span> è la deviazione standard nota della distribuzione.</p></li>
+</ul>
+<p>Vogliamo trovare il valore di <span class="math notranslate nohighlight">\(\mu\)</span> che massimizza questa funzione di log-verosimiglianza. Siccome <code class="docutils literal notranslate"><span class="pre">optimize()</span></code> di SciPy minimizza una funzione, possiamo passare il negativo della log-verosimiglianza per trovare il massimo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dati osservati</span>
+<span class="n">y_obs</span> <span class="o">=</span> <span class="mi">114</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">15</span>
+
+<span class="c1"># Definizione della funzione negativa della log-verosimiglianza</span>
+<span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Ottimizzazione per trovare il valore di mu che massimizza la log-verosimiglianza</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">negative_log_likelihood</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">y_obs</span><span class="p">,</span> <span class="n">sigma</span><span class="p">))</span>
+
+<span class="c1"># Il risultato ottimizzato per mu</span>
+<span class="n">result</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([113.99997648])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il valore di <span class="math notranslate nohighlight">\(\mu\)</span> che massimizza la log-verosimiglianza per una distribuzione Gaussiana con <span class="math notranslate nohighlight">\(y = 114\)</span> e <span class="math notranslate nohighlight">\(\sigma = 15\)</span> è circa <span class="math notranslate nohighlight">\(114\)</span>. Questo risultato dimostra che, nel caso di una distribuzione Gaussiana con una singola osservazione e deviazione standard nota, il massimo della log-verosimiglianza si ottiene quando la media stimata <span class="math notranslate nohighlight">\(\mu\)</span> è molto vicina al valore osservato <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </section>
 <section id="campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">
 <h3>Campione indipendente di osservazioni da una distribuzione gaussiana<a class="headerlink" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana" title="Link to this heading">#</a></h3>
@@ -1274,55 +1309,223 @@ f(y \,|\, \mu, \sigma = 6.50) = \prod_{i=1}^{n} f(y_i \,|\, \mu, \sigma = 6.50).
 </div>
 <p>Il valore <span class="math notranslate nohighlight">\(\mu\)</span> più credibile corrisponde al massimo della funzione di log-verosimiglinza e viene detto <em>stima di massima verosimiglianza</em>.</p>
 <p>Il massimo della funzione di log-verosimiglianza, ovvero 30.93 per l’esempio in discussione, è identico alla media dei dati campionari.</p>
-</section>
-<section id="derivazione-formale">
-<h3>Derivazione Formale<a class="headerlink" href="#derivazione-formale" title="Link to this heading">#</a></h3>
-<p>Per ottenere le stime di massima verosimiglianza (MLE) dei parametri <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma^2 \)</span> in una distribuzione gaussiana, ricorriamo all’analisi matematica, in particolare al calcolo delle derivate. La funzione di log-verosimiglianza <span class="math notranslate nohighlight">\( \ell(\theta) \)</span> per una distribuzione gaussiana è data da:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{aligned}
-\ell(\mu, \sigma^2 \mid Y) &amp;= \log \left( (2\pi\sigma^2)^{-n/2} \exp \left( -\frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - \mu)^2 \right) \right) \\
-&amp;= -\frac{n}{2} \log(2\pi) - \frac{n}{2} \log(\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - \mu)^2.
-\end{aligned}
-\end{split}\]</div>
-<p>L’obiettivo è massimizzare <span class="math notranslate nohighlight">\( \ell(\mu, \sigma^2 \mid Y) \)</span> rispetto a <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma^2 \)</span>, ovvero:</p>
+<p>Per applicare lo stesso approccio usato precedentemente con <code class="docutils literal notranslate"><span class="pre">optimize</span></code> ad un campione di dati, anziché a una singola osservazione, possiamo modificare la funzione di log-verosimiglianza per prendere in considerazione tutte le osservazioni nel campione. La log-verosimiglianza per un campione da una distribuzione Gaussiana, dove ogni osservazione <span class="math notranslate nohighlight">\(y_i\)</span> ha la stessa media <span class="math notranslate nohighlight">\(\mu\)</span> e deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>, è la somma delle log-verosimiglianze di ogni osservazione individuale.</p>
+<p>La formula modificata per il campione sarà:</p>
 <div class="math notranslate nohighlight">
 \[
-\max_{\mu, \sigma^2} \ell(\mu, \sigma^2 \mid Y).
+\log L(\mu; y, \sigma) = \sum_{i=1}^{n} \left[ -\frac{1}{2} \log(2 \pi) - \log(\sigma) - \frac{(y_i - \mu)^2}{2 \sigma^2} \right],
 \]</div>
-<section id="stima-di-massima-verosimiglianza-per-mu">
-<h4>Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span><a class="headerlink" href="#stima-di-massima-verosimiglianza-per-mu" title="Link to this heading">#</a></h4>
-<p>Per trovare la stima di <span class="math notranslate nohighlight">\( \mu \)</span> che massimizza la funzione di log-verosimiglianza, calcoliamo la derivata parziale di <span class="math notranslate nohighlight">\( \ell \)</span> rispetto a <span class="math notranslate nohighlight">\( \mu \)</span> e la poniamo uguale a zero:</p>
+<p>dove <span class="math notranslate nohighlight">\(y\)</span> è l’array delle osservazioni e <span class="math notranslate nohighlight">\(n\)</span> è il numero di osservazioni nel campione.</p>
+<p>Poiché, per semplicità, assumiamo <span class="math notranslate nohighlight">\(\sigma\)</span> come la deviazione standard del campione, prima calcoleremo <span class="math notranslate nohighlight">\(\sigma\)</span> dal campione fornito e poi useremo quel valore per l’ottimizzazione della log-verosimiglianza, cercando il valore di <span class="math notranslate nohighlight">\(\mu\)</span> che la massimizza.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcolo della deviazione standard del campione</span>
+<span class="n">sigma_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Definizione della funzione negativa della log-verosimiglianza per il campione</span>
+<span class="k">def</span> <span class="nf">negative_log_likelihood_sample</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Ottimizzazione per trovare il valore di mu che massimizza la log-verosimiglianza per il campione</span>
+<span class="n">result_sample</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">negative_log_likelihood_sample</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">sigma_sample</span><span class="p">))</span>
+
+<span class="c1"># Il risultato ottimizzato per mu</span>
+<span class="n">result_sample</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([30.93333333])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il valore di <span class="math notranslate nohighlight">\(\mu\)</span> che massimizza la log-verosimiglianza per il campione di dati fornito, assumendo noto il valore di <span class="math notranslate nohighlight">\(\sigma\)</span> (la deviazione standard del campione), è circa <span class="math notranslate nohighlight">\(30.93\)</span>. Questo rappresenta la stima ottimale per la media della distribuzione Gaussiana che meglio si adatta al campione di dati dato.</p>
+</section>
+<section id="la-stima-di-massima-verosimiglianza-per-mu">
+<h3>La Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span><a class="headerlink" href="#la-stima-di-massima-verosimiglianza-per-mu" title="Link to this heading">#</a></h3>
+<p>Per determinare il valore di <span class="math notranslate nohighlight">\( \mu \)</span> che massimizza la funzione di log-verosimiglianza, procediamo calcolando la sua derivata parziale rispetto a <span class="math notranslate nohighlight">\( \mu \)</span> e impostando il risultato uguale a zero:</p>
+<ol class="arabic">
+<li><p>Partiamo dalla funzione di log-verosimiglianza, che è data da:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{aligned}
-\frac{\partial \ell}{\partial \mu} &amp;= \frac{\partial}{\partial \mu} \left( -\frac{n}{2} \log(2\pi) - \frac{n}{2} \log(\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - \mu)^2 \right) \\
-&amp;= \sum_{i=1}^n \frac{(y_i - \mu)}{\sigma^2} \\
-&amp;= \frac{1}{\sigma^2} \sum_{i=1}^n (y_i - \mu) = 0.
-\end{aligned}
-\end{split}\]</div>
-<p>Risolvendo questa equazione, otteniamo:</p>
+\[
+   \ell = -\frac{n}{2} \log(2\pi) - \frac{n}{2} \log(\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - \mu)^2.
+   \]</div>
+</li>
+<li><p>Calcoliamo la derivata parziale di <span class="math notranslate nohighlight">\( \ell \)</span> rispetto a <span class="math notranslate nohighlight">\( \mu \)</span>:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{aligned}
-\hat{\mu}_{MLE} &amp;= \frac{1}{n} \sum_{i=1}^n y_i \\
-&amp;= \bar{y}.
-\end{aligned}
-\end{split}\]</div>
-<p>La stima di massima verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span> corrisponde quindi alla media aritmetica delle osservazioni.</p>
+\[
+   \frac{\partial \ell}{\partial \mu} = \sum_{i=1}^n \frac{(y_i - \mu)}{\sigma^2}.
+   \]</div>
+</li>
+<li><p>Impostiamo la derivata uguale a zero per trovare il punto di massimo:</p>
+<div class="math notranslate nohighlight">
+\[
+   \frac{1}{\sigma^2} \sum_{i=1}^n (y_i - \mu) = 0.
+   \]</div>
+</li>
+</ol>
+<p>Risolvendo questa equazione per <span class="math notranslate nohighlight">\( \mu \)</span>, otteniamo la stima di massima verosimiglianza:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\mu}_{MLE} = \frac{1}{n} \sum_{i=1}^n y_i = \bar{y}.
+\]</div>
+<p>Questa formula ci mostra che la stima di massima verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span> corrisponde semplicemente alla media aritmetica delle osservazioni.</p>
+<p>Questo processo può essere analogamente applicato per stimare <span class="math notranslate nohighlight">\( \sigma^2 \)</span>, la varianza, e si trova che la stima di massima verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span> è pari alla varianza campionaria.</p>
+<p>In conclusione, all’interno di una distribuzione gaussiana, le stime di massima verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span> (la media) e <span class="math notranslate nohighlight">\( \sigma^2 \)</span> (la varianza) coincidono con la media campionaria e la varianza campionaria, rispettivamente.</p>
 </section>
-<section id="stima-di-massima-verosimiglianza-per-sigma-2">
-<h4>Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span><a class="headerlink" href="#stima-di-massima-verosimiglianza-per-sigma-2" title="Link to this heading">#</a></h4>
-<p>Una derivazione simile può essere effettuata per <span class="math notranslate nohighlight">\( \sigma^2 \)</span>, e si può dimostrare che la stima di massima verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span> è la varianza campionaria.</p>
-<p>In sintesi, le stime di massima verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span> e <span class="math notranslate nohighlight">\( \sigma^2 \)</span> in una distribuzione gaussiana coincidono con la media e la varianza campionaria, rispettivamente.</p>
 </section>
+<section id="apprendimento-per-rinforzo">
+<h2>Apprendimento per rinforzo<a class="headerlink" href="#apprendimento-per-rinforzo" title="Link to this heading">#</a></h2>
+<p>Lo scopo degli studi sull’apprendimento per rinforzo è quello di comprendere come le persone imparano a massimizzare le loro ricompense in situazioni in cui la scelta migliore è inizialmente sconosciuta. In modo più specifico, consideriamo il seguente problema di apprendimento. Un partecipante deve effettuare ripetutamente delle scelte tra diverse opzioni o azioni, e dopo ogni scelta riceve una ricompensa numerica estratta da una distribuzione di probabilità che dipende dall’azione selezionata. L’obiettivo del partecipante è massimizzare la ricompensa totale attesa durante un certo periodo di tempo, ad esempio, durante 100 scelte. Per descrivere questa situazione, viene spesso utilizzata la metafora di un giocatore che deve fare una serie di <span class="math notranslate nohighlight">\(T\)</span> scelte tra <span class="math notranslate nohighlight">\(K\)</span> slot machine (conosciute anche come “multi-armed bandits”) al fine di massimizzare le sue vincite. Se nella scelta <span class="math notranslate nohighlight">\(t\)</span> viene selezionata la slot machine <span class="math notranslate nohighlight">\(k\)</span>, viene ottenuta una ricompensa <span class="math notranslate nohighlight">\(r_t\)</span> che ha valore <code class="docutils literal notranslate"><span class="pre">1</span></code> con una probabilità di successo <span class="math notranslate nohighlight">\(\mu^k_t\)</span>, altrimenti ha valore <code class="docutils literal notranslate"><span class="pre">0</span></code>. Le probabilità di successo sono diverse per ogni slot machine e inizialmente sono sconosciute al partecipante. Nella versione più semplice di questo compito, le probabilità di successo rimangono costanti nel tempo.</p>
+<p>Il modello di Rescorla-Wagner è un modello di apprendimento associativo che descrive come gli animali o gli umani aggiornano le loro aspettative di rinforzo in risposta a stimoli. Il modello può essere descritto con la seguente formula di aggiornamento:</p>
+<div class="math notranslate nohighlight">
+\[ V_{t+1} = V_t + \alpha (\lambda - V_t), \]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(V_t\)</span> è il valore predetto del rinforzo al tempo <span class="math notranslate nohighlight">\(t\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> è il tasso di apprendimento, un parametro che vogliamo stimare,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda\)</span> è l’intensità del rinforzo,</p></li>
+<li><p><span class="math notranslate nohighlight">\(V_{t+1}\)</span> è il valore aggiornato dopo aver sperimentato il rinforzo.</p></li>
+</ul>
+<p>Per semplificare, consideriamo un caso in cui gli stimoli si presentano in maniera binaria (rinforzo presente o assente), e <span class="math notranslate nohighlight">\(\lambda\)</span> è noto. L’obiettivo è stimare il valore di <span class="math notranslate nohighlight">\(\alpha\)</span> che massimizza la verosimiglianza dei dati osservati sotto il modello.</p>
+<p>La funzione di verosimiglianza per questo modello dipende dalla differenza tra i valori predetti e gli effettivi rinforzi ricevuti. Tuttavia, la formulazione esatta della funzione di verosimiglianza può variare a seconda della specifica formulazione del problema e dei dati disponibili. Per mantenere le cose semplici, consideriamo una versione semplificata in cui la “verosimiglianza” è basata sulla somma dei quadrati degli errori (SSE) tra i rinforzi previsti e quelli osservati (anche se tecnicamente questo non è un approccio basato sulla verosimiglianza nel senso statistico classico).</p>
+<p>Per questo esempio, assumiamo di avere un semplice set di dati di rinforzi osservati e vogliamo trovare il valore di <span class="math notranslate nohighlight">\(\alpha\)</span> che minimizza l’SSE:</p>
+<div class="math notranslate nohighlight">
+\[ SSE = \sum_{t=1}^{n} (\lambda - V_t)^2. \]</div>
+<p>Ecco un esempio di implementazione in Python che utilizza <code class="docutils literal notranslate"><span class="pre">scipy.optimize.minimize</span></code> per stimare <span class="math notranslate nohighlight">\(\alpha\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dati di esempio: rinforzi osservati (lambda)</span>
+<span class="c1"># In questo esempio, assumiamo lambda = 1 per rinforzo presente e lambda = 0 per rinforzo assente</span>
+<span class="c1"># per semplicità. In pratica, lambda potrebbe essere diverso a seconda degli esperimenti.</span>
+<span class="n">rinforzi_osservati</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># Esempio di sequenza di rinforzi</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Funzione che calcola l&#39;SSE per un dato valore di alpha</span>
+<span class="k">def</span> <span class="nf">sse</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">rinforzi</span><span class="p">,</span> <span class="n">V0</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">V0</span>
+    <span class="n">sse</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">lambda_</span> <span class="ow">in</span> <span class="n">rinforzi</span><span class="p">:</span>
+        <span class="n">sse</span> <span class="o">+=</span> <span class="p">(</span><span class="n">lambda_</span> <span class="o">-</span> <span class="n">V</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">V</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">lambda_</span> <span class="o">-</span> <span class="n">V</span><span class="p">)</span>  <span class="c1"># Aggiornamento del valore secondo il modello Rescorla-Wagner</span>
+    <span class="k">return</span> <span class="n">sse</span>
+
+<span class="c1"># Ottimizzazione per trovare il valore di alpha che minimizza l&#39;SSE</span>
+<span class="n">result_alpha</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">sse</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">rinforzi_osservati</span><span class="p">,))</span>
+
+<span class="c1"># Il risultato ottimizzato per alpha</span>
+<span class="n">result_alpha</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.29739989])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il valore di <span class="math notranslate nohighlight">\(\alpha\)</span> (tasso di apprendimento) che minimizza la somma dei quadrati degli errori (SSE) per il modello di Rescorla-Wagner, dato il campione di rinforzi osservati, è circa <span class="math notranslate nohighlight">\(0.297\)</span>. Questo suggerisce che il tasso di apprendimento ottimale per adattare il modello ai dati osservati in questo esempio semplificato è di circa 0.297, secondo l’approccio di minimizzazione dell’errore utilizzato qui.</p>
 </section>
+<section id="un-esempio-usando-la-distribuzione-esponenziale">
+<h2>Un esempio usando la distribuzione esponenziale<a class="headerlink" href="#un-esempio-usando-la-distribuzione-esponenziale" title="Link to this heading">#</a></h2>
+<p>Supponiamo che i seguenti siano i tempi di attesa per un certo evento:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">27</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Definiamo la funzione di log-verosimiglianza negativa. Per iniziare, ricordiamo che la funzione di densità di probabilità (PDF) per una distribuzione esponenziale, dato un tasso <span class="math notranslate nohighlight">\(\lambda\)</span>, è definita come:</p>
+<div class="math notranslate nohighlight">
+\[
+f(x; \lambda) = \lambda e^{-\lambda x} \quad \text{per } x \geq 0.
+\]</div>
+<p>La verosimiglianza (<span class="math notranslate nohighlight">\(L\)</span>) di osservare un insieme di dati <span class="math notranslate nohighlight">\(\{x_1, x_2, ..., x_n\}\)</span> dato un parametro <span class="math notranslate nohighlight">\(\lambda\)</span> è il prodotto delle funzioni di densità di probabilità per ogni punto dati, assumendo che ciascun dato sia indipendente dagli altri. Quindi, per <span class="math notranslate nohighlight">\(n\)</span> dati osservati, la funzione di verosimiglianza è:</p>
+<div class="math notranslate nohighlight">
+\[
+L(\lambda) = \prod_{i=1}^{n} f(x_i; \lambda) = \prod_{i=1}^{n} \lambda e^{-\lambda x_i}
+\]</div>
+<p>La log-verosimiglianza (<span class="math notranslate nohighlight">\(\log(L(\lambda))\)</span>) è il logaritmo naturale di <span class="math notranslate nohighlight">\(L(\lambda)\)</span>. Utilizziamo il logaritmo per semplificare la moltiplicazione in una somma, il che rende più semplici sia il calcolo che la differenziazione. Pertanto, la log-verosimiglianza diventa:</p>
+<div class="math notranslate nohighlight">
+\[
+\log(L(\lambda)) = \log\left(\prod_{i=1}^{n} \lambda e^{-\lambda x_i}\right) = \sum_{i=1}^{n} \log(\lambda e^{-\lambda x_i}) = \sum_{i=1}^{n} (\log(\lambda) - \lambda x_i)
+\]</div>
+<p>Il motivo per utilizzare il negativo della log-verosimiglianza, cioè <span class="math notranslate nohighlight">\(-\log(L(\lambda))\)</span>, nelle tecniche di ottimizzazione, è perché molte librerie e funzioni di ottimizzazione sono progettate per minimizzare una funzione obiettivo piuttosto che massimizzarla. Dato che vogliamo trovare il valore di <span class="math notranslate nohighlight">\(\lambda\)</span> che massimizza la log-verosimiglianza (e quindi la verosimiglianza), possiamo invece minimizzare il suo negativo. Di conseguenza, la funzione obiettivo che passiamo all’algoritmo di minimizzazione è:</p>
+<div class="math notranslate nohighlight">
+\[
+-\log(L(\lambda)) = -\sum_{i=1}^{n} (\log(\lambda) - \lambda x_i)
+\]</div>
+<p>Scriviamo la funzione in Python:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">neg_log_likelihood</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+    <span class="n">lambda_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># Assicura che lambda_ sia almeno eps</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lambda_</span><span class="p">)</span> <span class="o">-</span> <span class="n">lambda_</span> <span class="o">*</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Minimizzaziamo la funzione di log-verosimiglianza negativa:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">neg_log_likelihood</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">data</span><span class="p">,),</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Il valore di lambda che massimizza la log-verosimiglianza è: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Il valore di lambda che massimizza la log-verosimiglianza è: 0.04166666292998713
+</pre></div>
+</div>
+</div>
+</div>
+<p>Avendo trovato il tasso <span class="math notranslate nohighlight">\(\lambda\)</span>, la stima di massima verosimiglianza del tempo di attesa medio diventa:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">/</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([24.00000215])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Visualizzazione.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lambda_opt</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">lambda_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">LL</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">neg_log_likelihood</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">L</span> <span class="ow">in</span> <span class="n">lambda_array</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lambda_array</span><span class="p">,</span> <span class="n">LL</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Log-likelihood&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lambda_opt</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Optimal $\lambda$ = </span><span class="si">{</span><span class="n">lambda_opt</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$\lambda$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Log-likelihood&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Log-likelihood over a range of $\lambda$ values&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ad33c32499edd0315ae4131d71634c6a2918be4e347cbed63abb27ab4eda1ea9.png" src="../_images/ad33c32499edd0315ae4131d71634c6a2918be4e347cbed63abb27ab4eda1ea9.png" />
+</div>
+</div>
 </section>
 <section id="conclusione-e-riflessioni-finali">
 <h2>Conclusione e Riflessioni Finali<a class="headerlink" href="#conclusione-e-riflessioni-finali" title="Link to this heading">#</a></h2>
 <p>La funzione di verosimiglianza rappresenta un elemento cruciale che collega i dati osservati ai parametri di un modello statistico. Essa fornisce una misura della plausibilità dei dati in relazione a diversi valori possibili dei parametri del modello. La strutturazione di una funzione di verosimiglianza richiede la considerazione di tre componenti fondamentali: il modello statistico che si presume abbia generato i dati, l’insieme di valori possibili per i parametri di tale modello e le osservazioni empiriche che effettivamente abbiamo a disposizione.</p>
 <p>La funzione di verosimiglianza è centrale nella pratica dell’inferenza statistica. Essa ci permette di quantificare quanto bene differenti set di parametri potrebbero aver generato i dati osservati. Questo è fondamentale sia per la selezione del modello che per la stima dei parametri, e pertanto è indispensabile per un’analisi dati rigorosa e per un’interpretazione accurata dei risultati.</p>
-<p>Un’applicazione pratica e illustrativa dei principi esposti in questo capitolo è fornita nel capitolo <a class="reference internal" href="10_rescorla_wagner.html#notebook-rescorla-wagner"><span class="std std-ref">Apprendimento per rinforzo</span></a>, che è un esempio di come la teoria della verosimiglianza possa essere applicata per affrontare questioni empiriche complesse in psicologia.</p>
+<p>Un’applicazione pratica e illustrativa dei principi esposti in questo capitolo è fornita nella sezione sul modello Rescorla-Wagner, che è un esempio di come la teoria della verosimiglianza possa essere applicata per affrontare questioni empiriche in psicologia.</p>
 <p>In sintesi, la comprensione e l’applicazione appropriata della funzione di verosimiglianza sono passaggi essenziali nel processo di analisi dati. Essa costituisce uno strumento indispensabile per chi è impegnato nella ricerca empirica e nell’interpretazione di dati complessi.</p>
 <div class="admonition-esercizi admonition">
 <p class="admonition-title">Esercizi</p>
@@ -1359,11 +1562,11 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-matplotlib: 3.8.3
-numpy     : 1.26.4
-arviz     : 0.17.1
 scipy     : 1.12.0
+matplotlib: 3.8.3
+arviz     : 0.17.1
 pandas    : 2.2.1
+numpy     : 1.26.4
 seaborn   : 0.13.2
 
 Watermark: 2.4.3
@@ -1453,13 +1656,11 @@ Watermark: 2.4.3
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-gaussiano-e-verosimiglianza">Modello Gaussiano e Verosimiglianza</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caso-di-una-singola-osservazione">Caso di una Singola Osservazione</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campione-indipendente-di-osservazioni-da-una-distribuzione-gaussiana">Campione indipendente di osservazioni da una distribuzione gaussiana</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-formale">Derivazione Formale</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-mu">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-di-massima-verosimiglianza-per-sigma-2">Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \sigma^2 \)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-stima-di-massima-verosimiglianza-per-mu">La Stima di Massima Verosimiglianza per <span class="math notranslate nohighlight">\( \mu \)</span></a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apprendimento-per-rinforzo">Apprendimento per rinforzo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-usando-la-distribuzione-esponenziale">Un esempio usando la distribuzione esponenziale</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione-e-riflessioni-finali">Conclusione e Riflessioni Finali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
