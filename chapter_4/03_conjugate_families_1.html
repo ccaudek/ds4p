@@ -80,7 +80,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Distribuzioni coniugate (2)" href="04_conjugate_families_2.html" />
-    <link rel="prev" title="Pensare ad una proporzione in termini soggettivi" href="02_subj_prop.html" />
+    <link rel="prev" title="Verosimiglianza Gaussiana: Metodo Basato su Griglia" href="02_grid_gauss.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -251,13 +251,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
@@ -850,7 +850,7 @@ dtype: float64
 <p>Una volta scelta una distribuzione a priori <span class="math notranslate nohighlight">\(Beta(2, 2)\)</span>, i cui parametri rispecchiano le nostre credenze iniziali su <span class="math notranslate nohighlight">\(\theta\)</span>, la distribuzione a posteriori diventa una Beta di parametri <span class="math notranslate nohighlight">\(\alpha + y\)</span> e <span class="math notranslate nohighlight">\(\beta + n - y\)</span>. Per i dati dell’esempio sulla sopravvivenza dei pazienti con AIDS, otteniamo la distribuzione a posteriori <span class="math notranslate nohighlight">\(p(\theta \mid n, y) \sim Beta(1763, 1084)\)</span>.</p>
 <p>Essendo <span class="math notranslate nohighlight">\(\mathbb{E}[Beta(\alpha, \beta)] = \frac{\alpha}{\alpha + \beta}\)</span>, il valore atteso a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> può essere calcolato come:</p>
 <div class="math notranslate nohighlight" id="equation-eq-ev-post-beta-bin-1">
-<span class="eqno">(55)<a class="headerlink" href="#equation-eq-ev-post-beta-bin-1" title="Link to this equation">#</a></span>\[
+<span class="eqno">(46)<a class="headerlink" href="#equation-eq-ev-post-beta-bin-1" title="Link to this equation">#</a></span>\[
 \mathbb{E}_{\text{post}} [\mathrm{Beta}(\alpha + y, \beta + n - y)] = \frac{\alpha + y}{\alpha + \beta +n}.
 \]</div>
 <p>Nel caso in cui la distribuzione a priori è debolmente informativa e il campione è molto grande, la distribuzione a priori esercita un effetto trascurabile sulla distribuzione a posteriori.</p>
@@ -880,7 +880,7 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.6020654882558295, 0.6362894604661353]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.6020654882558294, 0.6362894604661353]
 </pre></div>
 </div>
 </div>
@@ -938,7 +938,7 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/s7/z86r4t9j6yx376cm120nln6w0000gn/T/ipykernel_20771/1990880785.py:16: RuntimeWarning: divide by zero encountered in log
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_45952/1990880785.py:16: RuntimeWarning: divide by zero encountered in log
   log_likelihood = y * np.log(theta) + (n - y) * np.log(1 - theta)
 </pre></div>
 </div>
@@ -954,7 +954,7 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.6020654882558295, 0.6362894604661353]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.6020654882558294, 0.6362894604661353]
 </pre></div>
 </div>
 </div>
@@ -1015,7 +1015,7 @@ y \mid \theta &amp; \sim \text{Bin}(n = 40, \theta) \notag\\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/s7/z86r4t9j6yx376cm120nln6w0000gn/T/ipykernel_20771/431063134.py:16: RuntimeWarning: divide by zero encountered in log
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/cl/wwjrsxdd5tz7y9jr82nd5hrw0000gn/T/ipykernel_45952/431063134.py:16: RuntimeWarning: divide by zero encountered in log
   log_likelihood = y * np.log(theta) + (n - y) * np.log(1 - theta)
 </pre></div>
 </div>
@@ -1075,7 +1075,7 @@ y \mid \theta &amp; \sim \text{Bin}(n = 40, \theta) \notag\\
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 10 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Mar 28 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1084,17 +1084,17 @@ IPython version      : 8.22.2
 Compiler    : Clang 16.0.6 
 OS          : Darwin
 Release     : 23.4.0
-Machine     : arm64
-Processor   : arm
+Machine     : x86_64
+Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
-seaborn   : 0.13.2
-arviz     : 0.17.0
-scipy     : 1.12.0
 numpy     : 1.26.4
-matplotlib: 3.8.3
 pandas    : 2.2.1
+matplotlib: 3.8.3
+seaborn   : 0.13.2
+arviz     : 0.17.1
+scipy     : 1.12.0
 
 Watermark: 2.4.3
 </pre></div>
@@ -1135,12 +1135,12 @@ Watermark: 2.4.3
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="02_subj_prop.html"
+       href="02_grid_gauss.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Pensare ad una proporzione in termini soggettivi</p>
+        <p class="prev-next-title">Verosimiglianza Gaussiana: Metodo Basato su Griglia</p>
       </div>
     </a>
     <a class="right-next"
