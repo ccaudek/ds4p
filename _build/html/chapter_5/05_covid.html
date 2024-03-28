@@ -251,13 +251,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
@@ -599,7 +599,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
 </pre></div>
 </div>
@@ -970,7 +970,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7f60bb143f3600e3a9ccb87148f55e554257667c750c15bee7e35e9c5c302f6d.png" src="../_images/7f60bb143f3600e3a9ccb87148f55e554257667c750c15bee7e35e9c5c302f6d.png" />
+<img alt="../_images/7fc5d90d56cc5a6c4ee3a13f40ddc74cbefdb2ca5ac45ee77f624ef3dce7c394.png" src="../_images/7fc5d90d56cc5a6c4ee3a13f40ddc74cbefdb2ca5ac45ee77f624ef3dce7c394.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -984,7 +984,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/73a7fbdd9a2914942bc299acc552f1961912e4136e3cb3f34457bcbb9226f7c5.png" src="../_images/73a7fbdd9a2914942bc299acc552f1961912e4136e3cb3f34457bcbb9226f7c5.png" />
+<img alt="../_images/301cf290de1d71064b20d814fefea6de4fedd7814ce690180d97e8e7c846eef6.png" src="../_images/301cf290de1d71064b20d814fefea6de4fedd7814ce690180d97e8e7c846eef6.png" />
 </div>
 </div>
 <p>Per una descrizione più accurata, l’effetto della temperatura potrebbe essere modellato attraverso una funzione quadratica. Tuttavia, per semplicità, opteremo per una rappresentazione lineare. Nei dati relativi al periodo pre-COVID-19, un aumento di un grado nella temperatura è associato a una diminuzione media di 764 decessi.</p>
@@ -1057,40 +1057,305 @@ Name: t, Length: 168, dtype: int64
 <span class="expanded">Hide code cell output</span>
 </summary>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Auto-assigning NUTS sampler...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing NUTS using jitter+adapt_diag...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multiprocess sampling (4 chains in 4 jobs)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NUTS: [intercept, linear trend, temp coeff, sigma]
-</pre></div>
-</div>
-<div class="output text_html">
-<style>
-    /* Turns off some styling */
-    progress {
-        /* gets rid of default border in Firefox and Opera. */
-        border: none;
-        /* Needs to be in here for Safari polyfill so background images work as expected. */
-        background-size: auto;
-    }
-    progress:not([value]), progress:not([value])::-webkit-progress-bar {
-        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
-    }
-    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-        background: #F44336;
-    }
-</style>
-</div><div class="output text_html">
-    <div>
-      <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-      100.00% [8000/8000 00:02&lt;00:00 Sampling 4 chains, 0 divergences]
-    </div>
-    </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 3 seconds.
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">random_seed</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:667,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, nuts_sampler_kwargs, callback, mp_ctx, model, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">664</span>         <span class="n">auto_nuts_init</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="g g-Whitespace">    </span><span class="mi">666</span> <span class="n">initial_points</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">667</span> <span class="n">step</span> <span class="o">=</span> <span class="n">assign_step_methods</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="n">pm</span><span class="o">.</span><span class="n">STEP_METHODS</span><span class="p">,</span> <span class="n">step_kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">669</span> <span class="k">if</span> <span class="n">nuts_sampler</span> <span class="o">!=</span> <span class="s2">&quot;pymc&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">670</span>     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">NUTS</span><span class="p">):</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:232,</span> in <span class="ni">assign_step_methods</span><span class="nt">(model, step, methods, step_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">224</span>         <span class="n">selected</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">225</span>             <span class="n">methods_list</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">226</span>             <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">method</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="n">rv_var</span><span class="p">,</span> <span class="n">has_gradient</span><span class="o">=</span><span class="n">has_gradient</span><span class="p">:</span> <span class="n">method</span><span class="o">.</span><span class="n">_competence</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">    </span><span class="mi">227</span>                 <span class="n">var</span><span class="p">,</span> <span class="n">has_gradient</span>
+<span class="g g-Whitespace">    </span><span class="mi">228</span>             <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">229</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">230</span>         <span class="n">selected_steps</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">selected</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">232</span> <span class="k">return</span> <span class="n">instantiate_steppers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">selected_steps</span><span class="p">,</span> <span class="n">step_kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:133,</span> in <span class="ni">instantiate_steppers</span><span class="nt">(model, steps, selected_steps, step_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">131</span>         <span class="n">args</span> <span class="o">=</span> <span class="n">step_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">{})</span>
+<span class="g g-Whitespace">    </span><span class="mi">132</span>         <span class="n">used_keys</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">133</span>         <span class="n">step</span> <span class="o">=</span> <span class="n">step_class</span><span class="p">(</span><span class="nb">vars</span><span class="o">=</span><span class="nb">vars</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span>         <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">136</span> <span class="n">unused_args</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">step_kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">used_keys</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/step_methods/hmc/nuts.py:180,</span> in <span class="ni">NUTS.__init__</span><span class="nt">(self, vars, max_treedepth, early_max_treedepth, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_treedepth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">early_max_treedepth</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span><span class="w">     </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Set up the No-U-Turn sampler.</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span><span class="sd">     Parameters</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">    </span><span class="mi">178</span><span class="sd">     `pm.sample` to the desired number of tuning steps.</span>
+<span class="g g-Whitespace">    </span><span class="mi">179</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">180</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="bp">self</span><span class="o">.</span><span class="n">max_treedepth</span> <span class="o">=</span> <span class="n">max_treedepth</span>
+<span class="g g-Whitespace">    </span><span class="mi">183</span>     <span class="bp">self</span><span class="o">.</span><span class="n">early_max_treedepth</span> <span class="o">=</span> <span class="n">early_max_treedepth</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/step_methods/hmc/base_hmc.py:109,</span> in <span class="ni">BaseHMC.__init__</span><span class="nt">(self, vars, scaling, step_scale, is_cov, model, blocked, potential, dtype, Emax, target_accept, gamma, k, t0, adapt_step_size, step_rand, **pytensor_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">107</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">108</span>     <span class="nb">vars</span> <span class="o">=</span> <span class="n">get_value_vars_from_user_vars</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">109</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">blocked</span><span class="o">=</span><span class="n">blocked</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="o">**</span><span class="n">pytensor_kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">111</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapt_step_size</span> <span class="o">=</span> <span class="n">adapt_step_size</span>
+<span class="g g-Whitespace">    </span><span class="mi">112</span> <span class="bp">self</span><span class="o">.</span><span class="n">Emax</span> <span class="o">=</span> <span class="n">Emax</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/step_methods/arraystep.py:162,</span> in <span class="ni">GradientSharedStep.__init__</span><span class="nt">(self, vars, model, blocked, dtype, logp_dlogp_func, **pytensor_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">159</span> <span class="n">model</span> <span class="o">=</span> <span class="n">modelcontext</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">161</span> <span class="k">if</span> <span class="n">logp_dlogp_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">162</span>     <span class="n">func</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">logp_dlogp_function</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="o">**</span><span class="n">pytensor_kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">163</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">164</span>     <span class="n">func</span> <span class="o">=</span> <span class="n">logp_dlogp_func</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/model/core.py:608,</span> in <span class="ni">Model.logp_dlogp_function</span><span class="nt">(self, grad_vars, tempered, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">602</span> <span class="n">ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_point</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">603</span> <span class="n">extra_vars_and_values</span> <span class="o">=</span> <span class="p">{</span>
+<span class="g g-Whitespace">    </span><span class="mi">604</span>     <span class="n">var</span><span class="p">:</span> <span class="n">ip</span><span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">605</span>     <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_vars</span>
+<span class="g g-Whitespace">    </span><span class="mi">606</span>     <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">input_vars</span> <span class="ow">and</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">grad_vars</span>
+<span class="g g-Whitespace">    </span><span class="mi">607</span> <span class="p">}</span>
+<span class="ne">--&gt; </span><span class="mi">608</span> <span class="k">return</span> <span class="n">ValueGradFunction</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">grad_vars</span><span class="p">,</span> <span class="n">extra_vars_and_values</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/model/core.py:342,</span> in <span class="ni">ValueGradFunction.__init__</span><span class="nt">(self, costs, grad_vars, extra_vars_and_values, dtype, casting, compute_grads, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">338</span>     <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">cost</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">340</span> <span class="n">inputs</span> <span class="o">=</span> <span class="n">grad_vars</span>
+<span class="ne">--&gt; </span><span class="mi">342</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pytensor_function</span> <span class="o">=</span> <span class="n">compile_pymc</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">givens</span><span class="o">=</span><span class="n">givens</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/pytensorf.py:985,</span> in <span class="ni">compile_pymc</span><span class="nt">(inputs, outputs, random_seed, mode, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">983</span> <span class="n">opt_qry</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">provided_optimizer</span><span class="o">.</span><span class="n">including</span><span class="p">(</span><span class="s2">&quot;random_make_inplace&quot;</span><span class="p">,</span> <span class="n">check_parameter_opt</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">984</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span><span class="n">linker</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">linker</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt_qry</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">985</span> <span class="n">pytensor_function</span> <span class="o">=</span> <span class="n">pytensor</span><span class="o">.</span><span class="n">function</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">986</span>     <span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">987</span>     <span class="n">outputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">988</span>     <span class="n">updates</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="n">rng_updates</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;updates&quot;</span><span class="p">,</span> <span class="p">{})},</span>
+<span class="g g-Whitespace">    </span><span class="mi">989</span>     <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">990</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">991</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">992</span> <span class="k">return</span> <span class="n">pytensor_function</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/compile/function/__init__.py:315,</span> in <span class="ni">function</span><span class="nt">(inputs, outputs, mode, updates, givens, no_default_updates, accept_inplace, name, rebuild_strict, allow_input_downcast, profile, on_unused_input)</span>
+<span class="g g-Whitespace">    </span><span class="mi">309</span>     <span class="n">fn</span> <span class="o">=</span> <span class="n">orig_function</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">310</span>         <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">accept_inplace</span><span class="o">=</span><span class="n">accept_inplace</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span>
+<span class="g g-Whitespace">    </span><span class="mi">311</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">312</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">313</span>     <span class="c1"># note: pfunc will also call orig_function -- orig_function is</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span>     <span class="c1">#      a choke point that all compilation must pass through</span>
+<span class="ne">--&gt; </span><span class="mi">315</span>     <span class="n">fn</span> <span class="o">=</span> <span class="n">pfunc</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">316</span>         <span class="n">params</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">317</span>         <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">318</span>         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">319</span>         <span class="n">updates</span><span class="o">=</span><span class="n">updates</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">320</span>         <span class="n">givens</span><span class="o">=</span><span class="n">givens</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">321</span>         <span class="n">no_default_updates</span><span class="o">=</span><span class="n">no_default_updates</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">322</span>         <span class="n">accept_inplace</span><span class="o">=</span><span class="n">accept_inplace</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">323</span>         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">324</span>         <span class="n">rebuild_strict</span><span class="o">=</span><span class="n">rebuild_strict</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">325</span>         <span class="n">allow_input_downcast</span><span class="o">=</span><span class="n">allow_input_downcast</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">326</span>         <span class="n">on_unused_input</span><span class="o">=</span><span class="n">on_unused_input</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">327</span>         <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">328</span>         <span class="n">output_keys</span><span class="o">=</span><span class="n">output_keys</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">329</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">330</span> <span class="k">return</span> <span class="n">fn</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/compile/function/pfunc.py:469,</span> in <span class="ni">pfunc</span><span class="nt">(params, outputs, mode, updates, givens, no_default_updates, accept_inplace, name, rebuild_strict, allow_input_downcast, profile, on_unused_input, output_keys, fgraph)</span>
+<span class="g g-Whitespace">    </span><span class="mi">455</span>     <span class="n">profile</span> <span class="o">=</span> <span class="n">ProfileStats</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">profile</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">457</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">cloned_outputs</span> <span class="o">=</span> <span class="n">construct_pfunc_ins_and_outs</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">458</span>     <span class="n">params</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">459</span>     <span class="n">outputs</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">466</span>     <span class="n">fgraph</span><span class="o">=</span><span class="n">fgraph</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">467</span> <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">469</span> <span class="k">return</span> <span class="n">orig_function</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">470</span>     <span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">471</span>     <span class="n">cloned_outputs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">472</span>     <span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">473</span>     <span class="n">accept_inplace</span><span class="o">=</span><span class="n">accept_inplace</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">474</span>     <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">475</span>     <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">476</span>     <span class="n">on_unused_input</span><span class="o">=</span><span class="n">on_unused_input</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">477</span>     <span class="n">output_keys</span><span class="o">=</span><span class="n">output_keys</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">478</span>     <span class="n">fgraph</span><span class="o">=</span><span class="n">fgraph</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">479</span> <span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/compile/function/types.py:1762,</span> in <span class="ni">orig_function</span><span class="nt">(inputs, outputs, mode, accept_inplace, name, profile, on_unused_input, output_keys, fgraph)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1750</span>     <span class="n">m</span> <span class="o">=</span> <span class="n">Maker</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1751</span>         <span class="n">inputs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1752</span>         <span class="n">outputs</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1759</span>         <span class="n">fgraph</span><span class="o">=</span><span class="n">fgraph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1760</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1761</span>     <span class="k">with</span> <span class="n">config</span><span class="o">.</span><span class="n">change_flags</span><span class="p">(</span><span class="n">compute_test_value</span><span class="o">=</span><span class="s2">&quot;off&quot;</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1762</span>         <span class="n">fn</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">defaults</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1763</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1764</span>     <span class="k">if</span> <span class="n">profile</span> <span class="ow">and</span> <span class="n">fn</span><span class="p">:</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/compile/function/types.py:1654,</span> in <span class="ni">FunctionMaker.create</span><span class="nt">(self, input_storage, storage_map)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1651</span> <span class="n">start_import_time</span> <span class="o">=</span> <span class="n">pytensor</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">cmodule</span><span class="o">.</span><span class="n">import_time</span>
+<span class="g g-Whitespace">   </span><span class="mi">1653</span> <span class="k">with</span> <span class="n">config</span><span class="o">.</span><span class="n">change_flags</span><span class="p">(</span><span class="n">traceback__limit</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">traceback__compile_limit</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1654</span>     <span class="n">_fn</span><span class="p">,</span> <span class="n">_i</span><span class="p">,</span> <span class="n">_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linker</span><span class="o">.</span><span class="n">make_thunk</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1655</span>         <span class="n">input_storage</span><span class="o">=</span><span class="n">input_storage_lists</span><span class="p">,</span> <span class="n">storage_map</span><span class="o">=</span><span class="n">storage_map</span>
+<span class="g g-Whitespace">   </span><span class="mi">1656</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1658</span> <span class="n">end_linker</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1660</span> <span class="n">linker_time</span> <span class="o">=</span> <span class="n">end_linker</span> <span class="o">-</span> <span class="n">start_linker</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/basic.py:245,</span> in <span class="ni">LocalLinker.make_thunk</span><span class="nt">(self, input_storage, output_storage, storage_map, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="k">def</span> <span class="nf">make_thunk</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">239</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">240</span>     <span class="n">input_storage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;InputStorageType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">243</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">&quot;BasicThunkType&quot;</span><span class="p">,</span> <span class="s2">&quot;InputStorageType&quot;</span><span class="p">,</span> <span class="s2">&quot;OutputStorageType&quot;</span><span class="p">]:</span>
+<span class="ne">--&gt; </span><span class="mi">245</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_all</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">246</span>         <span class="n">input_storage</span><span class="o">=</span><span class="n">input_storage</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">247</span>         <span class="n">output_storage</span><span class="o">=</span><span class="n">output_storage</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">248</span>         <span class="n">storage_map</span><span class="o">=</span><span class="n">storage_map</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">249</span>     <span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/vm.py:1235,</span> in <span class="ni">VMLinker.make_all</span><span class="nt">(self, profiler, input_storage, output_storage, storage_map)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1230</span> <span class="n">thunk_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1231</span> <span class="c1"># no-recycling is done at each VM.__call__ So there is</span>
+<span class="g g-Whitespace">   </span><span class="mi">1232</span> <span class="c1"># no need to cause duplicate c code by passing</span>
+<span class="g g-Whitespace">   </span><span class="mi">1233</span> <span class="c1"># no_recycling here.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1234</span> <span class="n">thunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="ne">-&gt; </span><span class="mi">1235</span>     <span class="n">node</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">make_thunk</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">storage_map</span><span class="p">,</span> <span class="n">compute_map</span><span class="p">,</span> <span class="p">[],</span> <span class="n">impl</span><span class="o">=</span><span class="n">impl</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1236</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1237</span> <span class="n">linker_make_thunk_time</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">thunk_start</span>
+<span class="g g-Whitespace">   </span><span class="mi">1238</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">thunks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;lazy&quot;</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1239</span>     <span class="c1"># We don&#39;t want all ops maker to think about lazy Ops.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1240</span>     <span class="c1"># So if they didn&#39;t specify that its lazy or not, it isn&#39;t.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1241</span>     <span class="c1"># If this member isn&#39;t present, it will crash later.</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/op.py:119,</span> in <span class="ni">COp.make_thunk</span><span class="nt">(self, node, storage_map, compute_map, no_recycling, impl)</span>
+<span class="g g-Whitespace">    </span><span class="mi">115</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_node</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="n">node</span><span class="p">,</span> <span class="n">storage_map</span><span class="o">=</span><span class="n">storage_map</span><span class="p">,</span> <span class="n">compute_map</span><span class="o">=</span><span class="n">compute_map</span><span class="p">,</span> <span class="n">impl</span><span class="o">=</span><span class="s2">&quot;c&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">117</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">119</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_c_thunk</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">storage_map</span><span class="p">,</span> <span class="n">compute_map</span><span class="p">,</span> <span class="n">no_recycling</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span> <span class="k">except</span> <span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">,</span> <span class="n">MethodNotDefined</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span>     <span class="c1"># We requested the c code, so don&#39;t catch the error.</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span>     <span class="k">if</span> <span class="n">impl</span> <span class="o">==</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/op.py:84,</span> in <span class="ni">COp.make_c_thunk</span><span class="nt">(self, node, storage_map, compute_map, no_recycling)</span>
+<span class="g g-Whitespace">     </span><span class="mi">82</span>         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Disabling C code for </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2"> due to unsupported float16&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">83</span>         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;float16&quot;</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">84</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">make_thunk</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">85</span>     <span class="n">input_storage</span><span class="o">=</span><span class="n">node_input_storage</span><span class="p">,</span> <span class="n">output_storage</span><span class="o">=</span><span class="n">node_output_storage</span>
+<span class="g g-Whitespace">     </span><span class="mi">86</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">87</span> <span class="n">thunk</span><span class="p">,</span> <span class="n">node_input_filters</span><span class="p">,</span> <span class="n">node_output_filters</span> <span class="o">=</span> <span class="n">outputs</span>
+<span class="g g-Whitespace">     </span><span class="mi">89</span> <span class="nd">@is_cthunk_wrapper_type</span>
+<span class="g g-Whitespace">     </span><span class="mi">90</span> <span class="k">def</span> <span class="nf">rval</span><span class="p">():</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/basic.py:1209,</span> in <span class="ni">CLinker.make_thunk</span><span class="nt">(self, input_storage, output_storage, storage_map, cache, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1174</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Compile this linker&#39;s `self.fgraph` and return a function that performs the computations.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1175</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">1176</span><span class="sd"> The return values can be used as follows:</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1206</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">1207</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1208</span> <span class="n">init_tasks</span><span class="p">,</span> <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_init_tasks</span><span class="p">()</span>
+<span class="ne">-&gt; </span><span class="mi">1209</span> <span class="n">cthunk</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">in_storage</span><span class="p">,</span> <span class="n">out_storage</span><span class="p">,</span> <span class="n">error_storage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compile__</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1210</span>     <span class="n">input_storage</span><span class="p">,</span> <span class="n">output_storage</span><span class="p">,</span> <span class="n">storage_map</span><span class="p">,</span> <span class="n">cache</span>
+<span class="g g-Whitespace">   </span><span class="mi">1211</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1213</span> <span class="n">res</span> <span class="o">=</span> <span class="n">_CThunk</span><span class="p">(</span><span class="n">cthunk</span><span class="p">,</span> <span class="n">init_tasks</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">error_storage</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1214</span> <span class="n">res</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_order</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/basic.py:1129,</span> in <span class="ni">CLinker.__compile__</span><span class="nt">(self, input_storage, output_storage, storage_map, cache)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1127</span> <span class="n">input_storage</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">input_storage</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1128</span> <span class="n">output_storage</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">output_storage</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1129</span> <span class="n">thunk</span><span class="p">,</span> <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cthunk_factory</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1130</span>     <span class="n">error_storage</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span>     <span class="n">input_storage</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1132</span>     <span class="n">output_storage</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1133</span>     <span class="n">storage_map</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1134</span>     <span class="n">cache</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1135</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1136</span> <span class="k">return</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1137</span>     <span class="n">thunk</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1138</span>     <span class="n">module</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1147</span>     <span class="n">error_storage</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1148</span> <span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/basic.py:1653,</span> in <span class="ni">CLinker.cthunk_factory</span><span class="nt">(self, error_storage, in_storage, out_storage, storage_map, cache)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1651</span>     <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1652</span>         <span class="n">cache</span> <span class="o">=</span> <span class="n">get_module_cache</span><span class="p">()</span>
+<span class="ne">-&gt; </span><span class="mi">1653</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">module_from_key</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">lnk</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1655</span> <span class="nb">vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">orphans</span>
+<span class="g g-Whitespace">   </span><span class="mi">1656</span> <span class="c1"># List of indices that should be ignored when passing the arguments</span>
+<span class="g g-Whitespace">   </span><span class="mi">1657</span> <span class="c1"># (basically, everything that the previous call to uniq eliminated)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/cmodule.py:1231,</span> in <span class="ni">ModuleCache.module_from_key</span><span class="nt">(self, key, lnk)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1229</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1230</span>     <span class="n">location</span> <span class="o">=</span> <span class="n">dlimport_workdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirname</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1231</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">lnk</span><span class="o">.</span><span class="n">compile_cmodule</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1232</span>     <span class="n">name</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="vm">__file__</span>
+<span class="g g-Whitespace">   </span><span class="mi">1233</span>     <span class="k">assert</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/basic.py:1552,</span> in <span class="ni">CLinker.compile_cmodule</span><span class="nt">(self, location)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1550</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1551</span>     <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LOCATION </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1552</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">c_compiler</span><span class="o">.</span><span class="n">compile_str</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1553</span>         <span class="n">module_name</span><span class="o">=</span><span class="n">mod</span><span class="o">.</span><span class="n">code_hash</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1554</span>         <span class="n">src_code</span><span class="o">=</span><span class="n">src_code</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1555</span>         <span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1556</span>         <span class="n">include_dirs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">header_dirs</span><span class="p">(),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1557</span>         <span class="n">lib_dirs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lib_dirs</span><span class="p">(),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1558</span>         <span class="n">libs</span><span class="o">=</span><span class="n">libs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1559</span>         <span class="n">preargs</span><span class="o">=</span><span class="n">preargs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1560</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1561</span> <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1562</span>     <span class="n">e</span><span class="o">.</span><span class="n">args</span> <span class="o">+=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fgraph</span><span class="p">),)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/link/c/cmodule.py:2590,</span> in <span class="ni">GCC_compiler.compile_str</span><span class="nt">(module_name, src_code, location, include_dirs, lib_dirs, libs, preargs, py_module, hide_symbols)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2587</span>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2589</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">2590</span>     <span class="n">p_out</span> <span class="o">=</span> <span class="n">output_subprocess_Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2591</span>     <span class="n">compile_stderr</span> <span class="o">=</span> <span class="n">p_out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">2592</span> <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">2593</span>     <span class="c1"># An exception can occur e.g. if `g++` is not found.</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pytensor/utils.py:212,</span> in <span class="ni">output_subprocess_Popen</span><span class="nt">(command, **params)</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span> <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess_Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span> <span class="c1"># we need to use communicate to make sure we don&#39;t deadlock around</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span> <span class="c1"># the stdout/stderr pipe.</span>
+<span class="ne">--&gt; </span><span class="mi">212</span> <span class="n">out</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">return</span> <span class="n">out</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">returncode</span><span class="p">,)</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/subprocess.py:1209,</span> in <span class="ni">Popen.communicate</span><span class="nt">(self, input, timeout)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1206</span>     <span class="n">endtime</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1208</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1209</span>     <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_communicate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1210</span> <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1211</span>     <span class="c1"># https://bugs.python.org/issue25942</span>
+<span class="g g-Whitespace">   </span><span class="mi">1212</span>     <span class="c1"># See the detailed comment in .wait().</span>
+<span class="g g-Whitespace">   </span><span class="mi">1213</span>     <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/subprocess.py:2113,</span> in <span class="ni">Popen._communicate</span><span class="nt">(self, input, endtime, orig_timeout)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2106</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_check_timeout</span><span class="p">(</span><span class="n">endtime</span><span class="p">,</span> <span class="n">orig_timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2107</span>                         <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2108</span>                         <span class="n">skip_check_and_raise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2109</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>  <span class="c1"># Impossible :)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2110</span>         <span class="s1">&#39;_check_timeout(..., skip_check_and_raise=True) &#39;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2111</span>         <span class="s1">&#39;failed to raise TimeoutExpired.&#39;</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">2113</span> <span class="n">ready</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2114</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_timeout</span><span class="p">(</span><span class="n">endtime</span><span class="p">,</span> <span class="n">orig_timeout</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2116</span> <span class="c1"># XXX Rewrite these to use non-blocking I/O on the file</span>
+<span class="g g-Whitespace">   </span><span class="mi">2117</span> <span class="c1"># objects; they are no longer using C stdio!</span>
+
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/selectors.py:415,</span> in <span class="ni">_PollLikeSelector.select</span><span class="nt">(self, timeout)</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span> <span class="n">ready</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">415</span>     <span class="n">fd_event_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span> <span class="k">except</span> <span class="ne">InterruptedError</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span>     <span class="k">return</span> <span class="n">ready</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
 </div>
 </div>
@@ -1145,7 +1410,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0ba2bbadb77f1b44abeaf3e68bfe6137c69e3390cf27b8afff65c54c52972b91.png" src="../_images/0ba2bbadb77f1b44abeaf3e68bfe6137c69e3390cf27b8afff65c54c52972b91.png" />
+<img alt="../_images/6181bf040a8d4cbe32cd81f5430e0807079f31e082eac54a6c8244fa0b7a3591.png" src="../_images/6181bf040a8d4cbe32cd81f5430e0807079f31e082eac54a6c8244fa0b7a3591.png" />
 </div>
 </div>
 <p>Il modello, pur non essendo esente da limitazioni, dimostra un’alta capacità predittiva del numero di decessi in relazione al tempo, avvalendosi unicamente del tempo e della temperatura come variabili indipendenti.</p>
@@ -1164,7 +1429,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7ab5d866d492f8fec13052b4e521162308881ab0df34b8f0c898db0e4c51ee5b.png" src="../_images/7ab5d866d492f8fec13052b4e521162308881ab0df34b8f0c898db0e4c51ee5b.png" />
+<img alt="../_images/1b3c29631b3a110e3067260e10a176d60d4671b40a3d4fafb8413e2c305b41e4.png" src="../_images/1b3c29631b3a110e3067260e10a176d60d4671b40a3d4fafb8413e2c305b41e4.png" />
 </div>
 </div>
 <p>Possiamo notare una buona corrispondenza tra i dati osservati e le predizioni del modello.</p>
@@ -1229,7 +1494,7 @@ Name: t, Length: 168, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/88c2146d10d09ce54b2584026bdf30e7a33d855c8dc4fc5596013d9f3933aefb.png" src="../_images/88c2146d10d09ce54b2584026bdf30e7a33d855c8dc4fc5596013d9f3933aefb.png" />
+<img alt="../_images/df90cb3a95499a4ee3108e05a4f08ca28416f327f1a02ce6a46d1e6592144fb8.png" src="../_images/df90cb3a95499a4ee3108e05a4f08ca28416f327f1a02ce6a46d1e6592144fb8.png" />
 </div>
 </div>
 <p>Alla figura è sovrapposta una spezzata (la linea blu) che, nel periodo post-covid, descrive il numero effettivo di morti.</p>
@@ -1615,10 +1880,10 @@ array([56704, 43650, 49723, 88141, 52363, 42614, 40778, 37184, 42494,
        46282, 51317, 56672, 73315, 58767, 48624, 41513, 37864, 41223,
        43264, 43151, 47520, 46511, 51602, 52859, 53158, 45869, 49489,
        45919, 48611])
-Dimensions without coordinates: t</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'></div><ul class='xr-dim-list'><li><span>t</span>: 29</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-6490086b-1514-4933-bdec-5e3317fb041f' class='xr-array-in' type='checkbox' checked><label for='section-6490086b-1514-4933-bdec-5e3317fb041f' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>56704 43650 49723 88141 52363 42614 ... 53158 45869 49489 45919 48611</span></div><div class='xr-array-data'><pre>array([56704, 43650, 49723, 88141, 52363, 42614, 40778, 37184, 42494,
+Dimensions without coordinates: t</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'></div><ul class='xr-dim-list'><li><span>t</span>: 29</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-0f07109c-2369-466f-8561-cefae9f654f9' class='xr-array-in' type='checkbox' checked><label for='section-0f07109c-2369-466f-8561-cefae9f654f9' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>56704 43650 49723 88141 52363 42614 ... 53158 45869 49489 45919 48611</span></div><div class='xr-array-data'><pre>array([56704, 43650, 49723, 88141, 52363, 42614, 40778, 37184, 42494,
        46282, 51317, 56672, 73315, 58767, 48624, 41513, 37864, 41223,
        43264, 43151, 47520, 46511, 51602, 52859, 53158, 45869, 49489,
-       45919, 48611])</pre></div></div></li><li class='xr-section-item'><input id='section-2644eb37-7407-4672-9ec7-142e8c738204' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-2644eb37-7407-4672-9ec7-142e8c738204' class='xr-section-summary'  title='Expand/collapse section'>Coordinates: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-42191c30-35f2-4d36-82c2-625318e642dd' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-42191c30-35f2-4d36-82c2-625318e642dd' class='xr-section-summary'  title='Expand/collapse section'>Indexes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-7a61f9c1-4204-4296-8469-32803fbae08b' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-7a61f9c1-4204-4296-8469-32803fbae08b' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+       45919, 48611])</pre></div></div></li><li class='xr-section-item'><input id='section-efff224c-e917-4dbe-bb7d-0271ec11e8e3' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-efff224c-e917-4dbe-bb7d-0271ec11e8e3' class='xr-section-summary'  title='Expand/collapse section'>Coordinates: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-3e0abdb0-813f-493e-86f5-6ff297983f41' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-3e0abdb0-813f-493e-86f5-6ff297983f41' class='xr-section-summary'  title='Expand/collapse section'>Indexes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-b6a15c8d-285c-4e2e-9ee2-58a6c23e1a6b' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-b6a15c8d-285c-4e2e-9ee2-58a6c23e1a6b' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1991,97 +2256,97 @@ dl.xr-attrs {
   fill: currentColor;
 }
 </style><pre class='xr-text-repr-fallback'>&lt;xarray.DataArray &#x27;obs&#x27; (chain: 4, draw: 1000, t: 29)&gt; Size: 928kB
-array([[[47819.03714256, 49822.16509107, 46607.89464031, ...,
-         44640.16132465, 48893.59995802, 44272.43448564],
-        [49999.53902903, 43745.8295672 , 46991.46525648, ...,
-         53789.51020379, 49537.0887294 , 43611.05519357],
-        [45778.9530229 , 48919.07841387, 43830.07904382, ...,
-         47140.69579109, 46720.94198621, 39018.61803794],
+array([[[48152.75899184, 50294.95748082, 46848.34887964, ...,
+         44675.76398356, 49241.64232162, 44304.54987353],
+        [48727.7080539 , 41987.24687016, 45492.05291551, ...,
+         52477.53608768, 48118.00309785, 42279.56514752],
+        [46428.47742523, 49449.39568012, 44600.46575709, ...,
+         48100.34293625, 47684.54012245, 40273.00646477],
         ...,
-        [47222.43812761, 41562.72649444, 45541.65249883, ...,
-         47673.00525774, 49045.68465297, 48270.91709953],
-        [37667.38944505, 48079.23594067, 47966.03805358, ...,
-         46792.41061598, 49175.52927844, 48215.43578749],
-        [42810.83837686, 42976.04870558, 43965.6108836 , ...,
-         42802.70549745, 48676.46870084, 43263.59160807]],
+        [46605.31215985, 40890.5987238 , 44892.06005117, ...,
+         46856.6265952 , 48189.00915932, 47266.42644048],
+        [37545.47239085, 47045.41249632, 46918.76897892, ...,
+         45814.18497647, 47915.40533541, 46862.30433897],
+        [42171.97271911, 42290.25233126, 43303.10634499, ...,
+         42133.97465134, 48042.16315407, 42990.92378607]],
 
-       [[45644.05325069, 49701.56472137, 49556.79051092, ...,
-         46196.82626104, 50536.60335665, 44760.35309777],
-        [45283.50901741, 41677.31784725, 46588.45964019, ...,
-         41921.65356066, 47209.23430796, 37411.67163404],
-        [51626.45136291, 42409.26811062, 40936.2422117 , ...,
-         43716.77277299, 48268.40378432, 37566.15411593],
+       [[46119.92320877, 50019.10395609, 49887.33931288, ...,
+         46763.82375909, 50946.62657244, 45425.16247781],
+        [45163.44537932, 41615.98546715, 46460.60940366, ...,
+         41832.63248948, 47007.25720883, 37123.9924852 ],
+        [52119.97654278, 42810.09200802, 41346.07229808, ...,
+         44192.1690984 , 48836.95453203, 38203.28718174],
 ...
-        [51153.93579937, 50322.41197562, 43352.04374094, ...,
-         45687.80655582, 46212.86771219, 43966.63401635],
-        [51208.89337118, 49236.44982782, 48597.96003906, ...,
-         45648.18909919, 49520.28257898, 41909.10425458],
-        [48853.42437843, 49153.94036237, 48283.30063948, ...,
-         40618.08173028, 45843.06401765, 45460.03512017]],
+        [53606.07884334, 52521.01616977, 43714.15795239, ...,
+         46805.87659101, 47565.71454669, 44960.3756466 ],
+        [50914.31093333, 48679.42351714, 47984.7059714 , ...,
+         44633.43772619, 49027.92375061, 40685.63473523],
+        [50099.4187396 , 50489.93880525, 49553.61290974, ...,
+         42011.45963149, 47069.26578997, 46145.22625728]],
 
-       [[54552.47638645, 44390.85942427, 48451.52323594, ...,
-         46831.22401061, 48965.74011902, 39781.54773685],
-        [47065.93392308, 45454.05257449, 50959.66589854, ...,
-         49028.05617394, 40373.28062492, 42060.31173417],
-        [48541.52447619, 52431.37077524, 48844.98930159, ...,
-         52613.58255333, 46648.9545463 , 40964.19143048],
+       [[55245.13227075, 45559.92881929, 49423.39391575, ...,
+         48031.81946984, 49989.57787202, 40953.06984358],
+        [45715.42817355, 44002.82658208, 49729.31777767, ...,
+         47538.89750403, 38646.41965929, 40616.16183887],
+        [48816.68568008, 52693.89105892, 49123.57773928, ...,
+         52850.95765236, 46868.88961938, 40994.32581777],
         ...,
-        [43892.5199118 , 48282.96579071, 46755.83657355, ...,
-         41528.06832226, 40131.98754281, 42166.91494545],
-        [48037.96097073, 48661.44990251, 47787.07646144, ...,
-         46718.19632448, 43019.09547154, 46177.45642881],
-        [45288.13141496, 43536.12272505, 42411.55937899, ...,
-         43609.21951583, 50663.14006015, 49312.66127047]]])
+        [43559.06799639, 48279.92281342, 46577.56748359, ...,
+         40756.07019898, 39043.08639229, 40576.86081157],
+        [46403.94182979, 46994.65213133, 46074.8744931 , ...,
+         44709.63052006, 40684.00377053, 45368.89714235],
+        [46621.90059107, 45226.02882315, 44143.96642714, ...,
+         45081.66332355, 50874.45923613, 48862.49207912]]])
 Coordinates:
   * chain    (chain) int64 32B 0 1 2 3
   * draw     (draw) int64 8kB 0 1 2 3 4 5 6 7 ... 993 994 995 996 997 998 999
-  * t        (t) int64 232B 0 1 2 3 4 5 6 7 8 9 ... 20 21 22 23 24 25 26 27 28</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'obs'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>chain</span>: 4</li><li><span class='xr-has-index'>draw</span>: 1000</li><li><span class='xr-has-index'>t</span>: 29</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-e824fe67-8d6d-41b2-a39e-209aa47fd617' class='xr-array-in' type='checkbox' checked><label for='section-e824fe67-8d6d-41b2-a39e-209aa47fd617' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>4.782e+04 4.982e+04 4.661e+04 ... 4.361e+04 5.066e+04 4.931e+04</span></div><div class='xr-array-data'><pre>array([[[47819.03714256, 49822.16509107, 46607.89464031, ...,
-         44640.16132465, 48893.59995802, 44272.43448564],
-        [49999.53902903, 43745.8295672 , 46991.46525648, ...,
-         53789.51020379, 49537.0887294 , 43611.05519357],
-        [45778.9530229 , 48919.07841387, 43830.07904382, ...,
-         47140.69579109, 46720.94198621, 39018.61803794],
+  * t        (t) int64 232B 0 1 2 3 4 5 6 7 8 9 ... 20 21 22 23 24 25 26 27 28</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'obs'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>chain</span>: 4</li><li><span class='xr-has-index'>draw</span>: 1000</li><li><span class='xr-has-index'>t</span>: 29</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-3aa730d8-22c8-4847-8b8f-1d4cf677834c' class='xr-array-in' type='checkbox' checked><label for='section-3aa730d8-22c8-4847-8b8f-1d4cf677834c' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>4.815e+04 5.029e+04 4.685e+04 ... 4.508e+04 5.087e+04 4.886e+04</span></div><div class='xr-array-data'><pre>array([[[48152.75899184, 50294.95748082, 46848.34887964, ...,
+         44675.76398356, 49241.64232162, 44304.54987353],
+        [48727.7080539 , 41987.24687016, 45492.05291551, ...,
+         52477.53608768, 48118.00309785, 42279.56514752],
+        [46428.47742523, 49449.39568012, 44600.46575709, ...,
+         48100.34293625, 47684.54012245, 40273.00646477],
         ...,
-        [47222.43812761, 41562.72649444, 45541.65249883, ...,
-         47673.00525774, 49045.68465297, 48270.91709953],
-        [37667.38944505, 48079.23594067, 47966.03805358, ...,
-         46792.41061598, 49175.52927844, 48215.43578749],
-        [42810.83837686, 42976.04870558, 43965.6108836 , ...,
-         42802.70549745, 48676.46870084, 43263.59160807]],
+        [46605.31215985, 40890.5987238 , 44892.06005117, ...,
+         46856.6265952 , 48189.00915932, 47266.42644048],
+        [37545.47239085, 47045.41249632, 46918.76897892, ...,
+         45814.18497647, 47915.40533541, 46862.30433897],
+        [42171.97271911, 42290.25233126, 43303.10634499, ...,
+         42133.97465134, 48042.16315407, 42990.92378607]],
 
-       [[45644.05325069, 49701.56472137, 49556.79051092, ...,
-         46196.82626104, 50536.60335665, 44760.35309777],
-        [45283.50901741, 41677.31784725, 46588.45964019, ...,
-         41921.65356066, 47209.23430796, 37411.67163404],
-        [51626.45136291, 42409.26811062, 40936.2422117 , ...,
-         43716.77277299, 48268.40378432, 37566.15411593],
+       [[46119.92320877, 50019.10395609, 49887.33931288, ...,
+         46763.82375909, 50946.62657244, 45425.16247781],
+        [45163.44537932, 41615.98546715, 46460.60940366, ...,
+         41832.63248948, 47007.25720883, 37123.9924852 ],
+        [52119.97654278, 42810.09200802, 41346.07229808, ...,
+         44192.1690984 , 48836.95453203, 38203.28718174],
 ...
-        [51153.93579937, 50322.41197562, 43352.04374094, ...,
-         45687.80655582, 46212.86771219, 43966.63401635],
-        [51208.89337118, 49236.44982782, 48597.96003906, ...,
-         45648.18909919, 49520.28257898, 41909.10425458],
-        [48853.42437843, 49153.94036237, 48283.30063948, ...,
-         40618.08173028, 45843.06401765, 45460.03512017]],
+        [53606.07884334, 52521.01616977, 43714.15795239, ...,
+         46805.87659101, 47565.71454669, 44960.3756466 ],
+        [50914.31093333, 48679.42351714, 47984.7059714 , ...,
+         44633.43772619, 49027.92375061, 40685.63473523],
+        [50099.4187396 , 50489.93880525, 49553.61290974, ...,
+         42011.45963149, 47069.26578997, 46145.22625728]],
 
-       [[54552.47638645, 44390.85942427, 48451.52323594, ...,
-         46831.22401061, 48965.74011902, 39781.54773685],
-        [47065.93392308, 45454.05257449, 50959.66589854, ...,
-         49028.05617394, 40373.28062492, 42060.31173417],
-        [48541.52447619, 52431.37077524, 48844.98930159, ...,
-         52613.58255333, 46648.9545463 , 40964.19143048],
+       [[55245.13227075, 45559.92881929, 49423.39391575, ...,
+         48031.81946984, 49989.57787202, 40953.06984358],
+        [45715.42817355, 44002.82658208, 49729.31777767, ...,
+         47538.89750403, 38646.41965929, 40616.16183887],
+        [48816.68568008, 52693.89105892, 49123.57773928, ...,
+         52850.95765236, 46868.88961938, 40994.32581777],
         ...,
-        [43892.5199118 , 48282.96579071, 46755.83657355, ...,
-         41528.06832226, 40131.98754281, 42166.91494545],
-        [48037.96097073, 48661.44990251, 47787.07646144, ...,
-         46718.19632448, 43019.09547154, 46177.45642881],
-        [45288.13141496, 43536.12272505, 42411.55937899, ...,
-         43609.21951583, 50663.14006015, 49312.66127047]]])</pre></div></div></li><li class='xr-section-item'><input id='section-36044a9d-ecfa-4ceb-9e8c-e43f77a5a127' class='xr-section-summary-in' type='checkbox'  checked><label for='section-36044a9d-ecfa-4ceb-9e8c-e43f77a5a127' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>chain</span></div><div class='xr-var-dims'>(chain)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3</div><input id='attrs-59cbfa43-e8f0-42a1-baff-0bebabb5087d' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-59cbfa43-e8f0-42a1-baff-0bebabb5087d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-686af18f-3ef3-4a5b-989b-c8f0292e8b61' class='xr-var-data-in' type='checkbox'><label for='data-686af18f-3ef3-4a5b-989b-c8f0292e8b61' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0, 1, 2, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>draw</span></div><div class='xr-var-dims'>(draw)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 ... 995 996 997 998 999</div><input id='attrs-dbe91141-a38d-455a-bee7-8ba3fb4465ba' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-dbe91141-a38d-455a-bee7-8ba3fb4465ba' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-a591183e-98e9-4a51-a042-a504af28b800' class='xr-var-data-in' type='checkbox'><label for='data-a591183e-98e9-4a51-a042-a504af28b800' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([  0,   1,   2, ..., 997, 998, 999])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>t</span></div><div class='xr-var-dims'>(t)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 6 ... 23 24 25 26 27 28</div><input id='attrs-28672b8a-c3f1-4b5b-b380-7b5ff40378c7' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-28672b8a-c3f1-4b5b-b380-7b5ff40378c7' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-84e18080-0a78-4b23-8859-87af9632a314' class='xr-var-data-in' type='checkbox'><label for='data-84e18080-0a78-4b23-8859-87af9632a314' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
-       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-db58c2b5-7927-4c0c-95f2-a189866f213f' class='xr-section-summary-in' type='checkbox'  ><label for='section-db58c2b5-7927-4c0c-95f2-a189866f213f' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>chain</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-260c4f64-89e7-4af9-aaee-c142f2e386e7' class='xr-index-data-in' type='checkbox'/><label for='index-260c4f64-89e7-4af9-aaee-c142f2e386e7' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([0, 1, 2, 3], dtype=&#x27;int64&#x27;, name=&#x27;chain&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>draw</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-4a152d86-04fa-421a-9b4f-45146106f74a' class='xr-index-data-in' type='checkbox'/><label for='index-4a152d86-04fa-421a-9b4f-45146106f74a' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,
+        [43559.06799639, 48279.92281342, 46577.56748359, ...,
+         40756.07019898, 39043.08639229, 40576.86081157],
+        [46403.94182979, 46994.65213133, 46074.8744931 , ...,
+         44709.63052006, 40684.00377053, 45368.89714235],
+        [46621.90059107, 45226.02882315, 44143.96642714, ...,
+         45081.66332355, 50874.45923613, 48862.49207912]]])</pre></div></div></li><li class='xr-section-item'><input id='section-c7466951-20dd-406b-98c7-8473ebe9e815' class='xr-section-summary-in' type='checkbox'  checked><label for='section-c7466951-20dd-406b-98c7-8473ebe9e815' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>chain</span></div><div class='xr-var-dims'>(chain)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3</div><input id='attrs-35672d1f-18eb-4c77-a87d-03798abb9559' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-35672d1f-18eb-4c77-a87d-03798abb9559' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-403b9bfe-ebff-41b3-8867-773c6b0aa780' class='xr-var-data-in' type='checkbox'><label for='data-403b9bfe-ebff-41b3-8867-773c6b0aa780' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([0, 1, 2, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>draw</span></div><div class='xr-var-dims'>(draw)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 ... 995 996 997 998 999</div><input id='attrs-c924ad93-aed3-41de-985f-1465956f8f12' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-c924ad93-aed3-41de-985f-1465956f8f12' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5e3e7fbf-5748-42d8-945e-b42e1a4c2146' class='xr-var-data-in' type='checkbox'><label for='data-5e3e7fbf-5748-42d8-945e-b42e1a4c2146' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([  0,   1,   2, ..., 997, 998, 999])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>t</span></div><div class='xr-var-dims'>(t)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 5 6 ... 23 24 25 26 27 28</div><input id='attrs-551667e4-9cfc-4bd2-ba91-63da1e3a6474' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-551667e4-9cfc-4bd2-ba91-63da1e3a6474' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-978a10cd-9fcf-4382-9cfd-347169927ffa' class='xr-var-data-in' type='checkbox'><label for='data-978a10cd-9fcf-4382-9cfd-347169927ffa' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+       18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-a1eb6d5b-f11d-48a1-8cf0-be334ae8182b' class='xr-section-summary-in' type='checkbox'  ><label for='section-a1eb6d5b-f11d-48a1-8cf0-be334ae8182b' class='xr-section-summary' >Indexes: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-index-name'><div>chain</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-bc253cf3-965d-42c2-b057-99616443e4c6' class='xr-index-data-in' type='checkbox'/><label for='index-bc253cf3-965d-42c2-b057-99616443e4c6' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([0, 1, 2, 3], dtype=&#x27;int64&#x27;, name=&#x27;chain&#x27;))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>draw</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-4ebcd74b-bc75-479a-b81d-03af4f23bb09' class='xr-index-data-in' type='checkbox'/><label for='index-4ebcd74b-bc75-479a-b81d-03af4f23bb09' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,
        ...
        990, 991, 992, 993, 994, 995, 996, 997, 998, 999],
-      dtype=&#x27;int64&#x27;, name=&#x27;draw&#x27;, length=1000))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>t</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-5f467e5e-e841-4c1e-955f-b27120203c95' class='xr-index-data-in' type='checkbox'/><label for='index-5f467e5e-e841-4c1e-955f-b27120203c95' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+      dtype=&#x27;int64&#x27;, name=&#x27;draw&#x27;, length=1000))</pre></div></li><li class='xr-var-item'><div class='xr-index-name'><div>t</div></div><div class='xr-index-preview'>PandasIndex</div><div></div><input id='index-36354f2e-0778-489a-bcfb-46dfd9deeb3f' class='xr-index-data-in' type='checkbox'/><label for='index-36354f2e-0778-489a-bcfb-46dfd9deeb3f' title='Show/Hide index repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-index-data'><pre>PandasIndex(Index([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
        18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
-      dtype=&#x27;int64&#x27;, name=&#x27;t&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-6fe815db-71ad-4325-a184-798cea7fe7ed' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-6fe815db-71ad-4325-a184-798cea7fe7ed' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+      dtype=&#x27;int64&#x27;, name=&#x27;t&#x27;))</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-6483b50f-af5e-45b8-9650-bdf0ea06dbb3' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-6483b50f-af5e-45b8-9650-bdf0ea06dbb3' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2119,7 +2384,7 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fced17b3baa2231f176f8d23478c6e538fa4de51b746f2d57cf9a677bf124399.png" src="../_images/fced17b3baa2231f176f8d23478c6e538fa4de51b746f2d57cf9a677bf124399.png" />
+<img alt="../_images/cd27a55ede5471889b82f1c7d0bf30f17263e95d1969972289a60bbb64056254.png" src="../_images/cd27a55ede5471889b82f1c7d0bf30f17263e95d1969972289a60bbb64056254.png" />
 </div>
 </div>
 </section>
@@ -2133,29 +2398,29 @@ Coordinates:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Mar 10 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Mar 01 2024
 
 Python implementation: CPython
 Python version       : 3.11.8
-IPython version      : 8.22.2
+IPython version      : 8.22.1
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
-Release     : 23.4.0
-Machine     : arm64
-Processor   : arm
+Release     : 23.3.0
+Machine     : x86_64
+Processor   : i386
 CPU cores   : 8
 Architecture: 64bit
 
+pandas    : 2.2.1
 matplotlib: 3.8.3
+arviz     : 0.17.0
 numpy     : 1.26.4
-scipy     : 1.12.0
 seaborn   : 0.13.2
 xarray    : 2024.2.0
-arviz     : 0.17.0
 pytensor  : 2.18.6
+scipy     : 1.12.0
 pymc      : 5.10.4
-pandas    : 2.2.1
 
 Watermark: 2.4.3
 </pre></div>

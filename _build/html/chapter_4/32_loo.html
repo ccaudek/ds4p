@@ -251,13 +251,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_3/10_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
 <li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
@@ -621,6 +621,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/corrado/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -764,23 +770,23 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.3749071974384449
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.37490719743844486
 </pre></div>
 </div>
 </div>
 </div>
 <p>In pratica, non conoscendo <span class="math notranslate nohighlight">\(p_t(y)\)</span>, approssimiamo l’ELPD usando l’eq. <code class="xref eq docutils literal notranslate"><span class="pre">eq-elpd</span></code>:</p>
 <div class="math notranslate nohighlight" id="equation-eq-empirical-elpd">
-<span class="eqno">(64)<a class="headerlink" href="#equation-eq-empirical-elpd" title="Link to this equation">#</a></span>\[
+<span class="eqno">(55)<a class="headerlink" href="#equation-eq-empirical-elpd" title="Link to this equation">#</a></span>\[
 \frac{1}{n} \sum_{i=1}^n \log p(y_i \mid y).
 \]</div>
 <p>Questo metodo è un’approssimazione Monte Carlo basata sui dati osservati, usando <span class="math notranslate nohighlight">\(\{y_1, y_2, \ldots, y_n\}\)</span> come rappresentazione empirica di possibili futuri dati.</p>
-<p>Esaminiamo in dettaglio le componenti dell’eq. <a class="reference internal" href="#equation-eq-empirical-elpd">(64)</a>:</p>
+<p>Esaminiamo in dettaglio le componenti dell’eq. <a class="reference internal" href="#equation-eq-empirical-elpd">(55)</a>:</p>
 <ol class="arabic simple">
 <li><p><strong>Densità Logaritmica Predittiva <span class="math notranslate nohighlight">\( \log p(y_i \mid y) \)</span> per un dato <span class="math notranslate nohighlight">\( y_i \)</span></strong>: Questa misura valuta quanto efficacemente il modello predice un singolo dato <span class="math notranslate nohighlight">\(y_i\)</span>, data la distribuzione osservata <span class="math notranslate nohighlight">\(y\)</span>. Valori più alti indicano una migliore performance predittiva.</p></li>
 <li><p><strong>Media della Densità Logaritmica Predittiva</strong>: La media di questi valori logaritmici predittivi fornisce una stima complessiva dell’efficacia predittiva del modello sull’intero set di dati.</p></li>
 </ol>
-<p>Nel caso dell’esempio in discussione, usando l’eq. <a class="reference internal" href="#equation-eq-empirical-elpd">(64)</a> otteniamo un valore approssimato a quello trovato in precedenza:</p>
+<p>Nel caso dell’esempio in discussione, usando l’eq. <a class="reference internal" href="#equation-eq-empirical-elpd">(55)</a> otteniamo un valore approssimato a quello trovato in precedenza:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">/</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">y_data</span><span class="p">)))</span>
@@ -853,7 +859,7 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="nn">File /opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:277,</span> in <span class="ni">_sample_external_nuts</span><span class="nt">(sampler, draws, tune, chains, target_accept, random_seed, initvals, model, progressbar, idata_kwargs, nuts_sampler_kwargs, **kwargs)</span>
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:277,</span> in <span class="ni">_sample_external_nuts</span><span class="nt">(sampler, draws, tune, chains, target_accept, random_seed, initvals, model, progressbar, idata_kwargs, nuts_sampler_kwargs, **kwargs)</span>
 <span class="g g-Whitespace">    </span><span class="mi">276</span> <span class="k">try</span><span class="p">:</span>
 <span class="ne">--&gt; </span><span class="mi">277</span>     <span class="kn">import</span> <span class="nn">nutpie</span>
 <span class="g g-Whitespace">    </span><span class="mi">278</span> <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
@@ -871,29 +877,29 @@ document.write(`
 <span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Generating posterior predictive samples</span>
 <span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample_posterior_predictive</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">extend_inferencedata</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="nn">File /opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:689,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, nuts_sampler_kwargs, callback, mp_ctx, model, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">685</span>     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">NUTS</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">686</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">687</span>             <span class="s2">&quot;Model can not be sampled with NUTS alone. Your model is probably not continuous.&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">688</span>         <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">689</span>     <span class="k">return</span> <span class="n">_sample_external_nuts</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">690</span>         <span class="n">sampler</span><span class="o">=</span><span class="n">nuts_sampler</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">691</span>         <span class="n">draws</span><span class="o">=</span><span class="n">draws</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">692</span>         <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">693</span>         <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">694</span>         <span class="n">target_accept</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;nuts&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target_accept&quot;</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">695</span>         <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">696</span>         <span class="n">initvals</span><span class="o">=</span><span class="n">initvals</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">697</span>         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">698</span>         <span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">699</span>         <span class="n">idata_kwargs</span><span class="o">=</span><span class="n">idata_kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">700</span>         <span class="n">nuts_sampler_kwargs</span><span class="o">=</span><span class="n">nuts_sampler_kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">701</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">702</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">704</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">705</span>     <span class="n">step</span> <span class="o">=</span> <span class="n">CompoundStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:674,</span> in <span class="ni">sample</span><span class="nt">(draws, tune, chains, cores, random_seed, progressbar, step, nuts_sampler, initvals, init, jitter_max_retries, n_init, trace, discard_tuned_samples, compute_convergence_checks, keep_warning_stat, return_inferencedata, idata_kwargs, nuts_sampler_kwargs, callback, mp_ctx, model, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">670</span>     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">NUTS</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">671</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">672</span>             <span class="s2">&quot;Model can not be sampled with NUTS alone. Your model is probably not continuous.&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">673</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">674</span>     <span class="k">return</span> <span class="n">_sample_external_nuts</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">675</span>         <span class="n">sampler</span><span class="o">=</span><span class="n">nuts_sampler</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">676</span>         <span class="n">draws</span><span class="o">=</span><span class="n">draws</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">677</span>         <span class="n">tune</span><span class="o">=</span><span class="n">tune</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">678</span>         <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">679</span>         <span class="n">target_accept</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;nuts&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target_accept&quot;</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">680</span>         <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">681</span>         <span class="n">initvals</span><span class="o">=</span><span class="n">initvals</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">682</span>         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">683</span>         <span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">684</span>         <span class="n">idata_kwargs</span><span class="o">=</span><span class="n">idata_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">685</span>         <span class="n">nuts_sampler_kwargs</span><span class="o">=</span><span class="n">nuts_sampler_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">686</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">687</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">689</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">690</span>     <span class="n">step</span> <span class="o">=</span> <span class="n">CompoundStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
 
-<span class="nn">File /opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:279,</span> in <span class="ni">_sample_external_nuts</span><span class="nt">(sampler, draws, tune, chains, target_accept, random_seed, initvals, model, progressbar, idata_kwargs, nuts_sampler_kwargs, **kwargs)</span>
+<span class="nn">File ~/opt/anaconda3/envs/pymc_env/lib/python3.11/site-packages/pymc/sampling/mcmc.py:279,</span> in <span class="ni">_sample_external_nuts</span><span class="nt">(sampler, draws, tune, chains, target_accept, random_seed, initvals, model, progressbar, idata_kwargs, nuts_sampler_kwargs, **kwargs)</span>
 <span class="g g-Whitespace">    </span><span class="mi">277</span>     <span class="kn">import</span> <span class="nn">nutpie</span>
 <span class="g g-Whitespace">    </span><span class="mi">278</span> <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 <span class="ne">--&gt; </span><span class="mi">279</span>     <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
