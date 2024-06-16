@@ -1,0 +1,1192 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Analisi bayesiana del modello di regressione lineare bivariato &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_5/05_03_reglin_bayesian';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_5/05_03_reglin_bayesian.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="✏️ Esercizi" href="E_reglin_1.html" />
+    <link rel="prev" title="Analisi della regressione" href="introduction_part_5.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_5/05_03_reglin_bayesian.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_5/05_03_reglin_bayesian.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Analisi bayesiana del modello di regressione lineare bivariato</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-all-approccio-bayesiano-al-modello-di-regressione">Introduzione all’Approccio Bayesiano al Modello di Regressione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-della-distribuzione-posteriore">Calcolo della distribuzione posteriore</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-con-una-sola-variabile-predittiva">Esempio con una sola variabile predittiva</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definizione-del-modello-lineare">Definizione del modello lineare</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri-alpha-e-beta">Parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comprensione-dei-parametri">Comprensione dei parametri</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="analisi-bayesiana-del-modello-di-regressione-lineare-bivariato">
+<span id="reglin-pymc-notebook"></span><h1>Analisi bayesiana del modello di regressione lineare bivariato<a class="headerlink" href="#analisi-bayesiana-del-modello-di-regressione-lineare-bivariato" title="Link to this heading">#</a></h1>
+<p>Nel presente capitolo, esploreremo l’analisi bayesiana applicata al modello di regressione lineare bivariato.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../_config/config.py # Import the configuration settings
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">cmdstanpy</span>
+
+<span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pingouin</span> <span class="k">as</span> <span class="nn">pg</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Per introdurre l’approccio bayesiano, seguiremo la trattazione di <span id="id1">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> e analizzeremo nuovamente i dati del censimento dei !Kung San. In precedenza, abbiamo applicato il modello Normale all’altezza. Tuttavia, di solito siamo interessati a modellare come un risultato sia correlato a un’altra variabile, una variabile predittiva. Se la variabile predittiva ha una qualsiasi associazione statistica con la variabile di risultato, possiamo utilizzarla per predire il risultato. Quando la variabile predittiva è integrata nel modello in un modo specifico, otteniamo una regressione lineare.</p>
+<p>Ora esaminiamo come l’altezza di questi cacciatori-raccoglitori del Kalahari (la variabile di risultato) covaria con il peso (la variabile predittiva). <span id="id2">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> fa notare che questa non è la domanda scientifica più entusiasmante. Tuttavia, è una relazione facile da iniziare a esaminare, e se sembra noiosa, è perché non si ha in mente una teoria sulla crescita e sulla storia della vita. In questo momento, vi chiedo solo di concentrarvi sui meccanismi per stimare un’associazione tra due variabili.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Howell_18.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>height</th>
+      <th>weight</th>
+      <th>age</th>
+      <th>male</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>151.765</td>
+      <td>47.825606</td>
+      <td>63.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>139.700</td>
+      <td>36.485807</td>
+      <td>63.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>136.525</td>
+      <td>31.864838</td>
+      <td>65.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>156.845</td>
+      <td>53.041914</td>
+      <td>41.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>145.415</td>
+      <td>41.276872</td>
+      <td>51.0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the scatterplot with regression line</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Scatterplot with Regression Line&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Weight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Height&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/bd5e126b4ccd47d82f0c5e2ded242714938bdc0cac492a2b6215e5b33d8622ae.png"><img alt="../_images/bd5e126b4ccd47d82f0c5e2ded242714938bdc0cac492a2b6215e5b33d8622ae.png" src="../_images/bd5e126b4ccd47d82f0c5e2ded242714938bdc0cac492a2b6215e5b33d8622ae.png" style="width: 1011px; height: 611px;" /></a>
+</div>
+</div>
+<section id="introduzione-all-approccio-bayesiano-al-modello-di-regressione">
+<h3>Introduzione all’Approccio Bayesiano al Modello di Regressione<a class="headerlink" href="#introduzione-all-approccio-bayesiano-al-modello-di-regressione" title="Link to this heading">#</a></h3>
+<p>L’approccio del modello lineare consiste nel trasformare il parametro della media di una distribuzione Gaussiana, <span class="math notranslate nohighlight">\(\mu\)</span>, in una funzione lineare della variabile predittiva e di altri nuovi parametri che definiamo. Questa strategia è comunemente nota come «modello lineare». Il modello lineare assume che la variabile predittiva abbia una relazione costante e additiva con la media dell’output. Successivamente, calcola la distribuzione posteriore di questa relazione costante.</p>
+</section>
+<section id="calcolo-della-distribuzione-posteriore">
+<h3>Calcolo della distribuzione posteriore<a class="headerlink" href="#calcolo-della-distribuzione-posteriore" title="Link to this heading">#</a></h3>
+<p>Il modello lineare esplora tutte le possibili combinazioni dei valori dei parametri. Alcuni di questi parametri descrivono come la media dell’output, <span class="math notranslate nohighlight">\( \mu \)</span>, cambia in relazione a un’altra variabile. Per ogni combinazione di valori dei parametri, l’algoritmo calcola la probabilità posteriore, che misura quanto è plausibile quella combinazione data dal modello e dai dati. La distribuzione posteriore classifica quindi tutte le possibili combinazioni dei valori dei parametri in base alla loro plausibilità.</p>
+<p>In pratica, la distribuzione posteriore fornisce un’idea di quanto siano probabili diverse relazioni tra le variabili, secondo le assunzioni del modello.</p>
+<p>Possiamo quindi chiedere al modello lineare: «Considera tutte le rette che mettono in relazione una variabile con l’altra. Ordina tutte queste rette per plausibilità, dati questi dati.» Il modello lineare risponde con una distribuzione posteriore, che rappresenta la plausibilità di ciascuna retta.</p>
+</section>
+<section id="esempio-con-una-sola-variabile-predittiva">
+<h3>Esempio con una sola variabile predittiva<a class="headerlink" href="#esempio-con-una-sola-variabile-predittiva" title="Link to this heading">#</a></h3>
+<p>Nel caso più semplice di una sola variabile predittiva, consideriamo il modello Gaussiano di base:</p>
+<div class="math notranslate nohighlight">
+\[ h_i \sim \text{Normal}(\mu, \sigma) \quad [\text{verosimiglianza}] \]</div>
+<div class="math notranslate nohighlight">
+\[ \mu \sim \text{Normal}(181, 30) \quad [\mu \text{ prior}] \]</div>
+<div class="math notranslate nohighlight">
+\[ \sigma \sim \text{Normal}(0, 20) \quad [\sigma \text{ prior}] \]</div>
+<p>Per integrare il peso (<span class="math notranslate nohighlight">\(x\)</span>) in un modello Gaussiano dell’altezza (<span class="math notranslate nohighlight">\(h\)</span>), definiamo la media <span class="math notranslate nohighlight">\(\mu\)</span> come una funzione dei valori in <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ h_i \sim \text{Normal}(\mu_i, \sigma) \quad [\text{verosimiglianza}] \]</div>
+<div class="math notranslate nohighlight">
+\[ \mu_i = \alpha + \beta(x_i - \bar{x}) \quad [\text{modello lineare}] \]</div>
+<div class="math notranslate nohighlight">
+\[ \alpha \sim \text{Normal}(181, 30) \quad [\alpha \text{ prior}] \]</div>
+<div class="math notranslate nohighlight">
+\[ \beta \sim \text{Normal}(0, 10) \quad [\beta \text{ prior}] \]</div>
+<div class="math notranslate nohighlight">
+\[ \sigma \sim \text{Normal}(0, 20) \quad [\sigma \text{ prior}] \]</div>
+</section>
+<section id="definizione-del-modello-lineare">
+<h3>Definizione del modello lineare<a class="headerlink" href="#definizione-del-modello-lineare" title="Link to this heading">#</a></h3>
+<p>Nel modello lineare, la media <span class="math notranslate nohighlight">\(\mu\)</span> non è più un parametro da stimare direttamente. Come visto nella seconda linea del modello, <span class="math notranslate nohighlight">\(\mu_i\)</span> è costruito a partire da altri parametri, <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>, e dalla variabile osservata <span class="math notranslate nohighlight">\(x\)</span>. Questa relazione non è stocastica—non c’è un <span class="math notranslate nohighlight">\(\sim\)</span>, ma un <span class="math notranslate nohighlight">\(=\)</span>—perché la definizione di <span class="math notranslate nohighlight">\(\mu_i\)</span> è deterministica. Una volta noti <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span> e <span class="math notranslate nohighlight">\(x_i\)</span>, conosciamo <span class="math notranslate nohighlight">\(\mu_i\)</span> con certezza.</p>
+</section>
+<section id="parametri-alpha-e-beta">
+<h3>Parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span><a class="headerlink" href="#parametri-alpha-e-beta" title="Link to this heading">#</a></h3>
+<p>Il valore <span class="math notranslate nohighlight">\(x_i\)</span> è semplicemente il valore del peso nella riga <span class="math notranslate nohighlight">\(i\)</span>. I parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono più misteriosi; li abbiamo inventati. I parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> sono necessari e sufficienti per descrivere una distribuzione Gaussiana, ma <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono strumenti che inventiamo per manipolare <span class="math notranslate nohighlight">\(\mu\)</span>, permettendole di variare sistematicamente tra i casi nei dati.</p>
+</section>
+<section id="comprensione-dei-parametri">
+<h3>Comprensione dei parametri<a class="headerlink" href="#comprensione-dei-parametri" title="Link to this heading">#</a></h3>
+<p>Ogni parametro deve essere descritto nella distribuzione posteriore. La seconda linea della definizione del modello:</p>
+<div class="math notranslate nohighlight">
+\[ \mu_i = \alpha + \beta(x_i - \bar{x}) \]</div>
+<p>ci dice che stiamo ponendo due domande sulla media dell’output:</p>
+<ol class="arabic simple">
+<li><p>Qual è l’altezza attesa quando <span class="math notranslate nohighlight">\(x_i = \bar{x}\)</span>? Il parametro <span class="math notranslate nohighlight">\(\alpha\)</span> risponde a questa domanda, poiché quando <span class="math notranslate nohighlight">\(x_i = \bar{x}\)</span>, <span class="math notranslate nohighlight">\(\mu_i = \alpha\)</span>. Per questo motivo, <span class="math notranslate nohighlight">\(\alpha\)</span> è spesso chiamato l’intercetta.</p></li>
+<li><p>Qual è la variazione attesa nell’altezza quando <span class="math notranslate nohighlight">\(x_i\)</span> varia di 1 unità? Il parametro <span class="math notranslate nohighlight">\(\beta\)</span> risponde a questa domanda, essendo spesso chiamato la «pendenza» o «coefficiente angolare».</p></li>
+</ol>
+<p>Congiuntamente, questi due parametri chiedono al modello lineare di trovare una linea che mette in relazione <span class="math notranslate nohighlight">\(x\)</span> con <span class="math notranslate nohighlight">\(h\)</span>, una linea che passa attraverso <span class="math notranslate nohighlight">\(\alpha\)</span> quando <span class="math notranslate nohighlight">\(x_i = \bar{x}\)</span> e ha una pendenza di <span class="math notranslate nohighlight">\(\beta\)</span>.</p>
+<p>In sintesi, l’approccio bayesiano al modello di regressione lineare ci permette di considerare tutte le possibili combinazioni di parametri e di valutare la plausibilità di ciascuna combinazione, data dai dati e dal modello. Questo ci fornisce una comprensione completa e probabilistica delle relazioni tra variabili, incorporando le incertezze e le variazioni presenti nei dati.</p>
+<p>L’analisi bayesiana del modello di regressione lineare ci consente di specificare distribuzioni a priori per i parametri <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span>. Una volta osservati i dati, possiamo calcolare la distribuzione a posteriori di questi parametri. Ciò fornisce una valutazione dell’incertezza nelle stime di <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>, tenendo conto sia delle informazioni a priori sia delle evidenze fornite dai dati.</p>
+<p>Il codice Stan che implementa il modello precedente è contenuto nel file <code class="docutils literal notranslate"><span class="pre">linreg_height.stan</span></code>. Compiliamo e stampiamo il modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;linreg_height.stan&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=1&gt; N;
+  vector[N] x;
+  vector[N] y;
+}
+parameters {
+  real alpha;
+  real beta;
+  real&lt;lower=0&gt; sigma;
+}
+model {
+  y ~ normal(alpha + beta * (x- mean(x)), sigma);
+  alpha ~ normal(181, 30);
+  beta ~ normal(-2, 2);
+  sigma ~ normal(0, 20);
+}
+generated quantities {
+  array[N] real y_rep = normal_rng(alpha + beta * x, sigma);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Sistemiamo i dati in un dizionario come richiesto del modello Stan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]),</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]),</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento MCMC.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo le distribuzioni a posteriori dei parametri.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/96055f15a708e8b5d391a53c4307f4e9355acabe9d9f7ab02f6c2f65f23f560d.png"><img alt="../_images/96055f15a708e8b5d391a53c4307f4e9355acabe9d9f7ab02f6c2f65f23f560d.png" src="../_images/96055f15a708e8b5d391a53c4307f4e9355acabe9d9f7ab02f6c2f65f23f560d.png" style="width: 1211px; height: 611px;" /></a>
+</div>
+</div>
+<p>L’oggetto <code class="docutils literal notranslate"><span class="pre">fit</span></code> generato da <code class="docutils literal notranslate"><span class="pre">cmdstanpy</span></code> appartiene alla classe <code class="docutils literal notranslate"><span class="pre">cmdstanpy.stanfit.mcmc.CmdStanMCMC</span></code>. Questo oggetto è funzionalmente equivalente a un oggetto della classe <code class="docutils literal notranslate"><span class="pre">InferenceData</span></code>, permettendo quindi la sua manipolazione tramite le funzioni fornite da ArviZ. Esaminiamo dunque un sommario delle distribuzioni a posteriori dei parametri del modello lineare.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>alpha</th>
+      <td>154.594</td>
+      <td>0.278</td>
+      <td>154.066</td>
+      <td>155.112</td>
+      <td>0.003</td>
+      <td>0.002</td>
+      <td>7707.0</td>
+      <td>5702.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta</th>
+      <td>0.904</td>
+      <td>0.042</td>
+      <td>0.823</td>
+      <td>0.983</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>8612.0</td>
+      <td>6334.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>5.104</td>
+      <td>0.195</td>
+      <td>4.747</td>
+      <td>5.482</td>
+      <td>0.002</td>
+      <td>0.002</td>
+      <td>8641.0</td>
+      <td>6071.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Avendo definito nel modello il predittore lineare come <span class="math notranslate nohighlight">\(x - \bar{x}\)</span>, l’intercetta corrisponderà alla media dei valori dell’altezza. La pendenza <span class="math notranslate nohighlight">\(\beta\)</span> ci informa sull’incremento atteso dell’altezza quando il peso aumenta di un’unità. Il parametro <span class="math notranslate nohighlight">\(\sigma\)</span> descrive la deviazione standard della dispersione dei dati attorno alla retta di regressione.</p>
+<p>Confrontiamo i valori ottenuti con l’approccio bayesiano con quelli trovati usando la procedura di massima verosimiglianza.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">linear_regression</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]),</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">])</span>
+<span class="n">lm</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>names</th>
+      <th>coef</th>
+      <th>se</th>
+      <th>T</th>
+      <th>pval</th>
+      <th>r2</th>
+      <th>adj_r2</th>
+      <th>CI[2.5%]</th>
+      <th>CI[97.5%]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Intercept</td>
+      <td>154.60</td>
+      <td>0.27</td>
+      <td>570.25</td>
+      <td>0.0</td>
+      <td>0.57</td>
+      <td>0.57</td>
+      <td>154.06</td>
+      <td>155.13</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>weight</td>
+      <td>0.91</td>
+      <td>0.04</td>
+      <td>21.52</td>
+      <td>0.0</td>
+      <td>0.57</td>
+      <td>0.57</td>
+      <td>0.82</td>
+      <td>0.99</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La somiglianza tra le due soluzioni conferma che, nel caso di modelli semplici come questo, e quando vengono usati dei prior debolmente informativi, i due approcci producono risultati sostanzialmente equivalenti.</p>
+<p>Per creare un PPC plot dobbiamo creare un oggetto InferenceData nel quale i dati sono strutturati come si aspetta ArviZ:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span>
+    <span class="n">posterior</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span>
+    <span class="n">posterior_predictive</span><span class="o">=</span><span class="s1">&#39;y_rep&#39;</span><span class="p">,</span>
+    <span class="n">observed_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo ora il pp-check.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">data_pairs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;y_rep&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/anaconda3/envs/cmdstan_env/lib/python3.12/site-packages/IPython/core/events.py:82: UserWarning: Creating legend with loc=&quot;best&quot; can be slow with large amounts of data.
+  func(*args, **kwargs)
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/00c9d91f655c43fdf53a9eaa94b088434bf2dc3a1ac19e076a302eba803316d8.png"><img alt="../_images/00c9d91f655c43fdf53a9eaa94b088434bf2dc3a1ac19e076a302eba803316d8.png" src="../_images/00c9d91f655c43fdf53a9eaa94b088434bf2dc3a1ac19e076a302eba803316d8.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Costruiamo ora un grafico che rappresenta i valori osservati insieme alla linea di regressione stimata tramite il modello bayesiano. Al grafico aggiungeremo diverse linee di regressione, ciascuna orientata in base ai valori campionati casualmente dalla distribuzione a posteriori dei parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract posterior samples</span>
+<span class="n">alpha_samples</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">stan_variable</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">)</span>
+<span class="n">beta_samples</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">stan_variable</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot y vs x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># s is the size of the point</span>
+
+<span class="c1"># Draw lines from posterior samples</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>  <span class="c1"># assuming you have at least 300 samples</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">alpha_samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta_samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># Line using the mean of posterior estimates</span>
+<span class="n">mean_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">alpha_samples</span><span class="p">)</span>
+<span class="n">mean_beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">beta_samples</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">mean_alpha</span> <span class="o">+</span> <span class="n">mean_beta</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mean Posterior Prediction&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Additional plot formatting</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Regression with Posterior Samples&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/2b51d9b20c4b7ec4f16fc94f5b53d832ab576742b215f178b31702aa4d57fc27.png"><img alt="../_images/2b51d9b20c4b7ec4f16fc94f5b53d832ab576742b215f178b31702aa4d57fc27.png" src="../_images/2b51d9b20c4b7ec4f16fc94f5b53d832ab576742b215f178b31702aa4d57fc27.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Le numerose linee di regressione presenti nel grafico visualizzano la nostra incertezza riguardo l’inclinazione esatta della linea di regressione principale. Tuttavia, il grafico mostra chiaramente che questa incertezza è minima.</p>
+</section>
+</section>
+<section id="commenti-e-considerazioni-finali">
+<h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
+<p>In questo capitolo abbiamo esplorato la stima dei parametri di un modello di regressione bivariato utilizzando l’approccio bayesiano.</p>
+<p>Per fornire un confronto con un metodo alternativo, in appendice è presentata un’introduzione all’approccio frequentista per il modello di regressione lineare bivariato. Questa sezione aggiuntiva offre una panoramica degli aspetti chiave dell’approccio frequentista, consentendo di confrontare e comprendere le differenze tra i due approcci nella stima dei parametri e nell’interpretazione dei risultati.</p>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -m
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+pandas    : 2.2.2
+matplotlib: 3.8.4
+arviz     : 0.18.0
+numpy     : 1.26.4
+seaborn   : 0.13.2
+pingouin  : 0.5.4
+logging   : 0.5.1.2
+cmdstanpy : 1.2.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="introduction_part_5.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Analisi della regressione</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="E_reglin_1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-all-approccio-bayesiano-al-modello-di-regressione">Introduzione all’Approccio Bayesiano al Modello di Regressione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-della-distribuzione-posteriore">Calcolo della distribuzione posteriore</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-con-una-sola-variabile-predittiva">Esempio con una sola variabile predittiva</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definizione-del-modello-lineare">Definizione del modello lineare</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri-alpha-e-beta">Parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comprensione-dei-parametri">Comprensione dei parametri</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

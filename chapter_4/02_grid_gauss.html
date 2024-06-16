@@ -1,0 +1,1156 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Verosimiglianza Gaussiana: Metodo Basato su Griglia &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/02_grid_gauss';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_4/02_grid_gauss.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="Distribuzioni coniugate" href="03_conjugate_families_1.html" />
+    <link rel="prev" title="Pensare ad una proporzione in termini soggettivi" href="02_subj_prop.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/02_grid_gauss.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/02_grid_gauss.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Verosimiglianza Gaussiana: Metodo Basato su Griglia</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-prior-uniforme">Un prior uniforme</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-log-verosimiglianza">La Log-Verosimiglianza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deviazione-standard-ignota">Deviazione Standard Ignota</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definizione-dello-spazio-dei-parametri">1. <strong>Definizione dello Spazio dei Parametri</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-della-log-likelihood-bidimensionale">2. <strong>Calcolo della Log-Likelihood Bidimensionale</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazione-delle-priors">3. <strong>Applicazione delle Priors</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-della-distribuzione-a-posteriori-bidimensionale">4. <strong>Calcolo della Distribuzione a Posteriori Bidimensionale</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizzazione">5. <strong>Visualizzazione</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#discussione">Discussione</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="verosimiglianza-gaussiana-metodo-basato-su-griglia">
+<span id="cap-grid-gauss"></span><h1>Verosimiglianza Gaussiana: Metodo Basato su Griglia<a class="headerlink" href="#verosimiglianza-gaussiana-metodo-basato-su-griglia" title="Link to this heading">#</a></h1>
+<p>Lo scopo di questo capitolo è di estendere la discussione precedente, relativa al calcolo della distribuzione a posteriori con il metodo basato su griglia, al caso in cui la verosimiglianza è gaussiana.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="un-prior-uniforme">
+<h2>Un prior uniforme<a class="headerlink" href="#un-prior-uniforme" title="Link to this heading">#</a></h2>
+<p>Consideriamo il caso in cui abbiamo un campione di 10 osservazioni. Questo campione è generato mediante il campionamento casuale da una Normale di media 50 e deviazione standard pari a 5. Nella simulazione successiva considereremo <span class="math notranslate nohighlight">\(\sigma\)</span> nota.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>  <span class="c1"># Per la riproducibilità</span>
+<span class="n">vera_media</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># Media vera</span>
+<span class="n">sigma_conosciuta</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Deviazione standard conosciuta</span>
+<span class="n">dimensione_campione</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Dimensione del campione</span>
+
+<span class="c1"># Generare un campione</span>
+<span class="n">campione</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">vera_media</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_conosciuta</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">dimensione_campione</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">campione</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[48.54283933 43.64834594 54.59899393 61.47236626 48.30510499 43.11175964
+ 60.88971922 39.33729382 52.25731836 50.64725801]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creiamo ora una griglia di 100 elementi con valori compresi tra 40 e 60.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">media_griglia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># 100 punti tra 40 e 60</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[40.         40.2020202  40.4040404  40.60606061 40.80808081 41.01010101
+ 41.21212121 41.41414141 41.61616162 41.81818182 42.02020202 42.22222222
+ 42.42424242 42.62626263 42.82828283 43.03030303 43.23232323 43.43434343
+ 43.63636364 43.83838384 44.04040404 44.24242424 44.44444444 44.64646465
+ 44.84848485 45.05050505 45.25252525 45.45454545 45.65656566 45.85858586
+ 46.06060606 46.26262626 46.46464646 46.66666667 46.86868687 47.07070707
+ 47.27272727 47.47474747 47.67676768 47.87878788 48.08080808 48.28282828
+ 48.48484848 48.68686869 48.88888889 49.09090909 49.29292929 49.49494949
+ 49.6969697  49.8989899  50.1010101  50.3030303  50.50505051 50.70707071
+ 50.90909091 51.11111111 51.31313131 51.51515152 51.71717172 51.91919192
+ 52.12121212 52.32323232 52.52525253 52.72727273 52.92929293 53.13131313
+ 53.33333333 53.53535354 53.73737374 53.93939394 54.14141414 54.34343434
+ 54.54545455 54.74747475 54.94949495 55.15151515 55.35353535 55.55555556
+ 55.75757576 55.95959596 56.16161616 56.36363636 56.56565657 56.76767677
+ 56.96969697 57.17171717 57.37373737 57.57575758 57.77777778 57.97979798
+ 58.18181818 58.38383838 58.58585859 58.78787879 58.98989899 59.19191919
+ 59.39393939 59.5959596  59.7979798  60.        ]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcoliamo la likelihood.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">campione</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">media</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_conosciuta</span><span class="p">))</span> <span class="k">for</span> <span class="n">media</span> <span class="ow">in</span> <span class="n">media_griglia</span><span class="p">])</span>
+<span class="n">likelihood</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([4.43497974e-25, 1.00961743e-24, 2.26116493e-24, 4.98216199e-24,
+       1.07997486e-23, 2.30313636e-23, 4.83209939e-23, 9.97383700e-23,
+       2.02534436e-22, 4.04618453e-22, 7.95248204e-22, 1.53769396e-21,
+       2.92514449e-21, 5.47437998e-21, 1.00793553e-20, 1.82574775e-20,
+       3.25356129e-20, 5.70410371e-20, 9.83843533e-20, 1.66945554e-19,
+       2.78698020e-19, 4.57723393e-19, 7.39575534e-19, 1.17563407e-18,
+       1.83853539e-18, 2.82866831e-18, 4.28156219e-18, 6.37577071e-18,
+       9.34056882e-18, 1.34624518e-17, 1.90890888e-17, 2.66290968e-17,
+       3.65458340e-17, 4.93434508e-17, 6.55437614e-17, 8.56531629e-17,
+       1.10119860e-16, 1.39282995e-16, 1.73316833e-16, 2.12174698e-16,
+       2.55538678e-16, 3.02781890e-16, 3.52950131e-16, 4.04768775e-16,
+       4.56678807e-16, 5.06903062e-16, 5.53540208e-16, 5.94680409e-16,
+       6.28533301e-16, 6.53556524e-16, 6.68572052e-16, 6.72858096e-16,
+       6.66206627e-16, 6.48940106e-16, 6.21885576e-16, 5.86308990e-16,
+       5.43817056e-16, 4.96237176e-16, 4.45487960e-16, 3.93452986e-16,
+       3.41869158e-16, 2.92238345e-16, 2.45767628e-16, 2.03339784e-16,
+       1.65512287e-16, 1.32540414e-16, 1.04418297e-16, 8.09310345e-17,
+       6.17111697e-17, 4.62937824e-17, 3.41658127e-17, 2.48068172e-17,
+       1.77198703e-17, 1.24526055e-17, 8.60934527e-18, 5.85585374e-18,
+       3.91850601e-18, 2.57965137e-18, 1.67075095e-18, 1.06456606e-18,
+       6.67334716e-19, 4.11552289e-19, 2.49698841e-19, 1.49045282e-19,
+       8.75246011e-20, 5.05652605e-20, 2.87398541e-20, 1.60704142e-20,
+       8.84056013e-21, 4.78456761e-21, 2.54750949e-21, 1.33444023e-21,
+       6.87689899e-22, 3.48655374e-22, 1.73904286e-22, 8.53364173e-23,
+       4.11972976e-23, 1.95665048e-23, 9.14256335e-24, 4.20274369e-24])
+</pre></div>
+</div>
+</div>
+</div>
+<p>La likelihood rappresenta quanto sono verosimili i dati osservati dato un certo parametro (o set di parametri) del modello. Nel contesto della distribuzione gaussiana, la likelihood di un insieme di osservazioni dato un valore specifico della media (<span class="math notranslate nohighlight">\(\mu\)</span>) e conoscendo la deviazione standard (<span class="math notranslate nohighlight">\(\sigma\)</span>) si calcola come il prodotto delle densità di probabilità di ogni osservazione data quella media e deviazione standard. Questo approccio si basa sull’assunzione di indipendenza tra le osservazioni.</p>
+<p>Il codice precedente calcola la likelihood per una serie di valori possibili della media (<span class="math notranslate nohighlight">\(\mu\)</span>), mantenendo la deviazione standard (<span class="math notranslate nohighlight">\(\sigma\)</span>) come un valore noto e fisso. Ecco come funziona passo dopo passo:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">likelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">campione</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">media</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_conosciuta</span><span class="p">))</span> <span class="k">for</span> <span class="n">media</span> <span class="ow">in</span> <span class="n">media_griglia</span><span class="p">])</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">norm.pdf(campione,</span> <span class="pre">loc=media,</span> <span class="pre">scale=sigma_conosciuta)</span></code>:</strong> Per ogni valore di <code class="docutils literal notranslate"><span class="pre">media</span></code> nella griglia specificata (<code class="docutils literal notranslate"><span class="pre">media_griglia</span></code>), questa espressione calcola la densità di probabilità (PDF) della distribuzione normale per ciascun punto nel campione (<code class="docutils literal notranslate"><span class="pre">campione</span></code>). <code class="docutils literal notranslate"><span class="pre">loc=media</span></code> specifica il valore medio della distribuzione normale considerata in quel momento, mentre <code class="docutils literal notranslate"><span class="pre">scale=sigma_conosciuta</span></code> indica la deviazione standard della distribuzione, che è considerata nota e costante per tutti i calcoli. Il risultato di <code class="docutils literal notranslate"><span class="pre">norm.pdf</span></code> per ogni valore di <code class="docutils literal notranslate"><span class="pre">media</span></code> è un array che contiene le probabilità di ogni osservazione del campione date quella media e la deviazione standard conosciuta.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">np.prod(...)</span></code>:</strong> Calcola il prodotto degli elementi nell’array restituito da <code class="docutils literal notranslate"><span class="pre">norm.pdf</span></code>, ovvero moltiplica tra loro le probabilità di tutte le osservazioni del campione per il valore corrente di <code class="docutils literal notranslate"><span class="pre">media</span></code>. Questo prodotto rappresenta la likelihood complessiva del campione dato quel valore specifico della media, assumendo che le osservazioni siano indipendenti. Il concetto di indipendenza è cruciale qui perché ci permette di moltiplicare le probabilità delle singole osservazioni per ottenere la probabilità complessiva (likelihood) del set di dati.</p></li>
+<li><p><strong>Comprehension list <code class="docutils literal notranslate"><span class="pre">[...]</span> <span class="pre">for</span> <span class="pre">media</span> <span class="pre">in</span> <span class="pre">media_griglia</span></code>:</strong> Questa parte del codice esegue il calcolo della likelihood per ogni valore di <code class="docutils literal notranslate"><span class="pre">media</span></code> nella griglia e salva i risultati in un array NumPy. Quindi, per ciascun valore possibile della media considerata, calcoliamo quanto il campione osservato sia verosimile, data quella media e la deviazione standard nota.</p></li>
+</ol>
+<p>Il risultato finale, <code class="docutils literal notranslate"><span class="pre">likelihood</span></code>, è un array dove ogni elemento corrisponde alla likelihood del campione di dati osservati per un specifico valore della media sulla griglia.</p>
+<p>Per fare un esempio, consideriamo il primo punto della griglia, corrispondente ad una una media di <span class="math notranslate nohighlight">\(40\)</span> (dato che <code class="docutils literal notranslate"><span class="pre">media_griglia</span></code> è definita da 40 a 60). Calcoliamo la densità di probabilità (PDF) per ogni osservazione nel campione dato questo valore della media (<span class="math notranslate nohighlight">\(40\)</span>) e una deviazione standard conosciuta di <span class="math notranslate nohighlight">\(5\)</span>. Ecco le PDF per ciascuna osservazione nel campione:</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>[2.28493333e-02, 4.62542534e-02, 3.31420922e-02, 3.00464741e-02,
+ 1.11418804e-05, 1.96649746e-02, 2.18282203e-02, 2.11292630e-02,
+ 4.05476440e-03, 1.40537162e-07]
+</pre></div>
+</div>
+<p>Questi valori rappresentano la densità di probabilità di osservare ciascuna misurazione data una distribuzione normale con media <span class="math notranslate nohighlight">\(40\)</span> e deviazione standard <span class="math notranslate nohighlight">\(5\)</span>. La likelihood del campione dato questo valore della media è calcolata come il prodotto di queste densità di probabilità, risultando in <span class="math notranslate nohighlight">\(6.060521630996206 \times 10^{-26}\)</span>.</p>
+<p>Questo numero molto piccolo riflette il fatto che, dato un valore medio di <span class="math notranslate nohighlight">\(40\)</span>, la probabilità complessiva di osservare questo specifico campione è estremamente bassa.</p>
+<p>Per costruire la likelihood completa, ripetiamo questa procedura per ogni punto della nostra griglia di valori.</p>
+<p>Dopo aver calcolato la likelihood per ogni punto, procediamo moltiplicandola per il valore del prior corrispondente. Questo passaggio ci consente di ottenere una distribuzione a posteriori non ancora normalizzata.</p>
+<p>Nel contesto di una griglia discreta, la normalizzazione della distribuzione a posteriori può essere facilmente conseguita dividendo ogni valore per la somma totale dei valori della distribuzione a posteriori.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">))</span>  <span class="c1"># Una prior uniforme</span>
+<span class="n">posterior_non_norm</span> <span class="o">=</span> <span class="n">likelihood</span> <span class="o">*</span> <span class="n">prior</span>  <span class="c1"># Calcoliamo la posterior non normalizzata moltiplicando per la prior</span>
+<span class="n">posterior</span> <span class="o">=</span> <span class="n">posterior_non_norm</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">posterior_non_norm</span><span class="p">)</span>  <span class="c1"># Normalizziamo la posterior</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>La figura successiva presenta una rappresentazione grafica della distribuzione a posteriori normalizzata.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">,</span> <span class="n">posterior</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione a Posteriori della Media&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Media&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probabilità&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/c1f02dbecd5cf0b9d1070ed93cb82567d1b5a821487f7676553a4b37171fff54.png"><img alt="../_images/c1f02dbecd5cf0b9d1070ed93cb82567d1b5a821487f7676553a4b37171fff54.png" src="../_images/c1f02dbecd5cf0b9d1070ed93cb82567d1b5a821487f7676553a4b37171fff54.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Per fare un altro esempio, consideriamo un prior non uniforme corrispondente ad una distribuzione gaussiana con media 40 e <span class="math notranslate nohighlight">\(\sigma\)</span> = 3.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcolo della prior gaussiana per ogni valore della griglia della media</span>
+<span class="n">prior</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Calcolo della likelihood (rimane invariato)</span>
+<span class="n">likelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">campione</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">media</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_conosciuta</span><span class="p">))</span> <span class="k">for</span> <span class="n">media</span> <span class="ow">in</span> <span class="n">media_griglia</span><span class="p">])</span>
+
+<span class="c1"># Calcolo della distribuzione a posteriori (aggiornamento con la nuova prior)</span>
+<span class="n">posterior_non_norm</span> <span class="o">=</span> <span class="n">likelihood</span> <span class="o">*</span> <span class="n">prior</span>  <span class="c1"># Moltiplicazione element-wise</span>
+<span class="n">posterior</span> <span class="o">=</span> <span class="n">posterior_non_norm</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">posterior_non_norm</span><span class="p">)</span>  <span class="c1"># Normalizzazione</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Riesaminiamo la distribuzione a posteriori calcolata in questo caso, confrontandola con la distribuzione a priori. È importante notare che, in questo secondo esempio, la distribuzione a posteriori mostra una «traslazione» in direzione del prior.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">,</span> <span class="n">posterior</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Posterior&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">,</span> <span class="n">prior</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">prior</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Prior&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione a Posteriori e Prior della Media&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Media&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Densità&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/549046a1afaa8390a37c03ebd12b3b3dca4fb5116ebcbbc8c42e881ff365f8ff.png"><img alt="../_images/549046a1afaa8390a37c03ebd12b3b3dca4fb5116ebcbbc8c42e881ff365f8ff.png" src="../_images/549046a1afaa8390a37c03ebd12b3b3dca4fb5116ebcbbc8c42e881ff365f8ff.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Dopo aver calcolato la distribuzione a posteriori come mostrato sopra, per ottenere un campione casuale da questa distribuzione possiamo seguire un approccio di campionamento discreto. Poiché la distribuzione a posteriori è definita su una griglia di valori della media, possiamo utilizzare il campionamento ponderato per selezionare casualmente un valore dalla griglia secondo le probabilità a posteriori.</p>
+<p>Questo metodo ci permette di «campionare» dalla distribuzione a posteriori nonostante essa sia rappresentata in forma discreta anziché continua. Ecco come si può fare in Python:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Selezione casuale di un indice dalla griglia secondo le probabilità a posteriori</span>
+<span class="n">indice_campionato</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">posterior</span><span class="p">)</span>
+
+<span class="c1"># Estrazione del valore della media corrispondente all&#39;indice campionato</span>
+<span class="n">media_campionata</span> <span class="o">=</span> <span class="n">media_griglia</span><span class="p">[</span><span class="n">indice_campionato</span><span class="p">]</span>
+<span class="n">media_campionata</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1000,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il metodo <code class="docutils literal notranslate"><span class="pre">np.random.choice</span></code> permette di selezionare un indice dalla griglia con probabilità proporzionale ai valori della distribuzione a posteriori. In questo modo, i valori della media con probabilità a posteriori più alta saranno selezionati più frequentemente, riflettendo la loro maggiore plausibilità data la combinazione dei dati osservati e della prior.</p>
+<p>Questo campione dalla distribuzione a posteriori rappresenta quindi una possibile stima della media della popolazione, tenendo conto sia dei dati osservati (attraverso la likelihood) sia delle nostre conoscenze o supposizioni precedenti (attraverso la prior).</p>
+<p>L’istogramma seguente mostra la distribuzione di un campione casuale ottenuto dalla distribuzione a posteriori.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">media_campionata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/cdc672593fc16e6ca5a8d30612c1501a369d443d5c65d59301fef95705d83928.png"><img alt="../_images/cdc672593fc16e6ca5a8d30612c1501a369d443d5c65d59301fef95705d83928.png" src="../_images/cdc672593fc16e6ca5a8d30612c1501a369d443d5c65d59301fef95705d83928.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Calcoliamo ora la media a posteriori:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">media_campionata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>48.07676767676767
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’intervallo di credibilità al 94% è dato da:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcolo del 3° e 97° percentile dei campioni per ottenere l&#39;intervallo di credibilità al 95%</span>
+<span class="n">limite_inferiore</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">media_campionata</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">limite_superiore</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">media_campionata</span><span class="p">,</span> <span class="mi">97</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Intervallo di credibilità al 94% per la media: [</span><span class="si">{</span><span class="n">limite_inferiore</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">limite_superiore</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Intervallo di credibilità al 94% per la media: [45.45454545454545, 50.511111111111106]
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’intervallo di credibilità al 94%, calcolato come descritto sopra, rappresenta un intervallo all’interno del quale ci aspettiamo che si trovi il vero valore della media della popolazione con una probabilità del 94%. In altre parole, basandoci sulle informazioni ottenute dai campioni e su precedenti conoscenze rappresentate dalla distribuzione a priori, possiamo essere il 94% confidenti che l’intervallo definito dal 3° al 97° percentile includa la vera media della popolazione.</p>
+<p>L’intervallo di credibilità che è stato calcolato offre una stima probabilitica di dove si trova il vero valore della media della popolazione, basandosi sui dati del campione e sull’approccio inferenziale bayesiano. Questo intervallo fornisce quindi una misura diretta dell’incertezza della nostra stima, riflettendo la forza e la precisione delle evidenze a nostra disposizione.</p>
+</section>
+<section id="la-log-verosimiglianza">
+<h2>La Log-Verosimiglianza<a class="headerlink" href="#la-log-verosimiglianza" title="Link to this heading">#</a></h2>
+<p>Nell’esempio presente abbiamo calcolato la verosimiglianza con una somma. Tuttavia questo produce dei problemi e, in generale, è preferibile lavorare con i logaritmi.</p>
+<p><strong>Stabilità Numerica</strong></p>
+<ul class="simple">
+<li><p><strong>Riduzione dell’Underflow:</strong> I prodotti di molte probabilità piccole possono portare a un «underflow» numerico, dove il valore risultante è così piccolo che viene arrotondato a zero dalla rappresentazione in virgola mobile del computer. I logaritmi trasformano questi prodotti in somme, riducendo significativamente il rischio di underflow.</p></li>
+</ul>
+<p><strong>Semplificazione dei Calcoli</strong></p>
+<ul class="simple">
+<li><p><strong>Trasformazione di Prodotti in Somme:</strong> Il logaritmo di un prodotto è uguale alla somma dei logaritmi (log(ab) = log(a) + log(b)). Questo trasforma il prodotto di molte verosimiglianze in una somma di logaritmi, semplificando i calcoli e migliorando l’efficienza computazionale.</p></li>
+</ul>
+<p><strong>Miglioramento della Precisione</strong></p>
+<ul class="simple">
+<li><p><strong>Maggiore Precisione nei Calcoli:</strong> I calcolatori sono generalmente più precisi nel sommare che nel moltiplicare numeri, specialmente quando si tratta di numeri molto grandi o molto piccoli. L’uso dei logaritmi può quindi aiutare a mantenere una maggiore precisione nei calcoli.</p></li>
+</ul>
+<p><strong>Facilità di Ottimizzazione</strong></p>
+<ul class="simple">
+<li><p><strong>Convenienza nell’Ottimizzazione:</strong> Molti algoritmi di ottimizzazione lavorano meglio con somme piuttosto che con prodotti, soprattutto perché le derivate delle funzioni somma sono più semplici da calcolare rispetto a quelle dei prodotti. Questo è particolarmente utile nella stima di massima verosimiglianza e in altri contesti di ottimizzazione bayesiana.</p></li>
+</ul>
+<p><strong>Gestione di Valori Estremi</strong></p>
+<ul class="simple">
+<li><p><strong>Migliore Gestione di Gamma Dinamico:</strong> I logaritmi possono aiutare a gestire meglio un ampio range di valori, riducendo gli effetti di valori estremamente grandi o piccoli che potrebbero altrimenti dominare il prodotto di verosimiglianze e portare a risultati distorti.</p></li>
+</ul>
+<p>In conclusione, l’uso dei logaritmi nella stima delle distribuzioni posteriori e in altri calcoli probabilistici offre numerosi vantaggi in termini di stabilità numerica, precisione e efficienza computazionale, rendendolo un approccio preferibile in molte situazioni.</p>
+<p>Per riprodurre l’esempio precedente utilizzando la log-verosimiglianza, anziché lavorare direttamente con i valori delle verosimiglianze, convertiremo i calcoli in termini di logaritmi. Questo approccio migliora la stabilità numerica e l’efficienza dei calcoli, come discusso precedentemente. Seguiamo il processo passo dopo passo:</p>
+<ol class="arabic simple">
+<li><p><strong>Generazione del Campione</strong>: Iniziamo generando un campione dalla distribuzione normale con una media vera e una deviazione standard conosciuta.</p></li>
+<li><p><strong>Definizione della Griglia per la Media</strong>: Stabiliremo una griglia di valori possibili per la media sulla quale calcoleremo la log-verosimiglianza.</p></li>
+<li><p><strong>Calcolo della Log-Likelihood</strong>: Calcoleremo la log-verosimiglianza per ciascun valore della griglia, utilizzando la densità di probabilità normale.</p></li>
+<li><p><strong>Applicazione della Prior e Calcolo della Posterior</strong>: Moltiplicheremo la log-verosimiglianza per la log-prior (se applicabile) e normalizzeremo per ottenere la distribuzione a posteriori.</p></li>
+<li><p><strong>Visualizzazione</strong>: Infine, visualizzeremo la distribuzione a posteriori della media.</p></li>
+</ol>
+<p>Procediamo con l’implementazione in Python:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>  <span class="c1"># Per la riproducibilità</span>
+<span class="n">vera_media</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># Media vera</span>
+<span class="n">sigma_conosciuta</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Deviazione standard conosciuta</span>
+<span class="n">dimensione_campione</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Dimensione del campione</span>
+
+<span class="c1"># Generare un campione</span>
+<span class="n">campione</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">vera_media</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_conosciuta</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">dimensione_campione</span><span class="p">)</span>
+
+<span class="c1"># Definizione della griglia per la media</span>
+<span class="n">media_griglia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  
+
+<span class="c1"># Calcolo della log-likelihood</span>
+<span class="n">log_likelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">campione</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">media</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma_conosciuta</span><span class="p">))</span> <span class="k">for</span> <span class="n">media</span> <span class="ow">in</span> <span class="n">media_griglia</span><span class="p">])</span>
+
+<span class="c1"># Calcoliamo la log-prior gaussiana</span>
+<span class="n">log_prior</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Calcoliamo la log-posterior non normalizzata sommando log-likelihood e log-prior</span>
+<span class="n">log_posterior_non_norm</span> <span class="o">=</span> <span class="n">log_likelihood</span> <span class="o">+</span> <span class="n">log_prior</span>  
+
+<span class="c1"># Normalizziamo la log-posterior</span>
+<span class="n">log_posterior</span> <span class="o">=</span> <span class="n">log_posterior_non_norm</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_posterior_non_norm</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">log_posterior_non_norm</span><span class="p">))))</span>
+<span class="n">posterior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_posterior</span><span class="p">)</span>
+
+<span class="c1"># Visualizzazione della distribuzione a posteriori</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">media_griglia</span><span class="p">,</span> <span class="n">posterior</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione a Posteriori della Media (Log-verosimiglianza)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Media&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probabilità&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/d9418d328070c2d1543cb038ed71c342d2df2a609892f6f465e7f5a45ab4d07d.png"><img alt="../_images/d9418d328070c2d1543cb038ed71c342d2df2a609892f6f465e7f5a45ab4d07d.png" src="../_images/d9418d328070c2d1543cb038ed71c342d2df2a609892f6f465e7f5a45ab4d07d.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+</section>
+<section id="deviazione-standard-ignota">
+<h2>Deviazione Standard Ignota<a class="headerlink" href="#deviazione-standard-ignota" title="Link to this heading">#</a></h2>
+<p>Estendere l’approccio usato sopra al caso in cui la deviazione standard (<span class="math notranslate nohighlight">\(\sigma\)</span>) della popolazione non è conosciuta introduce una complessità maggiore nell’inferenza bayesiana, poiché ora dobbiamo stimare due parametri (la media e la deviazione standard) invece di uno solo. In questo contesto, la distribuzione a posteriori diventa una funzione delle due dimensioni (media e <span class="math notranslate nohighlight">\(\sigma\)</span>), e la sua esplorazione richiede metodi più sofisticati per navigare efficacemente lo spazio dei parametri. Vediamo come affrontare questo problema:</p>
+<section id="definizione-dello-spazio-dei-parametri">
+<h3>1. <strong>Definizione dello Spazio dei Parametri</strong><a class="headerlink" href="#definizione-dello-spazio-dei-parametri" title="Link to this heading">#</a></h3>
+<p>Dobbiamo definire una griglia bidimensionale che copra le possibili combinazioni di valori per la media (<span class="math notranslate nohighlight">\(\mu\)</span>) e la deviazione standard (<span class="math notranslate nohighlight">\(\sigma\)</span>). Questo approccio, sebbene computazionalmente intensivo, è fattibile per problemi di dimensioni moderate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu_griglia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">sigma_griglia</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calcolo-della-log-likelihood-bidimensionale">
+<h3>2. <strong>Calcolo della Log-Likelihood Bidimensionale</strong><a class="headerlink" href="#calcolo-della-log-likelihood-bidimensionale" title="Link to this heading">#</a></h3>
+<p>Per ogni coppia di valori (<span class="math notranslate nohighlight">\(\mu\)</span>, <span class="math notranslate nohighlight">\(\sigma\)</span>) nella griglia, calcoliamo la log-likelihood del campione. Questo richiede un’iterazione su entrambe le dimensioni della griglia.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log_likelihood_2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">campione</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">))</span>
+                                <span class="k">for</span> <span class="n">sigma</span> <span class="ow">in</span> <span class="n">sigma_griglia</span><span class="p">]</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">mu_griglia</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="applicazione-delle-priors">
+<h3>3. <strong>Applicazione delle Priors</strong><a class="headerlink" href="#applicazione-delle-priors" title="Link to this heading">#</a></h3>
+<p>Le priors per <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> possono essere definite in modo indipendente e poi combinate, o si può definire una prior congiunta che rifletta la conoscenza o le assunzioni sui parametri. Le log-priors per <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> sono calcolate su ogni griglia rispettivamente e poi sommate per ottenere una log-prior congiunta.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log_prior_mu</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">mu_griglia</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">log_prior_sigma</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">sigma_griglia</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">log_prior_2d</span> <span class="o">=</span> <span class="n">log_prior_mu</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> <span class="n">log_prior_sigma</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calcolo-della-distribuzione-a-posteriori-bidimensionale">
+<h3>4. <strong>Calcolo della Distribuzione a Posteriori Bidimensionale</strong><a class="headerlink" href="#calcolo-della-distribuzione-a-posteriori-bidimensionale" title="Link to this heading">#</a></h3>
+<p>Sommando la log-likelihood con la log-prior congiunta e normalizzando, otteniamo la distribuzione a posteriori bidimensionale.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log_posterior_2d</span> <span class="o">=</span> <span class="n">log_likelihood_2d</span> <span class="o">+</span> <span class="n">log_prior_2d</span>
+<span class="n">log_posterior_2d</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">log_posterior_2d</span><span class="p">)</span>  <span class="c1"># Stabilizzazione</span>
+<span class="n">posterior_2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_posterior_2d</span><span class="p">)</span>
+<span class="n">posterior_2d</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">posterior_2d</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizzazione">
+<h3>5. <strong>Visualizzazione</strong><a class="headerlink" href="#visualizzazione" title="Link to this heading">#</a></h3>
+<p>La visualizzazione di distribuzioni bidimensionali può essere effettuata tramite contour plot o heatmaps.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">mu_griglia</span><span class="p">,</span> <span class="n">sigma_griglia</span><span class="p">,</span> <span class="n">posterior_2d</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Media ($\mu$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Deviazione Standard ($\sigma$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Densità Posterior&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione a Posteriori Bidimensionale&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;&gt;:2: SyntaxWarning: invalid escape sequence &#39;\m&#39;
+&lt;&gt;:3: SyntaxWarning: invalid escape sequence &#39;\s&#39;
+&lt;&gt;:2: SyntaxWarning: invalid escape sequence &#39;\m&#39;
+&lt;&gt;:3: SyntaxWarning: invalid escape sequence &#39;\s&#39;
+/var/folders/s7/z86r4t9j6yx376cm120nln6w0000gn/T/ipykernel_33016/4162669767.py:2: SyntaxWarning: invalid escape sequence &#39;\m&#39;
+  plt.xlabel(&#39;Media ($\mu$)&#39;)
+/var/folders/s7/z86r4t9j6yx376cm120nln6w0000gn/T/ipykernel_33016/4162669767.py:3: SyntaxWarning: invalid escape sequence &#39;\s&#39;
+  plt.ylabel(&#39;Deviazione Standard ($\sigma$)&#39;)
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/ff89aff8a5f99a708c7eca9e4c30e69f3a460d151b2f6cc2aacd780f808fde9e.png"><img alt="../_images/ff89aff8a5f99a708c7eca9e4c30e69f3a460d151b2f6cc2aacd780f808fde9e.png" src="../_images/ff89aff8a5f99a708c7eca9e4c30e69f3a460d151b2f6cc2aacd780f808fde9e.png" style="width: 729px; height: 491px;" /></a>
+</div>
+</div>
+</section>
+<section id="discussione">
+<h3>Discussione<a class="headerlink" href="#discussione" title="Link to this heading">#</a></h3>
+<p>Questo approccio richiede di navigare un numero molto maggiore di combinazioni di parametri rispetto alla stima di un solo parametro, rendendo l’analisi più computazionalmente intensiva. Inoltre, la scelta delle priors per più parametri richiede attenzione, poiché influenzerà direttamente le stime a posteriori.</p>
+<p>Per problemi con più dimensioni o quando l’esplorazione della griglia diventa impraticabile, metodi come il campionamento di Markov Chain Monte Carlo (MCMC) diventano essenziali. Questi metodi permettono di campionare efficacemente dalla distribuzione a posteriori senza dover esplorare esplicitamente tutto lo spazio dei parametri.</p>
+<p>In sintesi, l’estensione dell’approccio bayesiano a casi in cui più parametri sono sconosciuti richiede una maggiore attenzione nella definizione dello spazio dei parametri, nella scelta delle priors, e nel calcolo delle distribuzioni a posteriori</p>
+</section>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+matplotlib: 3.8.4
+arviz     : 0.18.0
+numpy     : 1.26.4
+scipy     : 1.13.1
+seaborn   : 0.13.2
+pandas    : 2.2.2
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_subj_prop.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Pensare ad una proporzione in termini soggettivi</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_conjugate_families_1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">Distribuzioni coniugate</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-prior-uniforme">Un prior uniforme</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-log-verosimiglianza">La Log-Verosimiglianza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deviazione-standard-ignota">Deviazione Standard Ignota</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definizione-dello-spazio-dei-parametri">1. <strong>Definizione dello Spazio dei Parametri</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-della-log-likelihood-bidimensionale">2. <strong>Calcolo della Log-Likelihood Bidimensionale</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applicazione-delle-priors">3. <strong>Applicazione delle Priors</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-della-distribuzione-a-posteriori-bidimensionale">4. <strong>Calcolo della Distribuzione a Posteriori Bidimensionale</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizzazione">5. <strong>Visualizzazione</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#discussione">Discussione</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

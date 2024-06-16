@@ -1,0 +1,2253 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modello gerarchico beta-binomiale con Stan &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/24_stan_hier_beta_binom';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_4/24_stan_hier_beta_binom.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="Analisi della regressione" href="../chapter_5/introduction_part_5.html" />
+    <link rel="prev" title="Confronto tra due gruppi" href="23_stan_two_groups.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/24_stan_hier_beta_binom.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/24_stan_hier_beta_binom.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modello gerarchico beta-binomiale con Stan</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisi-bayesiana-della-terapia-tattile">Analisi bayesiana della «terapia tattile»</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sezione-data">Sezione <code class="docutils literal notranslate"><span class="pre">data</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sezione-parameters">Sezione <code class="docutils literal notranslate"><span class="pre">parameters</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sezione-model">Sezione <code class="docutils literal notranslate"><span class="pre">model</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schrinkage-bayesiano">Schrinkage bayesiano</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosa-significa-shrinkage-in-un-modello-gerarchico">Cosa Significa Shrinkage in un Modello Gerarchico?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meccanismo-dello-shrinkage">Meccanismo dello Shrinkage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benefici-dello-shrinkage">Benefici dello Shrinkage</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="modello-gerarchico-beta-binomiale-con-stan">
+<span id="stan-hier-beta-binom-model"></span><h1>Modello gerarchico beta-binomiale con Stan<a class="headerlink" href="#modello-gerarchico-beta-binomiale-con-stan" title="Link to this heading">#</a></h1>
+<p>In questo capitolo, esploreremo il concetto di modellazione gerarchica nel contesto Bayesiano. Partiamo da un esempio semplice per introdurre la stima statistica: consideriamo un’urna con palline di colore blu e rosso. Estraendo un campione di 10 palline, possiamo stimare la proporzione di palline blu presenti nell’urna. Questo scenario classico ci introduce ai fondamenti della stima statistica.</p>
+<p>Immaginiamo ora una situazione più complessa: abbiamo a disposizione una grande urna che contiene al suo interno 10 urne più piccole, ciascuna delle quali è riempita con proprie palline blu e rosse. Supponiamo di scegliere 7 di queste urne minori ed estrarre 10 palline da ciascuna. La questione è: come analizziamo questi dati?</p>
+<p>Una possibile soluzione è trattare ogni urna piccola come un’entità completamente indipendente, ripetendo il problema statistico base per sette volte. Questo metodo, tuttavia, non è ideale perché assume che non ci sia nessuna correlazione tra le urne piccole, ignorando il fatto che tutte provengono da una urna comune più grande che potrebbe influenzarne il contenuto.</p>
+<p>Un altro metodo potrebbe essere quello di ignorare completamente la presenza delle urne minori e focalizzarsi unicamente sulla stima della proporzione totale di palline blu nell’urna grande. Questo approccio, però, trascura completamente la struttura gerarchica dei dati, ossia il fatto che le palline sono organizzate in urne separate.</p>
+<p>Il metodo più appropriato per analizzare questa situazione è attraverso la modellazione gerarchica. Con questo approccio, ci proponiamo di stimare non solo la proporzione di palline blu in ogni urna minore, ma anche di comprendere quanto le urne sono correlate tra loro. L’urna grande funge da modello generativo per le urne più piccole, e comprendere questa relazione sottostante ci consente di fare previsioni più accurate sulla proporzione di palline blu in ogni urna minore, riconoscendo e sfruttando la struttura gerarchica dei dati.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">cmdstanpy</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
+
+<span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed to make the results fully reproducible</span>
+<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;stan_hier_beta_binomial&quot;</span><span class="p">))</span>
+<span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.facecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+
+<span class="c1"># Get the home directory</span>
+<span class="n">home_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+<span class="c1"># Construct the path to the Quarto project directory </span>
+<span class="n">project_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">home_directory</span><span class="p">,</span> <span class="s1">&#39;_repositories&#39;</span><span class="p">,</span> <span class="s1">&#39;ds4p&#39;</span><span class="p">)</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="analisi-bayesiana-della-terapia-tattile">
+<h2>Analisi bayesiana della «terapia tattile»<a class="headerlink" href="#analisi-bayesiana-della-terapia-tattile" title="Link to this heading">#</a></h2>
+<p>Esaminiamo un problema presentato nel lavoro di <span id="id1"></span> riguardante la «terapia tattile» (Therapeutic Touch), una pratica infermieristica incentrata sulla manipolazione del presunto «campo energetico» di un paziente. Nonostante la sua prevalenza nelle scuole di infermieristica e negli ospedali negli Stati Uniti, come riportato da <span id="id2"></span>, evidenze empiriche a supporto della sua efficacia sono scarse o assenti.</p>
+<p>Il focus dell’indagine di <span id="id3"></span> è una delle asserzioni cardine degli operatori di terapia tattile: la presunta capacità di percepire i campi energetici senza contatto visivo. Per testare questa affermazione, è stato progettato un esperimento in cui gli operatori ponevano le loro mani attraverso un pannello che bloccava la visione. In ciascuna prova, un esaminatore, seguendo l’esito di un lancio di moneta, posizionava la sua mano sopra una delle mani dell’operatore. L’operatore doveva quindi identificare quale delle sue mani era stata «selezionata» dall’esaminatore. Ogni tentativo è stato classificato come «corretto» o «errato».</p>
+<p>L’unità di osservazione in questo esperimento è costituita da un set di 10 prove per operatore. In totale, lo studio ha coinvolto 21 operatori, con sette di loro sottoposti a retest dopo circa un anno. I dati di retest sono stati trattati come entità indipendenti, portando a un campione effettivo di 28 osservazioni. La metrica di interesse è la proporzione di risposte corrette per ciascun operatore, con una proporzione attesa di 0.50 sotto l’ipotesi nulla di performance casuale.</p>
+<p>La domanda della ricerca centrale è se il campione nel suo complesso è in grado di ottenere una prestazione superiore a quella attesa in base al caso soltanto e, inoltre, se vi sono variazioni  nelle prestazioni individuali.</p>
+<p>Inizieremo importando i dati forniti da <span id="id4"></span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the URL of the CSV file on GitHub</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/boboppie/kruschke-doing_bayesian_data_analysis/master/2e/TherapeuticTouchData.csv&quot;</span>
+<span class="c1"># Download the content of the CSV file</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">tt_dat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tt_dat</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   y    s
+0  1  S01
+1  0  S01
+2  0  S01
+3  0  S01
+4  0  S01
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tt_dat</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(280, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Nella colonna <code class="docutils literal notranslate"><span class="pre">y</span></code>, il valore 1 indica una risposta corretta, mentre 0 indica una risposta errata. La seconda colonna contiene il codice identificativo di ciascun operatore.</p>
+<p>Calcoliamo la proporzione di risposte corrette per ciascun operatore.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tt_agg</span> <span class="o">=</span> <span class="n">tt_dat</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">proportion_correct</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">tt_agg</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>s</th>
+      <th>proportion_correct</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>S01</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>S02</td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>S03</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>S04</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>S05</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>S06</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>S07</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>S08</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>S09</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>S10</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>S11</td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>S12</td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>S13</td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>S14</td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>S15</td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>S16</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>S17</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>S18</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>S19</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>S20</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>S21</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>S22</td>
+      <td>0.5</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>S23</td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>S24</td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>S25</td>
+      <td>0.7</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>S26</td>
+      <td>0.7</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>S27</td>
+      <td>0.7</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>S28</td>
+      <td>0.8</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Costruiamo un modello gerarchico partendo dall’ipotesi che il numero di risposte corrette di ciascun operatore sia modellato da una variabile casuale binomiale. Per ciascuno dei ventotto operatori, possiamo esprimere questo come segue:</p>
+<div class="math notranslate nohighlight">
+\[
+y_i \sim \text{Binomial}(n_i, p_i),
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\(i = 0, \dots, 27\)</span>.</p>
+<p>Per modellare la distribuzione a priori del parametro sconosciuto <span class="math notranslate nohighlight">\(p_i\)</span>, possiamo utilizzare una distribuzione Beta con parametri <span class="math notranslate nohighlight">\(a\)</span> e <span class="math notranslate nohighlight">\(b\)</span> – si veda <span id="id5">Kruschke [<a class="reference internal" href="../references/bibliography.html#id12" title="John Kruschke. Doing Bayesian data analysis: A tutorial with R, JAGS, and Stan. Academic Press, 2014.">Kru14</a>]</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+p_i \sim \text{Beta}(a, b).
+\]</div>
+<p>È importante notare che gli iperparametri <span class="math notranslate nohighlight">\(a\)</span> e <span class="math notranslate nohighlight">\(b\)</span> sono condivisi tra tutti gli operatori, caratteristica che definisce un modello gerarchico.</p>
+<p>Se <span class="math notranslate nohighlight">\(a\)</span> e <span class="math notranslate nohighlight">\(b\)</span> sono noti, la distribuzione a posteriori del parametro <span class="math notranslate nohighlight">\(p\)</span> per ciascun operatore, dati i risultati osservati <span class="math notranslate nohighlight">\(y_i\)</span>, è anch’essa una distribuzione Beta:</p>
+<div class="math notranslate nohighlight">
+\[
+p_i \mid y_i \sim \text{Beta}(a + y_i, b + n_i - y_i). 
+\]</div>
+<p>Nel caso più generale, dove gli iperparametri <span class="math notranslate nohighlight">\(a\)</span> e <span class="math notranslate nohighlight">\(b\)</span> sono incogniti, è necessario stabilire una distribuzione a priori anche per questi. Nell’esempio seguente, useremo i seguenti prior:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+a \sim \text{Gamma}(8, 12)\\ 
+b \sim \text{Gamma}(27, 5)
+\end{split}\]</div>
+<p>Per applicare il modello gerarchico descritto sopra ai dati del <em>therapeutic touch</em>, iniziamo a calcolare il numero di risposte corrette di ciascun operatore.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">tt_dat</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0     1
+1     2
+2     3
+3     3
+4     3
+5     3
+6     3
+7     3
+8     3
+9     3
+10    4
+11    4
+12    4
+13    4
+14    4
+15    5
+16    5
+17    5
+18    5
+19    5
+20    5
+21    5
+22    6
+23    6
+24    7
+25    7
+26    7
+27    8
+Name: y, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creiamo il vettore <code class="docutils literal notranslate"><span class="pre">N</span></code> che fornisce il numero di prove per ciascun operatore.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="n">tt_dat</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo dunque i dati a disposizione.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0     1
+1     2
+2     3
+3     3
+4     3
+5     3
+6     3
+7     3
+8     3
+9     3
+10    4
+11    4
+12    4
+13    4
+14    4
+15    5
+16    5
+17    5
+18    5
+19    5
+20    5
+21    5
+22    6
+23    6
+24    7
+25    7
+26    7
+27    8
+Name: y, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creaiamo un dizionario con i dati necessari per Stan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+    <span class="s2">&quot;n_trials&quot;</span><span class="p">:</span> <span class="n">N</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 28, &#39;y&#39;: [1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 7, 7, 8], &#39;n_trials&#39;: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Leggiamo il codice Stan che implementa il modello descritto nel capitolo <span class="xref std std-ref">hier_beta_binom_model</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;h_beta_binom_model.stan&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N;  // Number of participants
+  array[N] int&lt;lower=0&gt; y;  // Number of successes for each participant
+  array[N] int&lt;lower=0&gt; n_trials;  // Number of trials for each participant
+}
+
+parameters {
+  real&lt;lower=0&gt; alpha;  // Alpha parameter for the Beta distribution
+  real&lt;lower=0&gt; beta;   // Beta parameter for the Beta distribution
+  array[N] real&lt;lower=0, upper=1&gt; p;  // Success probability for each participant
+}
+
+model {
+  // Priors
+  alpha ~ gamma(8, 2);
+  beta ~ gamma(27, 5);
+  
+  // Each participant&#39;s success probability follows a Beta distribution
+  p ~ beta(alpha, beta);
+  
+  // Likelihood of the observed data
+  for (i in 1:N) {
+    y[i] ~ binomial(n_trials[i], p[i]);
+  }
+}
+
+generated quantities {
+  real overall_p = alpha / (alpha + beta);  // Calculate the mean success probability
+}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="sezione-data">
+<h3>Sezione <code class="docutils literal notranslate"><span class="pre">data</span></code><a class="headerlink" href="#sezione-data" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">N</span></code></strong>: rappresenta il numero totale di partecipanti allo studio.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">y</span></code></strong>: un array che contiene il numero di successi osservati per ciascun partecipante.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">n_trials</span></code></strong>: un array che indica il numero di tentativi compiuti da ogni partecipante.</p></li>
+</ul>
+<p>Queste sono le osservazioni raccolte dall’esperimento e rappresentano la base dati su cui verrà adattato il modello.</p>
+</section>
+<section id="sezione-parameters">
+<h3>Sezione <code class="docutils literal notranslate"><span class="pre">parameters</span></code><a class="headerlink" href="#sezione-parameters" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code></strong>: sono i parametri della distribuzione Beta, che servono a modellare la variabilità della probabilità di successo tra i partecipanti. Questi parametri determinano la forma della distribuzione Beta, influenzando direttamente la variabilità e la media delle probabilità di successo <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">p</span></code></strong>: un array che rappresenta la probabilità di successo individuale per ciascun partecipante. Queste probabilità sono stimate dal modello e sono soggette a variabilità tra i partecipanti.</p></li>
+</ul>
+</section>
+<section id="sezione-model">
+<h3>Sezione <code class="docutils literal notranslate"><span class="pre">model</span></code><a class="headerlink" href="#sezione-model" title="Link to this heading">#</a></h3>
+<ul>
+<li><p><strong>Priori</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">~</span> <span class="pre">gamma(8,</span> <span class="pre">2)</span></code>: indica che il parametro <code class="docutils literal notranslate"><span class="pre">alpha</span></code> segue una distribuzione Gamma con forma 8 e tasso 2. Questo è un prior informativo che suggerisce una certa credenza iniziale sulla distribuzione delle probabilità di successo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beta</span> <span class="pre">~</span> <span class="pre">gamma(27,</span> <span class="pre">5)</span></code>: simile ad <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, anche <code class="docutils literal notranslate"><span class="pre">beta</span></code> segue una distribuzione Gamma, ma con parametri diversi, riflettendo una diversa credenza iniziale sulla distribuzione delle probabilità di fallimento.</p></li>
+</ul>
+<p>Questi priori definiscono una distribuzione Beta flessibile che può adattarsi a vari tipi di dati di conteggio successo-fallimento.</p>
+</li>
+<li><p><strong>Distribuzione delle probabilità di successo</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">~</span> <span class="pre">beta(alpha,</span> <span class="pre">beta)</span></code>: indica che la probabilità di successo <code class="docutils literal notranslate"><span class="pre">p</span></code> per ogni partecipante segue una distribuzione Beta parametrizzata da <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>. Questo legame gerarchico permette di condividere informazioni tra i partecipanti, stabilendo che, sebbene ogni partecipante abbia la sua probabilità di successo, queste probabilità provengono dalla stessa distribuzione Beta.</p></li>
+</ul>
+</li>
+<li><p><strong>Likelihood</strong>:</p>
+<ul class="simple">
+<li><p>Il ciclo <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">(i</span> <span class="pre">in</span> <span class="pre">1:N)</span></code> itera su ciascun partecipante, dove <code class="docutils literal notranslate"><span class="pre">y[i]</span> <span class="pre">~</span> <span class="pre">binomial(n_trials[i],</span> <span class="pre">p[i])</span></code> modella il numero di successi <code class="docutils literal notranslate"><span class="pre">y[i]</span></code> per il partecipante <code class="docutils literal notranslate"><span class="pre">i</span></code> come una variabile casuale binomiale, con <code class="docutils literal notranslate"><span class="pre">n_trials[i]</span></code> tentativi e probabilità di successo <code class="docutils literal notranslate"><span class="pre">p[i]</span></code>. Questo collega direttamente la distribuzione delle probabilità di successo individuali alla distribuzione osservata dei successi.</p></li>
+</ul>
+</li>
+</ul>
+<p>Il modello gerarchico beta-binomiale adotta un approccio bayesiano per caratterizzare la variazione individuale nelle probabilità di successo all’interno di un contesto di prove binomiali. Questo modello incorpora una struttura gerarchica, dove i parametri alpha e beta regolano la distribuzione delle probabilità p tramite una distribuzione Beta. Tale struttura consente di catturare sia le differenze individuali sia le informazioni comuni tra i partecipanti. Di conseguenza, il modello risulta particolarmente idoneo per analizzare dati caratterizzati da variazioni intra-gruppo in contesti sperimentali o osservazionali basati su frequenze.</p>
+<p>Compiliamo il modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento MCMC.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">84735</span><span class="p">,</span> <span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo le stime a posteriori dei parametri.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_2.5%</th>
+      <th>hdi_97.5%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>alpha</th>
+      <td>4.591</td>
+      <td>0.866</td>
+      <td>2.991</td>
+      <td>6.359</td>
+      <td>0.008</td>
+      <td>0.006</td>
+      <td>10600.0</td>
+      <td>10141.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta</th>
+      <td>5.756</td>
+      <td>0.932</td>
+      <td>4.009</td>
+      <td>7.623</td>
+      <td>0.008</td>
+      <td>0.006</td>
+      <td>12032.0</td>
+      <td>11787.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[0]</th>
+      <td>0.273</td>
+      <td>0.100</td>
+      <td>0.091</td>
+      <td>0.469</td>
+      <td>0.001</td>
+      <td>0.000</td>
+      <td>20279.0</td>
+      <td>11628.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[1]</th>
+      <td>0.324</td>
+      <td>0.103</td>
+      <td>0.129</td>
+      <td>0.524</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>20614.0</td>
+      <td>11911.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[2]</th>
+      <td>0.373</td>
+      <td>0.107</td>
+      <td>0.174</td>
+      <td>0.588</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>20791.0</td>
+      <td>11355.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[3]</th>
+      <td>0.372</td>
+      <td>0.106</td>
+      <td>0.179</td>
+      <td>0.590</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22416.0</td>
+      <td>11620.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[4]</th>
+      <td>0.373</td>
+      <td>0.107</td>
+      <td>0.173</td>
+      <td>0.582</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22260.0</td>
+      <td>11753.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[5]</th>
+      <td>0.374</td>
+      <td>0.106</td>
+      <td>0.173</td>
+      <td>0.583</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>21443.0</td>
+      <td>12716.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[6]</th>
+      <td>0.372</td>
+      <td>0.106</td>
+      <td>0.172</td>
+      <td>0.580</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>21992.0</td>
+      <td>12317.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[7]</th>
+      <td>0.372</td>
+      <td>0.106</td>
+      <td>0.173</td>
+      <td>0.582</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>21133.0</td>
+      <td>11017.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[8]</th>
+      <td>0.372</td>
+      <td>0.105</td>
+      <td>0.176</td>
+      <td>0.583</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>21459.0</td>
+      <td>11369.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[9]</th>
+      <td>0.372</td>
+      <td>0.108</td>
+      <td>0.167</td>
+      <td>0.580</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22007.0</td>
+      <td>11102.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[10]</th>
+      <td>0.422</td>
+      <td>0.108</td>
+      <td>0.209</td>
+      <td>0.627</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>21331.0</td>
+      <td>12556.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[11]</th>
+      <td>0.421</td>
+      <td>0.109</td>
+      <td>0.217</td>
+      <td>0.634</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22045.0</td>
+      <td>11591.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[12]</th>
+      <td>0.422</td>
+      <td>0.108</td>
+      <td>0.213</td>
+      <td>0.632</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22874.0</td>
+      <td>12190.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[13]</th>
+      <td>0.421</td>
+      <td>0.110</td>
+      <td>0.214</td>
+      <td>0.637</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22807.0</td>
+      <td>12055.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[14]</th>
+      <td>0.421</td>
+      <td>0.109</td>
+      <td>0.213</td>
+      <td>0.634</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>21851.0</td>
+      <td>12199.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[15]</th>
+      <td>0.471</td>
+      <td>0.112</td>
+      <td>0.257</td>
+      <td>0.689</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22072.0</td>
+      <td>10892.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[16]</th>
+      <td>0.471</td>
+      <td>0.111</td>
+      <td>0.249</td>
+      <td>0.680</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22559.0</td>
+      <td>11739.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[17]</th>
+      <td>0.470</td>
+      <td>0.111</td>
+      <td>0.258</td>
+      <td>0.683</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>23384.0</td>
+      <td>11679.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[18]</th>
+      <td>0.471</td>
+      <td>0.111</td>
+      <td>0.259</td>
+      <td>0.688</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22495.0</td>
+      <td>11479.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[19]</th>
+      <td>0.471</td>
+      <td>0.111</td>
+      <td>0.264</td>
+      <td>0.691</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22949.0</td>
+      <td>11720.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[20]</th>
+      <td>0.472</td>
+      <td>0.110</td>
+      <td>0.251</td>
+      <td>0.680</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22288.0</td>
+      <td>11847.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[21]</th>
+      <td>0.472</td>
+      <td>0.109</td>
+      <td>0.264</td>
+      <td>0.685</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>24414.0</td>
+      <td>12216.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[22]</th>
+      <td>0.519</td>
+      <td>0.109</td>
+      <td>0.306</td>
+      <td>0.728</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22363.0</td>
+      <td>11502.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[23]</th>
+      <td>0.521</td>
+      <td>0.111</td>
+      <td>0.305</td>
+      <td>0.732</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>20720.0</td>
+      <td>11618.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[24]</th>
+      <td>0.570</td>
+      <td>0.109</td>
+      <td>0.357</td>
+      <td>0.780</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22438.0</td>
+      <td>11048.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[25]</th>
+      <td>0.570</td>
+      <td>0.109</td>
+      <td>0.349</td>
+      <td>0.772</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>20850.0</td>
+      <td>12520.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[26]</th>
+      <td>0.569</td>
+      <td>0.110</td>
+      <td>0.358</td>
+      <td>0.786</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>21973.0</td>
+      <td>11715.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>p[27]</th>
+      <td>0.620</td>
+      <td>0.107</td>
+      <td>0.409</td>
+      <td>0.821</td>
+      <td>0.001</td>
+      <td>0.001</td>
+      <td>22119.0</td>
+      <td>11629.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Le distribuzioni posteriori degli iperparametri, prese da sole, non hanno un significato chiaro. Tuttavia, possiamo utilizzarle per calcolare la distribuzione a posteriori della probabilità di una risposta corretta per tutto il gruppo.</p>
+<p>Convertiamo l’oggetto <code class="docutils literal notranslate"><span class="pre">fit</span></code> creato da cmdstanpy in un oggetto InferenceData usando ArviZ:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span><span class="n">posterior</span><span class="o">=</span><span class="n">fit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="schrinkage-bayesiano">
+<h2>Schrinkage bayesiano<a class="headerlink" href="#schrinkage-bayesiano" title="Link to this heading">#</a></h2>
+<p>Nel contesto dei modelli gerarchici bayesiani, il fenomeno dello «shrinkage» (o riduzione) è un aspetto fondamentale e desiderabile, specialmente quando si modellano dati provenienti da gruppi o sotto-popolazioni con campionature di dimensioni diverse o variazioni intrinseche. Questo fenomeno può essere particolarmente rilevante e utile nel tuo modello gerarchico per il numero di risposte corrette di ciascun operatore, modello che utilizza una distribuzione binomiale per le osservazioni e una Beta per i priori dei parametri di successo <span class="math notranslate nohighlight">\( p_i \)</span>.</p>
+<section id="cosa-significa-shrinkage-in-un-modello-gerarchico">
+<h3>Cosa Significa Shrinkage in un Modello Gerarchico?<a class="headerlink" href="#cosa-significa-shrinkage-in-un-modello-gerarchico" title="Link to this heading">#</a></h3>
+<p>Lo «shrinkage» in un modello bayesiano gerarchico si riferisce al processo per cui le stime dei parametri individuali (ad esempio, le probabilità di successo per ciascun operatore nel presente modello) sono «spostate» verso una media di gruppo. Questo accade perché il modello considera sia i dati osservati per ciascun gruppo (o individuo) sia le informazioni aggiuntive fornite dalla struttura gerarchica e dai dati degli altri gruppi.</p>
+</section>
+<section id="meccanismo-dello-shrinkage">
+<h3>Meccanismo dello Shrinkage<a class="headerlink" href="#meccanismo-dello-shrinkage" title="Link to this heading">#</a></h3>
+<p>Nel presente modello:</p>
+<ul class="simple">
+<li><p>Ogni operatore ha una probabilità di successo <span class="math notranslate nohighlight">\( p_i \)</span> che segue una distribuzione Beta <span class="math notranslate nohighlight">\( \text{Beta}(a, b) \)</span>, dove <span class="math notranslate nohighlight">\( a \)</span> e <span class="math notranslate nohighlight">\( b \)</span> sono iperparametri condivisi tra tutti gli operatori.</p></li>
+<li><p>Gli iperparametri <span class="math notranslate nohighlight">\( a \)</span> e <span class="math notranslate nohighlight">\( b \)</span> sono stimati dai dati di tutti gli operatori, e quindi forniscono una base comune che riflette le caratteristiche medie di tutti gli operatori.</p></li>
+</ul>
+<p>Se un operatore ha pochi dati (ad esempio, pochi tentativi o risposte), la stima di <span class="math notranslate nohighlight">\( p_i \)</span> per quell’operatore sarà fortemente influenzata dai valori di <span class="math notranslate nohighlight">\( a \)</span> e <span class="math notranslate nohighlight">\( b \)</span>, «spostando» la stima di <span class="math notranslate nohighlight">\( p_i \)</span> verso la media di gruppo. Questo riduce l’impatto delle fluttuazioni casuali nei dati di quell’operatore, che potrebbero altrimenti portare a stime eccessivamente ottimistiche o pessimistiche.</p>
+</section>
+<section id="benefici-dello-shrinkage">
+<h3>Benefici dello Shrinkage<a class="headerlink" href="#benefici-dello-shrinkage" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Migliore Stima per Gruppi con Pochi Dati</strong>: Operatori con meno dati beneficiano maggiormente dello shrinkage, in quanto le loro stime sono stabilizzate attraverso l’informazione «prestata» dagli altri operatori.</p></li>
+<li><p><strong>Riduzione dell’Overfitting</strong>: Il modello evita di adattarsi troppo ai dati di un singolo operatore, specialmente quando questi sono limitati o rumorosi, risultando in generalizzazioni più robuste.</p></li>
+<li><p><strong>Incorporazione della Struttura dei Dati</strong>: Lo shrinkage riflette l’assunzione che gli operatori siano simili ma non identici, permettendo una certa individualità ma entro un quadro comune che li lega.</p></li>
+</ol>
+<p>Supponiamo che alcuni operatori abbiano mostrato risultati estremamente buoni o cattivi, che potrebbero essere dovuti a varianze casuali. Lo shrinkage modera queste stime estreme, specialmente se non sono supportate da una grande quantità di dati, rendendo le previsioni finali più credibili e meno soggette a errori casuali.</p>
+<p>In conclusione, lo shrinkage in un modello gerarchico aiuta a ottenere stime più accurate e credibili per tutti i membri del gruppo, sfruttando le informazioni collettive e limitando l’impatto delle anomalie nei dati individuali.</p>
+<p>Per rappresentare visivamente questo fenomeno, iniziamo con il recuperare le stime a posteriori di  <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alphas</span> <span class="o">=</span> <span class="n">idata</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span>
+<span class="n">betas</span> <span class="o">=</span> <span class="n">idata</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creiamo un array che contiene le stime bayesiane della probabilità di successo di ciascun operatore fornite sopra dalla funzione <code class="docutils literal notranslate"><span class="pre">summary</span></code> di ArviZ. Per fare questo usiamo le funzionalità di <code class="docutils literal notranslate"><span class="pre">xarray</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bayesian estimates</span>
+<span class="c1"># Calcola la media lungo le dimensioni &#39;chain&#39; e &#39;draw&#39;</span>
+<span class="n">bayesian_estimates</span> <span class="o">=</span> <span class="n">idata</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;chain&quot;</span><span class="p">,</span> <span class="s2">&quot;draw&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bayesian_estimates</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.27273311 0.32377131 0.37344338 0.37214022 0.37257493 0.37351838
+ 0.37219305 0.37214675 0.37185773 0.37173435 0.42165569 0.42127528
+ 0.42172633 0.42118034 0.42149943 0.47116033 0.47087155 0.46970487
+ 0.47107502 0.47138671 0.47205312 0.47221249 0.51906367 0.52052519
+ 0.57032404 0.57017976 0.56928041 0.62016621]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Generiamo un array con le probabilità empiriche.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Empirical probabilities</span>
+<span class="n">empirical_probs</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="n">N</span><span class="o">.</span><span class="n">values</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">empirical_probs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.1 0.2 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.4 0.4 0.4 0.4 0.4 0.5 0.5 0.5
+ 0.5 0.5 0.5 0.5 0.6 0.6 0.7 0.7 0.7 0.8]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il grafico seguente confronta le probabilità empiriche con le stime Bayesiane per la probabilità di successo associata a ciascun operatore. Questa rappresentazione evidenzia il fenomeno di «shrinkage» intrinseco ai modelli Bayesiani gerarchici. In particolare, il grafico illustra come le stime Bayesiane delle probabilità di successo per gli operatori tendono a convergere verso la media generale, in confronto alle probabilità empiriche.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcola la media generale delle probabilità empiriche</span>
+<span class="n">mean_empirical_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">empirical_probs</span><span class="p">)</span>
+<span class="n">mean_empirical_prob</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.43928571428571417
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcola la media generale delle stime Bayesiane</span>
+<span class="n">mean_bayesian_estimate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bayesian_estimates</span><span class="p">)</span>
+<span class="n">mean_bayesian_estimate</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewBox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewBox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class='xr-text-repr-fallback'>&lt;xarray.DataArray &#x27;p&#x27; ()&gt; Size: 8B
+array(0.44112334)</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.DataArray</div><div class='xr-array-name'>'p'</div></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-a7f20ce8-adcc-45d7-9318-d4d4cf4f1602' class='xr-array-in' type='checkbox' checked><label for='section-a7f20ce8-adcc-45d7-9318-d4d4cf4f1602' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>0.4411</span></div><div class='xr-array-data'><pre>array(0.44112334)</pre></div></div></li><li class='xr-section-item'><input id='section-0fa184c1-ccdb-4597-aa21-57b494226764' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-0fa184c1-ccdb-4597-aa21-57b494226764' class='xr-section-summary'  title='Expand/collapse section'>Coordinates: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-c6dc2568-6d78-4ecf-a66e-d40f1c487014' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-c6dc2568-6d78-4ecf-a66e-d40f1c487014' class='xr-section-summary'  title='Expand/collapse section'>Indexes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'></ul></div></li><li class='xr-section-item'><input id='section-7f0c024c-360f-4d64-a399-57ae624baffd' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-7f0c024c-360f-4d64-a399-57ae624baffd' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crea il grafico</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="c1"># Traccia le probabilità empiriche</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span> <span class="n">empirical_probs</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Probabilità Empiriche&quot;</span><span class="p">)</span>
+
+<span class="c1"># Traccia le stime Bayesiane</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span> <span class="n">bayesian_estimates</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Stime Bayesiane&quot;</span><span class="p">)</span>
+
+<span class="c1"># Aggiungi linee orizzontali per indicare le medie generali</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">mean_empirical_prob</span><span class="p">,</span>
+    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Media Generale Empirica: </span><span class="si">{</span><span class="n">mean_empirical_prob</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">mean_bayesian_estimate</span><span class="p">,</span>
+    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Media Generale Bayesiana: </span><span class="si">{</span><span class="n">mean_bayesian_estimate</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Etichette e titolo</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Indice dell&#39;Operatore&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probabilità di Successo&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Fenomeno dello Shrinkage in un Modello Bayesiano Gerarchico&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/028eacb081235952b0ca53abc0391e94f7b75801ebcc54df8f9f665b37a84ef6.png"><img alt="../_images/028eacb081235952b0ca53abc0391e94f7b75801ebcc54df8f9f665b37a84ef6.png" src="../_images/028eacb081235952b0ca53abc0391e94f7b75801ebcc54df8f9f665b37a84ef6.png" style="width: 756px; height: 491px;" /></a>
+</div>
+</div>
+<p>Esaminiamo la distribuzione a posteriori dei parametri <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/882d75b05905103a1b7bb92407eaab7f4b080c50457c7bbf022020327c897660.png"><img alt="../_images/882d75b05905103a1b7bb92407eaab7f4b080c50457c7bbf022020327c897660.png" src="../_images/882d75b05905103a1b7bb92407eaab7f4b080c50457c7bbf022020327c897660.png" style="width: 911px; height: 311px;" /></a>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">combined</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;rank_bars&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/e2ea1aa8a9802062e9f405ca0c725fb0b09ee67009ea00abb6523040ae4b158b.png"><img alt="../_images/e2ea1aa8a9802062e9f405ca0c725fb0b09ee67009ea00abb6523040ae4b158b.png" src="../_images/e2ea1aa8a9802062e9f405ca0c725fb0b09ee67009ea00abb6523040ae4b158b.png" style="width: 911px; height: 611px;" /></a>
+</div>
+</div>
+<p>Le distribuzioni posteriori degli iperparametri, prese da sole, non hanno un significato chiaro. Tuttavia, possiamo utilizzarle per calcolare la distribuzione a posteriori della probabilità di una risposta corretta per tutto il gruppo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function to calculate the mean of a Beta distribution</span>
+<span class="k">def</span> <span class="nf">beta_mean</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">alpha</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)</span>
+
+
+<span class="c1"># Calculate the means for each pair of alpha and beta</span>
+<span class="n">sample_posterior_x_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beta_mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="n">betas</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_posterior_x_means</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4, 4000)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_posterior_x_means</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.37604496, 0.41922669, 0.47345362, ..., 0.49569844, 0.47777766,
+        0.4247707 ],
+       [0.45096577, 0.41051049, 0.49462864, ..., 0.50996786, 0.53271226,
+        0.4371311 ],
+       [0.47134244, 0.47201767, 0.44473739, ..., 0.35595368, 0.41136842,
+        0.46184053],
+       [0.36027889, 0.42282699, 0.43706697, ..., 0.41162794, 0.43983373,
+        0.46031791]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sample_posterior_x_means</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.4428264916259948
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">sample_posterior_x_means</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/b178d36d9cc86079b01ce8297e35c8be1e9a2d9c1b5d75e229d1548200d1d9c4.png"><img alt="../_images/b178d36d9cc86079b01ce8297e35c8be1e9a2d9c1b5d75e229d1548200d1d9c4.png" src="../_images/b178d36d9cc86079b01ce8297e35c8be1e9a2d9c1b5d75e229d1548200d1d9c4.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>L’intervallo [0.37, 0.51] rappresenta l’intervallo di credibilità al 94% per la probabilità di risposta corretta <code class="docutils literal notranslate"><span class="pre">p</span></code>, considerando l’insieme del gruppo degli operatori. Questo intervallo ci fornisce un’indicazione sulla variabilità delle probabilità di successo tra gli operatori, considerando sia le differenze tra di loro che le somiglianze all’interno del gruppo.</p>
+<p>Poiché l’intervallo di credibilità include il valore 0.5, possiamo concludere che non ci sono evidenze credibili che gli operatori, considerati nel loro insieme, siano in grado di «percepire il campo energetico di una persona senza vedere le mani» ad un livello diverso rispetto a quello che ci si potrebbe aspettare dal caso soltanto.</p>
+</section>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m -p cmdstanpy 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+cmdstanpy: 1.2.3
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+numpy     : 1.26.4
+requests  : 2.32.3
+pandas    : 2.2.2
+arviz     : 0.18.0
+cmdstanpy : 1.2.3
+matplotlib: 3.8.4
+logging   : 0.5.1.2
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="23_stan_two_groups.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Confronto tra due gruppi</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../chapter_5/introduction_part_5.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">Analisi della regressione</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisi-bayesiana-della-terapia-tattile">Analisi bayesiana della «terapia tattile»</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sezione-data">Sezione <code class="docutils literal notranslate"><span class="pre">data</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sezione-parameters">Sezione <code class="docutils literal notranslate"><span class="pre">parameters</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sezione-model">Sezione <code class="docutils literal notranslate"><span class="pre">model</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schrinkage-bayesiano">Schrinkage bayesiano</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosa-significa-shrinkage-in-un-modello-gerarchico">Cosa Significa Shrinkage in un Modello Gerarchico?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meccanismo-dello-shrinkage">Meccanismo dello Shrinkage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benefici-dello-shrinkage">Benefici dello Shrinkage</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

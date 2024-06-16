@@ -1,0 +1,1480 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Regressione multipla con Stan &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_5/05_05a_stan_multreg';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_5/05_05a_stan_multreg.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_5/05_05a_stan_multreg.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_5/05_05a_stan_multreg.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Regressione multipla con Stan</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regressione-multipla">Regressione multipla</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-pratico">Un esempio pratico</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#una-nota-di-cautela-sui-modelli-di-regressione">Una nota di cautela sui modelli di regressione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="regressione-multipla-con-stan">
+<span id="stan-reglin1-notebook"></span><h1>Regressione multipla con Stan<a class="headerlink" href="#regressione-multipla-con-stan" title="Link to this heading">#</a></h1>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../_config/config.py # Import the configuration settings
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">cmdstanpy</span>
+
+<span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span> <span class="nn">pingouin</span> <span class="k">as</span> <span class="nn">pg</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;male&quot;</span><span class="p">]]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
+<span class="c1"># Perform linear regression using pingouin</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">linear_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Round the results to 2 decimal places</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;male&quot;</span><span class="p">]]</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Perform linear regression using pingouin</span>
+
+<span class="ne">NameError</span>: name &#39;df&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="regressione-multipla">
+<h2>Regressione multipla<a class="headerlink" href="#regressione-multipla" title="Link to this heading">#</a></h2>
+<p>La regressione multipla rappresenta un’estensione del modello di regressione semplice, e permette di esplorare e quantificare le relazioni tra una variabile dipendente e più variabili indipendenti. Passando dal modello semplice <span class="math notranslate nohighlight">\( y = a + bx + \text{errore} \)</span> al modello più generale <span class="math notranslate nohighlight">\( y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \cdots + \text{errore} \)</span>, emergono nuove complessità. Queste includono le decisioni su quali predittori <span class="math notranslate nohighlight">\( x \)</span> includere nel modello, l’interpretazione dei coefficienti e delle loro interazioni, e la costruzione di nuovi predittori a partire dalle variabili esistenti per catturare elementi di discrezionalità e non linearità.</p>
+<p>I coefficienti di regressione, in un contesto di regressione multipla, sono tipicamente più complicati da interpretare rispetto a quelli di un modello con un solo predittore. L’interpretazione di un dato coefficiente, infatti, è parzialmente condizionata dalle altre variabili presenti nel modello. Il coefficiente <span class="math notranslate nohighlight">\( \beta_k \)</span> rappresenta la differenza media o attesa nella variabile risposta <span class="math notranslate nohighlight">\( y \)</span>, confrontando due individui che differiscono di un’unità nel predittore <span class="math notranslate nohighlight">\( x_k \)</span> ma sono identici per quanto riguarda gli altri predittori. Questo concetto è talvolta sintetizzato con l’espressione «confrontare due osservazionni (o persone) che differiscono per <span class="math notranslate nohighlight">\( x_k \)</span> a parità delle altre variabili».</p>
+<p>Dal punto di vista dell’implementazione con Stan, l’estensione del modello per includere molteplici predittori dell’intelligenza del bambino è relativamente semplice. È necessario costruire una matrice <span class="math notranslate nohighlight">\(X\)</span> contenente le colonne che rappresentano i vari predittori che intendiamo analizzare. Per l’esempio specifico in questione, i predittori selezionati per l’intelligenza del bambino includono: la scolarità della madre (codificata come 0 o 1 a seconda che la madre abbia completato o meno le scuole superiori), l’intelligenza della madre e l’età della madre. Prima di procedere con l’analisi, è importante standardizzare tutte queste variabili per facilitare l’interpretazione dei risultati e migliorare la stabilità numerica del modello.</p>
+<p>Consideriamo in dettaglio la verosimiglianza <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">X</span> <span class="pre">*</span> <span class="pre">beta</span></code> nel caso in cui <span class="math notranslate nohighlight">\(X\)</span> è una matrice con più di un predittore.</p>
+<p>Prima di tutto, definiamo le variabili coinvolte:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code>: è il vettore delle osservazioni, dove ogni elemento rappresenta un dato osservato.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>: è l’intercetta del modello lineare, un singolo valore che rappresenta il punto in cui la linea del modello incrocia l’asse y quando tutte le variabili indipendenti (<code class="docutils literal notranslate"><span class="pre">X</span></code>) sono zero.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code>: è la matrice dei predittori (o variabili indipendenti), dove ogni riga corrisponde a un’osservazione e ogni colonna a una variabile indipendente.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beta</span></code>: è il vettore dei coefficienti, dove ogni elemento rappresenta l’effetto di una corrispondente variabile indipendente in <code class="docutils literal notranslate"><span class="pre">X</span></code> sulla variabile dipendente <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma</span></code>: è la deviazione standard degli errori del modello, che misura quanto i dati reali si discostano dalla linea del modello.</p></li>
+</ul>
+<p>L’espressione <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">X</span> <span class="pre">*</span> <span class="pre">beta</span></code> calcola i valori previsti (<code class="docutils literal notranslate"><span class="pre">y</span></code> predetti) per il modello lineare. Ecco come funziona, spiegato senza ricorrere all’algebra matriciale:</p>
+<ol class="arabic simple">
+<li><p><strong>Moltiplicazione <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">beta</span></code></strong>: Per ogni riga in <code class="docutils literal notranslate"><span class="pre">X</span></code> (che rappresenta un’osservazione con le sue variabili indipendenti), moltiplichiamo ogni elemento (ogni variabile indipendente) per il corrispondente elemento in <code class="docutils literal notranslate"><span class="pre">beta</span></code> (il coefficiente della variabile) e sommiamo questi prodotti. Questo ci dà un valore singolo per ogni osservazione, che rappresenta il contributo combinato di tutte le variabili indipendenti alla variabile dipendente, prima di aggiungere l’intercetta.</p></li>
+<li><p><strong>Aggiunta di <code class="docutils literal notranslate"><span class="pre">alpha</span></code></strong>: Dopo aver calcolato il contributo combinato delle variabili indipendenti, aggiungiamo l’intercetta (<code class="docutils literal notranslate"><span class="pre">alpha</span></code>) a questo valore. L’intercetta rappresenta il valore di <code class="docutils literal notranslate"><span class="pre">y</span></code> quando tutte le variabili indipendenti sono zero. Aggiungendola, otteniamo il valore previsto finale per <code class="docutils literal notranslate"><span class="pre">y</span></code> per ogni osservazione.</p></li>
+<li><p><strong>Risultato</strong>: L’espressione <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">X</span> <span class="pre">*</span> <span class="pre">beta</span></code> produce quindi un vettore di valori previsti di dimensione <span class="math notranslate nohighlight">\(n \times 1\)</span>, dove <span class="math notranslate nohighlight">\(n\)</span> è il numero di osservazioni in <code class="docutils literal notranslate"><span class="pre">y</span></code>. Ogni elemento di questo vettore è il valore previsto di <code class="docutils literal notranslate"><span class="pre">y</span></code> per ogni osservazione, dato il modello lineare specificato.</p></li>
+</ol>
+<p>Per fare un esempio semplice, immaginiamo di avere un modello con una sola variabile indipendente per semplificare:</p>
+<ul class="simple">
+<li><p>Supponiamo che <code class="docutils literal notranslate"><span class="pre">alpha</span></code> sia 5 (l’intercetta).</p></li>
+<li><p>La matrice <code class="docutils literal notranslate"><span class="pre">X</span></code> ha una sola colonna (una sola variabile indipendente) con, per esempio, tre osservazioni: <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code>.</p></li>
+<li><p>Il vettore <code class="docutils literal notranslate"><span class="pre">beta</span></code> ha un solo elemento, diciamo 2, che è il coefficiente della nostra variabile indipendente.</p></li>
+</ul>
+<p>Per ogni osservazione in <code class="docutils literal notranslate"><span class="pre">X</span></code>, moltiplichiamo il suo valore per <code class="docutils literal notranslate"><span class="pre">beta</span></code> (2 in questo caso) e aggiungiamo <code class="docutils literal notranslate"><span class="pre">alpha</span></code> (5). Quindi, per la prima osservazione (1), otteniamo <span class="math notranslate nohighlight">\(1 \times 2 + 5 = 7\)</span>, e così via per le altre osservazioni. Il risultato finale è un vettore di valori previsti di <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<p>Espandiamo ora l’esempio precedente per un caso di regressione multipla, dove abbiamo due variabili indipendenti (predittori). Questo ci permetterà di vedere come il processo di calcolo dei valori previsti si adatta quando ci sono più predittori nel modello.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>: l’intercetta del modello, diciamo che è 5.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code>: la matrice dei predittori ora ha due colonne, perché abbiamo due variabili indipendenti. Per esempio, possiamo avere tre osservazioni come segue:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+  X = \begin{bmatrix}
+  1 &amp; 3 \\
+  2 &amp; 2 \\
+  3 &amp; 1 \\
+  \end{bmatrix}
+  \end{split}\]</div>
+<p>Qui, ogni riga rappresenta un’osservazione e ogni colonna rappresenta una variabile indipendente. Ad esempio, la prima riga rappresenta una osservazione dove il primo predittore ha valore 1 e il secondo predittore ha valore 3.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beta</span></code>: il vettore dei coefficienti ora ha due elementi, uno per ogni variabile indipendente. Supponiamo che <code class="docutils literal notranslate"><span class="pre">beta</span> <span class="pre">=</span> <span class="pre">[2,</span> <span class="pre">1]</span></code>, dove 2 è il coefficiente per il primo predittore e 1 è il coefficiente per il secondo predittore.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma</span></code>: la deviazione standard degli errori del modello, che per semplicità non utilizzeremo direttamente in questo esempio.</p></li>
+</ul>
+<p>Per calcolare i valori previsti (<code class="docutils literal notranslate"><span class="pre">y</span></code> predetti) per ogni osservazione, seguiamo questi passi:</p>
+<ol class="arabic">
+<li><p><strong>Moltiplicazione <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">*</span> <span class="pre">beta</span></code></strong>:</p>
+<ul class="simple">
+<li><p>Per la prima osservazione (<code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">3]</span></code>), calcoliamo: <span class="math notranslate nohighlight">\(1 \times 2 + 3 \times 1 = 2 + 3 = 5\)</span>.</p></li>
+<li><p>Per la seconda osservazione (<code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">2]</span></code>), calcoliamo: <span class="math notranslate nohighlight">\(2 \times 2 + 2 \times 1 = 4 + 2 = 6\)</span>.</p></li>
+<li><p>Per la terza osservazione (<code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">1]</span></code>), calcoliamo: <span class="math notranslate nohighlight">\(3 \times 2 + 1 \times 1 = 6 + 1 = 7\)</span>.</p></li>
+</ul>
+<p>Questo passo ci dà il contributo combinato delle variabili indipendenti alla variabile dipendente per ogni osservazione.</p>
+</li>
+<li><p><strong>Aggiunta di <code class="docutils literal notranslate"><span class="pre">alpha</span></code></strong>:</p>
+<ul class="simple">
+<li><p>Aggiungiamo l’intercetta <code class="docutils literal notranslate"><span class="pre">alpha</span></code> (5) ai risultati precedenti per ottenere i valori previsti finali di <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
+<ul>
+<li><p>Prima osservazione: <span class="math notranslate nohighlight">\(5 + 5 = 10\)</span>.</p></li>
+<li><p>Seconda osservazione: <span class="math notranslate nohighlight">\(6 + 5 = 11\)</span>.</p></li>
+<li><p>Terza osservazione: <span class="math notranslate nohighlight">\(7 + 5 = 12\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Risultato</strong>:</p>
+<p>Otteniamo quindi un vettore di valori previsti di <code class="docutils literal notranslate"><span class="pre">y</span></code> di dimensione <span class="math notranslate nohighlight">\(n \times 1\)</span>, dove <span class="math notranslate nohighlight">\(n\)</span> è il numero di osservazioni. In questo caso, il vettore dei valori previsti di <code class="docutils literal notranslate"><span class="pre">y</span></code> sarà <code class="docutils literal notranslate"><span class="pre">[10,</span> <span class="pre">11,</span> <span class="pre">12]</span></code>.</p>
+</li>
+</ol>
+<p>Questo esempio illustra come l’espressione <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">X</span> <span class="pre">*</span> <span class="pre">beta</span></code> in un contesto di regressione multipla produca un vettore di valori previsti. Ogni valore previsto è il risultato della somma del prodotto dei predittori per i loro rispettivi coefficienti più l’intercetta, riflettendo come il modello lineare stima <code class="docutils literal notranslate"><span class="pre">y</span></code> in base ai valori di più variabili indipendenti.</p>
+</section>
+<section id="un-esempio-pratico">
+<h2>Un esempio pratico<a class="headerlink" href="#un-esempio-pratico" title="Link to this heading">#</a></h2>
+<p>Per fare un esempio pratico, analizzeremo nuovamente i dati sull’intelligenza di un gruppo di bambini. In questo caso, cercheremo di predire l’intelligenza media dei bambini considerando tre fattori: se le madri hanno completato la scuola superiore, l’intelligenza della madre e l’età della madre.</p>
+<p>Importiamo i dati:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kidiq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_stata</span><span class="p">(</span><span class="s2">&quot;../data/kidiq.dta&quot;</span><span class="p">)</span>
+<span class="n">kidiq</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Stampiamo il modello Stan di regressione multipla per questi dati. Il modello assume che i dati siano standardizzati.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;linear_regression.stan&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>// run with 4 chains and 2k iters.
+// all data should be scaled to mean 0 and std 1:
+data {
+  int&lt;lower=1&gt; N;   // number of observations
+  int&lt;lower=1&gt; K;   // number of independent variables, including the intercept
+  matrix[N, K] X;   // data matrix
+  vector[N] y;      // dependent variable vector
+}
+parameters {
+  real alpha;           // intercept
+  vector[K] beta;       // coefficients for independent variables
+  real&lt;lower=0&gt; sigma;  // model error
+}
+model {
+  // priors
+  alpha ~ student_t(3, 0, 2.5);
+  beta ~ student_t(3, 0, 2.5);
+  sigma ~ exponential(1);
+
+  // likelihood
+  y ~ normal(alpha + X * beta, sigma);
+}
+generated quantities {
+  vector[N] log_lik; // Log-likelihood for each observation
+  vector[N] y_rep;  // Posterior predictions for each observation
+
+  for (n in 1:N) {
+    log_lik[n] = normal_lpdf(y[n] | alpha + dot_product(X[n], beta), sigma);
+    y_rep[n] = normal_rng(alpha + dot_product(X[n], beta), sigma);
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Compiliamo il modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Standaridizziamo i predittori:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">kidiq</span><span class="p">[</span><span class="s2">&quot;mom_hs&quot;</span><span class="p">])</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">kidiq</span><span class="p">[</span><span class="s2">&quot;mom_iq&quot;</span><span class="p">])</span>
+<span class="n">x3</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">kidiq</span><span class="p">[</span><span class="s2">&quot;mom_age&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;one&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x1</span><span class="p">),</span>  <span class="c1"># Crea una lista di 1 della stessa lunghezza di x1</span>
+    <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="n">x1</span><span class="p">,</span>
+    <span class="s2">&quot;x2&quot;</span><span class="p">:</span> <span class="n">x2</span><span class="p">,</span>
+    <span class="s2">&quot;x3&quot;</span><span class="p">:</span> <span class="n">x3</span>
+<span class="p">})</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>one</th>
+      <th>x1</th>
+      <th>x2</th>
+      <th>x3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.522233</td>
+      <td>1.409460</td>
+      <td>1.562029</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0.522233</td>
+      <td>-0.710026</td>
+      <td>0.820727</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>0.522233</td>
+      <td>1.030732</td>
+      <td>1.562029</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>0.522233</td>
+      <td>-0.036733</td>
+      <td>0.820727</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>0.522233</td>
+      <td>-0.484177</td>
+      <td>1.562029</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert scaled DataFrame to numpy matrix</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verificare le dimensioni di X</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dimensioni di X:&quot;</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dimensioni di X: (434, 4)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creiamo un dizionario con i dati nel formato atteso da Stan:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>  <span class="c1"># Nota: questa include anche la colonna dell&#39;intercetta </span>
+    <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">kidiq</span><span class="p">[</span><span class="s2">&quot;kid_score&quot;</span><span class="p">])</span>  <span class="c1"># Assumo che kid_score sia la variabile dipendente</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento MCMC:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo le tracce dei parametri:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/9f4f01040d4ae0d531a890d1e928ceb3947a48a8c7e7f845df367b151370ae56.png"><img alt="../_images/9f4f01040d4ae0d531a890d1e928ceb3947a48a8c7e7f845df367b151370ae56.png" src="../_images/9f4f01040d4ae0d531a890d1e928ceb3947a48a8c7e7f845df367b151370ae56.png" style="width: 1211px; height: 611px;" /></a>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Zoom in </span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">ax_row</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+    <span class="n">ax_row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">)</span>  <span class="c1"># Modifica solo l&#39;asse del grafico della densità</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/ea4eba298890452f278d6be076c4815df93d46f741ceb3c1bc671987dd31dddd.png"><img alt="../_images/ea4eba298890452f278d6be076c4815df93d46f741ceb3c1bc671987dd31dddd.png" src="../_images/ea4eba298890452f278d6be076c4815df93d46f741ceb3c1bc671987dd31dddd.png" style="width: 1211px; height: 211px;" /></a>
+</div>
+</div>
+<p>Anche nel caso della regressione multipla, i risultati ottenuti con l’approccio bayesiano sono molto simili a quelli prodotti dall’approccio basato sulla massima verosimiglianza.</p>
+<p>Calcoliamo una sintesi delle distribuzioni a posteriori dei parametri:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>alpha</th>
+      <td>0.020</td>
+      <td>1.958</td>
+      <td>-3.680</td>
+      <td>3.784</td>
+      <td>0.030</td>
+      <td>0.027</td>
+      <td>4412.0</td>
+      <td>2963.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta[0]</th>
+      <td>-0.021</td>
+      <td>1.959</td>
+      <td>-3.652</td>
+      <td>3.794</td>
+      <td>0.030</td>
+      <td>0.027</td>
+      <td>4414.0</td>
+      <td>3080.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta[1]</th>
+      <td>0.114</td>
+      <td>0.045</td>
+      <td>0.032</td>
+      <td>0.202</td>
+      <td>0.001</td>
+      <td>0.000</td>
+      <td>5939.0</td>
+      <td>5353.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta[2]</th>
+      <td>0.413</td>
+      <td>0.044</td>
+      <td>0.325</td>
+      <td>0.489</td>
+      <td>0.001</td>
+      <td>0.000</td>
+      <td>7429.0</td>
+      <td>5414.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta[3]</th>
+      <td>0.030</td>
+      <td>0.043</td>
+      <td>-0.053</td>
+      <td>0.109</td>
+      <td>0.001</td>
+      <td>0.000</td>
+      <td>7277.0</td>
+      <td>5658.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>0.892</td>
+      <td>0.030</td>
+      <td>0.836</td>
+      <td>0.949</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>6955.0</td>
+      <td>5019.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Replichiamo il risultato usando l’approccio di massima verosimiglianza:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">linear_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">kidiq</span><span class="p">[</span><span class="s2">&quot;kid_score&quot;</span><span class="p">]))</span>
+<span class="n">lm</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>names</th>
+      <th>coef</th>
+      <th>se</th>
+      <th>T</th>
+      <th>pval</th>
+      <th>r2</th>
+      <th>adj_r2</th>
+      <th>CI[2.5%]</th>
+      <th>CI[97.5%]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Intercept</td>
+      <td>-0.00</td>
+      <td>0.04</td>
+      <td>-0.00</td>
+      <td>1.00</td>
+      <td>0.21</td>
+      <td>0.21</td>
+      <td>-0.08</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>x2</td>
+      <td>0.11</td>
+      <td>0.05</td>
+      <td>2.50</td>
+      <td>0.01</td>
+      <td>0.21</td>
+      <td>0.21</td>
+      <td>0.02</td>
+      <td>0.20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>x3</td>
+      <td>0.41</td>
+      <td>0.04</td>
+      <td>9.28</td>
+      <td>0.00</td>
+      <td>0.21</td>
+      <td>0.21</td>
+      <td>0.33</td>
+      <td>0.50</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>x4</td>
+      <td>0.03</td>
+      <td>0.04</td>
+      <td>0.68</td>
+      <td>0.50</td>
+      <td>0.21</td>
+      <td>0.21</td>
+      <td>-0.06</td>
+      <td>0.12</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Nel contesto della regressione multivariata, l’interpretazione dei coefficienti parziali differisce da quella della regressione bivariata. Nel nostro caso, il coefficiente associato all’intelligenza della madre, indicato come <span class="math notranslate nohighlight">\(\beta\)</span> = 0.41, assume il seguente significato: prevediamo che l’intelligenza del bambino aumenti di 0.41 deviazioni standard in media per ogni deviazione standard aggiuntiva nell’intelligenza della madre, mantenendo costanti gli effetti del livello di istruzione e dell’età della madre. Questo implica che stiamo considerando l’impatto dell’intelligenza della madre sull’intelligenza del bambino all’interno di una popolazione di madri che sono omogenee per quanto riguarda il livello di istruzione e l’età.</p>
+<p>Calcoliamo la distribuzione predittiva a posteriori e generiamo il PPC plot:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idata2</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span>
+    <span class="n">posterior</span><span class="o">=</span><span class="n">fit2</span><span class="p">,</span>
+    <span class="n">posterior_predictive</span><span class="o">=</span><span class="s1">&#39;y_rep&#39;</span><span class="p">,</span>
+    <span class="n">observed_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">kidiq</span><span class="p">[</span><span class="s2">&quot;kid_score&quot;</span><span class="p">])},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">idata2</span><span class="p">,</span> <span class="n">data_pairs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;y_rep&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/115c032487022593986e3453b7cff89a819f442172683f3f7303a61ead62f13c.png"><img alt="../_images/115c032487022593986e3453b7cff89a819f442172683f3f7303a61ead62f13c.png" src="../_images/115c032487022593986e3453b7cff89a819f442172683f3f7303a61ead62f13c.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Per fare un esercizio, riscriviamo il modello senza usare l’algebra matriciale.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;mreg.stan&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+    int&lt;lower=1&gt; N;   // Numero di osservazioni
+    int&lt;lower=1&gt; K;   // Numero di variabili indipendenti, intercetta inclusa
+    vector[N] x1;     // Prima variabile indipendente
+    vector[N] x2;     // Seconda variabile indipendente
+    vector[N] x3;     // Seconda variabile indipendente
+    // Aggiungi altri vettori se ci sono più variabili indipendenti
+    vector[N] y;      // Vettore della variabile dipendente
+}
+parameters {
+    real alpha;           // Intercetta
+    real beta1;           // Coefficiente per la prima variabile indipendente
+    real beta2;           // Coefficiente per la seconda variabile indipendente
+    real beta3;           // Coefficiente per la terza variabile indipendente
+    // Definisci altri real per ulteriori coefficienti
+    real&lt;lower=0&gt; sigma;  // Errore del modello
+}
+model {
+    // Prior
+    alpha ~ student_t(3, 0, 2.5);
+    beta1 ~ student_t(3, 0, 2.5);
+    beta2 ~ student_t(3, 0, 2.5);
+    beta3 ~ student_t(3, 0, 2.5);
+    // Definisci prior per altri coefficienti
+    sigma ~ exponential(1);
+
+    // Likelihood
+    for (n in 1:N) {
+        y[n] ~ normal(alpha + beta1 * x1[n] + beta2 * x2[n] + + beta3 * x3[n], sigma);
+        // Aggiungi termini per altri coefficienti se necessario
+    }
+}
+generated quantities {
+    vector[N] log_lik; // Log-likelihood per ogni osservazione
+    vector[N] y_rep;  // Predizioni posteriori per ogni osservazione
+
+    for (n in 1:N) {
+        log_lik[n] = normal_lpdf(y[n] | alpha + beta1 * x1[n] + beta2 * x2[n] + + beta3 * x3[n], sigma);
+        // Aggiungi termini per altri coefficienti se necessario
+        y_rep[n] = normal_rng(alpha + beta1 * x1[n] + beta2 * x2[n] + beta3 * x3[n], sigma);
+        // Aggiungi termini per altri coefficienti se necessario
+    }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Compiliamo il modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model3</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Generiamo il dizionario con i dati nel formato appropriato per Stan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># Nota: questa include anche la colonna dell&#39;intercetta</span>
+    <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="n">x1</span><span class="p">,</span>
+    <span class="s2">&quot;x2&quot;</span><span class="p">:</span> <span class="n">x2</span><span class="p">,</span>
+    <span class="s2">&quot;x3&quot;</span><span class="p">:</span> <span class="n">x3</span><span class="p">,</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">kidiq</span><span class="p">[</span><span class="s2">&quot;kid_score&quot;</span><span class="p">])</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit3</span> <span class="o">=</span> <span class="n">model3</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>I risultati replicano quelli ottenuti in precedenza.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span>
+    <span class="n">fit3</span><span class="p">,</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta1&quot;</span><span class="p">,</span> <span class="s2">&quot;beta2&quot;</span><span class="p">,</span> <span class="s2">&quot;beta3&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]),</span>
+    <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>alpha</th>
+      <td>0.000</td>
+      <td>0.043</td>
+      <td>-0.077</td>
+      <td>0.084</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>8977.0</td>
+      <td>5942.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta1</th>
+      <td>0.114</td>
+      <td>0.046</td>
+      <td>0.026</td>
+      <td>0.198</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>9573.0</td>
+      <td>6486.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta2</th>
+      <td>0.413</td>
+      <td>0.044</td>
+      <td>0.334</td>
+      <td>0.499</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>9730.0</td>
+      <td>6090.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta3</th>
+      <td>0.030</td>
+      <td>0.044</td>
+      <td>-0.053</td>
+      <td>0.113</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>9154.0</td>
+      <td>6239.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>0.893</td>
+      <td>0.031</td>
+      <td>0.837</td>
+      <td>0.954</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>8242.0</td>
+      <td>5824.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="una-nota-di-cautela-sui-modelli-di-regressione">
+<h2>Una nota di cautela sui modelli di regressione<a class="headerlink" href="#una-nota-di-cautela-sui-modelli-di-regressione" title="Link to this heading">#</a></h2>
+<p>Nel suo libro <em>Statistical Rethinking</em>, <span id="id1">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> introduce l’idea di modelli statistici paragonandoli ai Golem, antiche creature della mitologia, prive di volontà propria e animate solo dall’intento di chi le crea. Questi enti, pur essendo dotati di grande forza, possono diventare pericolosi se non guidati con saggezza.</p>
+<p><span id="id2">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> sostiene che gli scienziati, nella creazione di modelli matematici e software, diano vita a moderni equivalenti di questi Golem. Questi modelli, sebbene influenzino il mondo reale tramite le loro previsioni e le intuizioni che generano, non dovrebbero essere considerati né completamente veritieri né falsi. Essi sono piuttosto strumenti sviluppati con uno scopo specifico, capaci di operare calcoli con estrema precisione, ma privi della capacità di comprendere o interpretare il contesto più ampio in cui sono applicati.</p>
+<p>In particolare, il modello di regressione viene esaminato come esempio di come tali strumenti possano produrre risultati concreti, ma manchino di adattabilità e giudizio autonomo, limitando la loro efficacia nel trattare questioni che richiedono un approccio più creativo e comprensivo. <span id="id3">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> enfatizza ulteriormente che nessun strumento statistico, da solo, è sufficiente per affrontare adeguatamente il complesso problema dell’inferenza causale a partire da dati empirici. Questi modelli, privi di una reale comprensione delle dinamiche di causa ed effetto, si limitano a descrivere relazioni tra variabili. Senza un’interpretazione critica e un orientamento consapevole da parte degli scienziati, questi strumenti, creati per fini ben definiti, possono rivelarsi non solo inefficaci, ma anche potenzialmente dannosi.</p>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+pandas    : 2.2.2
+matplotlib: 3.8.4
+logging   : 0.5.1.2
+numpy     : 1.26.4
+cmdstanpy : 1.2.3
+scipy     : 1.13.1
+pingouin  : 0.5.4
+arviz     : 0.18.0
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regressione-multipla">Regressione multipla</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-pratico">Un esempio pratico</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#una-nota-di-cautela-sui-modelli-di-regressione">Una nota di cautela sui modelli di regressione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

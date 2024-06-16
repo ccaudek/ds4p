@@ -1,0 +1,1415 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Intervallo di confidenza &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="application/vnd.jupyter.widget-state+json">{"state": {"0d900375490e42c581665de72d57b86b": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_4eb178d73ba34fe2ae82dcf276540c8e", "placeholder": "\u200b", "style": "IPY_MODEL_fb039c76b2c0446aab46f627ed40e925", "tabbable": null, "tooltip": null, "value": "Running\u2007chain\u20070:\u2007100%"}}, "1741aee34f49494197e8ad2a794ad339": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "1844b08bfeb14364961c830bbf309406": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "20f255bc62c344768e592a475facb60c": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "25fd1d7234bb41c5bbd65d486ec08b47": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_a7fceead18c24bc4a7656e3d5fce3554", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_572c71e85db544a1b9aa65a60be29db1", "tabbable": null, "tooltip": null, "value": 2000.0}}, "26d135204d3248efab679199fcd498a4": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "27d55e20e7e54fe6a36d894f11838045": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_6870cadefcc94e85a00cff53a09a0967", "placeholder": "\u200b", "style": "IPY_MODEL_a2acaeabd7004acbbefcd73c790881f8", "tabbable": null, "tooltip": null, "value": "\u20072000/2000\u2007[00:00&lt;00:00,\u20072276.41it/s]"}}, "2c1548fd72724d9490c3bcf273dbd221": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_eba69c6ba4624d6e81c1c3e11d77ee2a", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_1844b08bfeb14364961c830bbf309406", "tabbable": null, "tooltip": null, "value": 2000.0}}, "300a9b23466942ed8e465875fee1d644": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "31825d8025ca4918aa6e4757f34769a2": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "373cdd18b83648eeabfb8dbf55319643": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3edf731046304defbd0d10ab82f143ce": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_6394abd96ed648bda78217a7447ace26", "placeholder": "\u200b", "style": "IPY_MODEL_31825d8025ca4918aa6e4757f34769a2", "tabbable": null, "tooltip": null, "value": "\u20072000/2000\u2007[00:00&lt;00:00,\u20072269.96it/s]"}}, "436f2a0f98f840c5b93d79332d2c45ab": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "4bb5ea10cdd04582b038cb04eba62ce5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_6995a9164c5543c9894899b19a7fde94", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_de5fb9eb411a404094c781d285aff4d3", "tabbable": null, "tooltip": null, "value": 2000.0}}, "4cb327207d1b41a496664307ab45a66e": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "4eb178d73ba34fe2ae82dcf276540c8e": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5512d9a172c84671949f9875292d3bf7": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "572c71e85db544a1b9aa65a60be29db1": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "6394abd96ed648bda78217a7447ace26": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "670c11738dc5419aad91abe1d6159533": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "67e8ed3e00af40e4872d06785ad8577d": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6870cadefcc94e85a00cff53a09a0967": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6995a9164c5543c9894899b19a7fde94": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6b7ff015bdeb451ba0f89ecfa89db9a5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_be203a71421c4243979a677f899d56bb", "IPY_MODEL_4bb5ea10cdd04582b038cb04eba62ce5", "IPY_MODEL_3edf731046304defbd0d10ab82f143ce"], "layout": "IPY_MODEL_6ddadfd974104947adeab61bcfbf5085", "tabbable": null, "tooltip": null}}, "6ddadfd974104947adeab61bcfbf5085": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "79475c38a5ac4145b36b7a7fb5cf3b5c": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_917ca4b181804febbe4232bdb3387201", "placeholder": "\u200b", "style": "IPY_MODEL_d2a9ff7d3ada4f77812c9642c6526b34", "tabbable": null, "tooltip": null, "value": "\u20072000/2000\u2007[00:00&lt;00:00,\u20072281.84it/s]"}}, "917ca4b181804febbe4232bdb3387201": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "93a0f00908af4be2afbe01de22c9b951": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_67e8ed3e00af40e4872d06785ad8577d", "max": 2000.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_26d135204d3248efab679199fcd498a4", "tabbable": null, "tooltip": null, "value": 2000.0}}, "9f7e3278420a4c68bc5e71d8de1aa8c1": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_20f255bc62c344768e592a475facb60c", "placeholder": "\u200b", "style": "IPY_MODEL_5512d9a172c84671949f9875292d3bf7", "tabbable": null, "tooltip": null, "value": "Running\u2007chain\u20073:\u2007100%"}}, "a1fa819a91534bb485b2994e64ac8247": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_373cdd18b83648eeabfb8dbf55319643", "placeholder": "\u200b", "style": "IPY_MODEL_e39c1e3c0320477c8ea4ee23612a7755", "tabbable": null, "tooltip": null, "value": "\u20072000/2000\u2007[00:00&lt;00:00,\u20072256.85it/s]"}}, "a2acaeabd7004acbbefcd73c790881f8": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "a7fceead18c24bc4a7656e3d5fce3554": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "bb05ba2c60c94488bc9a6c3f0c4f1ac1": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "bcae3fc03fa34bb58029091188752ffb": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_f37ada7dcbbb431ea8424472ddc5679a", "IPY_MODEL_2c1548fd72724d9490c3bcf273dbd221", "IPY_MODEL_27d55e20e7e54fe6a36d894f11838045"], "layout": "IPY_MODEL_c2ee2caf69984fd6bc2edca801818565", "tabbable": null, "tooltip": null}}, "be203a71421c4243979a677f899d56bb": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_300a9b23466942ed8e465875fee1d644", "placeholder": "\u200b", "style": "IPY_MODEL_bb05ba2c60c94488bc9a6c3f0c4f1ac1", "tabbable": null, "tooltip": null, "value": "Running\u2007chain\u20071:\u2007100%"}}, "c2ee2caf69984fd6bc2edca801818565": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "c5e7adf2aed7462d957486f39126de27": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_0d900375490e42c581665de72d57b86b", "IPY_MODEL_25fd1d7234bb41c5bbd65d486ec08b47", "IPY_MODEL_a1fa819a91534bb485b2994e64ac8247"], "layout": "IPY_MODEL_436f2a0f98f840c5b93d79332d2c45ab", "tabbable": null, "tooltip": null}}, "d2a9ff7d3ada4f77812c9642c6526b34": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "de5fb9eb411a404094c781d285aff4d3": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "de7a5289597f4c62b241181dac87ff5e": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_9f7e3278420a4c68bc5e71d8de1aa8c1", "IPY_MODEL_93a0f00908af4be2afbe01de22c9b951", "IPY_MODEL_79475c38a5ac4145b36b7a7fb5cf3b5c"], "layout": "IPY_MODEL_1741aee34f49494197e8ad2a794ad339", "tabbable": null, "tooltip": null}}, "e39c1e3c0320477c8ea4ee23612a7755": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "eba69c6ba4624d6e81c1c3e11d77ee2a": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "f37ada7dcbbb431ea8424472ddc5679a": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_4cb327207d1b41a496664307ab45a66e", "placeholder": "\u200b", "style": "IPY_MODEL_670c11738dc5419aad91abe1d6159533", "tabbable": null, "tooltip": null, "value": "Running\u2007chain\u20072:\u2007100%"}}, "fb039c76b2c0446aab46f627ed40e925": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}}, "version_major": 2, "version_minor": 0}</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@1.0.6/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_6/02_conf_interv';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_6/02_conf_interv.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="✏️ Esercizi" href="E_conf_interv.html" />
+    <link rel="prev" title="✏️ Esercizi" href="E_estimation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_6.html">Inferenza frequentista</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_6/02_conf_interv.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_6/02_conf_interv.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Intervallo di confidenza</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inferenza-statistica-frequentista-l-intervallo-di-confidenza">Inferenza Statistica Frequentista: L’Intervallo di Confidenza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determinazione-dell-intervallo-di-confidenza-per-una-media">Determinazione dell’intervallo di Confidenza per una Media</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-dell-intervallo-di-confidenza-per-una-popolazione-normale-con-varianza-nota">Derivazione dell’Intervallo di Confidenza per una Popolazione Normale con Varianza Nota</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-1-standardizzazione-della-media-campionaria">Passo 1: Standardizzazione della Media Campionaria</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-2-stabilire-il-livello-di-confidenza">Passo 2: Stabilire il Livello di Confidenza</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-3-formulazione-dell-intervallo-di-confidenza">Passo 3: Formulazione dell’Intervallo di Confidenza</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-4-manipolazione-algebrica-per-definire-i-limiti">Passo 4: Manipolazione Algebrica per Definire i Limiti</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-5-specificazione-dei-limiti-dell-intervallo">Passo 5: Specificazione dei Limiti dell’Intervallo</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione">Conclusione:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-dell-intervallo-di-confidenza-per-popolazioni-normali-con-varianza-incognita">Stima dell’Intervallo di Confidenza per Popolazioni Normali con Varianza Incognita</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-1-impiego-della-distribuzione-t-di-student">Passo 1: Impiego della Distribuzione t di Student</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-2-determinazione-dei-limiti-dell-intervallo-di-confidenza">Passo 2: Determinazione dei Limiti dell’Intervallo di Confidenza</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#livello-di-copertura">Livello di Copertura</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione">Simulazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-concetto-di-livello-di-confidenza">Il Concetto di Livello di Confidenza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-malinteso-comune-nell-interpretazione-degli-intervalli-di-confidenza">Un Malinteso Comune nell’Interpretazione degli Intervalli di Confidenza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fraintendimenti-comuni-sugli-intervalli-di-confidenza">Fraintendimenti Comuni sugli Intervalli di Confidenza</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-tra-intervalli-frequentisti-e-bayesiani">Confronto tra Intervalli Frequentisti e Bayesiani</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intervallo-di-confidenza-frequentista">Intervallo di Confidenza Frequentista</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intervallo-di-credibilita-bayesiano">Intervallo di Credibilità Bayesiano</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="intervallo-di-confidenza">
+<span id="confidence-interval-notebook"></span><h1>Intervallo di confidenza<a class="headerlink" href="#intervallo-di-confidenza" title="Link to this heading">#</a></h1>
+<p>Gli intervalli di confidenza sono un pilastro nell’approccio frequentista all’inferenza statistica, fornendo un mezzo per gestire l’incertezza associata ai risultati delle analisi statistiche. Questo capitolo si propone di esplorare in profondità gli intervalli di confidenza, analizzandone il calcolo e la loro interpretazione dal punto di vista frequentista. Sarà messa in luce la sfida nell’interpretare correttamente tali intervalli.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pymc</span> <span class="k">as</span> <span class="nn">pm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inferenza-statistica-frequentista-l-intervallo-di-confidenza">
+<h2>Inferenza Statistica Frequentista: L’Intervallo di Confidenza<a class="headerlink" href="#inferenza-statistica-frequentista-l-intervallo-di-confidenza" title="Link to this heading">#</a></h2>
+<p>L’intervallo di confidenza è un concetto fondamentale nell’approccio frequentista alla statistica. Questo strumento è impiegato per valutare la variabilità della stima di un parametro di interesse all’interno di una popolazione, partendo da un campione di essa.</p>
+<p>Al centro di questo metodo si trova l’errore standard, che misura la deviazione standard della distribuzione campionaria di uno stimatore. Questo indice quantifica quanto la stima del parametro si discosta, in media, dal valore effettivo del parametro nella popolazione. Gli statistici frequentisti sfruttano l’errore standard per definire l’intervallo di confidenza, che rappresenta un intervallo di valori entro cui si ritiene si trovi il vero valore del parametro, come ad esempio la media della popolazione.</p>
+<p>Per comprendere l’intervallo di confidenza da una prospettiva frequentista è essenziale il concetto di «procedura di stima». In base a questo approccio, l’intervallo di confidenza viene costruito in modo che, se la medesima procedura fosse ripetuta su diversi campioni della stessa popolazione, una determinata percentuale degli intervalli di confidenza (ad esempio, il 95%) includerebbe il vero valore del parametro della popolazione.</p>
+<p>In terminologia frequentista, quindi, non si afferma che un dato intervallo di confidenza possieda una probabilità del 95% di contenere il vero valore del parametro. Piuttosto, si sostiene che, seguendo lo stesso metodo di stima, il 95% degli intervalli di confidenza derivati da campioni differenti racchiuderebbe il vero valore del parametro.</p>
+<p>In questo quadro, l’intervallo di confidenza non è una dichiarazione sulla probabilità che un particolare intervallo includa il valore del parametro, ma piuttosto un’affermazione sulla regolarità con cui gli intervalli calcolati in un determinato modo riescono a catturare il valore del parametro quando si ripete il medesimo processo su vari campioni. Questa distinzione è cruciale per una corretta comprensione dell’approccio frequentista all’inferenza statistica.</p>
+<p>Mentre quest’interpretazione dell’intervallo di confidenza può apparire controintuitiva e talvolta poco pratica, riflette il contrasto con l’approccio bayesiano, il quale enfatizza l’aggiornamento delle probabilità sulla base di nuove informazioni, a differenza dell’approccio frequentista, che si basa sulla ripetizione degli esperimenti e sulla valutazione della variabilità campionaria.</p>
+</section>
+<section id="determinazione-dell-intervallo-di-confidenza-per-una-media">
+<h2>Determinazione dell’intervallo di Confidenza per una Media<a class="headerlink" href="#determinazione-dell-intervallo-di-confidenza-per-una-media" title="Link to this heading">#</a></h2>
+<p>Nei casi in cui la distribuzione delle statistiche campionarie si avvicina a una distribuzione Normale, l’intervallo di confidenza al 95% è calcolato come:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\theta} \pm 1.96 \cdot \text{SE},
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\(\hat{\theta}\)</span> rappresenta la stima del parametro e SE l’errore standard.</p>
+<section id="derivazione-dell-intervallo-di-confidenza-per-una-popolazione-normale-con-varianza-nota">
+<h3>Derivazione dell’Intervallo di Confidenza per una Popolazione Normale con Varianza Nota<a class="headerlink" href="#derivazione-dell-intervallo-di-confidenza-per-una-popolazione-normale-con-varianza-nota" title="Link to this heading">#</a></h3>
+<p>Consideriamo una popolazione che segue una distribuzione normale con una media nota <span class="math notranslate nohighlight">\(\mu\)</span> e varianza <span class="math notranslate nohighlight">\(\sigma^2\)</span>. Prendiamo un campione casuale di dimensione <span class="math notranslate nohighlight">\(n\)</span> da questa popolazione, indicato come <span class="math notranslate nohighlight">\(X_1, X_2, \dots, X_n\)</span>. Grazie alle proprietà delle distribuzioni normali, la media campionaria <span class="math notranslate nohighlight">\(\bar{X}\)</span> segue anch’essa una distribuzione normale, nello specifico <span class="math notranslate nohighlight">\(\bar{X} \sim \mathcal{N}(\mu, \sigma^2/n)\)</span>.</p>
+<section id="passo-1-standardizzazione-della-media-campionaria">
+<h4>Passo 1: Standardizzazione della Media Campionaria<a class="headerlink" href="#passo-1-standardizzazione-della-media-campionaria" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Per standardizzare la media campionaria in una variabile distribuita normalmente standard, sottraiamo la media della popolazione <span class="math notranslate nohighlight">\(\mu\)</span> e dividiamo per lo scarto standard della media campionaria <span class="math notranslate nohighlight">\(\sigma/\sqrt{n}\)</span>. Ciò porta alla seguente trasformazione:</p>
+<div class="math notranslate nohighlight">
+\[
+  Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim \mathcal{N}(0, 1).
+  \]</div>
+</li>
+</ul>
+</section>
+<section id="passo-2-stabilire-il-livello-di-confidenza">
+<h4>Passo 2: Stabilire il Livello di Confidenza<a class="headerlink" href="#passo-2-stabilire-il-livello-di-confidenza" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Definiamo un livello di confidenza <span class="math notranslate nohighlight">\(\gamma = 1 - \alpha\)</span>, ad esempio <span class="math notranslate nohighlight">\(\gamma = 0.95\)</span> per un livello di confidenza del 95%.</p></li>
+<li><p>Identifichiamo il valore critico <span class="math notranslate nohighlight">\(z\)</span>, corrispondente al quantile <span class="math notranslate nohighlight">\((1 - \alpha/2)\)</span> della distribuzione normale standard. Il valore <span class="math notranslate nohighlight">\(z\)</span> rappresenta il punto di taglio alle estremità della distribuzione:</p>
+<div class="math notranslate nohighlight">
+\[
+  P(-z \leq Z \leq z) = \gamma.
+  \]</div>
+</li>
+</ul>
+</section>
+<section id="passo-3-formulazione-dell-intervallo-di-confidenza">
+<h4>Passo 3: Formulazione dell’Intervallo di Confidenza<a class="headerlink" href="#passo-3-formulazione-dell-intervallo-di-confidenza" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Con il valore <span class="math notranslate nohighlight">\(z\)</span> definito, formuliamo l’intervallo di confidenza per la media della popolazione:</p>
+<div class="math notranslate nohighlight">
+\[
+  P\left(-z \leq \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \leq z\right) = \gamma.
+  \]</div>
+</li>
+</ul>
+</section>
+<section id="passo-4-manipolazione-algebrica-per-definire-i-limiti">
+<h4>Passo 4: Manipolazione Algebrica per Definire i Limiti<a class="headerlink" href="#passo-4-manipolazione-algebrica-per-definire-i-limiti" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Rielaboriamo la disuguaglianza per esporre i limiti dell’intervallo di confidenza:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+  \begin{align}
+  P\bigg(-z \leq &amp;\frac{ \bar{X} - \mu } {\sigma} \sqrt{n} \leq z\bigg) = \gamma\notag\\
+  P\bigg(-z {\frac{\sigma}{\sqrt{n}}} \leq  &amp;\bar{X} - \mu \leq z \frac{\sigma}{\sqrt{n}}\bigg) = \gamma\notag\\
+  P\bigg(-\bar{X}-z {\frac{\sigma}{\sqrt{n}}} \leq &amp;-\mu \leq -\bar{X} + z \frac{\sigma}{\sqrt{n}}\bigg) = \gamma\notag\\
+  P\bigg(\bar{X}+z \frac{\sigma}{\sqrt{n}} \geq &amp;\mu \geq  \bar{X} -z \frac{\sigma}{\sqrt{n}}\bigg) = \gamma.\notag
+  \end{align}
+  \end{split}\]</div>
+</li>
+</ul>
+</section>
+<section id="passo-5-specificazione-dei-limiti-dell-intervallo">
+<h4>Passo 5: Specificazione dei Limiti dell’Intervallo<a class="headerlink" href="#passo-5-specificazione-dei-limiti-dell-intervallo" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Definiamo i limiti dell’intervallo di confidenza, <span class="math notranslate nohighlight">\(\hat{a}\)</span> e <span class="math notranslate nohighlight">\(\hat{b}\)</span>, come segue:</p>
+<div class="math notranslate nohighlight">
+\[
+  \hat{a} = \bar{X} - z \frac{\sigma}{\sqrt{n}}, 
+  \quad \hat{b} = \bar{X} + z \frac{\sigma}{\sqrt{n}},
+  \]</div>
+<p>con <span class="math notranslate nohighlight">\(P(\hat{a} \leq \mu \leq \hat{b}) = \gamma\)</span>.</p>
+</li>
+</ul>
+</section>
+<section id="conclusione">
+<h4>Conclusione:<a class="headerlink" href="#conclusione" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>L’intervallo di confidenza <span class="math notranslate nohighlight">\((\hat{a}, \hat{b})\)</span> racchiude il vero valore della media della popolazione <span class="math notranslate nohighlight">\(\mu\)</span> con una probabilità <span class="math notranslate nohighlight">\(\gamma\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="stima-dell-intervallo-di-confidenza-per-popolazioni-normali-con-varianza-incognita">
+<h3>Stima dell’Intervallo di Confidenza per Popolazioni Normali con Varianza Incognita<a class="headerlink" href="#stima-dell-intervallo-di-confidenza-per-popolazioni-normali-con-varianza-incognita" title="Link to this heading">#</a></h3>
+<p>In contesti reali, quando si preleva un campione <span class="math notranslate nohighlight">\(X_1, \dots, X_n\)</span> da una popolazione, la varianza <span class="math notranslate nohighlight">\(\sigma^2\)</span> della popolazione è spesso incognita. Questo aggiunge incertezza riguardo alla media della popolazione <span class="math notranslate nohighlight">\(\mu\)</span>, che è il parametro di interesse. In questi casi, si adotta la distribuzione t di Student per la stima dell’intervallo di confidenza della media <span class="math notranslate nohighlight">\(\mu\)</span>, a causa della varianza incognita.</p>
+<section id="passo-1-impiego-della-distribuzione-t-di-student">
+<h4>Passo 1: Impiego della Distribuzione t di Student<a class="headerlink" href="#passo-1-impiego-della-distribuzione-t-di-student" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Applichiamo la formula seguente per calcolare l’intervallo:</p>
+<div class="math notranslate nohighlight">
+\[
+  P\left(−t^{\ast} \leq \frac{\bar{X} - \mu}{s/\sqrt{n}} \leq t^{\ast}\right) = \gamma,
+  \]</div>
+<p>dove <span class="math notranslate nohighlight">\(\gamma = 1 - \alpha\)</span> è il livello di confidenza, <span class="math notranslate nohighlight">\(s\)</span> è la stima della deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span> della popolazione, e <span class="math notranslate nohighlight">\(t^{\ast}\)</span> è il quantile di ordine <span class="math notranslate nohighlight">\(1 - \alpha/2\)</span> della distribuzione t con <span class="math notranslate nohighlight">\(n−1\)</span> gradi di libertà.</p>
+</li>
+</ul>
+</section>
+<section id="passo-2-determinazione-dei-limiti-dell-intervallo-di-confidenza">
+<h4>Passo 2: Determinazione dei Limiti dell’Intervallo di Confidenza<a class="headerlink" href="#passo-2-determinazione-dei-limiti-dell-intervallo-di-confidenza" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Calcoliamo i limiti inferiore <span class="math notranslate nohighlight">\(\hat{a}\)</span> e superiore <span class="math notranslate nohighlight">\(\hat{b}\)</span> dell’intervallo di confidenza così:</p>
+<div class="math notranslate nohighlight">
+\[
+  \hat{a} = \bar{X} - t^{\ast} \frac{s}{\sqrt{n}},
+  \quad \hat{b} = \bar{X} + t^{\ast} \frac{s}{\sqrt{n}}.
+  \]</div>
+</li>
+</ul>
+<p>In queste circostanze, si sostituisce la varianza sconosciuta <span class="math notranslate nohighlight">\(\sigma^2\)</span> con la sua stima <span class="math notranslate nohighlight">\(s\)</span> e si utilizza la distribuzione t di Student invece della normale.</p>
+<p>Applicabilità e Limitazioni:</p>
+<ul class="simple">
+<li><p>Il metodo presuppone che la popolazione segua una distribuzione normale e è valido anche per campioni di piccole dimensioni (ad esempio, <span class="math notranslate nohighlight">\(n &lt; 30\)</span>) prelevati da tale popolazione.</p></li>
+<li><p>Se la popolazione non è normalmente distribuita e la dimensione del campione è ridotta, questo metodo potrebbe non essere idoneo.</p></li>
+<li><p>Tuttavia, per campioni di grandi dimensioni (<span class="math notranslate nohighlight">\(n \geq 30\)</span>), questo approccio rimane valido per la stima dell’intervallo di confidenza grazie al teorema del limite centrale, che si applica anche a popolazioni con distribuzioni non normali.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="livello-di-copertura">
+<h2>Livello di Copertura<a class="headerlink" href="#livello-di-copertura" title="Link to this heading">#</a></h2>
+<p>Per interpretare correttamente gli intervalli di fiducia è fondamentale considerare il concetto di «livello di copertura». Questo livello indica la frequenza con cui l’intervallo di fiducia include il valore reale del parametro della popolazione, in una serie di esperimenti ripetuti.</p>
+<p>Esempio di Livello di Copertura:</p>
+<ul class="simple">
+<li><p>Se il livello di copertura è del 95%, significa che, nel lungo periodo, il 95% degli intervalli di fiducia costruiti conterrà il valore vero del parametro.</p></li>
+<li><p>Importante: Questo non implica che ci sia una probabilità del 95% che il valore vero del parametro cada in un particolare intervallo di fiducia. Infatti, il parametro della popolazione è un valore fisso e non soggetto a probabilità; piuttosto, l’incertezza risiede nell’intervallo di fiducia stesso.</p></li>
+</ul>
+<p>Come Funziona la Copertura:</p>
+<ul class="simple">
+<li><p>Nel contesto frequentista, la «probabilità» si riferisce alla frequenza a lungo termine di un certo evento in un gran numero di ripetizioni dell’esperimento.</p></li>
+<li><p>Nel caso degli intervalli di fiducia, l“«esperimento» è l’estrazione di un campione dalla popolazione, e l“«evento» è la generazione di un intervallo di fiducia che contiene il valore vero del parametro.</p></li>
+<li><p>Il livello di copertura, generalmente indicato come <span class="math notranslate nohighlight">\(1-\alpha\)</span>, rappresenta la probabilità a lungo termine che intervalli di fiducia costruiti con questa metodologia includano il vero valore del parametro.</p></li>
+</ul>
+<section id="simulazione">
+<h3>Simulazione<a class="headerlink" href="#simulazione" title="Link to this heading">#</a></h3>
+<ul>
+<li><p>Per illustrare questo concetto, eseguiamo una simulazione con la popolazione degli adulti maschi italiani, assunta come normalmente distribuita con media 175 cm e varianza 49 cm².</p></li>
+<li><p>Eseguiamo 1000 ripetizioni di un esperimento, estraendo ogni volta un campione di 30 individui.</p></li>
+<li><p>Per ciascun campione, calcoliamo l’intervallo di fiducia al 95% usando la formula:</p>
+<div class="math notranslate nohighlight">
+\[
+  \bar{X} \pm t \frac{s}{\sqrt{n}},
+  \]</div>
+<p>dove <span class="math notranslate nohighlight">\(\bar{X}\)</span> è la media campionaria, <span class="math notranslate nohighlight">\(s\)</span> è la deviazione standard campionaria e <span class="math notranslate nohighlight">\(t\)</span> è il valore critico della distribuzione t-Student per <span class="math notranslate nohighlight">\(n-1\)</span> gradi di libertà al livello di significatività <span class="math notranslate nohighlight">\(\alpha/2 = 0.025\)</span>.</p>
+</li>
+<li><p>Registriamo i limiti di ciascun intervallo e controlliamo quanti di essi includono effettivamente il vero valore medio della popolazione.</p></li>
+</ul>
+<p>Attraverso questa simulazione, possiamo visualizzare concretamente il concetto di livello di copertura e la sua importanza nella statistica frequentista.</p>
+<p>Iniziamo generando 1000 campioni casuali di dimensione <span class="math notranslate nohighlight">\(n=30\)</span> da una distribuzione normale con media <span class="math notranslate nohighlight">\(175\)</span> e deviazione standard <span class="math notranslate nohighlight">\(7\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mi">175</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)])</span>
+<span class="n">samples</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1000, 30)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il primo campione di ampiezza <span class="math notranslate nohighlight">\(n\)</span> = 30 che abbiamo ottenuto è il seguente.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[168.7521154  164.76507718 186.03932551 174.89753671 178.53547098
+ 166.43685324 173.18819275 186.53346854 179.53087581 174.0064583
+ 173.43909077 181.59265851 166.69050785 183.22433398 166.07866923
+ 179.2748938  174.15087319 163.67224744 172.59808326 173.62163039
+ 180.52986468 180.90518979 179.45970115 174.65367383 177.21907685
+ 176.15960156 164.09910426 168.77703185 181.18799765 177.50704723]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Stampiamo qui di seguito le medie dei primi dieci campioni.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xbar</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">xbar</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[174.45599554 174.91755506 175.71293812 175.38317558 174.45200455
+ 176.01775635 174.26451759 174.46718845 173.56806964 176.48997266]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Troviamo il valore critico della distribuzione <span class="math notranslate nohighlight">\(t\)</span> di Student con (30-1) gradi di libertà.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">t</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0452296421327034
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizzando le informazioni precedenti, calcoliamo 1000 intervalli di confidenza per la media della popolazione.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interval_width</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="n">samples</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">CI_low</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">interval_width</span>
+<span class="n">CI_high</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">interval_width</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Troviamo ora il livello di copertura, ovvero il numero di volte in cui l’intervallo di confidenza calcolato contiene il vero valore del parametro.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coverage_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">CI_low</span> <span class="o">&lt;</span> <span class="n">mu</span><span class="p">,</span> <span class="n">mu</span> <span class="o">&lt;</span> <span class="n">CI_high</span><span class="p">))</span> <span class="o">/</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">coverage_p</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.948
+</pre></div>
+</div>
+</div>
+</div>
+<p>In conclusione, ripetendo la simulazione per 1000 volte, abbiamo ottenuto una proporzione di intervalli di confidenza del 95% che contengono il parametro (ovvero il livello di copertura) molto vicino al valore nominale di <span class="math notranslate nohighlight">\(1 - \alpha = 0.95\)</span>.</p>
+</section>
+<section id="il-concetto-di-livello-di-confidenza">
+<h3>Il Concetto di Livello di Confidenza<a class="headerlink" href="#il-concetto-di-livello-di-confidenza" title="Link to this heading">#</a></h3>
+<p>Gli intervalli di confidenza sono range di valori che, con una certa sicurezza statistica, si ritiene includano il parametro di interesse.</p>
+<p>Secondo l’approccio frequentista, l’intervallo di confidenza si deve considerare come una metodologia:</p>
+<ul class="simple">
+<li><p>Se ripetiamo l’esperimento (estrarre un campione e calcolare l’intervallo di confidenza) molte volte, il metodo produce un intervallo che coprirà il valore vero del parametro nel 95% dei casi, assumendo un livello di confidenza del 95%.</p></li>
+</ul>
+</section>
+<section id="un-malinteso-comune-nell-interpretazione-degli-intervalli-di-confidenza">
+<h3>Un Malinteso Comune nell’Interpretazione degli Intervalli di Confidenza<a class="headerlink" href="#un-malinteso-comune-nell-interpretazione-degli-intervalli-di-confidenza" title="Link to this heading">#</a></h3>
+<p>È inesatto affermare che un determinato intervallo di confidenza contenga il valore vero di un parametro con una probabilità del 95%. Questo è un errore diffuso, persino tra i ricercatori, che spesso interpretano l’intervallo di confidenza come indicativo della probabilità che il parametro (ad esempio, la media della popolazione <span class="math notranslate nohighlight">\(\mu\)</span>) si trovi effettivamente all’interno di un dato intervallo (es. <span class="math notranslate nohighlight">\([\hat{a}, \hat{b}]\)</span>).</p>
+<p>La descrizione corretta è la seguente:</p>
+<ul class="simple">
+<li><p>«La metodologia impiegata per calcolare l’intervallo <span class="math notranslate nohighlight">\([\hat{a}, \hat{b}]\)</span> ha il 95% di probabilità di generare un intervallo che include il vero valore del parametro».</p></li>
+<li><p>Ciò significa che l’intervallo di confidenza non esprime una probabilità circa la posizione precisa del parametro, ma riflette la probabilità che la procedura adottata per determinarlo generi un intervallo che lo includa.</p></li>
+</ul>
+<p>In conclusione, l’intervallo di confidenza ci fornisce una garanzia statistica riguardo alla affidabilità del metodo usato per la sua stima, piuttosto che sulla esatta ubicazione del parametro in questione.</p>
+</section>
+<section id="fraintendimenti-comuni-sugli-intervalli-di-confidenza">
+<h3>Fraintendimenti Comuni sugli Intervalli di Confidenza<a class="headerlink" href="#fraintendimenti-comuni-sugli-intervalli-di-confidenza" title="Link to this heading">#</a></h3>
+<p>Nel loro lavoro, <span id="id1">[]</span> evidenziano come, nonostante l’ampio riconoscimento dei limiti dei test di ipotesi nulle, gli intervalli di confidenza siano spesso consigliati per l’inferenza statistica. Anche l’American Psychological Association (APA) suggerisce che gli intervalli di confidenza siano «in generale, la migliore strategia di reportistica». Tuttavia, <span id="id2">[]</span> sottolineano che queste raccomandazioni non considerano la difficoltà nel fornire una corretta interpretazione degli intervalli di confidenza.</p>
+<p>Per indagare l’interpretazione degli intervalli di confidenza, Hoekstra et al. hanno condotto uno studio con due domande principali:</p>
+<ol class="arabic simple">
+<li><p>Quanto frequentemente intervalli di confidenza sono mal interpretati da studenti e ricercatori?</p></li>
+<li><p>L’esperienza nella ricerca riduce le interpretazioni errate degli intervalli di confidenza?</p></li>
+</ol>
+<p>Prima di presentare lo studio, <span id="id3">[]</span> ricordano qual è l’interpretazione corretta degli intervalli di confidenza.</p>
+<blockquote>
+<div><p>A CI is a numerical interval constructed around the estimate of a parameter. Such an interval does not, however, directly indicate a property of the parameter; instead, it indicates a property of the procedure, as is typical for a frequentist technique. Specifically, we may find that a particular procedure, when used repeatedly across a series of hypothetical data sets (i.e., the sample space), yields intervals that contain the true parameter value in 95% of the cases. When such a procedure is applied to a particular data set, the resulting interval is said to be a 95% CI. The key point is that the CIs do not provide for a statement about the parameter as it relates to the particular sample at hand; instead, they provide for a statement about the performance of the procedure of drawing such intervals in repeated use. Hence, it is incorrect to interpret a CI as the probability that the true value is within the interval (e.g., Berger &amp; Wolpert, 1988). As is the case with <span class="math notranslate nohighlight">\(p\)</span>-values, CIs do not allow one to make probability statements about parameters or hypotheses.</p>
+</div></blockquote>
+<p>Nel loro studio, <span id="id4"></span> hanno presentato un questionario a 596 partecipanti, tra cui studenti universitari e ricercatori, con le seguenti affermazioni riguardanti l’interpretazione degli intervalli di confidenza.</p>
+<blockquote>
+<div><p>Professor Bumbledorf conducts an experiment, analyzes the data, and reports: «The 95% confidence interval for the mean ranges from 0.1 to 0.4.» Please mark each of the statements below as “true” or “false”.</p>
+</div></blockquote>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The probability that the true mean is greater than 0 is at least 95%.</p></li>
+<li><p>The probability that the true mean equals 0 is smaller than 5%.</p></li>
+<li><p>The «null hypothesis» that the true mean equals 0 is likely to be incorrect.</p></li>
+<li><p>There is a 95% probability that the true mean lies between 0.1 and 0.4.</p></li>
+<li><p>We can be 95% confident that the true mean lies between 0.1 and 0.4.</p></li>
+<li><p>If we were to repeat the experiment over and over, then 95% of the time the true mean falls between 0.1 and 0.4.</p></li>
+</ol>
+</div></blockquote>
+<p>Sorprendentemente, anche se tutte le sei affermazioni nel questionario sono errate, molti partecipanti hanno concordato con esse. I risultati mostrano che, in media, i partecipanti hanno concordato con circa 3.5 affermazioni errate su 6. Non è stata rilevata una differenza di rilievo nell’interpretazione degli intervalli di confidenza tra studenti e ricercatori, suggerendo che l’esperienza nella ricerca non migliora la comprensione di questo concetto.</p>
+<p>I risultati indicano che molte persone interpretano erroneamente gli intervalli di confidenza, e che anche l’esperienza nella ricerca non garantisce una migliore comprensione. Questo solleva dubbi sull’efficacia degli intervalli di confidenza frequentisti e suggerisce che gli «intervalli di credibilità» bayesiani possano rappresentare un’alternativa più vantaggiosa. Quest’ultimi tendono ad essere più intuitivi e di più facile interpretazione corretta.</p>
+</section>
+</section>
+<section id="confronto-tra-intervalli-frequentisti-e-bayesiani">
+<h2>Confronto tra Intervalli Frequentisti e Bayesiani<a class="headerlink" href="#confronto-tra-intervalli-frequentisti-e-bayesiani" title="Link to this heading">#</a></h2>
+<p>Concludiamo questo capitolo esaminando le differenze tra l’intervallo di confidenza frequentista e l’intervallo di credibilità bayesiano, utilizzando lo stesso set di dati per entrambi i calcoli.</p>
+<p>Immaginiamo di avere un gruppo di 20 osservazioni relative alla performance in un test cognitivo. Il nostro obiettivo è stimare la media della popolazione da cui sono state tratte queste osservazioni. Per farlo, simuliamo 20 valori casuali da una popolazione che segue una distribuzione normale con media 50 e deviazione standard 10, rappresentata da <span class="math notranslate nohighlight">\(\mathcal{N}(50, 10)\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_size</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">sample_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[49.22619769 39.08332511 50.46336829 59.64364434 42.1208818  59.11616667
+ 45.01546315 51.27884059 45.29073121 35.97836943 70.36405132 46.09204578
+ 41.60739894 57.88606025 42.24685608 51.78685494 40.10262166 70.92604727
+ 61.95807019 38.92208468 39.3622049  59.26910583 44.04405871 48.06085547
+ 38.44794398 63.4501465  48.13092255 52.76413903 53.29361187 53.08021373]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sample_data</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/149b668ce7d924f2e4cb4611bcc1811416c8a660595f971217c00dceae2e1c40.png"><img alt="../_images/149b668ce7d924f2e4cb4611bcc1811416c8a660595f971217c00dceae2e1c40.png" src="../_images/149b668ce7d924f2e4cb4611bcc1811416c8a660595f971217c00dceae2e1c40.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<section id="intervallo-di-confidenza-frequentista">
+<h3>Intervallo di Confidenza Frequentista<a class="headerlink" href="#intervallo-di-confidenza-frequentista" title="Link to this heading">#</a></h3>
+<p>Quando ci si avvicina al problema di stimare la media della popolazione, <span class="math notranslate nohighlight">\(\mu\)</span>, attraverso un approccio frequentista, uno dei metodi più comuni è la stima puntuale. Questo metodo consiste nell’utilizzare un unico valore, solitamente la media del campione, per rappresentare il parametro della popolazione che non conosciamo.</p>
+<p>La media campionaria, indicata come <span class="math notranslate nohighlight">\(\hat{\mu}\)</span>, è una scelta frequente per la stima puntuale della media della popolazione, <span class="math notranslate nohighlight">\(\mu\)</span>. Si calcola sommando tutti i valori osservati nel campione, ovvero <span class="math notranslate nohighlight">\(X_1, X_2, ..., X_n\)</span>, e dividendo questa somma per il numero totale di osservazioni nel campione, <span class="math notranslate nohighlight">\(n\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\mu} = \frac{1}{n} \sum_{i=1}^n X_i.
+\]</div>
+<p>Applicando questa formula ai dati del nostro esempio, otteniamo</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sample_data</span><span class="p">)</span>
+<span class="n">sample_mean</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>49.96707606604516
+</pre></div>
+</div>
+</div>
+</div>
+<p>Mentre le stime puntuali offrono un valore specifico per rappresentare il parametro della popolazione, non riescono da sole a descrivere completamente l’incertezza associata a questa stima. Per affrontare questa lacuna, l’approccio frequentista si avvale degli intervalli di confidenza. Un intervallo di confidenza fornisce una gamma di valori all’interno dei quali si presume che il vero parametro della popolazione cada, basandosi sui dati osservati. Questo intervallo viene definito aggiungendo e sottraendo un margine di errore alla stima puntuale:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mu} \pm m = [\hat{\mu} - m, \hat{\mu} + m].\]</div>
+<p>Il margine di errore, che riflette la variabilità dei dati del campione, dipende sia dal livello di confidenza scelto, indicato come <span class="math notranslate nohighlight">\(1-\alpha\)</span>, sia dalla dimensione del campione, <span class="math notranslate nohighlight">\(n\)</span>. Ad esempio, un intervallo di confidenza del 95% significa che ci si aspetta che l’intervallo includa il vero parametro della popolazione nel 95% delle applicazioni di questa procedura.</p>
+<p>Il margine di errore si calcola normalmente attraverso l’errore standard (SE) della stima puntuale, e viene definito da:</p>
+<div class="math notranslate nohighlight">
+\[m = t_{1-\frac{\alpha}{2}, n-1} \times SE,\]</div>
+<p>dove <span class="math notranslate nohighlight">\(t_{1-\frac{\alpha}{2}, n-1}\)</span> rappresenta il valore critico dalla distribuzione t per il livello di confidenza desiderato e <span class="math notranslate nohighlight">\(n-1\)</span> gradi di libertà.</p>
+<p>L’errore standard della media campionaria si ottiene dividendo la deviazione standard del campione, <span class="math notranslate nohighlight">\(\sigma\)</span>, per la radice quadrata della dimensione del campione:</p>
+<div class="math notranslate nohighlight">
+\[SE = \frac{\sigma}{\sqrt{n}}.\]</div>
+<p>Applicando questa formula ai dati del nostro esempio, la deviazione standard del campione risulta</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_stddev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sample_data</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sample_stddev</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9.495937723033265
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’errore standard della media è</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">standard_error</span> <span class="o">=</span> <span class="n">sample_stddev</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sample_size</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">standard_error</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.123356225880695
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’errore standard della media rappresenta una stima della deviazione standard della distribuzione delle medie campionarie per campioni di dimensione <span class="math notranslate nohighlight">\(n\)</span> (in questo caso, <span class="math notranslate nohighlight">\(n\)</span> = 20).</p>
+<p>Supponiamo di voler avere un livello di confidenza del 95%. Per trovare il valore critico della distribuzione <span class="math notranslate nohighlight">\(t\)</span> di Student, dobbiamo trovare il valore della statistica <span class="math notranslate nohighlight">\(T\)</span> che lascia il 2.5% dell’area sotto la coda a sinistra e il 2.5% dell’area sotto la coda a destra della distribuzione <span class="math notranslate nohighlight">\(t\)</span> di Student con 19 gradi di libertà.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">degrees_of_freedom</span> <span class="o">=</span> <span class="n">sample_size</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">t_val</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.975</span><span class="p">,</span> <span class="n">degrees_of_freedom</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t_val</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.093024054408263
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il margine d’errore è uguale a</p>
+<div class="math notranslate nohighlight">
+\[t \cdot SE\]</div>
+<p>ovvero</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">margin_of_error</span> <span class="o">=</span> <span class="n">t_val</span> <span class="o">*</span> <span class="n">standard_error</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">margin_of_error</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.444235656845839
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’intervallo di confidenza frequentista è uguale a</p>
+<div class="math notranslate nohighlight">
+\[\text{stima del parametro} \pm \text{margine d'errore}\]</div>
+<p>ovvero</p>
+<div class="math notranslate nohighlight">
+\[\bar{x} \pm t_{\text{critico}} \frac{s}{\sqrt{n}}.\]</div>
+<p>Per i dati dell’esempio otteniamo</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confidence_interval_lower</span> <span class="o">=</span> <span class="n">sample_mean</span> <span class="o">-</span> <span class="n">margin_of_error</span>
+<span class="n">confidence_interval_upper</span> <span class="o">=</span> <span class="n">sample_mean</span> <span class="o">+</span> <span class="n">margin_of_error</span>
+<span class="n">confidence_interval</span> <span class="o">=</span> <span class="p">[</span><span class="n">confidence_interval_lower</span><span class="p">,</span> <span class="n">confidence_interval_upper</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">confidence_interval</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[45.52284040919932, 54.411311722891]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Interpretiamo questo risultato dicendo che la procedura utilizzata per calcolare l’intervallo <span class="math notranslate nohighlight">\([42.99, 53.23]\)</span> include <span class="math notranslate nohighlight">\(\mu\)</span> nel 95% dei casi.</p>
+<p>La figura successiva mostra la distribuzione dei dati, la stima di <span class="math notranslate nohighlight">\(\mu\)</span> (ovvero, la media del campione) e l’intervalli di confidenza al 95%.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">visualize_output</span><span class="p">(</span><span class="n">sample_data</span><span class="p">,</span> <span class="n">sample_mean</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">type_interval</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">sample_data</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sample_mean</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Sample Mean&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">type_interval</span><span class="si">}</span><span class="s1"> interval&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visualize_output</span><span class="p">(</span><span class="n">sample_data</span><span class="p">,</span> <span class="n">sample_mean</span><span class="p">,</span> <span class="n">confidence_interval</span><span class="p">,</span> <span class="s1">&#39;confidence&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/220cf53c1e1cd51a928ab487d33955eb7a85cabd9b48dc76179d1217b8dae76f.png"><img alt="../_images/220cf53c1e1cd51a928ab487d33955eb7a85cabd9b48dc76179d1217b8dae76f.png" src="../_images/220cf53c1e1cd51a928ab487d33955eb7a85cabd9b48dc76179d1217b8dae76f.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+</section>
+<section id="intervallo-di-credibilita-bayesiano">
+<h3>Intervallo di Credibilità Bayesiano<a class="headerlink" href="#intervallo-di-credibilita-bayesiano" title="Link to this heading">#</a></h3>
+<p>Per determinare l’intervallo di credibilità bayesiano, impieghiamo un modello statistico basato sulla distribuzione Normale, integrando distribuzioni a priori che forniscono informazioni iniziali limitate sui parametri. Questa strategia ci consente di inserire delle conoscenze preliminari, pur essendo vaghe, nell’analisi statistica.</p>
+<p>Dettagli sulle scelte delle distribuzioni a priori:</p>
+<ul class="simple">
+<li><p>Per il parametro <span class="math notranslate nohighlight">\(\mu\)</span>, impostiamo una distribuzione a priori centrata intorno allo zero, con una deviazione standard piuttosto ampia. Come alternativa, si potrebbe considerare di centrare la distribuzione a priori sulla media campionaria.</p></li>
+<li><p>Per il parametro <span class="math notranslate nohighlight">\(\sigma\)</span>, adottiamo una distribuzione Normale troncata, posizionata anch’essa intorno allo zero, ma con una deviazione standard notevolmente grande.</p></li>
+</ul>
+<p>La scelta di centrare le distribuzioni a priori sullo zero è volta a evitare l’introduzione di bias nell’analisi, tendendo verso una stima conservativa, ossia una stima del parametro incline allo zero. La decisione di usare deviazioni standard molto ampie riflette la debolezza delle informazioni preliminari che abbiamo incorporato nel modello.</p>
+<p>Ciò detto, abbiamo introdotto alcune conoscenze iniziali nell’analisi: in particolare, l’assunzione che valori eccessivamente elevati, sia positivi che negativi, per la media del campione siano improbabili. Questa considerazione riflette una cautela nell’estimare il parametro, evitando di considerare valori estremi come plausibili.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfNormal</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">Y_obs</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;Y_obs&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="n">sample_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">model</span><span class="p">:</span>
+    <span class="n">idata</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">nuts_sampler</span><span class="o">=</span><span class="s2">&quot;numpyro&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c5e7adf2aed7462d957486f39126de27", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6b7ff015bdeb451ba0f89ecfa89db9a5", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "bcae3fc03fa34bb58029091188752ffb", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "de7a5289597f4c62b241181dac87ff5e", "version_major": 2, "version_minor": 0}</script></div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_2.5%</th>
+      <th>hdi_97.5%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>mu</th>
+      <td>49.91</td>
+      <td>1.84</td>
+      <td>46.31</td>
+      <td>53.47</td>
+      <td>0.04</td>
+      <td>0.03</td>
+      <td>2611.23</td>
+      <td>2270.39</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>9.97</td>
+      <td>1.39</td>
+      <td>7.45</td>
+      <td>12.71</td>
+      <td>0.03</td>
+      <td>0.02</td>
+      <td>2771.77</td>
+      <td>2240.99</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Si noti che, dati i dati specifici e la formulazione del modello bayesiano in uso, l’intervallo di credibilità ottenuto si mostra molto simile all’intervallo di confidenza calcolato secondo l’approccio frequentista. Tuttavia, l’interpretazione di questi due intervalli differisce in maniera sostanziale.</p>
+<p>Nel caso dell’intervallo di credibilità bayesiano, possiamo affermare che, in base al nostro grado di credenza soggettiva del 95%, la media della popolazione si trova all’interno dell’intervallo specificato. Questo è un’affermazione diretta sulla probabilità che la media della popolazione rientri in un determinato intervallo, basata sulle informazioni priori e sui dati osservati.</p>
+<p>In contrasto, l’intervallo di confidenza frequentista non permette un’interpretazione diretta riguardo alla probabilità della media della popolazione di cadere in un dato intervallo. Invece, l’interpretazione frequentista indica che, se ripetessimo il processo di campionamento molte volte, il 95% degli intervalli di confidenza calcolati conterrebbe la vera media della popolazione.</p>
+<p>Quindi, mentre l’intervallo di credibilità bayesiano fornisce una misura diretta della credenza nella posizione della media della popolazione, l’intervallo di confidenza frequentista fornisce una misura di affidabilità del processo di stima nel lungo termine.</p>
+</section>
+</section>
+<section id="riflessioni-conclusive">
+<h2>Riflessioni Conclusive<a class="headerlink" href="#riflessioni-conclusive" title="Link to this heading">#</a></h2>
+<p>Come sottolineato da <span id="id5"></span>, è comune riscontrare fraintendimenti riguardo agli intervalli di fiducia. Il «livello di confidenza del 95%» è da interpretarsi come la probabilità a lungo termine che, in una serie di intervalli di fiducia calcolati, il 95% di essi includa il vero valore del parametro sconosciuto. Tuttavia, per un singolo intervallo di fiducia, non è possibile dichiarare con sicurezza che questo contenga effettivamente il parametro di interesse. In altre parole, la certezza sulla presenza del parametro sconosciuto all’interno di un dato intervallo di fiducia non è garantita per ogni singolo caso analizzato.</p>
+<p>È inoltre inesatto presumere che esista un legame diretto tra la varianza e la media di un campione, ipotizzando che un intervallo di fiducia più ristretto implichi maggiore precisione. Nella prospettiva frequentista, la «precisione» è strettamente legata al livello di copertura a lungo termine assicurato dal metodo usato per creare gli intervalli di fiducia. Questo concetto non si applica al singolo intervallo di fiducia osservato. Dunque, un intervallo di fiducia che si presenta estremamente ristretto potrebbe in realtà essere significativamente lontano dal valore vero del parametro non noto.</p>
+<p>È importante sottolineare che l’approccio frequentista offre un metodo per calcolare gli intervalli di confidenza per una vasta gamma di statistiche. Questo include, ad esempio, la stima dell’intervallo di confidenza per la differenza tra due medie, per una proporzione o per la differenza tra due proporzioni. Ecco le formule per calcolare gli intervalli di confidenza per i casi menzionati:</p>
+<ol class="arabic">
+<li><p><strong>Intervallo di confidenza per la differenza tra due medie</strong>:</p>
+<p>Se abbiamo due campioni indipendenti di dimensione <span class="math notranslate nohighlight">\( n_1 \)</span> e <span class="math notranslate nohighlight">\( n_2 \)</span>, con medie <span class="math notranslate nohighlight">\( \bar{x}_1 \)</span> e <span class="math notranslate nohighlight">\( \bar{x}_2 \)</span> e deviazioni standard <span class="math notranslate nohighlight">\( s_1 \)</span> e <span class="math notranslate nohighlight">\( s_2 \)</span>, l’intervallo di confidenza per la differenza tra le medie è calcolato come:</p>
+<div class="math notranslate nohighlight">
+\[
+   (\bar{x}_1 - \bar{x}_2) \pm t_{\alpha/2} \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
+   \]</div>
+<p>Dove <span class="math notranslate nohighlight">\( t_{\alpha/2} \)</span> è il valore critico della distribuzione t di Student con <span class="math notranslate nohighlight">\( \alpha/2 \)</span> di probabilità di coda e gradi di libertà <span class="math notranslate nohighlight">\( df = n_1 + n_2 - 2 \)</span>.</p>
+</li>
+<li><p><strong>Intervallo di confidenza per una proporzione</strong>:</p>
+<p>Per stimare l’intervallo di confidenza per una proporzione <span class="math notranslate nohighlight">\( p \)</span> in un campione binomiale di dimensione <span class="math notranslate nohighlight">\( n \)</span>, la formula è:</p>
+<div class="math notranslate nohighlight">
+\[
+   \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
+   \]</div>
+<p>Dove <span class="math notranslate nohighlight">\( \hat{p} \)</span> è la proporzione campionaria e <span class="math notranslate nohighlight">\( z_{\alpha/2} \)</span> è il valore critico della distribuzione normale standard con <span class="math notranslate nohighlight">\( \alpha/2 \)</span> di probabilità di coda.</p>
+</li>
+<li><p><strong>Intervallo di confidenza per la differenza tra due proporzioni</strong>:</p>
+<p>Per stimare l’intervallo di confidenza per la differenza tra due proporzioni <span class="math notranslate nohighlight">\( p_1 \)</span> e <span class="math notranslate nohighlight">\( p_2 \)</span> in due campioni binomiali di dimensioni <span class="math notranslate nohighlight">\( n_1 \)</span> e <span class="math notranslate nohighlight">\( n_2 \)</span>, la formula è:</p>
+<div class="math notranslate nohighlight">
+\[
+   (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \sqrt{\frac{\hat{p}_1(1 - \hat{p}_1)}{n_1} + \frac{\hat{p}_2(1 - \hat{p}_2)}{n_2}}
+   \]</div>
+<p>Dove <span class="math notranslate nohighlight">\( \hat{p}_1 \)</span> e <span class="math notranslate nohighlight">\( \hat{p}_2 \)</span> sono le proporzioni campionarie e <span class="math notranslate nohighlight">\( z_{\alpha/2} \)</span> è il valore critico della distribuzione normale standard con <span class="math notranslate nohighlight">\( \alpha/2 \)</span> di probabilità di coda.</p>
+</li>
+</ol>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+pandas    : 2.2.2
+pymc      : 5.15.1
+numpy     : 1.26.4
+matplotlib: 3.8.4
+scipy     : 1.13.1
+seaborn   : 0.13.2
+arviz     : 0.18.0
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_6"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="E_estimation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="E_conf_interv.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inferenza-statistica-frequentista-l-intervallo-di-confidenza">Inferenza Statistica Frequentista: L’Intervallo di Confidenza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#determinazione-dell-intervallo-di-confidenza-per-una-media">Determinazione dell’intervallo di Confidenza per una Media</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-dell-intervallo-di-confidenza-per-una-popolazione-normale-con-varianza-nota">Derivazione dell’Intervallo di Confidenza per una Popolazione Normale con Varianza Nota</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-1-standardizzazione-della-media-campionaria">Passo 1: Standardizzazione della Media Campionaria</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-2-stabilire-il-livello-di-confidenza">Passo 2: Stabilire il Livello di Confidenza</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-3-formulazione-dell-intervallo-di-confidenza">Passo 3: Formulazione dell’Intervallo di Confidenza</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-4-manipolazione-algebrica-per-definire-i-limiti">Passo 4: Manipolazione Algebrica per Definire i Limiti</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-5-specificazione-dei-limiti-dell-intervallo">Passo 5: Specificazione dei Limiti dell’Intervallo</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione">Conclusione:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stima-dell-intervallo-di-confidenza-per-popolazioni-normali-con-varianza-incognita">Stima dell’Intervallo di Confidenza per Popolazioni Normali con Varianza Incognita</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-1-impiego-della-distribuzione-t-di-student">Passo 1: Impiego della Distribuzione t di Student</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passo-2-determinazione-dei-limiti-dell-intervallo-di-confidenza">Passo 2: Determinazione dei Limiti dell’Intervallo di Confidenza</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#livello-di-copertura">Livello di Copertura</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione">Simulazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-concetto-di-livello-di-confidenza">Il Concetto di Livello di Confidenza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-malinteso-comune-nell-interpretazione-degli-intervalli-di-confidenza">Un Malinteso Comune nell’Interpretazione degli Intervalli di Confidenza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fraintendimenti-comuni-sugli-intervalli-di-confidenza">Fraintendimenti Comuni sugli Intervalli di Confidenza</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-tra-intervalli-frequentisti-e-bayesiani">Confronto tra Intervalli Frequentisti e Bayesiani</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intervallo-di-confidenza-frequentista">Intervallo di Confidenza Frequentista</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intervallo-di-credibilita-bayesiano">Intervallo di Credibilità Bayesiano</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1510 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Inferenza bayesiana su una media &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/22_stan_normal_normal';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_4/22_stan_normal_normal.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="Confronto tra due gruppi" href="23_stan_two_groups.html" />
+    <link rel="prev" title="Analisi bayesiana dell’odds-ratio" href="19_stan_odds_ratio.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/22_stan_normal_normal.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/22_stan_normal_normal.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Inferenza bayesiana su una media</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-modello-normale">Il modello Normale</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-base">Modello di Base</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parametrizzazione-non-centrata">Parametrizzazione Non Centrata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior predictive check</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-robusto">Modello «robusto»</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="inferenza-bayesiana-su-una-media">
+<span id="bayes-one-mean-notebook"></span><h1>Inferenza bayesiana su una media<a class="headerlink" href="#inferenza-bayesiana-su-una-media" title="Link to this heading">#</a></h1>
+<p>L’obiettivo principale di questo capitolo è esaminare un contesto che abbiamo già preso in considerazione in precedenza: ci troviamo di fronte a un campione di dati misurati su una scala a intervalli o rapporti e desideriamo effettuare inferenze sulla media della popolazione da cui il campione è stato estratto. Tuttavia, anziché procedere con una derivazione analitica della distribuzione a posteriori della media della popolazione, in questo caso utilizzeremo i metodi MCMC con Stan.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../_config/config.py # Import the configuration settings
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">cmdstanpy</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
+
+<span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="il-modello-normale">
+<h2>Il modello Normale<a class="headerlink" href="#il-modello-normale" title="Link to this heading">#</a></h2>
+<p>I priori coniugati Normali di una Normale non richiedono l’approssimazione numerica ottenuta mediante metodi MCMC. In questo capitolo, tuttavia, ripetiamo l’esercizio descritto nel capitolo <a class="reference internal" href="04_conjugate_families_2.html#distr-coniugate-2-notebook"><span class="std std-ref">Distribuzioni coniugate (2)</span></a> usando Stan.</p>
+<section id="un-esempio-concreto">
+<h3>Un esempio concreto<a class="headerlink" href="#un-esempio-concreto" title="Link to this heading">#</a></h3>
+<p>Per applicare il modello Normale, utilizzeremo i dati del censimento parziale dell’area di Dobe dei !Kung San, raccolti attraverso interviste condotte da Nancy Howell alla fine degli anni “60. I !Kung San sono una suddivisione della popolazione San, che vive nel deserto del Kalahari, tra Namibia, Botswana e Angola, e mantengono un’economia basata su caccia e raccolta. Riprodurremo l’analisi descritta da <span id="id1">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>, esaminando unicamente i valori di altezza per individui di età superiore ai 18 anni.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Howell_18.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>height</th>
+      <th>weight</th>
+      <th>age</th>
+      <th>male</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>151.765</td>
+      <td>47.825606</td>
+      <td>63.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>139.700</td>
+      <td>36.485807</td>
+      <td>63.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>136.525</td>
+      <td>31.864838</td>
+      <td>65.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>156.845</td>
+      <td>53.041914</td>
+      <td>41.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>145.415</td>
+      <td>41.276872</td>
+      <td>51.0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>352
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span> <span class="n">bw_adjust</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Adjust bw_adjust for smoothing</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;BDI-II&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/5dec8da6777eb2af8426bcf97ad4004712910b85b0d7e1866d26ae209455cf5f.png"><img alt="../_images/5dec8da6777eb2af8426bcf97ad4004712910b85b0d7e1866d26ae209455cf5f.png" src="../_images/5dec8da6777eb2af8426bcf97ad4004712910b85b0d7e1866d26ae209455cf5f.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>La media dei valori dell’altezza nel campione è:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>154.5970926136364
+</pre></div>
+</div>
+</div>
+</div>
+<p>con una deviazione standard pari a:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7.742332137351995
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="modello-di-base">
+<h3>Modello di Base<a class="headerlink" href="#modello-di-base" title="Link to this heading">#</a></h3>
+<p>Impostiamo una distribuzione a priori <span class="math notranslate nohighlight">\(\mathcal{N}(181, 30)\)</span> per il parametro <span class="math notranslate nohighlight">\(\mu\)</span> e una distribuzione a priori <span class="math notranslate nohighlight">\(\mathcal{N}(0, 20)\)</span> per il parametro <span class="math notranslate nohighlight">\(\sigma\)</span>. Seguendo <span id="id2">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>, ho impostato la distribuzione a priori per <span class="math notranslate nohighlight">\(\mu\)</span> sul valore della mia altezza, per incorporare nel modello le mie conoscenze precedenti rispetto ai valori dell’altezza.</p>
+<p>Pertanto, il modello Normale si definisce nel seguente modo:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+Y_i &amp;\sim \mathcal{N}(\mu, \sigma) \notag\\
+\mu &amp;\sim \mathcal{N}(181, 30) \notag\\
+\sigma &amp;\sim \mathcal{N}(0, 20) \notag
+\end{align}
+\end{split}\]</div>
+<p>Con questa specifica del modello:</p>
+<ul class="simple">
+<li><p>La variabile casuale <span class="math notranslate nohighlight">\(Y_i\)</span> segue una distribuzione normale con parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span>.</p></li>
+<li><p>Il parametro <span class="math notranslate nohighlight">\(\mu\)</span> ha una distribuzione a priori normale con media 181 e deviazione standard 30.</p></li>
+<li><p>Il parametro <span class="math notranslate nohighlight">\(\sigma\)</span> ha una distribuzione a priori normale con deviazione standard 20, troncata inferiormente a 0.</p></li>
+</ul>
+<p>Per <span class="math notranslate nohighlight">\(\sigma\)</span>, la normale troncata con deviazione standard pari a 20 permette una grande variabilità, garantendo valori positivi per la deviazione standard della distribuzione normale di <span class="math notranslate nohighlight">\(Y_i\)</span>. I parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> sono sconosciuti e rappresentano l’oggetto dell’inferenza.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;gaussian_height.stan&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+    int&lt;lower=1&gt; N;
+    vector[N] y;
+}
+parameters {
+    real mu;
+    real&lt;lower=0&gt; sigma;
+}
+model {
+  y ~ normal(mu, sigma);
+  sigma ~ normal(0, 20);
+  mu ~ normal(181, 30);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creaiamo un dizionario con i dati in formato appropriato per Stan:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stan_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 352, &#39;y&#39;: 0      151.765
+1      139.700
+2      136.525
+3      156.845
+4      145.415
+        ...   
+347    162.560
+348    142.875
+349    162.560
+350    156.210
+351    158.750
+Name: height, Length: 352, dtype: float64}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo le distribuzioni a posteriori dei due parametri oggetto dell’inferenza insieme alle loro traccie (cioè i vettori dei campioni dei parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> prodotti dalla procedura di campionamento MCMC) mediante un <em>trace plot</em> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/ce79d375191908d69eb47de57c9331d61a7e8aba52fd35c1a4e7a3991a2cd22f.png"><img alt="../_images/ce79d375191908d69eb47de57c9331d61a7e8aba52fd35c1a4e7a3991a2cd22f.png" src="../_images/ce79d375191908d69eb47de57c9331d61a7e8aba52fd35c1a4e7a3991a2cd22f.png" style="width: 1211px; height: 411px;" /></a>
+</div>
+</div>
+<p>Una sintesi delle distribuzioni a posteriori dei parametri si ottiene nel modo seguente.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">,</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>mu</th>
+      <td>154.60</td>
+      <td>0.42</td>
+      <td>153.84</td>
+      <td>155.39</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7864.52</td>
+      <td>5825.33</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>7.77</td>
+      <td>0.30</td>
+      <td>7.21</td>
+      <td>8.34</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6655.48</td>
+      <td>5167.04</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="parametrizzazione-non-centrata">
+<h2>Parametrizzazione Non Centrata<a class="headerlink" href="#parametrizzazione-non-centrata" title="Link to this heading">#</a></h2>
+<p>Nella versione precedente del modello Normale abbiamo specificato le distribuzioni a priori per i parametri oggetto dell’inferenza (<span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span>) sulla scala dei dati grezzi osservati, i quali hanno una media di 154.6 e una deviazione standard di 7.7. Sul parametro <span class="math notranslate nohighlight">\(\mu\)</span> abbiamo imposto una distribuzione a priori normale con media 181 e deviazione standard 30, e sul parametro <span class="math notranslate nohighlight">\(\sigma\)</span> abbiamo imposto una distribuzione a priori normale con media 0 e deviazione standard 20. Queste distribuzioni a priori sono specifiche per ciascun particolare campione che possiamo osservare.</p>
+<p>È possibile usare un approccio diverso, che consente di definire delle distribuzioni a priori sui parametri che sono indipendenti dal particolare campione che osserviamo. Questa procedura è chiamata «parametrizzazione non centrata» (<em>non-centered parametrization</em>). In questo modello, utilizziamo variabili latenti <span class="math notranslate nohighlight">\(\mu_{\text{raw}}\)</span> e <span class="math notranslate nohighlight">\(\sigma_{\text{raw}}\)</span>, che seguono una distribuzione normale standard:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\mu_{\text{raw}} &amp;\sim \mathcal{N}(0, 1) \notag\\
+\sigma_{\text{raw}} &amp;\sim \mathcal{N}(0, 1) \notag
+\end{align}
+\end{split}\]</div>
+<p>Queste variabili vengono poi trasformate per ottenere i parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span> sulla scala originale:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\mu &amp;= y_{\text{mean}} + y_{\text{sd}} \cdot \mu_{\text{raw}} \notag\\
+\sigma &amp;= y_{\text{sd}} \cdot \sigma_{\text{raw}} \notag
+\end{align}
+\end{split}\]</div>
+<p>Dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(y_{\text{mean}}\)</span> è la media dei dati osservati <span class="math notranslate nohighlight">\(y\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{\text{sd}}\)</span> è la deviazione standard dei dati osservati <span class="math notranslate nohighlight">\(y\)</span>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_ncp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;gaussian_ncp.stan&#39;</span><span class="p">)</span>
+<span class="n">model_ncp</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_ncp_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Di seguito è riportato il codice Stan per questo modello con la parametrizzazione non centrata:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model_ncp</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+    int&lt;lower=1&gt; N;
+    vector[N] y;
+}
+transformed data {
+    real y_mean = mean(y);
+    real y_sd = sd(y);
+}
+parameters {
+    real mu_raw;
+    real&lt;lower=0&gt; sigma_raw;
+}
+transformed parameters {
+    real mu;
+    real&lt;lower=0&gt; sigma;
+    mu = y_mean + y_sd * mu_raw;
+    sigma = y_sd * sigma_raw;
+}
+model {
+    // Priors:
+    mu_raw ~ normal(0, 1);
+    sigma_raw ~ normal(0, 1);
+    // Likelihood:
+    y ~ normal(mu, sigma);
+}
+generated quantities {
+    vector[N] y_rep;
+    for (n in 1:N) {
+        y_rep[n] = normal_rng(mu, sigma);
+    }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ecco una spiegazione dettagliata del modello Stan con parametrizzazione non centrata.</p>
+<ol class="arabic">
+<li><p><strong>Blocco Dati</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">int&lt;lower=1&gt;</span> <span class="pre">N;</span></code>: Il numero totale di prove o osservazioni.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vector[N]</span> <span class="pre">y;</span></code>: Il vettore dei punteggi osservati per ciascuna prova. Questi punteggi sono sulla loro scala originale e non standardizzati.</p></li>
+</ul>
+</li>
+<li><p><strong>Blocco Dati Trasformati</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">real</span> <span class="pre">y_mean</span> <span class="pre">=</span> <span class="pre">mean(y);</span></code>: La media dei dati osservati <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">real</span> <span class="pre">y_sd</span> <span class="pre">=</span> <span class="pre">sd(y);</span></code>: La deviazione standard dei dati osservati <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Blocco Parametri</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">real</span> <span class="pre">mu_raw;</span></code>: Un parametro latente che segue una distribuzione normale standard.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">real&lt;lower=0&gt;</span> <span class="pre">sigma_raw;</span></code>: Un parametro latente che segue una distribuzione normale standard vincolata a essere positiva.</p></li>
+</ul>
+</li>
+<li><p><strong>Blocco Parametri Trasformati</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">real</span> <span class="pre">mu;</span></code>: La media della distribuzione normale per <code class="docutils literal notranslate"><span class="pre">y</span></code> sulla sua scala originale.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">real&lt;lower=0&gt;</span> <span class="pre">sigma;</span></code>: La deviazione standard della distribuzione normale per <code class="docutils literal notranslate"><span class="pre">y</span></code> sulla sua scala originale.</p></li>
+<li><p>Questi parametri trasformati sono definiti come:</p>
+<div class="highlight-stan notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">y_mean</span> <span class="o">+</span> <span class="n">y_sd</span> <span class="o">*</span> <span class="n">mu_raw</span><span class="p">;</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">y_sd</span> <span class="o">*</span> <span class="n">sigma_raw</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+<p>La <strong>parametrizzazione non centrata</strong> comporta la riparametrizzazione del modello in termini di variabili standardizzate (<code class="docutils literal notranslate"><span class="pre">mu_raw</span></code> e <code class="docutils literal notranslate"><span class="pre">sigma_raw</span></code>) e poi la loro trasformazione di nuovo sulla scala originale dei dati. Questo approccio spesso porta a una migliore efficienza di campionamento e proprietà di convergenza, specialmente nei modelli gerarchici.</p>
+<ol class="arabic simple">
+<li><p><strong>Parametri Latenti (<code class="docutils literal notranslate"><span class="pre">mu_raw</span></code> e <code class="docutils literal notranslate"><span class="pre">sigma_raw</span></code>)</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mu_raw</span> <span class="pre">~</span> <span class="pre">normal(0,</span> <span class="pre">1);</span></code>: <code class="docutils literal notranslate"><span class="pre">mu_raw</span></code> è una variabile normale standardizzata.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma_raw</span> <span class="pre">~</span> <span class="pre">normal(0,</span> <span class="pre">1);</span></code>: <code class="docutils literal notranslate"><span class="pre">sigma_raw</span></code> è una variabile normale standardizzata vincolata a essere positiva.</p></li>
+</ul>
+</li>
+<li><p><strong>Trasformazione alla Scala Originale</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mu</span> <span class="pre">=</span> <span class="pre">y_mean</span> <span class="pre">+</span> <span class="pre">y_sd</span> <span class="pre">*</span> <span class="pre">mu_raw;</span></code>: Questo scala e trasla <code class="docutils literal notranslate"><span class="pre">mu_raw</span></code> alla posizione e scala dei dati osservati <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma</span> <span class="pre">=</span> <span class="pre">y_sd</span> <span class="pre">*</span> <span class="pre">sigma_raw;</span></code>: Questo scala <code class="docutils literal notranslate"><span class="pre">sigma_raw</span></code> alla scala dei dati osservati <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+</ul>
+</li>
+</ol>
+<p>La dichiarazione della verosimiglianza <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">normal(mu,</span> <span class="pre">sigma);</span></code> indica che i dati osservati <code class="docutils literal notranslate"><span class="pre">y</span></code> seguono una distribuzione normale con media <code class="docutils literal notranslate"><span class="pre">mu</span></code> e deviazione standard <code class="docutils literal notranslate"><span class="pre">sigma</span></code>. Ecco perché ha senso anche se <code class="docutils literal notranslate"><span class="pre">y</span></code> è sulla sua scala originale:</p>
+<ul class="simple">
+<li><p><strong>Dati Osservati sulla Scala Originale</strong>: I dati osservati <code class="docutils literal notranslate"><span class="pre">y</span></code> sono sulla loro scala originale.</p></li>
+<li><p><strong>Parametri sulla Scala Originale</strong>: I parametri <code class="docutils literal notranslate"><span class="pre">mu</span></code> e <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, dopo la trasformazione nel blocco <code class="docutils literal notranslate"><span class="pre">transformed</span> <span class="pre">parameters</span></code>, sono anch’essi sulla scala originale di <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+</ul>
+<p>Quindi, la dichiarazione <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">normal(mu,</span> <span class="pre">sigma);</span></code> specifica correttamente che i dati osservati <code class="docutils literal notranslate"><span class="pre">y</span></code> (sulla loro scala originale) sono modellati da una distribuzione normale con media <code class="docutils literal notranslate"><span class="pre">mu</span></code> e deviazione standard <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, entrambe sulla scala originale di <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<p>Infine, il blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code> viene utilizzato per i controlli predittivi posteriori generando nuovi dati (<code class="docutils literal notranslate"><span class="pre">y_rep</span></code>) dalla distribuzione posteriore dei parametri (<code class="docutils literal notranslate"><span class="pre">mu</span></code> e <code class="docutils literal notranslate"><span class="pre">sigma</span></code>):</p>
+<div class="highlight-stan notranslate"><div class="highlight"><pre><span></span><span class="kn">generated quantities</span> <span class="p">{</span>
+    <span class="kt">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">y_rep</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="k">in</span> <span class="mf">1</span><span class="o">:</span><span class="n">N</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">y_rep</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="nb">normal_rng</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">y_rep</span></code></strong>: Questo genera punti dati replicati dalla distribuzione normale con la media posteriore <code class="docutils literal notranslate"><span class="pre">mu</span></code> e la deviazione standard posteriore <code class="docutils literal notranslate"><span class="pre">sigma</span></code>. Questo ti permette di confrontare le previsioni del modello con i dati osservati per eseguire controlli predittivi posteriori.</p></li>
+</ul>
+<p>Eseguiamo il campionamento MCMC per il modello che segue una parametrizzazione non centrata:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace_ncp</span> <span class="o">=</span> <span class="n">model_ncp</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo la distribuzioni a posteriori e le tracce dei parametri <span class="math notranslate nohighlight">\(\mu\)</span> e <span class="math notranslate nohighlight">\(\sigma\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">trace_ncp</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/1a10c5c44cb4fd299fac79d79233d8b4dc8db42c6bd5377e88985c3ee318d1a5.png"><img alt="../_images/1a10c5c44cb4fd299fac79d79233d8b4dc8db42c6bd5377e88985c3ee318d1a5.png" src="../_images/1a10c5c44cb4fd299fac79d79233d8b4dc8db42c6bd5377e88985c3ee318d1a5.png" style="width: 1211px; height: 411px;" /></a>
+</div>
+</div>
+<p>Otteniamo una sintesi delle distribuzioni a posteriori dei parametri:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">trace_ncp</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         mean    sd  hdi_3%  hdi_97%  mcse_mean  mcse_sd  ess_bulk  ess_tail  \
+mu     154.61  0.42  153.83   155.39       0.01      0.0   6329.64   5029.29   
+sigma    7.76  0.29    7.20     8.30       0.00      0.0   7836.78   5829.76   
+
+       r_hat  
+mu       1.0  
+sigma    1.0  
+</pre></div>
+</div>
+</div>
+</div>
+<p>I risultati sono molto simili a quelli ottenuti in precedenza.</p>
+</section>
+<section id="posterior-predictive-check">
+<h2>Posterior predictive check<a class="headerlink" href="#posterior-predictive-check" title="Link to this heading">#</a></h2>
+<p>Uno dei vantaggi del toolkit bayesiano è che una volta ottenuta la distribuzione a posteriori congiunta dei parametri p(θ|Y) è possibile utilizzarla per generare le previsioni p(Ỹ). Matematicamente, questo può essere fatto calcolando:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\tilde{y} \mid y) = \int p(\tilde{y} \mid \theta) p(\theta \mid y) d\theta.
+\]</div>
+<p>Questa distribuzione è nota come distribuzione predittiva posteriore. È predittiva perché viene utilizzata per fare previsioni e posteriore perché è calcolata utilizzando la distribuzione posteriore. Quindi possiamo pensare a questa come la distribuzione dei dati futuri dati il modello e i dati osservati.</p>
+<p>Utilizzando Stan è facile per ottenere campioni predittivi posteriori: non è necessario calcolare alcun integrale. Dobbiamo convertire l’oggetto creato dalla funzione <code class="docutils literal notranslate"><span class="pre">sample()</span></code> nel formato  ArviZ InferenceData:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert to ArviZ InferenceData object</span>
+<span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span>
+    <span class="n">posterior</span><span class="o">=</span><span class="n">trace_ncp</span><span class="p">,</span>
+    <span class="n">posterior_predictive</span><span class="o">=</span><span class="s1">&#39;y_rep&#39;</span><span class="p">,</span>
+    <span class="n">observed_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Un uso comune della distribuzione predittiva posteriore è quello di eseguire controlli predittivi posteriori. Questi sono un insieme di test che possono essere utilizzati per verificare se il modello è una buona rappresentazione dei dati. Possiamo utilizzare la funzione <code class="docutils literal notranslate"><span class="pre">plot_ppc</span></code> di ArviZ per visualizzare la distribuzione predittiva posteriore e i dati osservati. Il codice è:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the posterior predictive check</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">data_pairs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s2">&quot;y_rep&quot;</span><span class="p">},</span> <span class="n">num_pp_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/34898ccf99f8a277fa990fb133ff2fc309dbf9e6cc88735046490e6a7ea5bbea.png"><img alt="../_images/34898ccf99f8a277fa990fb133ff2fc309dbf9e6cc88735046490e6a7ea5bbea.png" src="../_images/34898ccf99f8a277fa990fb133ff2fc309dbf9e6cc88735046490e6a7ea5bbea.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Nella figura, la linea nera rappresenta una KDE (Kernel Density Estimation) dei dati, mentre le linee blu sono KDE calcolate da ciascuno dei 500 campioni predittivi posteriori. Le linee blu riflettono l’incertezza associata alla distribuzione dei dati previsti.</p>
+<p>Di default, in ArviZ le KDE vengono stimati all’interno dell’intervallo effettivo dei dati e si assume che siano zero al di fuori di questo intervallo.</p>
+<p>Dato che il tracciato del KDE plot è contenuto nell’insieme di profili dei KDE plot dei campioni predittivi a posteriori, si può concludere che il modello utilizzato offre una rappresentazione adeguata dei dati ed è utile per la maggior parte delle analisi. Tuttavia, è importante considerare che potrebbero esistere altri modelli in grado di adattarsi meglio all’intero dataset. Esploreremo ora come poter sviluppare un modello alternativo.</p>
+</section>
+<section id="modello-robusto">
+<h2>Modello «robusto»<a class="headerlink" href="#modello-robusto" title="Link to this heading">#</a></h2>
+<p>Non è necessario presupporre che i dati seguano una distribuzione gaussiana. Le lievi deviazioni dalla gaussianità possono essere considerate attraverso l’utilizzo della distribuzione t di Student, che è particolarmente utile quando queste deviazioni si manifestano nelle code della distribuzione, come sembra essere il caso in questa situazione. Pertanto, proponiamo di adottare un modello “robusto”, maggiormente adatto a gestire osservazioni che si discostano dalla normalità nelle code della distribuzione.</p>
+<p>La distribuzione t di Student è caratterizzata dal parametro <span class="math notranslate nohighlight">\(\nu\)</span>, noto come “gradi di libertà”. Quando <span class="math notranslate nohighlight">\(\nu\)</span> è pari o superiore a 30, la distribuzione t di Student diventa quasi indistinguibile da una distribuzione normale.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nu_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">nu</span> <span class="ow">in</span> <span class="n">nu_values</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;ν=</span><span class="si">{</span><span class="n">nu</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ν=∞&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/bde0b0521a349ad2c688b0c9fd876c023fdb50560fca2211dda70e5d6bb974f2.png"><img alt="../_images/bde0b0521a349ad2c688b0c9fd876c023fdb50560fca2211dda70e5d6bb974f2.png" src="../_images/bde0b0521a349ad2c688b0c9fd876c023fdb50560fca2211dda70e5d6bb974f2.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Tuttavia, le code della distribuzione t di Student risultano più pesanti rispetto a quelle della normale quando <span class="math notranslate nohighlight">\(\nu\)</span> è basso. Pertanto, proponiamo di assegnare a <span class="math notranslate nohighlight">\(\nu\)</span> una distribuzione a priori che concentri la maggior parte della sua massa su valori bassi, come ad esempio una distribuzione esponenziale con un parametro di rate pari a 1/30.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the rate parameter for the exponential distribution</span>
+<span class="n">rate</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">30</span>
+
+<span class="c1"># Generate samples from the exponential distribution</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">rate</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+
+<span class="c1"># Create the histogram plot of the samples</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Sampled Distribution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Exponential Distribution (λ = 1/30)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/fea0a2f86b8ecf194f74f7dcce692b4e0004d34f9ed4de7127842fb6d29e68e4.png"><img alt="../_images/fea0a2f86b8ecf194f74f7dcce692b4e0004d34f9ed4de7127842fb6d29e68e4.png" src="../_images/fea0a2f86b8ecf194f74f7dcce692b4e0004d34f9ed4de7127842fb6d29e68e4.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_student_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;student-model.stan&#39;</span><span class="p">)</span>
+<span class="n">model_student</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_student_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model_student</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+    int&lt;lower=1&gt; N;  // Numero totale di prove
+    vector[N] y;  // Punteggio in ciascuna prova
+}
+transformed data {
+    real y_mean = mean(y);  // Media dei dati osservati
+    real y_sd = sd(y);  // Deviazione standard dei dati osservati
+}
+parameters {
+    real mu_raw;  // Parametro latente standardizzato per mu
+    real&lt;lower=0&gt; sigma_raw;  // Parametro latente standardizzato per sigma
+    real&lt;lower=1&gt; nu;  // Gradi di libertà per la distribuzione t di Student
+}
+transformed parameters {
+    real mu;  // Media sulla scala originale
+    real&lt;lower=0&gt; sigma;  // Deviazione standard sulla scala originale
+    mu = y_mean + y_sd * mu_raw;
+    sigma = y_sd * sigma_raw;
+}
+model {
+    // Distribuzioni a priori non centrate
+    mu_raw ~ normal(0, 1);
+    sigma_raw ~ normal(0, 1);
+    nu ~ exponential(1.0 / 30.0);  // Prior esponenziale per i gradi di libertà
+    // Verosimiglianza
+    y ~ student_t(nu, mu, sigma);
+}
+generated quantities {
+    vector[N] y_rep;
+    for (n in 1:N) {
+        y_rep[n] = student_t_rng(nu, mu, sigma);
+    }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace_student</span> <span class="o">=</span> <span class="n">model_student</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo le distribuzioni a posteriori e le tracce dei parametri del nuovo modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">trace_student</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;nu&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/d505d376a51a80449867c6cf7f7d8d351d79d4de9ec428c98e1f68a3e55a7011.png"><img alt="../_images/d505d376a51a80449867c6cf7f7d8d351d79d4de9ec428c98e1f68a3e55a7011.png" src="../_images/d505d376a51a80449867c6cf7f7d8d351d79d4de9ec428c98e1f68a3e55a7011.png" style="width: 1211px; height: 611px;" /></a>
+</div>
+</div>
+<p>Convertiamo i risultati in un oggetto InferenceData di ArviZ.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span>
+    <span class="n">posterior</span><span class="o">=</span><span class="n">trace_student</span><span class="p">,</span>
+    <span class="n">posterior_predictive</span><span class="o">=</span><span class="s1">&#39;y_rep&#39;</span><span class="p">,</span>
+    <span class="n">observed_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Generiamo la distribuzione predittiva a posteriori.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">data_pairs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s2">&quot;y_rep&quot;</span><span class="p">},</span> <span class="n">num_pp_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/62af1142b12779c54df5ef4caafb400c49c6d403d295024c060c21c542daeca8.png"><img alt="../_images/62af1142b12779c54df5ef4caafb400c49c6d403d295024c060c21c542daeca8.png" src="../_images/62af1142b12779c54df5ef4caafb400c49c6d403d295024c060c21c542daeca8.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>La figura illustra che la situazione è analoga a quella del caso gaussiano. Questo non è sorprendente, dato che i dati relativi all’altezza si distribuiscono in maniera gaussiana nella popolazione. Pertanto, l’impiego della distribuzione t di Student o della distribuzione normale producono risultati sostanzialmente equivalenti in questo contesto.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">trace_student</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="s1">&#39;nu&#39;</span><span class="p">],</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>mu</th>
+      <td>154.57</td>
+      <td>0.42</td>
+      <td>153.85</td>
+      <td>155.40</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>8798.72</td>
+      <td>6040.50</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>7.63</td>
+      <td>0.30</td>
+      <td>7.08</td>
+      <td>8.21</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>7145.94</td>
+      <td>6226.65</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>nu</th>
+      <td>62.39</td>
+      <td>36.10</td>
+      <td>11.40</td>
+      <td>129.62</td>
+      <td>0.41</td>
+      <td>0.31</td>
+      <td>7870.31</td>
+      <td>5565.90</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="commenti-e-considerazioni-finali">
+<h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
+<p>In questo capitolo abbiamo esplorato il metodo per calcolare l’intervallo di credibilità per la media di una variabile casuale normale utilizzando Stan. Inoltre, abbiamo illustrato come sia possibile ampliare l’inferenza sulla media utilizzando un modello robusto basato sulla distribuzione t di Student.</p>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+seaborn   : 0.13.2
+pandas    : 2.2.2
+arviz     : 0.18.0
+numpy     : 1.26.4
+cmdstanpy : 1.2.3
+scipy     : 1.13.1
+logging   : 0.5.1.2
+matplotlib: 3.8.4
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="19_stan_odds_ratio.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Analisi bayesiana dell’odds-ratio</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="23_stan_two_groups.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">Confronto tra due gruppi</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-modello-normale">Il modello Normale</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-base">Modello di Base</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parametrizzazione-non-centrata">Parametrizzazione Non Centrata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior predictive check</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-robusto">Modello «robusto»</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
