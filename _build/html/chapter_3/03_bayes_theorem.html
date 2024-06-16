@@ -1,0 +1,1096 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Il teorema di Bayes &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_3/03_bayes_theorem';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_3/03_bayes_theorem.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="✏️ Esercizi" href="E_bayes_theorem.html" />
+    <link rel="prev" title="✏️ Esercizi" href="E_discrete_prob.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_chapter_3.html">Probabilità</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_3/03_bayes_theorem.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_3/03_bayes_theorem.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Il teorema di Bayes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#storia">Storia</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema">Teorema</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-formula-di-bayes">Interpretazione della Formula di Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alcuni-esempi">Alcuni esempi</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-valore-predittivo-di-un-test-di-laboratorio">Il Valore Predittivo di un Test di Laboratorio</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="il-teorema-di-bayes">
+<span id="bayes-theorem-notebook"></span><h1>Il teorema di Bayes<a class="headerlink" href="#il-teorema-di-bayes" title="Link to this heading">#</a></h1>
+<div class="admonition-obiettivi-di-apprendimento admonition">
+<p class="admonition-title">Obiettivi di apprendimento</p>
+<p>Dopo aver completato questo capitolo, acquisirete le competenze per:</p>
+<ul class="simple">
+<li><p>Capire in profondità il teorema di Bayes e la sua importanza.</p></li>
+<li><p>Utilizzare il teorema di Bayes per analizzare e interpretare i test diagnostici, tenendo in considerazione la prevalenza della malattia in questione.</p></li>
+<li><p>Affrontare e risolvere problemi di probabilità discreta che necessitano dell’applicazione del teorema di Bayes.</p></li>
+</ul>
+</div>
+<p>In questo capitolo esploreremo il teorema di Bayes, un fondamentale risultato della teoria delle probabilità che ci permette di calcolare le probabilità a posteriori di eventi ipotetici, dati i loro valori a priori e nuove informazioni. In altre parole, ci consente di aggiornare razionalmente le nostre conoscenze alla luce di nuove evidenze. Prima di procedere con il presente capitolo, è essenziale leggere l’appendice <a class="reference internal" href="../chapter_7/a15_calculus.html#calculus-appendix"><span class="std std-ref">Per liberarvi dai terrori preliminari</span></a>.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed to make the results fully reproducible</span>
+<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;bayes_theorem&quot;</span><span class="p">))</span>
+<span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.facecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="storia">
+<h2>Storia<a class="headerlink" href="#storia" title="Link to this heading">#</a></h2>
+<p>Il teorema di Bayes, così denominato in onore del Reverendo Thomas Bayes, un matematico e filosofo del XVIII secolo, rappresenta uno dei concetti fondamentali nel campo della statistica e del calcolo delle probabilità. Sebbene Bayes non abbia pubblicato il suo lavoro durante la sua vita, ritenendolo non abbastanza significativo, fu il suo amico Richard Price a riconoscere il valore delle sue scoperte. Price non solo editò il manoscritto inedito di Bayes ma lo arricchì significativamente prima di sottometterlo per la pubblicazione nelle «Philosophical Transactions» nel 1763. Questa pubblicazione non solo introdusse il teorema di Bayes al mondo scientifico ma fornì anche una base filosofica per quello che sarebbe poi diventato noto come l’approccio bayesiano alla statistica.</p>
+<p>Parallelamente e indipendentemente dai lavori di Bayes, Pierre-Simon Laplace, un eminente matematico e astronomo francese, formulò concetti simili. Nel 1774, e più dettagliatamente nella sua opera «Théorie analytique des probabilités» del 1812, Laplace esplorò l’uso della probabilità condizionale per aggiornare le conoscenze precedenti (probabilità a priori) sulla base di nuove evidenze (probabilità a posteriori). Sebbene Laplace abbia sviluppato questi principi senza conoscere il lavoro di Bayes, i suoi contributi hanno notevolmente esteso l’applicazione e l’interpretazione delle statistiche bayesiane.</p>
+<p>Il teorema di Bayes, nella sua essenza, fornisce un meccanismo matematico per aggiornare le probabilità iniziali di un’ipotesi in base all’osservazione di nuove evidenze. Questo processo di revisione continua della probabilità si basa sulla combinazione di conoscenze preesistenti (il prior) con informazioni appena acquisite (la likelihood), per produrre una nuova comprensione (il posterior). Tale meccanismo riflette un approccio olistico alla conoscenza, che considera la comprensione come un processo dinamico e iterativo.</p>
+<p>Nel contesto contemporaneo, l’importanza e l’applicabilità del teorema di Bayes vanno ben oltre la teoria della probabilità e la statistica, influenzando vari campi come l’intelligenza artificiale, l’apprendimento automatico, la psicologia, la medicina e persino la presa di decisioni nella vita quotidiana. La capacità di aggiornare costantemente le nostre convinzioni in base a nuove informazioni è fondamentale in un’era caratterizzata da un flusso incessante di dati. In modo emblematico, potremmo affermare che rilevanza universale del teorema di Bayes nella comprensione dei fenomeni e nella previsione degli eventi è enfatizzata nel titolo del libro di Tom Chivers pubblicato nel 2024: «Everything is predictable: how bayesian statistics explain our world».</p>
+</section>
+<section id="teorema">
+<h2>Teorema<a class="headerlink" href="#teorema" title="Link to this heading">#</a></h2>
+<p>Consideriamo una situazione in cui lo spazio degli eventi possibili, <span class="math notranslate nohighlight">\(\Omega\)</span>, è diviso in due eventi distinti e mutualmente esclusivi, denominati ipotesi <span class="math notranslate nohighlight">\(H_1\)</span> e <span class="math notranslate nohighlight">\(H_2\)</span>. Supponiamo di avere già una certa comprensione di questi eventi, espressa attraverso le loro probabilità a priori <span class="math notranslate nohighlight">\(P(H_1)\)</span> e <span class="math notranslate nohighlight">\(P(H_2)\)</span>. A questo punto, introduciamo un nuovo evento <span class="math notranslate nohighlight">\(E\)</span>, la cui occorrenza è accompagnata da una probabilità non nulla e per il quale conosciamo le probabilità condizionate <span class="math notranslate nohighlight">\(P(E \mid H_1)\)</span> e <span class="math notranslate nohighlight">\(P(E \mid H_2)\)</span>, che indicano quanto sia probabile osservare <span class="math notranslate nohighlight">\(E\)</span> assumendo che una delle due ipotesi sia vera. Se <span class="math notranslate nohighlight">\(E\)</span> si verifica, siamo interessati a determinare le probabilità a posteriori <span class="math notranslate nohighlight">\(P(H_1 \mid E)\)</span> e <span class="math notranslate nohighlight">\(P(H_2 \mid E)\)</span> delle nostre ipotesi alla luce di questa nuova evidenza.</p>
+<p>La seguente illustrazione rappresenta come lo spazio totale degli eventi si suddivide tra le ipotesi <span class="math notranslate nohighlight">\(H_1\)</span> e <span class="math notranslate nohighlight">\(H_2\)</span>, con l’evidenza <span class="math notranslate nohighlight">\(E\)</span> posizionata all’interno di questo contesto.</p>
+<a class="reference internal image-reference" href="../_images/bayes_theorem.png"><img alt="../_images/bayes_theorem.png" class="align-center" src="../_images/bayes_theorem.png" style="height: 230px;" /></a>
+<p>Per calcolare la probabilità a posteriori dell’ipotesi 1 data l’osservazione di <span class="math notranslate nohighlight">\(E\)</span>, utilizziamo la formula:</p>
+<div class="math notranslate nohighlight">
+\[
+P(H_1 \mid E) = \frac{P(E \cap H_1)}{P(E)}.
+\]</div>
+<p>Questo calcolo può essere semplificato sfruttando la definizione di probabilità condizionata, che ci permette di sostituire <span class="math notranslate nohighlight">\(P(E \cap H_1)\)</span> con <span class="math notranslate nohighlight">\(P(E \mid H_1)P(H_1)\)</span>. Applicando questa sostituzione, otteniamo:</p>
+<div class="math notranslate nohighlight">
+\[
+P(H_1 \mid E) = \frac{P(E \mid H_1) P(H_1)}{P(E)}.
+\]</div>
+<p>Dato che <span class="math notranslate nohighlight">\(H_1\)</span> e <span class="math notranslate nohighlight">\(H_2\)</span> si escludono a vicenda, la probabilità totale di <span class="math notranslate nohighlight">\(E\)</span> può essere espressa come la somma delle probabilità di <span class="math notranslate nohighlight">\(E\)</span> occorrente in concomitanza con ciascuna ipotesi, utilizzando il teorema della probabilità totale:</p>
+<div class="math notranslate nohighlight">
+\[
+P(E) = P(E \mid H_1)P(H_1) + P(E \mid H_2)P(H_2).
+\]</div>
+<p>Incorporando questi valori nella formula di Bayes, giungiamo a:</p>
+<div class="math notranslate nohighlight" id="equation-eq-bayes1">
+<span class="eqno">(14)<a class="headerlink" href="#equation-eq-bayes1" title="Link to this equation">#</a></span>\[
+P(H_1 \mid E) = \frac{P(E \mid H_1)P(H_1)}{P(E \mid H_1)P(H_1) + P(E \mid H_2)P(H_2)}.
+\]</div>
+<p>Questa espressione costituisce l’essenza della formula di Bayes per il caso semplificato in cui le ipotesi si limitano a due eventi mutualmente esclusivi, <span class="math notranslate nohighlight">\(H_1\)</span> e <span class="math notranslate nohighlight">\(H_2\)</span>.</p>
+<p>Nel quadro delle probabilità discrete, questa formula può essere generalizzata per accogliere un insieme più ampio di ipotesi che formano una partizione completa dello spazio degli eventi <span class="math notranslate nohighlight">\(\Omega\)</span>, dove ogni <span class="math notranslate nohighlight">\(E\)</span> rappresenta un evento con probabilità maggiore di zero. Per ogni ipotesi <span class="math notranslate nohighlight">\(H_i\)</span> all’interno di un insieme numerabile, la formula di Bayes si estende come segue:</p>
+<div class="math notranslate nohighlight" id="equation-eq-bayes2">
+<span class="eqno">(15)<a class="headerlink" href="#equation-eq-bayes2" title="Link to this equation">#</a></span>\[
+P(H_i \mid E) = \frac{P(E \mid H_i)P(H_i)}{\sum_{j=1}^{\infty}P(E \mid H_j)P(H_j)}.
+\]</div>
+<p>Qui, il denominatore agisce come un fattore di normalizzazione che integra i prodotti delle probabilità a priori e delle verosimiglianze associate a ogni ipotesi considerata.</p>
+<p>Per variabili continue, la formula di Bayes assume una forma integrale, adattandosi a situazioni in cui le ipotesi <span class="math notranslate nohighlight">\(H_i\)</span> rappresentano valori in un continuum. In questo contesto, la formula diventa:</p>
+<div class="math notranslate nohighlight" id="equation-eq-bayes-cont">
+<span class="eqno">(16)<a class="headerlink" href="#equation-eq-bayes-cont" title="Link to this equation">#</a></span>\[
+P(H_i \mid E) = \frac{P(E \mid H_i) \cdot P(H_i)}{\int P(E \mid H) \cdot P(H) \, dH},
+\]</div>
+<p>offrendo un framework potente per aggiornare le probabilità a posteriori di ipotesi continue basate su nuove evidenze, sottolineando l’importanza della formula di Bayes non solo come strumento matematico, ma anche come filosofia di apprendimento continuo e adattamento alle nuove informazioni.</p>
+<section id="interpretazione-della-formula-di-bayes">
+<h3>Interpretazione della Formula di Bayes<a class="headerlink" href="#interpretazione-della-formula-di-bayes" title="Link to this heading">#</a></h3>
+<p>La formula di Bayes si articola in tre elementi fondamentali che ne facilitano la comprensione e l’applicazione in diversi campi di studio:</p>
+<ul class="simple">
+<li><p><strong>Probabilità a Priori, <span class="math notranslate nohighlight">\(P(H)\)</span></strong>: Questa componente riflette la nostra valutazione preliminare riguardo la verosimiglianza dell’ipotesi <span class="math notranslate nohighlight">\(H\)</span> prima di prendere in esame nuove evidenze <span class="math notranslate nohighlight">\(E\)</span>. Essa incarna il livello di credibilità o fiducia attribuita all’ipotesi, basandosi su conoscenze preesistenti o su deduzioni logiche. In sostanza, la probabilità a priori quantifica le nostre convinzioni pregresse o le aspettative iniziali su quanto sia probabile che l’ipotesi sia vera.</p></li>
+<li><p><strong>Probabilità a Posteriori, <span class="math notranslate nohighlight">\(P(H \mid E)\)</span></strong>: Questo valore aggiorna la nostra fiducia nell’ipotesi <span class="math notranslate nohighlight">\(H\)</span> in seguito all’osservazione dell’evidenza <span class="math notranslate nohighlight">\(E\)</span>. In termini più intuitivi, rappresenta il livello di convinzione ricalibrato in <span class="math notranslate nohighlight">\(H\)</span> dopo aver considerato l’evidenza. La formula di Bayes ci offre un meccanismo matematicamente rigoroso per modulare questa probabilità alla luce delle nuove informazioni ricevute.</p></li>
+<li><p><strong>Verosimiglianza, <span class="math notranslate nohighlight">\(P(E \mid H)\)</span></strong>: La verosimiglianza esprime la probabilità di rilevare l’evidenza <span class="math notranslate nohighlight">\(E\)</span> dato che l’ipotesi <span class="math notranslate nohighlight">\(H\)</span> sia vera. È un indice di quanto l’evidenza supporti o confermi l’ipotesi. Un valore elevato di verosimiglianza indica che l’evidenza è fortemente in linea o prevista dalla veridicità dell’ipotesi.</p></li>
+</ul>
+<p>Grazie alla formula di Bayes, possiamo adottare un processo di aggiornamento continuo delle nostre credenze in base a nuove informazioni, promuovendo un metodo dinamico per navigare tra conoscenza e incertezza. Questa metodologia ci fornisce un approccio strutturato per rivedere e adattare le nostre convinzioni riguardo l’ipotesi <span class="math notranslate nohighlight">\(H\)</span> di fronte a nuovi dati o evidenze <span class="math notranslate nohighlight">\(E\)</span>. La capacità di rielaborare costantemente le nostre aspettative in funzione di informazioni aggiuntive si rivela essenziale in una vasta gamma di ambiti, inclusi l’intelligenza artificiale, la ricerca statistica, le discipline scientifiche e umanistiche. Tale prassi ci consente di prendere decisioni più informate, di interpretare con maggiore precisione i dati disponibili e di affinare significativamente le nostre previsioni e comprensioni del mondo circostante.</p>
+</section>
+</section>
+<section id="alcuni-esempi">
+<h2>Alcuni esempi<a class="headerlink" href="#alcuni-esempi" title="Link to this heading">#</a></h2>
+<p>Esamineremo alcuni esempi basilari per illustrare in maniera più chiara il modo in cui il teorema di Bayes viene applicato e funziona.</p>
+<div class="exercise admonition" id="ex-bayes-hair">
+
+<p class="admonition-title"><span class="caption-number">Exercise 98 </span></p>
+<section id="exercise-content">
+<p>Consideriamo il caso in cui osserviamo una persona con i capelli lunghi e desideriamo valutare la probabilità che questa persona sia femminile. In termini formali, definiamo <span class="math notranslate nohighlight">\(H = \text{&quot;donna&quot;}\)</span> e <span class="math notranslate nohighlight">\(E = \text{&quot;capelli lunghi&quot;}\)</span>, e miriamo a stimare <span class="math notranslate nohighlight">\(P(H \mid E)\)</span>.</p>
+<p>Le nostre conoscenze preliminari includono:</p>
+<ul class="simple">
+<li><p>La probabilità a priori che la persona osservata sia una donna, <span class="math notranslate nohighlight">\(P(H) = 0.5\)</span>,</p></li>
+<li><p>La probabilità generale di osservare qualcuno con i capelli lunghi, <span class="math notranslate nohighlight">\(P(E) = 0.4\)</span>,</p></li>
+<li><p>La probabilità di avere i capelli lunghi dato che la persona è una donna, <span class="math notranslate nohighlight">\(P(E \mid H) = 0.7\)</span>.</p></li>
+</ul>
+<p>Applicando la formula di Bayes, possiamo determinare:</p>
+<div class="math notranslate nohighlight">
+\[ P(H \mid E) = \frac{P(H) \cdot P(E \mid H)}{P(E)} = \frac{0.5 \cdot 0.7}{0.4} = 0.875. \]</div>
+<p>Questo risultato ci mostra che, alla luce delle informazioni a nostra disposizione, la probabilità che una persona con i capelli lunghi sia una donna è dell’0.875. In altre parole, prima di osservare l’evidenza (i capelli lunghi), partivamo da una conoscenza di base secondo cui c’era una chance su due (50%) che la persona fosse una donna. Dopo aver considerato l’evidenza dei capelli lunghi, abbiamo aggiornato la nostra stima alla probabilità «a posteriori» di 0.875, riflettendo così un incremento  della nostra convinzione che la persona sia una donna basandoci su quest’ultima osservazione.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ex-mammografia-bayes">
+
+<p class="admonition-title"><span class="caption-number">Exercise 99 </span></p>
+<section id="exercise-content">
+<p>Un esempio pratico che illustra efficacemente l’uso del teorema di Bayes è l’analisi del rapporto tra la mammografia e la diagnosi del cancro al seno, già considerato in precedenza. In questo contesto, si considerano due ipotesi: la presenza della malattia, indicata con <span class="math notranslate nohighlight">\(M^+\)</span>, e l’assenza della malattia, denotata con <span class="math notranslate nohighlight">\(M^-\)</span>. L’evidenza in questo caso è rappresentata dal risultato positivo di un test di mammografia, che indicheremo con <span class="math notranslate nohighlight">\(T^+\)</span>. Applicando la formula di Bayes, possiamo esprimere la probabilità di avere il cancro al seno dato un risultato positivo al test come segue:</p>
+<div class="math notranslate nohighlight">
+\[
+P(M^+ \mid T^+) = \frac{P(T^+ \mid M^+) \cdot P(M^+)}{P(T^+ \mid M^+) \cdot P(M^+) + P(T^+ \mid M^-) \cdot P(M^-)},
+\]</div>
+<p>dove:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(P(M^+ \mid T^+)\)</span> è la probabilità di avere il cancro (<span class="math notranslate nohighlight">\(M^+\)</span>) dato un risultato positivo al test (<span class="math notranslate nohighlight">\(T^+\)</span>),</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(T^+ \mid M^+)\)</span> rappresenta la probabilità che il test di mammografia risulti positivo (<span class="math notranslate nohighlight">\(T^+\)</span>) in presenza effettiva del cancro (<span class="math notranslate nohighlight">\(M^+\)</span>),</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(M^+)\)</span> denota la probabilità a priori che una persona abbia il cancro prima di sottoporsi al test,</p></li>
+<li><p><span class="math notranslate nohighlight">\(P(T^+ \mid M^-)\)</span> indica la probabilità che il test risulti positivo (<span class="math notranslate nohighlight">\(T^+\)</span>) nonostante l’assenza del cancro (<span class="math notranslate nohighlight">\(M^-\)</span>); dal momento che la specificità è data e uguale a 0.9, possiamo calcolare la probabilità di un falso positivo come segue:</p>
+<div class="math notranslate nohighlight">
+\[ P(T^+ \mid M^-) = 1 - \text{Specificità} = 1 - 0.9 = 0.1. \]</div>
+<p>Quindi, in questo contesto, <span class="math notranslate nohighlight">\(P(T^+ \mid M^-) = 0.1\)</span> significa che c’è un 10% di probabilità che il test diagnostichi erroneamente la presenza del cancro in una persona sana.</p>
+</li>
+<li><p><span class="math notranslate nohighlight">\(P(M^-)\)</span> rappresenta la probabilità a priori che una persona non sia affetta da cancro prima di effettuare il test.</p></li>
+</ul>
+<p>Inserendo i valori specifici del contesto analizzato otteniamo:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+P(M^+ \mid T^+) &amp;= \frac{0.9 \cdot 0.01}{0.9 \cdot 0.01 + 0.1 \cdot 0.99} \\
+&amp;= \frac{9}{108} \\
+&amp;\approx 0.083.
+\end{align}
+\end{split}\]</div>
+<p>Questo calcolo dimostra che, considerando una mammografia con risultato positivo ottenuta tramite un test con una sensibilità del 90% e una specificità del 90%, la probabilità che il paziente sia effettivamente affetto da cancro al seno è approssimativamente dell’8.3%.</p>
+</section>
+</div>
+<section id="il-valore-predittivo-di-un-test-di-laboratorio">
+<h3>Il Valore Predittivo di un Test di Laboratorio<a class="headerlink" href="#il-valore-predittivo-di-un-test-di-laboratorio" title="Link to this heading">#</a></h3>
+<p>L’applicazione del teorema di Bayes nell’interpretazione dei risultati dei test di laboratorio è cruciale nella pratica clinica. Questo teorema consente di calcolare la probabilità che un individuo sia affetto da una specifica malattia dopo un risultato positivo al test, nonché la probabilità di non essere malati in caso di esito negativo. La comprensione di tre elementi è fondamentale per questo calcolo: la prevalenza della malattia, la sensibilità e la specificità del test.</p>
+<ul>
+<li><p><strong>Prevalenza:</strong> Si riferisce alla percentuale di individui in una popolazione che sono affetti da una certa malattia in un determinato momento. Viene espressa come percentuale o frazione della popolazione. Per esempio, una prevalenza del 0.5% indica che su mille persone, cinque sono affette dalla malattia.</p></li>
+<li><p><strong>Sensibilità:</strong> Indica la capacità del test di identificare correttamente la malattia negli individui malati. Viene calcolata come la frazione di veri positivi (individui malati correttamente identificati) sul totale degli individui malati. La formula della sensibilità (<span class="math notranslate nohighlight">\(Sens\)</span>) è la seguente:</p>
+<div class="math notranslate nohighlight">
+\[ Sens = \frac{TP}{TP + FN}, \]</div>
+<p>dove <span class="math notranslate nohighlight">\(TP\)</span> rappresenta i veri positivi e <span class="math notranslate nohighlight">\(FN\)</span> i falsi negativi. Pertanto, la sensibilità misura la probabilità che il test risulti positivo se la malattia è effettivamente presente.</p>
+</li>
+<li><p><strong>Specificità:</strong> Misura la capacità del test di riconoscere gli individui sani, producendo un risultato negativo per chi non è affetto dalla malattia. Si calcola come la frazione di veri negativi (individui sani correttamente identificati) sul totale degli individui sani. La specificità (<span class="math notranslate nohighlight">\(Spec\)</span>) si definisce come:</p>
+<div class="math notranslate nohighlight">
+\[ Spec = \frac{TN}{TN + FP}, \]</div>
+<p>dove <span class="math notranslate nohighlight">\(TN\)</span> sono i veri negativi e <span class="math notranslate nohighlight">\(FP\)</span> i falsi positivi. Così, la specificità rappresenta la probabilità che il test risulti negativo in assenza della malattia.</p>
+</li>
+</ul>
+<p>Questa tabella riassume la terminologia:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(T^+\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(T^-\)</span></p></th>
+<th class="head text-center"><p>Totale</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(M^+\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(T^+ \cap M^+)\)</span> <br> (Sensibilità)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(T^- \cap M^+)\)</span> <br> (1 - Sensibilità)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(M^+)\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(M^-\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(T^+ \cap M^-)\)</span> <br> (1 - Specificità)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(T^- \cap M^-)\)</span> <br> (Specificità)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(M^-)\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Totale</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(T^+)\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(P(T^-)\)</span></p></td>
+<td class="text-center"><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>dove <span class="math notranslate nohighlight">\(T^+\)</span> e <span class="math notranslate nohighlight">\(T^-\)</span> indicano rispettivamente un risultato positivo o negativo del test, mentre <span class="math notranslate nohighlight">\(M^+\)</span> e <span class="math notranslate nohighlight">\(M^-\)</span> la presenza o assenza effettiva della malattia. In questa tabella, i totali marginali rappresentano:</p>
+<ul class="simple">
+<li><p><strong>Totale per <span class="math notranslate nohighlight">\(M^+\)</span> e <span class="math notranslate nohighlight">\(M^-\)</span></strong> (ultima colonna): La probabilità totale di avere la malattia (<span class="math notranslate nohighlight">\(P(M^+)\)</span>) e la probabilità totale di non avere la malattia (<span class="math notranslate nohighlight">\(P(M^-)\)</span>), rispettivamente. Questi valori sono calcolati sommando le probabilità all’interno di ciascuna riga.</p></li>
+<li><p><strong>Totale per <span class="math notranslate nohighlight">\(T^+\)</span> e <span class="math notranslate nohighlight">\(T^-\)</span></strong> (ultima riga): La probabilità totale di un risultato positivo al test (<span class="math notranslate nohighlight">\(P(T^+)\)</span>) e la probabilità totale di un risultato negativo al test (<span class="math notranslate nohighlight">\(P(T^-)\)</span>), rispettivamente. Questi valori sono calcolati sommando le probabilità all’interno di ciascuna colonna.</p></li>
+<li><p><strong>Totale generale</strong> (angolo in basso a destra): La somma di tutte le probabilità, che per definizione è 1, rappresentando l’intera popolazione o il set di casi considerati.</p></li>
+</ul>
+<p>Mediante il teorema di Bayes, possiamo usare queste informazioni per stimare la probabilità post-test di avere o non avere la malattia basandoci sul risultato del test, fornendo così una base razionale per decisioni diagnostiche e terapeutiche.</p>
+<p>La probabilità post-test che un individuo sia malato dato un risultato positivo del test è calcolata come:</p>
+<div class="math notranslate nohighlight">
+\[
+P(M^+ \mid T^+) = \frac{P(T^+ \mid M^+) \cdot P(M^+)}{P(T^+ \mid M^+) \cdot P(M^+) + P(T^+ \mid M^-) \cdot P(M^-)}.
+\]</div>
+<p>Questa formula rappresenta il valore predittivo positivo, indicando la probabilità che un individuo sia realmente malato se il test è positivo. Analogamente, il valore predittivo negativo, che è la probabilità che un individuo non sia malato dato un risultato negativo del test, si calcola come:</p>
+<div class="math notranslate nohighlight">
+\[
+P(M^- \mid T^-) = \frac{P(T^- \mid M^-) \cdot (1 - P(M^+))}{P(T^- \mid M^-) \cdot (1 - P(M^+)) + P(T^- \mid M^+) \cdot P(M^+)}.
+\]</div>
+<p>Questi valori predittivi sono essenziali per valutare l’efficacia di un test diagnostico, aiutando a determinare quanto sia affidabile un risultato positivo o negativo nel contesto di una specifica popolazione e malattia.</p>
+<br />
+<a class="reference internal image-reference" href="../_images/bayes_theorem_2x.png"><img alt="../_images/bayes_theorem_2x.png" class="align-center" src="../_images/bayes_theorem_2x.png" style="height: 320px;" /></a>
+<br /><div class="exercise admonition" id="ex-mammografia-bayes-2">
+
+<p class="admonition-title"><span class="caption-number">Exercise 100 </span></p>
+<section id="exercise-content">
+<p>Calcoliamo ora il valore predittivo del test positivo e il valore predittivo del test negativo per i dati dell’esempio sulla mammografia e cancro al seno.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">positive_predictive_value_of_diagnostic_test</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">sens</span> <span class="o">*</span> <span class="n">prev</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sens</span> <span class="o">*</span> <span class="n">prev</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">spec</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">prev</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Valore Predittivo Positivo (Positive Predictive Value, PPV):</strong> Questa misura indica la probabilità che un individuo sia effettivamente malato se ha ricevuto un risultato positivo al test. La formula che hai fornito per il PPV è:</p>
+<div class="math notranslate nohighlight">
+\[ PPV = \frac{Sens \cdot Prev}{Sens \cdot Prev + (1 - Spec) \cdot (1 - Prev)} \]</div>
+<p>Qui, <code class="docutils literal notranslate"><span class="pre">sens</span></code> rappresenta la sensibilità del test, <code class="docutils literal notranslate"><span class="pre">spec</span></code> la specificità, e <code class="docutils literal notranslate"><span class="pre">prev</span></code> la prevalenza della malattia nella popolazione. La formula riflette il calcolo del PPV basato sul teorema di Bayes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">negative_predictive_value_of_diagnostic_test</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">spec</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">prev</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">spec</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">prev</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sens</span><span class="p">)</span> <span class="o">*</span> <span class="n">prev</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Valore Predittivo Negativo (Negative Predictive Value, NPV):</strong> Questa misura indica la probabilità che un individuo non sia malato se ha ricevuto un risultato negativo al test. La formula per il NPV è:</p>
+<div class="math notranslate nohighlight">
+\[ NPV = \frac{Spec \cdot (1 - Prev)}{Spec \cdot (1 - Prev) + (1 - Sens) \cdot Prev} \]</div>
+<p>Anche in questo caso, <code class="docutils literal notranslate"><span class="pre">sens</span></code>, <code class="docutils literal notranslate"><span class="pre">spec</span></code>, e <code class="docutils literal notranslate"><span class="pre">prev</span></code> hanno gli stessi significati menzionati sopra. Questa formula calcola il NPV basandosi sul teorema di Bayes.</p>
+<p>Inseriamo i dati del problema.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sens</span> <span class="o">=</span> <span class="mf">0.9</span>  <span class="c1"># sensibilità</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="mf">0.9</span>  <span class="c1"># specificità</span>
+<span class="n">prev</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># prevalenza</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il valore predittivo del test positivo è:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res_pos</span> <span class="o">=</span> <span class="n">positive_predictive_value_of_diagnostic_test</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P(M+ | T+) = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">res_pos</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>P(M+ | T+) = 0.083
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il valore predittivo del test negativo è:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res_neg</span> <span class="o">=</span> <span class="n">negative_predictive_value_of_diagnostic_test</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P(M- | T-) = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">res_neg</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>P(M- | T-) = 0.999
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div class="exercise admonition" id="ex-covid-bayes">
+
+<p class="admonition-title"><span class="caption-number">Exercise 101 </span></p>
+<section id="exercise-content">
+<p>Consideriamo ora un altro esempio relativo al test antigenico rapido per il virus SARS-CoV-2, che può essere eseguito mediante tampone nasale, tampone naso-orofaringeo o campione di saliva. L’Istituto Superiore di Sanità ha pubblicato un documento il 5 novembre 2020, nel quale viene sottolineato che, fino a quel momento, i dati disponibili sui vari test sono quelli forniti dai produttori: la sensibilità varia tra il 70% e l’86%, mentre la specificità si attesta tra il 95% e il 97%.</p>
+<p>Per fare un esempio, consideriamo i dati di un certo momento temporale. Nella settimana tra il 17 e il 23 marzo 2023, in Italia, il numero di individui positivi al virus è stato stimato essere di 138.599 (fonte: Il Sole 24 Ore). Questo dato corrisponde a una prevalenza di circa 0.2% su una popolazione totale di circa 59 milioni di persone.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">prev</span> <span class="o">=</span> <span class="mi">138599</span> <span class="o">/</span> <span class="mi">59000000</span>
+ <span class="n">prev</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.002349135593220339
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’obiettivo è determinare la probabilità di essere effettivamente affetti da Covid-19, dato un risultato positivo al test antigenico rapido, ossia <span class="math notranslate nohighlight">\(P(M^+ \mid T^+)\)</span>. Per raggiungere questo scopo, useremo la formula relativa al valore predittivo positivo del test.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sens</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.7</span> <span class="o">+</span> <span class="mf">0.86</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># sensibilità</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.95</span> <span class="o">+</span> <span class="mf">0.97</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="c1"># specificità</span>
+
+<span class="n">res_pos</span> <span class="o">=</span> <span class="n">positive_predictive_value_of_diagnostic_test</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P(M+ | T+) = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">res_pos</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>P(M+ | T+) = 0.044
+</pre></div>
+</div>
+</div>
+</div>
+<p>Pertanto, se il risultato del tampone è positivo, la probabilità di essere effettivamente affetti da Covid-19 è solo del 4.4%, approssimativamente.</p>
+<p>Se la prevalenza fosse 100 volte superiore (cioè, pari al 23.5%), la probabilità di avere il Covid-19, dato un risultato positivo del tampone, aumenterebbe notevolmente e sarebbe pari a circa l’86%.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prev</span> <span class="o">=</span> <span class="mi">138599</span> <span class="o">/</span> <span class="mi">59000000</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="n">res_pos</span> <span class="o">=</span> <span class="n">positive_predictive_value_of_diagnostic_test</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P(M+ | T+) = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">res_pos</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>P(M+ | T+) = 0.857
+</pre></div>
+</div>
+</div>
+</div>
+<p>Se il risultato del test fosse negativo, considerando la prevalenza stimata del Covid-19 nella settimana dal 17 al 23 marzo 2023, la probabilità di non essere infetto sarebbe del 99.9%, approssimativamente.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sens</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.7</span> <span class="o">+</span> <span class="mf">0.86</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># sensibilità</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.95</span> <span class="o">+</span> <span class="mf">0.97</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># specificità</span>
+<span class="n">prev</span> <span class="o">=</span> <span class="mi">138599</span> <span class="o">/</span> <span class="mi">59000000</span>  <span class="c1"># prevalenza</span>
+
+<span class="n">res_neg</span> <span class="o">=</span> <span class="n">negative_predictive_value_of_diagnostic_test</span><span class="p">(</span><span class="n">sens</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P(M- | T-) = </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">res_neg</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>P(M- | T-) = 0.999
+</pre></div>
+</div>
+</div>
+</div>
+<p>Tuttavia, un’esito del genere non dovrebbe sorprenderci, considerando che la prevalenza della malattia è molto bassa; in altre parole, il risultato negativo conferma una situazione già presunta prima di sottoporsi al test. Il vero ostacolo, specialmente nel caso di malattie rare come il Covid-19 in quel periodo specifico, non risiede tanto nell’asserire l’assenza della malattia quanto piuttosto nel confermarne la presenza.</p>
+</section>
+</div>
+</section>
+</section>
+<section id="commenti-e-considerazioni-finali">
+<h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
+<p>La riflessione epistemologica contemporanea ha ribadito che la conoscenza non può essere vista come una certezza inconfutabile o una garanzia razionale di verità. Invece, essa emerge come una serie di decisioni prese all’interno di un contesto di incertezza. Questa comprensione è particolarmente pertinente nel campo della ricerca scientifica, dove né la logica deduttiva né le rigorose dimostrazioni matematiche sono sufficienti. Di conseguenza, la scienza necessita di una «logica dell’incertezza,» che è efficacemente fornita dalla teoria delle probabilità, e più specificamente, dal teorema di Bayes.</p>
+<p>Il teorema di Bayes ci offre un framework per interpretare la probabilità come una valutazione soggettiva influenzata da diversi fattori condizionanti. In pratica, il teorema esprime la probabilità a posteriori <span class="math notranslate nohighlight">\( P(H_i \mid E) \)</span> come un risultato derivato dalla combinazione della probabilità a priori <span class="math notranslate nohighlight">\( P(H_i) \)</span> e della verosimiglianza <span class="math notranslate nohighlight">\( P(E \mid H_i) \)</span>. Questa formulazione sottolinea che la nostra valutazione probabilistica di una data ipotesi <span class="math notranslate nohighlight">\( H_i \)</span> è modulata sia dall’evidenza empirica <span class="math notranslate nohighlight">\( E \)</span> che dalle nostre credenze a priori <span class="math notranslate nohighlight">\( P(H_i) \)</span>.</p>
+<p>Poiché la probabilità è una valutazione intrinsecamente soggettiva, è possibile che diversi osservatori arrivino a conclusioni differenti. Tuttavia, il teorema di Bayes fornisce un meccanismo razionale—conosciuto come «aggiornamento bayesiano»—per ricalibrare queste credenze in risposta a nuove informazioni o evidenze.</p>
+<p>L’approccio bayesiano offre strumenti per valutare l’efficacia di diverse strategie di trattamento o interventi in psicologia clinica. Per esempio, se si afferma che la meditazione mattutina è efficace nel trattamento della depressione, è essenziale valutare questa affermazione nel contesto di tutte le evidenze disponibili, compresi i casi in cui la meditazione non ha portato a miglioramenti.</p>
+<p>In sintesi, la metodologia bayesiana fornisce una cornice robusta per l’aggiornamento delle probabilità in presenza di nuove informazioni, offrendo spunti importanti sia per la ricerca che per la pratica clinica in psicologia.</p>
+<p>Nel contesto di questo capitolo, abbiamo focalizzato la nostra discussione sul teorema di Bayes nel caso delle variabili casuali discrete. Tuttavia, nel prossimo capitolo, esploreremo come il teorema può essere applicato in modo più intuitivo alle variabili casuali continue. Per ulteriori dettagli, si rimanda al notebook <a class="reference internal" href="../chapter_4/01_intro_bayes.html#bayes-workflow-notebook"><span class="std std-ref">Modellazione bayesiana</span></a>.</p>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+numpy     : 1.26.4
+seaborn   : 0.13.2
+arviz     : 0.18.0
+matplotlib: 3.8.4
+pandas    : 2.2.2
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_3"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="E_discrete_prob.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="E_bayes_theorem.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#storia">Storia</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema">Teorema</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-della-formula-di-bayes">Interpretazione della Formula di Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alcuni-esempi">Alcuni esempi</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-valore-predittivo-di-un-test-di-laboratorio">Il Valore Predittivo di un Test di Laboratorio</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

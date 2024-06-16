@@ -1,0 +1,1572 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Validazione Incrociata Leave-One-Out &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_5/05_32_stan_loo';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_5/05_32_stan_loo.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="Dati mancanti" href="05_35_missing.html" />
+    <link rel="prev" title="✏️ Esercizi" href="E_kl.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_5/05_32_stan_loo.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_5/05_32_stan_loo.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Validazione Incrociata Leave-One-Out</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminologia">Terminologia</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criteri-d-informazione">Criteri d’Informazione</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errore-quadratico-medio-mse">Errore Quadratico Medio (MSE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#somma-dei-logaritmi-delle-verosimiglianze">Somma dei Logaritmi delle Verosimiglianze</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relazione-con-il-concetto-di-entropia">Relazione con il Concetto di Entropia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-di-informazione-di-akaike-aic">Criterio di Informazione di Akaike (AIC)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#widely-applicable-information-criterion-waic">Widely Applicable Information Criterion (WAIC)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validazione-incrociata-e-il-metodo-leave-one-out">Validazione Incrociata e il Metodo Leave-One-Out</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processo-di-validazione-incrociata-k-fold">Processo di Validazione Incrociata K-Fold</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computazione-e-approssimazione-della-validazione-incrociata">Computazione e Approssimazione della Validazione Incrociata</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-per-l-approssimazione">Simulazione per l’Approssimazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valori-diagnostici-pareto-k">Valori Diagnostici Pareto <span class="math notranslate nohighlight">\(k\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-ruolo-dell-elpd-nella-valutazione-comparativa-dei-modelli">Il Ruolo dell’ELPD nella Valutazione Comparativa dei Modelli</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione">Simulazione</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="validazione-incrociata-leave-one-out">
+<span id="loo-notebook"></span><h1>Validazione Incrociata Leave-One-Out<a class="headerlink" href="#validazione-incrociata-leave-one-out" title="Link to this heading">#</a></h1>
+<div class="admonition-obiettivi-di-apprendimento admonition">
+<p class="admonition-title">Obiettivi di apprendimento</p>
+<p>Dopo aver completato questo capitolo, acquisirete le competenze per:</p>
+<ul class="simple">
+<li><p>comprendere il concetto di validazione incrociata Leave-One-Out;</p></li>
+<li><p>calcolare LOO-CV usando ArviZ;</p></li>
+<li><p>usare LOO-CV nel confronto tra modelli;</p></li>
+<li><p>comprendere e calcolare i valori diagnostici Pareto <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+</ul>
+</div>
+<p>Come evidenziato nel precedente capitolo, uno dei metodi più efficaci e ampiamente utilizzati per stimare la Densità Predittiva Logaritmica Attesa (ELPD) è la validazione incrociata Leave-One-Out (LOO-CV). Rispetto ad altri approcci che utilizzano l’intero set di dati per valutare le performance del modello, il metodo LOO-CV esclude una singola osservazione alla volta dal dataset, addestra il modello sui dati rimanenti e successivamente valuta la sua capacità di predire l’osservazione esclusa. Questo procedimento viene ripetuto per ogni osservazione presente nel dataset, fornendo così un’analisi dettagliata e approfondita della capacità del modello di generalizzare al di fuori dei dati osservati. Nel presente capitolo, esamineremo attentamente la metodologia LOO-CV e illustreremo come essa possa essere utilizzata per calcolare l’ELPD.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">cmdstanpy</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
+<span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span> <span class="nn">pingouin</span> <span class="k">as</span> <span class="nn">pg</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed to make the results fully reproducible</span>
+<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;stan_loo&quot;</span><span class="p">))</span>
+<span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.facecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+
+<span class="c1"># Get the home directory</span>
+<span class="n">home_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+<span class="c1"># Construct the path to the Quarto project directory </span>
+<span class="n">project_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">home_directory</span><span class="p">,</span> <span class="s1">&#39;_repositories&#39;</span><span class="p">,</span> <span class="s1">&#39;ds4p&#39;</span><span class="p">)</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="terminologia">
+<h2>Terminologia<a class="headerlink" href="#terminologia" title="Link to this heading">#</a></h2>
+<p>Nell’ambito della valutazione dei modelli statistici, è essenziale distinguere tra due tipi principali di accuratezza:</p>
+<ul class="simple">
+<li><p><strong>Accuratezza sul campione interno</strong> (within-sample accuracy): Questa metrica riflette la precisione con cui un modello predice i dati utilizzati per il suo addestramento. L’accuratezza sul campione interno è valutata direttamente sui dati di addestramento e può essere elevata, specialmente se il modello è complesso e tende a sovra-adattarsi a questi dati.</p></li>
+<li><p><strong>Accuratezza sul campione esterno</strong> (out-of-sample accuracy): Indica l’efficacia con cui un modello predice nuovi dati, ovvero quelli non inclusi nel set di addestramento. Questo tipo di accuratezza è particolarmente rilevante per valutare la capacità di generalizzazione del modello.</p></li>
+</ul>
+<p>Generalmente, l’accuratezza sul campione interno è superiore a quella sul campione esterno a causa del fenomeno di sovra-adattamento, che può portare a una sovrastima delle capacità predittive del modello se valutate solo internamente. Per ottenere una valutazione più accurata e realistica delle prestazioni del modello, è consigliabile focalizzarsi sull’accuratezza sul campione esterno. Tuttavia, valutare l’accuratezza esterna implica spesso utilizzare meno dati per l’addestramento, il che può essere problematico quando i dati disponibili sono limitati.</p>
+<p>Per affrontare queste sfide, come indicato in precedenza, sono stati sviluppati due metodi di valutazione:</p>
+<ul class="simple">
+<li><p><strong>Criteri di informazione</strong>: Questi criteri includono formule che cercano di stimare l’accuratezza sul campione esterno. Tipicamente, calcolano l’accuratezza sul campione interno e aggiungono un termine di penalità per la complessità del modello, al fine di mitigare il rischio di sovra-adattamento.</p></li>
+<li><p><strong>Validazione incrociata</strong>: Questo metodo empirico comporta la divisione dei dati in più sottoinsiemi, ciascuno dei quali viene alternativamente utilizzato per addestrare e valutare il modello. Questa tecnica aiuta a garantire che il modello sia robusto e capace di generalizzare bene su dati nuovi, contribuendo a una valutazione più affidabile delle sue prestazioni predittive.</p></li>
+</ul>
+</section>
+<section id="criteri-d-informazione">
+<h2>Criteri d’Informazione<a class="headerlink" href="#criteri-d-informazione" title="Link to this heading">#</a></h2>
+<p>I criteri d’informazione sono strumenti cruciali per la valutazione e il confronto di modelli statistici, poiché bilanciano quanto bene un modello si adatta ai dati con la sua complessità strutturale. Questi criteri sono radicati nella teoria dell’informazione, una branca della matematica che si concentra sulla quantità di informazione che un modello può estrazione dai dati osservati.</p>
+<section id="errore-quadratico-medio-mse">
+<h3>Errore Quadratico Medio (MSE)<a class="headerlink" href="#errore-quadratico-medio-mse" title="Link to this heading">#</a></h3>
+<p>L’Errore Quadratico Medio (MSE) è uno dei criteri di informazione più elementari e ampiamente utilizzati. Esso misura la discrepanza tra i valori reali osservati e quelli predetti da un modello. Si calcola con la formula:</p>
+<div class="math notranslate nohighlight">
+\[
+MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2,
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\(y_i\)</span> sono i valori osservati, <span class="math notranslate nohighlight">\(\hat{y}_i = E(y_i \mid \theta)\)</span> sono le stime previste dal modello basate sui parametri <span class="math notranslate nohighlight">\(\theta\)</span>, e <span class="math notranslate nohighlight">\(n\)</span> è il numero totale di osservazioni. Il MSE enfatizza gli errori più grandi, dunque penalizza le previsioni che più si discostano dai valori reali, fornendo una valutazione severa della qualità del modello.</p>
+</section>
+<section id="somma-dei-logaritmi-delle-verosimiglianze">
+<h3>Somma dei Logaritmi delle Verosimiglianze<a class="headerlink" href="#somma-dei-logaritmi-delle-verosimiglianze" title="Link to this heading">#</a></h3>
+<p>Nel contesto probabilistico, si preferisce spesso utilizzare la somma dei logaritmi delle verosimiglianze, che quantifica la probabilità di osservare i dati data una certa configurazione del modello:</p>
+<div class="math notranslate nohighlight">
+\[
+\sum \log p(y_i \mid \theta).
+\]</div>
+<p>Quando i dati seguono una distribuzione normale, questa somma è inversamente correlata al MSE. Questa relazione dimostra che entrambi gli approcci possono essere collegati: minimizzare il MSE in un contesto di errori normalmente distribuiti equivale a massimizzare la somma dei logaritmi delle verosimiglianze.</p>
+</section>
+<section id="relazione-con-il-concetto-di-entropia">
+<h3>Relazione con il Concetto di Entropia<a class="headerlink" href="#relazione-con-il-concetto-di-entropia" title="Link to this heading">#</a></h3>
+<p>L’entropia, un concetto fondamentale nella teoria dell’informazione, misura l’incertezza o la variabilità intrinseca nei dati. Un modello efficace nella predizione riduce questa incertezza. I criteri d’informazione come il MSE o la somma dei logaritmi delle verosimiglianze, valutano indirettamente la capacità di un modello di diminuire l’entropia dei dati osservati. In pratica, un modello che migliora l’adattamento ai dati riducendo il MSE o aumentando la somma dei logaritmi delle verosimiglianze, è efficace nel ridurre l’incertezza e, di conseguenza, nel rappresentare l’informazione contenuta nei dati.</p>
+</section>
+<section id="criterio-di-informazione-di-akaike-aic">
+<h3>Criterio di Informazione di Akaike (AIC)<a class="headerlink" href="#criterio-di-informazione-di-akaike-aic" title="Link to this heading">#</a></h3>
+<p>Il Criterio di Informazione di Akaike (AIC) è una misura ampiamente utilizzata per la selezione dei modelli. Come abbiamo già visto in precedenza, equilibra la capacità predittiva del modello con la sua complessità tramite la formula:</p>
+<div class="math notranslate nohighlight">
+\[
+AIC = -2 \sum \log p(y_i \mid \hat{\theta}_{\text{mle}}) + 2k,
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\(\hat{\theta}_{\text{mle}}\)</span> indica la stima di massima verosimiglianza dei parametri del modello e <span class="math notranslate nohighlight">\(k\)</span> è il numero di parametri stimati. L’AIC penalizza i modelli con più parametri, favorirendo la parsimonia. Un valore più basso di AIC indica una migliore capacità predittiva del modello e un migliore adattamento ai dati.</p>
+</section>
+<section id="widely-applicable-information-criterion-waic">
+<h3>Widely Applicable Information Criterion (WAIC)<a class="headerlink" href="#widely-applicable-information-criterion-waic" title="Link to this heading">#</a></h3>
+<p>Il Widely Applicable Information Criterion (WAIC) è una generalizzazione bayesiana dell’AIC che prende in considerazione l’intera distribuzione a posteriori dei parametri. Si esprime come:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}
+WAIC = -2\left[ \sum_{i=1}^{n} \log \left( \frac{1}{S} \sum_{s=1}^{S} p(y_i|\theta^{(s)}) \right) - \sum_{i=1}^{n} \text{Var}_{\\\theta^{(s)}} \left( \log p(y_i|\theta^{(s)}) \right) \right],
+\end{aligned}\end{align} \]</div>
+<p>dove <span class="math notranslate nohighlight">\(S\)</span> rappresenta il numero di campioni nella distribuzione a posteriori e <span class="math notranslate nohighlight">\(\text{Var}_{\theta^{(s)}}\)</span> la varianza calcolata sulla log-verosimiglianza. Il primo termine misura la capacità media di adattamento del modello attraverso tutti i campioni, mentre il secondo termine fornisce un aggiustamento per la varianza tra le stime logaritmiche di verosimiglianza, funzionando come un indicatore del numero effettivo di parametri.</p>
+<p>In sintesi, sia l’AIC che il WAIC offrono metriche valide per la selezione di modelli, fornendo un equilibrio tra l’adattamento dei dati e la semplicità del modello. Mentre l’AIC è tipicamente usato in contesti non bayesiani, il WAIC trova maggiore applicazione nei contesti bayesiani, offrendo una valutazione più completa in scenari in cui la distribuzione dei parametri è considerata.</p>
+</section>
+</section>
+<section id="validazione-incrociata-e-il-metodo-leave-one-out">
+<h2>Validazione Incrociata e il Metodo Leave-One-Out<a class="headerlink" href="#validazione-incrociata-e-il-metodo-leave-one-out" title="Link to this heading">#</a></h2>
+<p>La validazione incrociata è una tecnica statistica fondamentale nel campo del machine learning per valutare la capacità di generalizzazione dei modelli. Il metodo Leave-One-Out (LOO) è una forma particolare di validazione incrociata, in cui il numero di segmenti (fold) in cui viene suddiviso il dataset è uguale al numero di osservazioni nel dataset. In pratica, questo significa che per ogni iterazione del processo di validazione, il modello viene addestrato su tutti i dati tranne uno, che viene usato come test. Questo metodo è particolarmente utile per ottenere una stima precisa dell’Expected Log Predictive Density (ELPD), che misura la capacità predittiva del modello su nuovi dati.</p>
+<section id="processo-di-validazione-incrociata-k-fold">
+<h3>Processo di Validazione Incrociata K-Fold<a class="headerlink" href="#processo-di-validazione-incrociata-k-fold" title="Link to this heading">#</a></h3>
+<p>Durante una validazione incrociata K-Fold standard, il dataset è diviso in <span class="math notranslate nohighlight">\(K\)</span> fold, ognuno dei quali serve come set di test in una delle <span class="math notranslate nohighlight">\(K\)</span> iterazioni del processo. In ogni iterazione, il modello è addestrato su <span class="math notranslate nohighlight">\(K-1\)</span> fold e testato sul fold rimanente. La performance del modello è quindi valutata calcolando la media delle prestazioni su ciascun fold. Questo non solo fornisce una valutazione robusta della capacità del modello di generalizzare su nuovi dati, ma permette anche di utilizzare efficientemente l’intero dataset per l’addestramento, senza sacrificare dati per il set di test permanente.</p>
+</section>
+<section id="computazione-e-approssimazione-della-validazione-incrociata">
+<h3>Computazione e Approssimazione della Validazione Incrociata<a class="headerlink" href="#computazione-e-approssimazione-della-validazione-incrociata" title="Link to this heading">#</a></h3>
+<p>Sebbene la validazione incrociata sia estremamente utile, può essere computazionalmente intensiva, soprattutto per dataset grandi o modelli complessi. Un approccio per mitigare questo onere computazionale è l’approssimazione della validazione incrociata attraverso un singolo ciclo completo di addestramento del dataset, il che permette di stimare l’ELPD senza ripetere l’addestramento su molteplici subset. La formula dell’ELPD approssimato è:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{ELPD} \approx \int p(\tilde{y} \mid y) \log p(\tilde{y} \mid y) \, d\tilde{y}
+\]</div>
+<p>Qui, <span class="math notranslate nohighlight">\( \tilde{y} \)</span> rappresenta i dati futuri e <span class="math notranslate nohighlight">\( p(\tilde{y} \mid y) \)</span> è la distribuzione predittiva a posteriori, basata sui dati già osservati <span class="math notranslate nohighlight">\( y \)</span>. Questa distribuzione rappresenta la probabilità di osservare nuovi dati dati i dati esistenti e riflette tutte le incertezze del modello dopo aver osservato <span class="math notranslate nohighlight">\( y \)</span>. Si noti che, in questa approssimazione, si sostituisce la distribuzione <span class="math notranslate nohighlight">\(p(y)\)</span>, che è sconosciuta, con la distribuzione predittiva a posteriori del modello <span class="math notranslate nohighlight">\(p(\tilde{y} \mid y)\)</span>.</p>
+</section>
+<section id="simulazione-per-l-approssimazione">
+<h3>Simulazione per l’Approssimazione<a class="headerlink" href="#simulazione-per-l-approssimazione" title="Link to this heading">#</a></h3>
+<p>Poiché la distribuzione predittiva a posteriori spesso non può essere espressa in forma chiusa, si ricorre a tecniche di simulazione come il campionamento di Monte Carlo. Questo metodo implica il campionamento ripetuto dalla distribuzione <span class="math notranslate nohighlight">\( p(\tilde{y} \mid y) \)</span>, il calcolo del logaritmo di ciascun valore campionato, e la media di questi logaritmi per approssimare il valore dell’integrale. Tale approccio offre una stima efficace dell’ELPD, offrendo un’indicazione su quanto accuratamente il modello possa prevedere nuovi dati, essenziale per la validazione del modello in scenari reali.</p>
+</section>
+<section id="un-esempio-empirico">
+<h3>Un Esempio Empirico<a class="headerlink" href="#un-esempio-empirico" title="Link to this heading">#</a></h3>
+<p>Generiamo un set di dati artificiali seguendo una distribuzione normale con una media (<code class="docutils literal notranslate"><span class="pre">loc</span></code>) di 5 e una deviazione standard (<code class="docutils literal notranslate"><span class="pre">scale</span></code>) di 2. Scegliamo una dimensione (<code class="docutils literal notranslate"><span class="pre">size</span></code>) del campione di 100.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1.80998967 3.01056024 5.90315336 3.91121484 5.17347198 6.90905699
+ 6.61773571 5.01406456 6.66645114 5.39877838]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizziamo cmdstan per adattare un modello normale ai dati. Stimiamo la media (<code class="docutils literal notranslate"><span class="pre">mu</span></code>) e la deviazione standard (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>) del modello attraverso il campionamento MCMC.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;gaussian-mod-log-lik.stan&#39;</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N;
+  vector[N] y;
+}
+parameters {
+  real mu;
+  real&lt;lower=0&gt; sigma;
+}
+model {
+  // Priors
+  mu ~ normal(5, 2);         // Prior for mu, centered around the known mean with some uncertainty
+  sigma ~ normal(0, 2);      // Half-normal prior for sigma (implying positive values)
+  
+  // Likelihood
+  y ~ normal(mu, sigma);
+}
+generated quantities {
+  vector[N] log_lik;
+  for (n in 1:N)
+    log_lik[n] = normal_lpdf(y[n] | mu, sigma);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> 
+    <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span> <span class="o">=</span> <span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span> <span class="o">=</span> <span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+    <span class="n">show_console</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>mu</th>
+      <td>5.02</td>
+      <td>0.20</td>
+      <td>4.67</td>
+      <td>5.41</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6438.43</td>
+      <td>4990.55</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>1.97</td>
+      <td>0.14</td>
+      <td>1.71</td>
+      <td>2.24</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7231.05</td>
+      <td>5554.04</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="valori-diagnostici-pareto-k">
+<h2>Valori Diagnostici Pareto <span class="math notranslate nohighlight">\(k\)</span><a class="headerlink" href="#valori-diagnostici-pareto-k" title="Link to this heading">#</a></h2>
+<p>I valori diagnostici Pareto <span class="math notranslate nohighlight">\( k \)</span> sono essenziali nell’analizzare l’affidabilità delle stime dell’ELPD ottenute tramite la validazione incrociata Leave-One-Out (LOO-CV). Questi valori indicano la precisione con cui la LOO-CV approssima l’ELPD, fornendo una misura di quanto ci possiamo fidare della stima rispetto a quella che otterremmo con un calcolo diretto e completo.</p>
+<p>La LOO-CV è una tecnica che stima come un modello statistico si comporterebbe nel prevedere nuovi dati basandosi su quelli esistenti. Il valore Pareto <span class="math notranslate nohighlight">\( k \)</span> ci dice quanto affidabile sia questa stima:</p>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\( k &lt; 0.5 \)</span></strong>: Mostra che l’approssimazione è eccellente e l’errore nella stima dell’ELPD è trascurabile.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\( 0.5 \leq k &lt; 0.7 \)</span></strong>: Indica che l’approssimazione è accettabile, ma potrebbe essere opportuno esaminare più a fondo il modello e i dati.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\( 0.7 \leq k &lt; 1 \)</span></strong>: Suggerisce che l’approssimazione sta diventando mediocre, rendendo i risultati della LOO-CV meno affidabili e potenzialmente inadeguati.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\( k \geq 1 \)</span></strong>: Un valore così alto segnala un’approssimazione inadeguata e suggerisce che i risultati ottenuti potrebbero essere molto lontani dalla realtà, indicando la presenza di problemi nel modello o nella metodologia.</p></li>
+</ul>
+<p>Il valore di Pareto <span class="math notranslate nohighlight">\( k \)</span> si basa sulla distribuzione di Pareto per valutare le discrepanze nelle log-verosimiglianze, ovvero le differenze tra la log-verosimiglianza calcolata eliminando un dato e quella ottenuta sull’intero dataset. Valori elevati di <span class="math notranslate nohighlight">\( k \)</span> indicano che ci sono code più pesanti del previsto nella distribuzione delle discrepanze, suggerendo che l’approssimazione potrebbe non essere precisa.</p>
+<p>In sintesi, i valori di Pareto <span class="math notranslate nohighlight">\( k \)</span> offrono un indicatore affidabile dell’accuratezza dell’approssimazione fornita dalla LOO-CV e sono utili per identificare eventuali problemi nel modello statistico o nella metodologia impiegata.</p>
+<p>Convertiamo l’oggetto creato da cmdstanpy nella classe InferenceData richiesta da ArviZ:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_az</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span><span class="n">posterior</span><span class="o">=</span><span class="n">fit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo LOO-CV usando ArviZ:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loo_result</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">loo</span><span class="p">(</span><span class="n">fit_az</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">loo_result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 8000 posterior samples and 100 observations log-likelihood matrix.
+
+         Estimate       SE
+elpd_loo  -210.84     8.84
+p_loo        2.52        -
+------
+
+Pareto k diagnostic values:
+                         Count   Pct.
+(-Inf, 0.5]   (good)      100  100.0%
+ (0.5, 0.7]   (ok)          0    0.0%
+   (0.7, 1]   (bad)         0    0.0%
+   (1, Inf)   (very bad)    0    0.0%
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="il-ruolo-dell-elpd-nella-valutazione-comparativa-dei-modelli">
+<h2>Il Ruolo dell’ELPD nella Valutazione Comparativa dei Modelli<a class="headerlink" href="#il-ruolo-dell-elpd-nella-valutazione-comparativa-dei-modelli" title="Link to this heading">#</a></h2>
+<p>L’ELPD è fondamentale per il confronto di diversi modelli statistici. Utilizzando metodologie come la LOO-CV per stimare l’ELPD, possiamo ottenere una valutazione oggettiva dell’adeguatezza di ciascun modello rispetto ai dati. Questo è cruciale nella scelta del modello più adatto tra diverse alternative o nel decidere se un modello più complesso offre un miglior adattamento rispetto a uno più semplice.</p>
+<p>In conclusione, l’ELPD agisce come un indicatore affidabile della capacità predittiva di un modello. La LOO-CV, a sua volta, fornisce un modo efficace per stimare questa metrica, permettendo analisi precise e robuste delle prestazioni di diversi modelli. L’automazione di queste procedure di valutazione attraverso software come PyMC e Arviz rende l’approccio ancora più pratico e accessibile, consolidandone il ruolo come strumento essenziale per la selezione e la validazione di modelli statistici.</p>
+<section id="simulazione">
+<h3>Simulazione<a class="headerlink" href="#simulazione" title="Link to this heading">#</a></h3>
+<p>Per illustrare il confronto tra modelli utilizzando la LOO-CV, procediamo con una simulazione. Genereremo dati sintetici in cui esiste una relazione lineare tra le variabili <span class="math notranslate nohighlight">\(x\)</span> e <span class="math notranslate nohighlight">\(y\)</span>. In questo scenario, potremmo essere interessati a confrontare un modello lineare con un modello più semplice, che considera solo il termine di intercetta. Utilizzeremo la LOO-CV per stabilire quale dei due modelli si adatta meglio ai dati in questione. La stima dell’ELPD servirà come criterio quantitativo per orientare questa scelta di modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate synthetic data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span>
+<span class="n">y_obs</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">zx</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">zy</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">y_obs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">zy</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">zy</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.19824158875781e-16 1.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Adattiamo ai dati un modello che rispecchia il vero meccanismo generativo dei dati.</p>
+<p>Si noti che, per calcolare LOO e WAIC, ArviZ ha bisogno di accedere alla log-likelihood per ogni campione posteriore. Possiamo trovarla tramite <code class="docutils literal notranslate"><span class="pre">compute_log_likelihood()</span></code>. In alternativa, possiamo passare <code class="docutils literal notranslate"><span class="pre">idata_kwargs={&quot;log_likelihood&quot;:</span> <span class="pre">True}</span></code> a <code class="docutils literal notranslate"><span class="pre">sample()</span></code> per farla calcolare automaticamente alla fine del campionamento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_lin_reg_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;linear-regression.stan&#39;</span><span class="p">)</span>
+
+<span class="n">model_lin_reg</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_lin_reg_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_lin_reg</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>// all data should be scaled to mean 0 and std 1:
+data {
+  int&lt;lower=1&gt; N;
+  vector[N] x;
+  vector[N] y;
+}
+parameters {
+  real alpha;
+  real beta;
+  real&lt;lower=0&gt; sigma;
+}
+model {
+  y ~ normal(alpha + beta * x, sigma);
+  alpha ~ normal(0, 2.5);
+  beta ~ normal(0, 2.5);
+  sigma ~ cauchy(0, 2.5);
+}
+generated quantities {
+  vector[N] log_lik;
+  vector[N] y_rep;
+  for (n in 1:N) {
+    log_lik[n] = normal_lpdf(y[n] | alpha + beta * x[n], sigma);
+    y_rep[n] = normal_rng(alpha + beta * x[n], sigma);
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare the stan_data dictionary</span>
+<span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">zx</span><span class="p">),</span>
+    <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">zx</span><span class="p">,</span>
+    <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">zy</span>
+<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stan_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 100, &#39;x&#39;: array([-1.71481604, -1.68017329, -1.64553055, -1.6108878 , -1.57624505,
+       -1.5416023 , -1.50695955, -1.4723168 , -1.43767406, -1.40303131,
+       -1.36838856, -1.33374581, -1.29910306, -1.26446031, -1.22981757,
+       -1.19517482, -1.16053207, -1.12588932, -1.09124657, -1.05660382,
+       -1.02196108, -0.98731833, -0.95267558, -0.91803283, -0.88339008,
+       -0.84874733, -0.81410459, -0.77946184, -0.74481909, -0.71017634,
+       -0.67553359, -0.64089084, -0.6062481 , -0.57160535, -0.5369626 ,
+       -0.50231985, -0.4676771 , -0.43303435, -0.39839161, -0.36374886,
+       -0.32910611, -0.29446336, -0.25982061, -0.22517786, -0.19053512,
+       -0.15589237, -0.12124962, -0.08660687, -0.05196412, -0.01732137,
+        0.01732137,  0.05196412,  0.08660687,  0.12124962,  0.15589237,
+        0.19053512,  0.22517786,  0.25982061,  0.29446336,  0.32910611,
+        0.36374886,  0.39839161,  0.43303435,  0.4676771 ,  0.50231985,
+        0.5369626 ,  0.57160535,  0.6062481 ,  0.64089084,  0.67553359,
+        0.71017634,  0.74481909,  0.77946184,  0.81410459,  0.84874733,
+        0.88339008,  0.91803283,  0.95267558,  0.98731833,  1.02196108,
+        1.05660382,  1.09124657,  1.12588932,  1.16053207,  1.19517482,
+        1.22981757,  1.26446031,  1.29910306,  1.33374581,  1.36838856,
+        1.40303131,  1.43767406,  1.4723168 ,  1.50695955,  1.5416023 ,
+        1.57624505,  1.6108878 ,  1.64553055,  1.68017329,  1.71481604]), &#39;y&#39;: array([-1.25369697, -1.51410888, -1.12264904, -0.69018101, -1.46541976,
+       -1.43451905, -0.57172677, -0.91324793, -1.44980379, -0.95462592,
+       -1.38523884, -1.35540634, -0.99984973, -1.95770364, -1.84039662,
+       -1.27613083, -1.45193071, -0.81222207, -1.34206267, -1.54251469,
+       -0.19132131, -0.9363926 , -0.77094195, -1.42465105, -0.98987813,
+       -0.65835464, -1.20638283, -0.47509892, -0.89211361, -0.71948769,
+       -0.83081717,  0.32587522, -0.49918168, -0.94733587, -0.05384951,
+       -0.96038888, -0.27359788, -1.23754931, -0.91695414, -0.18642458,
+        0.09293748, -0.13633347, -0.23711307, -0.29130011, -0.80056374,
+       -0.42161671, -0.27180948,  0.4553774 ,  0.15894085, -0.77662445,
+        0.21176558, -0.082681  , -0.18567329,  0.43638204,  0.65964551,
+        0.64479105, -0.13655587,  0.13748445,  0.46220469,  0.78867095,
+        0.15219165,  0.31773898, -0.07374059, -0.08407726,  0.86834951,
+        1.14867904,  0.52434286,  1.04865616,  0.78507034,  0.35410049,
+        0.84674641,  1.41743978,  0.72630189,  1.49143251, -0.3973201 ,
+        1.21247617,  0.90624433,  0.76002975,  0.97019317,  0.04716531,
+        0.88910552,  1.18460649,  1.72967356,  0.84479898,  0.7425482 ,
+        0.91416098,  1.59519538,  1.35695436,  0.99399369,  1.50339012,
+        1.34335048,  1.77408719,  1.03852468,  1.24117485,  1.24250254,
+        0.78187315,  1.62002314,  1.63482977,  1.54830613,  1.46923337])}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit2</span> <span class="o">=</span> <span class="n">model_lin_reg</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span> <span class="o">=</span> <span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span> <span class="o">=</span> <span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+    <span class="n">show_console</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beta</th>
+      <td>0.91</td>
+      <td>0.04</td>
+      <td>0.82</td>
+      <td>0.99</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7552.03</td>
+      <td>5699.11</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>0.42</td>
+      <td>0.03</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>7001.46</td>
+      <td>5200.57</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Replichiamo i risultati usando le funzioni di pingouin:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">zx</span><span class="p">,</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">zy</span>
+<span class="p">})</span>
+
+<span class="c1"># Perform linear regression using pingouin</span>
+<span class="n">regression_results</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">linear_regression</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">]],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+
+<span class="c1"># Print the regression results</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">regression_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       names          coef        se             T          pval        r2  \
+0  Intercept -2.220446e-16  0.041834 -5.307754e-15  1.000000e+00  0.828492   
+1          x  9.102152e-01  0.041834  2.175778e+01  2.661609e-39  0.828492   
+
+     adj_r2  CI[2.5%]  CI[97.5%]  
+0  0.826742 -0.083018   0.083018  
+1  0.826742  0.827197   0.993233  
+</pre></div>
+</div>
+</div>
+</div>
+<p>Troviamo ELPD con il metodo LOO-CV per il modello lineare.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert CmdStanPy fit to ArviZ InferenceData</span>
+<span class="n">fit2_az</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span><span class="n">posterior</span><span class="o">=</span><span class="n">fit2</span><span class="p">)</span>
+<span class="c1"># Perform LOO-CV using ArviZ</span>
+<span class="n">loo2_result</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">loo</span><span class="p">(</span><span class="n">fit2_az</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">loo2_result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 8000 posterior samples and 100 observations log-likelihood matrix.
+
+         Estimate       SE
+elpd_loo   -56.81     6.89
+p_loo        2.87        -
+------
+
+Pareto k diagnostic values:
+                         Count   Pct.
+(-Inf, 0.5]   (good)      100  100.0%
+ (0.5, 0.7]   (ok)          0    0.0%
+   (0.7, 1]   (bad)         0    0.0%
+   (1, Inf)   (very bad)    0    0.0%
+</pre></div>
+</div>
+</div>
+</div>
+<p>Adattiamo ora un secondo modello che non tiene conto della relazione lineare tra x e y.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_lin_reg_file_only_alpha</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;linear-regression-only-alpha.stan&#39;</span><span class="p">)</span>
+
+<span class="n">model_lin_reg_only_alpha</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_lin_reg_file_only_alpha</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_lin_reg_only_alpha</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>// all data should be scaled to mean 0 and std 1:
+data {
+  int&lt;lower=1&gt; N;
+  vector[N] x;
+  vector[N] y;
+}
+parameters {
+  real alpha;
+  real&lt;lower=0&gt; sigma;
+}
+model {
+  y ~ normal(alpha, sigma);
+  alpha ~ normal(0, 2.5);
+  sigma ~ cauchy(0, 2.5);
+}
+generated quantities {
+  vector[N] log_lik;
+  vector[N] y_rep;
+  for (n in 1:N) {
+    log_lik[n] = normal_lpdf(y[n] | alpha, sigma);
+    y_rep[n] = normal_rng(alpha, sigma);
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit3</span> <span class="o">=</span> <span class="n">model_lin_reg_only_alpha</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span> <span class="o">=</span> <span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span> <span class="o">=</span> <span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+    <span class="n">show_console</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit3</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">round_to</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>alpha</th>
+      <td>0.00</td>
+      <td>0.10</td>
+      <td>-0.19</td>
+      <td>0.20</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6612.61</td>
+      <td>5300.73</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>1.02</td>
+      <td>0.07</td>
+      <td>0.88</td>
+      <td>1.15</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>6998.01</td>
+      <td>5550.97</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Troviamo ora ELPD con il metodo LOO-CV per il modello che ignora la relazione lineare.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert CmdStanPy fit to ArviZ InferenceData</span>
+<span class="n">fit3_az</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span><span class="n">posterior</span><span class="o">=</span><span class="n">fit3</span><span class="p">)</span>
+<span class="c1"># Perform LOO-CV using ArviZ</span>
+<span class="n">loo3_result</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">loo</span><span class="p">(</span><span class="n">fit3_az</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">loo3_result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Computed from 8000 posterior samples and 100 observations log-likelihood matrix.
+
+         Estimate       SE
+elpd_loo  -143.63     4.52
+p_loo        1.40        -
+------
+
+Pareto k diagnostic values:
+                         Count   Pct.
+(-Inf, 0.5]   (good)      100  100.0%
+ (0.5, 0.7]   (ok)          0    0.0%
+   (0.7, 1]   (bad)         0    0.0%
+   (1, Inf)   (very bad)    0    0.0%
+</pre></div>
+</div>
+</div>
+</div>
+<p>Infine, calcoliamo <code class="docutils literal notranslate"><span class="pre">eldp_diff</span></code>. L’incertezza di questa quantità è espressa dall’errore standard. Se il rapporto tra <code class="docutils literal notranslate"><span class="pre">eldp_diff</span></code> e il suo errore standard è almeno uguale a 2, allora possiamo concludere che vi è una differenza credibile tra di due modelli.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_comp_loo</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">compare</span><span class="p">({</span><span class="s2">&quot;linear_model&quot;</span><span class="p">:</span> <span class="n">loo2_result</span><span class="p">,</span> <span class="s2">&quot;intercept_model&quot;</span><span class="p">:</span> <span class="n">loo3_result</span><span class="p">})</span>
+<span class="n">df_comp_loo</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rank</th>
+      <th>elpd_loo</th>
+      <th>p_loo</th>
+      <th>elpd_diff</th>
+      <th>weight</th>
+      <th>se</th>
+      <th>dse</th>
+      <th>warning</th>
+      <th>scale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>linear_model</th>
+      <td>0</td>
+      <td>-56.814716</td>
+      <td>2.873961</td>
+      <td>0.000000</td>
+      <td>1.000000e+00</td>
+      <td>6.890641</td>
+      <td>0.000000</td>
+      <td>False</td>
+      <td>log</td>
+    </tr>
+    <tr>
+      <th>intercept_model</th>
+      <td>1</td>
+      <td>-143.633507</td>
+      <td>1.403145</td>
+      <td>86.818792</td>
+      <td>2.428635e-11</td>
+      <td>4.516124</td>
+      <td>7.956892</td>
+      <td>False</td>
+      <td>log</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Nel caso presente, sappiamo che il modello che include una relazione lineare tra le due variabili è quello che rispecchia il modo in cui i dati sono stati generati. Infatti, troviamo che il rapporto tra <code class="docutils literal notranslate"><span class="pre">eldp_diff</span></code> e il suo errore standard è molto maggiore di 2, il che conferma che, per questi dati, il modello lineare è da preferire al modello che include solo l’intercetta.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_compare</span><span class="p">(</span><span class="n">df_comp_loo</span><span class="p">,</span> <span class="n">insample_dev</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/7e3be2e9d91e5cc8cf33a53b73f0e2d06ca024cc2373d852ce087c1e9b96e785.png"><img alt="../_images/7e3be2e9d91e5cc8cf33a53b73f0e2d06ca024cc2373d852ce087c1e9b96e785.png" src="../_images/7e3be2e9d91e5cc8cf33a53b73f0e2d06ca024cc2373d852ce087c1e9b96e785.png" style="width: 611px; height: 211px;" /></a>
+</div>
+</div>
+</section>
+</section>
+<section id="riflessioni-conclusive">
+<h2>Riflessioni Conclusive<a class="headerlink" href="#riflessioni-conclusive" title="Link to this heading">#</a></h2>
+<p>In questo capitolo, abbiamo approfondito il metodo della Validazione Incrociata Leave-One-Out (LOO-CV) come strumento efficace per stimare l’Expected Log Predictive Density (ELPD). Abbiamo illustrato in dettaglio come la LOO-CV possa essere applicata utilizzando il framework cmdstan, evidenziando il suo ruolo cruciale nella pratica della modellazione statistica.</p>
+<p>Un aspetto centrale che abbiamo esaminato è l’importanza della LOO-CV nel contesto del confronto tra diversi modelli statistici. Questo metodo non solo aiuta a valutare la capacità predittiva di un singolo modello, ma si rivela anche essenziale quando si tratta di selezionare il modello più adatto tra un insieme di alternative, fornendo una base di confronto oggettiva e affidabile.</p>
+<p>Inoltre, abbiamo discusso il ruolo significativo dei valori diagnostici Pareto <span class="math notranslate nohighlight">\(k\)</span> nell’interpretazione delle stime ottenute tramite LOO-CV. Abbiamo sottolineato come questi valori siano fondamentali per valutare l’affidabilità delle stime di ELPD derivate dalla LOO-CV, offrendo una misura della precisione e della robustezza di queste stime.</p>
+<p>Nel complesso, attraverso questo capitolo, abbiamo mirato a fornire una comprensione completa di come la LOO-CV e i valori diagnostici Pareto <span class="math notranslate nohighlight">\(k\)</span> siano impiegati per migliorare la precisione e l’affidabilità delle stime di ELPD, migliorando così la qualità e l’efficacia dei modelli statistici in vari contesti di ricerca e applicazione.</p>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+arviz     : 0.18.0
+matplotlib: 3.8.4
+scipy     : 1.13.1
+numpy     : 1.26.4
+pingouin  : 0.5.4
+cmdstanpy : 1.2.3
+logging   : 0.5.1.2
+pandas    : 2.2.2
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="E_kl.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_35_missing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">Dati mancanti</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminologia">Terminologia</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criteri-d-informazione">Criteri d’Informazione</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errore-quadratico-medio-mse">Errore Quadratico Medio (MSE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#somma-dei-logaritmi-delle-verosimiglianze">Somma dei Logaritmi delle Verosimiglianze</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relazione-con-il-concetto-di-entropia">Relazione con il Concetto di Entropia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-di-informazione-di-akaike-aic">Criterio di Informazione di Akaike (AIC)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#widely-applicable-information-criterion-waic">Widely Applicable Information Criterion (WAIC)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validazione-incrociata-e-il-metodo-leave-one-out">Validazione Incrociata e il Metodo Leave-One-Out</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processo-di-validazione-incrociata-k-fold">Processo di Validazione Incrociata K-Fold</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computazione-e-approssimazione-della-validazione-incrociata">Computazione e Approssimazione della Validazione Incrociata</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-per-l-approssimazione">Simulazione per l’Approssimazione</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valori-diagnostici-pareto-k">Valori Diagnostici Pareto <span class="math notranslate nohighlight">\(k\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-ruolo-dell-elpd-nella-valutazione-comparativa-dei-modelli">Il Ruolo dell’ELPD nella Valutazione Comparativa dei Modelli</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione">Simulazione</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

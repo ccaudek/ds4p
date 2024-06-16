@@ -1,0 +1,1343 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Regressione di Poisson con Stan &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="application/vnd.jupyter.widget-state+json">{"state": {"00cfde841c7e44f5b581806b992c6e83": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "0443a00f41494945bac3a8f4a5c8ee0d": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "0928291213fc4e0c81e81371b704fb14": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_3078389853b64a55a98a885399d3400f", "max": 22.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_dd44414652e5435fa18bda967462b1d0", "tabbable": null, "tooltip": null, "value": 22.0}}, "0abf3be9011d492f8e00328d53335448": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "0e83647f1820446995f74ad4e285d339": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "10964c5f04814436a2b0593439de5881": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_0e83647f1820446995f74ad4e285d339", "placeholder": "\u200b", "style": "IPY_MODEL_40f7a1640e9a4ad0a24ecdb1cd58436e", "tabbable": null, "tooltip": null, "value": "chain\u20073\u2007"}}, "12c7e796a4254f58b6916eebe91c953b": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "197db679694d48ac86895de2fb8448ad": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_34cf706f8ad64cd4a3da601043d94702", "IPY_MODEL_0928291213fc4e0c81e81371b704fb14", "IPY_MODEL_969ed0f2eb6d46c394e1017c4b3892b9"], "layout": "IPY_MODEL_8c4cba21a9f14794b936a4a06aeb42ac", "tabbable": null, "tooltip": null}}, "1d16e66581444b2e9bc360430dedd16c": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "2cf774643139420d943f015e8c3182ee": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3078389853b64a55a98a885399d3400f": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "32f5a423a0184373bfbaeed284c1904c": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "34cf706f8ad64cd4a3da601043d94702": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_32f5a423a0184373bfbaeed284c1904c", "placeholder": "\u200b", "style": "IPY_MODEL_685c48d8837348cda0f79c763a38a1de", "tabbable": null, "tooltip": null, "value": "chain\u20072\u2007"}}, "3bec74f0b65c4d878a235a11e8e20a05": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_12c7e796a4254f58b6916eebe91c953b", "max": 22.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_999d50b672084f6ebae7a74e9dc9e844", "tabbable": null, "tooltip": null, "value": 22.0}}, "40f7a1640e9a4ad0a24ecdb1cd58436e": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "5076e8f20c884622adacdae5a1fd8f3d": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_1d16e66581444b2e9bc360430dedd16c", "max": 22.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_985d0eec2c774898a461c5c2ed8c741f", "tabbable": null, "tooltip": null, "value": 22.0}}, "6651830dc6da47e587f8056e9f7c9102": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "685c48d8837348cda0f79c763a38a1de": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "87f7c101d52143138d3d71a321a8b6bf": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "89fb84f658c942a2a4f83d1aab2efb13": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_f91e6e50b0c545a282fb8a3438e06a54", "IPY_MODEL_9f7e7b99e6464dcf967b8f33b9db4a80", "IPY_MODEL_a673fae0302b4936ba6cbf9e29d9fd35"], "layout": "IPY_MODEL_cfa63ea2ef184f8d896aa8a0d91e1fb2", "tabbable": null, "tooltip": null}}, "8c4cba21a9f14794b936a4a06aeb42ac": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "9534732635694e3d900a89c9d2817496": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "957c3071a5b8460f94c583a6b10a192b": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "969ed0f2eb6d46c394e1017c4b3892b9": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_87f7c101d52143138d3d71a321a8b6bf", "placeholder": "\u200b", "style": "IPY_MODEL_a9e1803c397c40db89c0540c69dadc56", "tabbable": null, "tooltip": null, "value": "\u200700:00\u2007Sampling\u2007completed"}}, "985d0eec2c774898a461c5c2ed8c741f": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": "blue", "description_width": ""}}, "988c30d1e6c445fcae2b5af890454352": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "999d50b672084f6ebae7a74e9dc9e844": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": "blue", "description_width": ""}}, "9f7e7b99e6464dcf967b8f33b9db4a80": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_0abf3be9011d492f8e00328d53335448", "max": 22.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_ab49501eb7884fa48728664f42d28411", "tabbable": null, "tooltip": null, "value": 22.0}}, "a144b6ddadab4402939873c42371bada": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a2007098fbf247dfba64554e36c836a8": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_10964c5f04814436a2b0593439de5881", "IPY_MODEL_3bec74f0b65c4d878a235a11e8e20a05", "IPY_MODEL_a480f6b2a27f4718b1ad313b3f3a84a3"], "layout": "IPY_MODEL_a144b6ddadab4402939873c42371bada", "tabbable": null, "tooltip": null}}, "a22f5be345d749559868e0f1efb8f679": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_b7312d4da31d447185e4f0a68821229e", "placeholder": "\u200b", "style": "IPY_MODEL_0443a00f41494945bac3a8f4a5c8ee0d", "tabbable": null, "tooltip": null, "value": "\u200700:00\u2007Sampling\u2007completed"}}, "a480f6b2a27f4718b1ad313b3f3a84a3": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_fc347c5aafb5456ca3f1cae0723fd6de", "placeholder": "\u200b", "style": "IPY_MODEL_e849ba1742c04b209a48247eac707dbe", "tabbable": null, "tooltip": null, "value": "\u200700:00\u2007Sampling\u2007completed"}}, "a673fae0302b4936ba6cbf9e29d9fd35": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_2cf774643139420d943f015e8c3182ee", "placeholder": "\u200b", "style": "IPY_MODEL_6651830dc6da47e587f8056e9f7c9102", "tabbable": null, "tooltip": null, "value": "\u200700:00\u2007Sampling\u2007completed"}}, "a9e1803c397c40db89c0540c69dadc56": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "ab49501eb7884fa48728664f42d28411": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": "blue", "description_width": ""}}, "b7312d4da31d447185e4f0a68821229e": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "cfa63ea2ef184f8d896aa8a0d91e1fb2": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "d6d80f8a504c4cc9b8c1b6552eaa77a5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_957c3071a5b8460f94c583a6b10a192b", "placeholder": "\u200b", "style": "IPY_MODEL_ed2bd11fba874a00998c7db3270aa709", "tabbable": null, "tooltip": null, "value": "chain\u20071\u2007"}}, "dd44414652e5435fa18bda967462b1d0": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": "blue", "description_width": ""}}, "e849ba1742c04b209a48247eac707dbe": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "ed2bd11fba874a00998c7db3270aa709": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "f91e6e50b0c545a282fb8a3438e06a54": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_9534732635694e3d900a89c9d2817496", "placeholder": "\u200b", "style": "IPY_MODEL_988c30d1e6c445fcae2b5af890454352", "tabbable": null, "tooltip": null, "value": "chain\u20074\u2007"}}, "fc347c5aafb5456ca3f1cae0723fd6de": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "fd8cd915697148eea59af72d0550cfd9": {"model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_d6d80f8a504c4cc9b8c1b6552eaa77a5", "IPY_MODEL_5076e8f20c884622adacdae5a1fd8f3d", "IPY_MODEL_a22f5be345d749559868e0f1efb8f679"], "layout": "IPY_MODEL_00cfde841c7e44f5b581806b992c6e83", "tabbable": null, "tooltip": null}}}, "version_major": 2, "version_minor": 0}</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@1.0.6/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_5/05_23_stan_poisson_regr';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_5/05_23_stan_poisson_regr.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_5/05_23_stan_poisson_regr.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_5/05_23_stan_poisson_regr.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Regressione di Poisson con Stan</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-alla-regressione-di-poisson">Introduzione alla Regressione di Poisson</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fondamenti-del-modello-di-poisson">Fondamenti del Modello di Poisson</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regressione-di-poisson-e-sue-caratteristiche">Regressione di Poisson e sue Caratteristiche</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#procedura-per-costruire-il-modello-di-regressione-di-poisson">Procedura per Costruire il Modello di Regressione di Poisson</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-pratico">Un Esempio Pratico</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-data">Blocco <code class="docutils literal notranslate"><span class="pre">data</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-parameters">Blocco <code class="docutils literal notranslate"><span class="pre">parameters</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-model">Blocco <code class="docutils literal notranslate"><span class="pre">model</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-generated-quantities">Blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-del-parametro-alpha">Interpretazione del Parametro <code class="docutils literal notranslate"><span class="pre">alpha</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-del-parametro-beta">Interpretazione del Parametro <code class="docutils literal notranslate"><span class="pre">beta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-dell-aumento-effettivo-in-frequenza">Calcolo dell’Aumento Effettivo in Frequenza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior-Predictive Check</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="regressione-di-poisson-con-stan">
+<span id="stan-poisson-regression-notebook"></span><h1>Regressione di Poisson con Stan<a class="headerlink" href="#regressione-di-poisson-con-stan" title="Link to this heading">#</a></h1>
+<p>In questo tutorial, approfondiremo l’utilizzo di CmdStanPy per condurre un’analisi di <a class="reference external" href="https://it.wikipedia.org/wiki/Regressione_di_Poisson">regressione di Poisson</a>. La regressione di Poisson rappresenta una forma di modello lineare generalizzato impiegato nell’analisi di regressione per modellare dati di conteggio. Essa si basa sull’assunzione che la variabile di risposta Y segua una distribuzione di Poisson, con il logaritmo del suo valore atteso modellabile attraverso una combinazione lineare di parametri sconosciuti.</p>
+<p>L’esempio che esploreremo amplia l’analisi dei dati precedentemente trattati nel capitolo <span class="xref std std-ref">poisson_model_notebook</span>. Dopo aver investigato il calcolo della media a posteriori e dell’incertezza correlata al tasso di sparatorie fatali da parte della polizia negli Stati Uniti per ogni anno, ci interrogheremo se vi siano evidenze di una tendenza all’aumento di tale tasso nel corso del tempo.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">expit</span>  <span class="c1"># Funzione logistica</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">cmdstan_path</span><span class="p">,</span> <span class="n">CmdStanModel</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed to make the results fully reproducible</span>
+<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;stan_poisson_regression&quot;</span><span class="p">))</span>
+<span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.facecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="introduzione-alla-regressione-di-poisson">
+<h2>Introduzione alla Regressione di Poisson<a class="headerlink" href="#introduzione-alla-regressione-di-poisson" title="Link to this heading">#</a></h2>
+<p>La regressione di Poisson è una tecnica avanzata per modellare dati di conteggio, particolarmente efficace in situazioni dove è necessario analizzare la frequenza di occorrenza di eventi in specifici intervalli di tempo o spazio. Un esempio pratico di applicazione è la previsione del numero di comportamenti ripetitivi manifestati da un paziente con disturbo ossessivo-compulsivo (DOC), analizzando variabili come l’età del paziente o il numero di sedute di terapia cognitivo-comportamentale.</p>
+<section id="fondamenti-del-modello-di-poisson">
+<h3>Fondamenti del Modello di Poisson<a class="headerlink" href="#fondamenti-del-modello-di-poisson" title="Link to this heading">#</a></h3>
+<p>Il modello si basa sulla distribuzione di Poisson, una distribuzione probabilistica che descrive eventi con una probabilità costante di occorrenza in un intervallo di tempo o spazio definito. La funzione di probabilità della distribuzione di Poisson è definita come:</p>
+<div class="math notranslate nohighlight">
+\[ Pr(Y = y) = \frac{\mu^y e^{-\mu}}{y!}, \]</div>
+<p>dove <span class="math notranslate nohighlight">\(\mu\)</span> rappresenta il numero atteso di eventi nell’intervallo considerato e <span class="math notranslate nohighlight">\(y\)</span> i possibili conteggi di eventi, assumendo valori interi non negativi (0, 1, 2, …). Importante notare che in questa distribuzione, il valore atteso <span class="math notranslate nohighlight">\(\mu\)</span> coincide anche con la varianza.</p>
+</section>
+<section id="regressione-di-poisson-e-sue-caratteristiche">
+<h3>Regressione di Poisson e sue Caratteristiche<a class="headerlink" href="#regressione-di-poisson-e-sue-caratteristiche" title="Link to this heading">#</a></h3>
+<p>Nel modello di regressione di Poisson, si cerca di collegare il valore atteso di un conteggio, <span class="math notranslate nohighlight">\(\mu_i\)</span>, a un insieme di variabili esplicative (come età, sesso, sintomi di depressione, ecc.) tramite una relazione funzionale. A differenza dei modelli lineari tradizionali, che possono produrre stime di conteggi negative e quindi non sensate, la regressione di Poisson utilizza una funzione di legame esponenziale per garantire che le stime dei conteggi siano sempre non negative. La relazione è espressa come segue:</p>
+<div class="math notranslate nohighlight">
+\[ \mu_i = e^{\beta_0 + \beta_1 x_i}, \]</div>
+<p>dove <span class="math notranslate nohighlight">\(\beta_0\)</span> e <span class="math notranslate nohighlight">\(\beta_1\)</span> sono i parametri del modello che devono essere stimati. Questi parametri quantificano l’effetto delle variabili esplicative sui conteggi previsti. L’utilizzo della funzione esponenziale come legame assicura che il valore atteso <span class="math notranslate nohighlight">\(\mu_i\)</span> sia sempre positivo.</p>
+</section>
+<section id="procedura-per-costruire-il-modello-di-regressione-di-poisson">
+<h3>Procedura per Costruire il Modello di Regressione di Poisson<a class="headerlink" href="#procedura-per-costruire-il-modello-di-regressione-di-poisson" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Assunzione di Base</strong>: Si assume che il conteggio degli eventi per un dato livello della variabile esplicativa segua una distribuzione di Poisson, con un parametro di tasso (<span class="math notranslate nohighlight">\(\mu_i\)</span>) specifico per ciascuna osservazione.</p></li>
+<li><p><strong>Definizione del Predittore Lineare</strong>: Si definisce un predittore lineare, <span class="math notranslate nohighlight">\(\eta_i\)</span>, come una combinazione lineare dei coefficienti del modello (<span class="math notranslate nohighlight">\(\beta\)</span>) e delle variabili esplicative (<span class="math notranslate nohighlight">\(x_i\)</span>).</p></li>
+<li><p><strong>Funzione di Legame</strong>: Si applica la funzione di legame esponenziale per stabilire che il tasso medio di eventi, <span class="math notranslate nohighlight">\(\mu_i\)</span>, sia determinato dal predittore lineare, così che <span class="math notranslate nohighlight">\(\mu_i = e^{\eta_i} = e^{\alpha + \beta x_i}\)</span>.</p></li>
+</ol>
+<p>Questi passaggi consentono di costruire un modello che non solo predice accuratamente i conteggi, ma offre anche insight significativi sull’effetto delle variabili esplicative studiate.</p>
+</section>
+<section id="un-esempio-pratico">
+<h3>Un Esempio Pratico<a class="headerlink" href="#un-esempio-pratico" title="Link to this heading">#</a></h3>
+<p>Per fare un esempio, consideriamo nuovamente i dati corrispondenti alle sparatorie mortale negli Stati Uniti ad opera di agenti di polizia, a partire dal 1° gennaio 2015.</p>
+<p>Importiamo i dati.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/washingtonpost/data-police-shootings/master/v2/fatal-police-shootings-data.csv&quot;</span>
+<span class="n">fps_dat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">fps_dat</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>date</th>
+      <th>threat_type</th>
+      <th>flee_status</th>
+      <th>armed_with</th>
+      <th>city</th>
+      <th>county</th>
+      <th>state</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>location_precision</th>
+      <th>name</th>
+      <th>age</th>
+      <th>gender</th>
+      <th>race</th>
+      <th>race_source</th>
+      <th>was_mental_illness_related</th>
+      <th>body_camera</th>
+      <th>agency_ids</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>2015-01-02</td>
+      <td>point</td>
+      <td>not</td>
+      <td>gun</td>
+      <td>Shelton</td>
+      <td>Mason</td>
+      <td>WA</td>
+      <td>47.246826</td>
+      <td>-123.121592</td>
+      <td>not_available</td>
+      <td>Tim Elliot</td>
+      <td>53.0</td>
+      <td>male</td>
+      <td>A</td>
+      <td>not_available</td>
+      <td>True</td>
+      <td>False</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>2015-01-02</td>
+      <td>point</td>
+      <td>not</td>
+      <td>gun</td>
+      <td>Aloha</td>
+      <td>Washington</td>
+      <td>OR</td>
+      <td>45.487421</td>
+      <td>-122.891696</td>
+      <td>not_available</td>
+      <td>Lewis Lee Lembke</td>
+      <td>47.0</td>
+      <td>male</td>
+      <td>W</td>
+      <td>not_available</td>
+      <td>False</td>
+      <td>False</td>
+      <td>70</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>2015-01-03</td>
+      <td>move</td>
+      <td>not</td>
+      <td>unarmed</td>
+      <td>Wichita</td>
+      <td>Sedgwick</td>
+      <td>KS</td>
+      <td>37.694766</td>
+      <td>-97.280554</td>
+      <td>not_available</td>
+      <td>John Paul Quintero</td>
+      <td>23.0</td>
+      <td>male</td>
+      <td>H</td>
+      <td>not_available</td>
+      <td>False</td>
+      <td>False</td>
+      <td>238</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>8</td>
+      <td>2015-01-04</td>
+      <td>point</td>
+      <td>not</td>
+      <td>replica</td>
+      <td>San Francisco</td>
+      <td>San Francisco</td>
+      <td>CA</td>
+      <td>37.762910</td>
+      <td>-122.422001</td>
+      <td>not_available</td>
+      <td>Matthew Hoffman</td>
+      <td>32.0</td>
+      <td>male</td>
+      <td>W</td>
+      <td>not_available</td>
+      <td>True</td>
+      <td>False</td>
+      <td>196</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9</td>
+      <td>2015-01-04</td>
+      <td>point</td>
+      <td>not</td>
+      <td>other</td>
+      <td>Evans</td>
+      <td>Weld</td>
+      <td>CO</td>
+      <td>40.383937</td>
+      <td>-104.692261</td>
+      <td>not_available</td>
+      <td>Michael Rodriguez</td>
+      <td>39.0</td>
+      <td>male</td>
+      <td>H</td>
+      <td>not_available</td>
+      <td>False</td>
+      <td>False</td>
+      <td>473</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert date</span>
+<span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+
+<span class="c1"># Create a new column &#39;year&#39; to store the year information from the &#39;date&#39; column</span>
+<span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+<span class="n">fps_dat</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;id&#39;, &#39;date&#39;, &#39;threat_type&#39;, &#39;flee_status&#39;, &#39;armed_with&#39;, &#39;city&#39;,
+       &#39;county&#39;, &#39;state&#39;, &#39;latitude&#39;, &#39;longitude&#39;, &#39;location_precision&#39;,
+       &#39;name&#39;, &#39;age&#39;, &#39;gender&#39;, &#39;race&#39;, &#39;race_source&#39;,
+       &#39;was_mental_illness_related&#39;, &#39;body_camera&#39;, &#39;agency_ids&#39;, &#39;year&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Filter out rows with year equal to 2024</span>
+<span class="n">fps</span> <span class="o">=</span> <span class="n">fps_dat</span><span class="p">[</span><span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2024</span><span class="p">]</span>
+
+<span class="c1"># Count occurrences of each year in fps</span>
+<span class="n">year_counts</span> <span class="o">=</span> <span class="n">fps</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">year_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>year
+2023    1161
+2022    1095
+2021    1050
+2020    1020
+2019     996
+2015     995
+2018     992
+2017     984
+2016     959
+Name: count, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">years</span> <span class="o">=</span> <span class="n">year_counts</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">year</span> <span class="o">=</span> <span class="n">years</span> <span class="o">-</span> <span class="mi">2019</span>
+<span class="n">year</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 4,  3,  2,  1,  0, -4, -1, -2, -3], dtype=int32)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">year_counts</span><span class="o">.</span><span class="n">values</span>
+<span class="n">counts</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1161, 1095, 1050, 1020,  996,  995,  992,  984,  959])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creiamo un dizionario con i dati nel formato richiesto per CmdStan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;N&quot;</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">year</span><span class="p">),</span>
+    <span class="s2">&quot;y&quot;</span> <span class="p">:</span> <span class="n">counts</span><span class="p">,</span>
+    <span class="s2">&quot;x&quot;</span> <span class="p">:</span> <span class="n">year</span> 
+<span class="p">}</span>
+<span class="n">stan_data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 9,
+ &#39;y&#39;: array([1161, 1095, 1050, 1020,  996,  995,  992,  984,  959]),
+ &#39;x&#39;: array([ 4,  3,  2,  1,  0, -4, -1, -2, -3], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Leggiamo il file che contiene il modello di regressione di Poisson.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;stan&#39;</span><span class="p">,</span> <span class="s1">&#39;poisson_regression.stan&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stan_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N;  // Numero di osservazioni
+  array[N] int&lt;lower=0&gt; y;  // Dati di conteggio (frequenze)
+  vector[N] x;  // Variabile predittore (anni, già standardizzata)
+}
+
+parameters {
+  real alpha;  // Intercetta
+  real beta;  // Pendenza
+}
+
+model {
+  // Priors debolmente informativi
+  alpha ~ normal(0, 10);
+  beta ~ normal(0, 10);
+
+  // Modello di regressione di Poisson
+  y ~ poisson_log(alpha + beta * x);
+}
+
+generated quantities {
+  array[N] int&lt;lower=0&gt; y_pred = poisson_log_rng(alpha + beta * x);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Questo modello Stan specifica una regressione di Poisson per dati di conteggio, dove l’obiettivo è modellare il numero di eventi (espressi dalla variabile <code class="docutils literal notranslate"><span class="pre">y</span></code>) in funzione di una variabile predittiva <code class="docutils literal notranslate"><span class="pre">x</span></code> (in questo caso, anni standardizzati). Il modello è strutturato in quattro blocchi principali: <code class="docutils literal notranslate"><span class="pre">data</span></code>, <code class="docutils literal notranslate"><span class="pre">parameters</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span></code>, e <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code>. Ecco una panoramica dettagliata di ciascuna sezione e il suo ruolo nel contesto del modello:</p>
+</section>
+<section id="blocco-data">
+<h3>Blocco <code class="docutils literal notranslate"><span class="pre">data</span></code><a class="headerlink" href="#blocco-data" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>N:</strong> Un intero che specifica il numero totale di osservazioni nel dataset. Serve a definire le dimensioni degli array e dei vettori utilizzati nel modello.</p></li>
+<li><p><strong>y:</strong> Un array di interi che rappresenta i dati di conteggio osservati. Ogni elemento in <code class="docutils literal notranslate"><span class="pre">y</span></code> corrisponde al numero di eventi registrati in ciascuna delle <code class="docutils literal notranslate"><span class="pre">N</span></code> unità di osservazione.</p></li>
+<li><p><strong>x:</strong> Un vettore di lunghezza <code class="docutils literal notranslate"><span class="pre">N</span></code> che contiene i valori della variabile predittiva (ad esempio, anni).</p></li>
+</ul>
+</section>
+<section id="blocco-parameters">
+<h3>Blocco <code class="docutils literal notranslate"><span class="pre">parameters</span></code><a class="headerlink" href="#blocco-parameters" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>alpha:</strong> Un parametro reale che rappresenta l’intercetta del modello. In un contesto di regressione di Poisson, <code class="docutils literal notranslate"><span class="pre">alpha</span></code> corrisponde al logaritmo del tasso atteso di eventi quando la variabile predittiva <code class="docutils literal notranslate"><span class="pre">x</span></code> è zero.</p></li>
+<li><p><strong>beta:</strong> Un parametro reale che rappresenta la pendenza o il coefficiente della variabile predittiva <code class="docutils literal notranslate"><span class="pre">x</span></code>. Questo parametro indica come il logaritmo del tasso atteso di eventi cambia in risposta a variazioni di una unità in <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
+</ul>
+</section>
+<section id="blocco-model">
+<h3>Blocco <code class="docutils literal notranslate"><span class="pre">model</span></code><a class="headerlink" href="#blocco-model" title="Link to this heading">#</a></h3>
+<p>I priors per <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code> sono definiti come distribuzioni normali con media 0 e deviazione standard 10, rappresentando priors debolmente informativi che permettono ai dati di guidare principalmente l’inferenza sui parametri.</p>
+<p>Nella tradizionale regressione di Poisson, il parametro <span class="math notranslate nohighlight">\(\mu_i\)</span> (il tasso medio di eventi per l’unità osservata) è collegato alle variabili esplicative tramite una funzione esponenziale: <span class="math notranslate nohighlight">\(\mu_i = e^{\eta_i} = e^{\beta_0 + \beta_1 x_i}\)</span>. Questa trasformazione assicura che il valore predetto di <span class="math notranslate nohighlight">\(\mu_i\)</span> sia sempre positivo, indipendentemente dai valori assunti dalle variabili esplicative, una necessità quando si modellano conteggi che non possono essere negativi.</p>
+<p>La funzione <code class="docutils literal notranslate"><span class="pre">poisson_log</span></code>, invece di lavorare direttamente con <span class="math notranslate nohighlight">\(\mu_i\)</span> come nella forma esponenziale <span class="math notranslate nohighlight">\(e^{\eta_i}\)</span>, opera sul logaritmo di <span class="math notranslate nohighlight">\(\mu_i\)</span>. Questo significa che la funzione specifica il logaritmo del tasso medio di eventi come lineare rispetto ai predittori. In altre parole, anziché modellare <span class="math notranslate nohighlight">\(\mu_i\)</span> direttamente e poi trasformarlo, si modella il logaritmo di <span class="math notranslate nohighlight">\(\mu_i\)</span> (che è <span class="math notranslate nohighlight">\(\log(\mu_i)\)</span>) come funzione lineare delle variabili esplicative: <span class="math notranslate nohighlight">\(\log(\mu_i) = \eta_i = \beta_0 + \beta_1 x_i\)</span>.</p>
+<p>Questa specificazione ha diversi vantaggi:</p>
+<ul class="simple">
+<li><p><strong>Stabilità numerica</strong>: Lavorare con il logaritmo di <span class="math notranslate nohighlight">\(\mu_i\)</span> può ridurre i problemi di stabilità numerica che talvolta emergono quando si lavora con valori estremamente grandi o piccoli di <span class="math notranslate nohighlight">\(\mu_i\)</span>.</p></li>
+<li><p><strong>Interpretazione diretta dei parametri</strong>: Poiché si modella il logaritmo di <span class="math notranslate nohighlight">\(\mu_i\)</span>, i coefficienti (come <span class="math notranslate nohighlight">\(\beta_1\)</span>) possono essere interpretati in termini di variazione percentuale. Un incremento di una unità in <span class="math notranslate nohighlight">\(x_i\)</span> è associato a un moltiplicatore esponenziale di <span class="math notranslate nohighlight">\(e^{\beta_1}\)</span> sul tasso medio di eventi.</p></li>
+</ul>
+<p>Nel codice Stan, la linea <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">~</span> <span class="pre">poisson_log(alpha</span> <span class="pre">+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">x);</span></code> specifica quindi che i dati di conteggio <code class="docutils literal notranslate"><span class="pre">y</span></code> seguono una distribuzione di Poisson, con il logaritmo del parametro di tasso (<span class="math notranslate nohighlight">\(\log(\mu_i)\)</span>) modellato come una funzione lineare di <code class="docutils literal notranslate"><span class="pre">x</span></code> attraverso <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">x</span></code>.</p>
+</section>
+<section id="blocco-generated-quantities">
+<h3>Blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code><a class="headerlink" href="#blocco-generated-quantities" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>y_pred:</strong> Un array di interi che contiene valori predetti generati dalla distribuzione di Poisson. Per ogni osservazione, <code class="docutils literal notranslate"><span class="pre">poisson_log_rng</span></code> genera un valore di conteggio casuale basato sul tasso atteso calcolato come <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">x</span></code>. Questi valori predetti possono essere utilizzati per verifiche predittive posteriori o per ottenere una distribuzione predittiva degli eventi.</p></li>
+</ul>
+<p>Compiliamo il modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CmdStanModel: name=poisson_regression
+	 stan_file=/Users/corradocaudek/_repositories/temp/chapter_5/stan/poisson_regression.stan
+	 exe_file=/Users/corradocaudek/_repositories/temp/chapter_5/stan/poisson_regression
+	 compiler_options=stanc_options={}, cpp_options={}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento.</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>09:49:32 - cmdstanpy - INFO - CmdStan start processing
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fd8cd915697148eea59af72d0550cfd9", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "197db679694d48ac86895de2fb8448ad", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "a2007098fbf247dfba64554e36c836a8", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "89fb84f658c942a2a4f83d1aab2efb13", "version_major": 2, "version_minor": 0}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>09:49:32 - cmdstanpy - INFO - CmdStan done processing.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>Esaminiamo un sommario della distribuzione a posteriori per i parametri.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_2.5%</th>
+      <th>hdi_97.5%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>alpha</th>
+      <td>6.934</td>
+      <td>0.011</td>
+      <td>6.912</td>
+      <td>6.954</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2589.0</td>
+      <td>2120.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>beta</th>
+      <td>0.020</td>
+      <td>0.004</td>
+      <td>0.012</td>
+      <td>0.028</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3875.0</td>
+      <td>2741.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>L’ess_bulk (Effective Sample Size per il bulk dell’estimatore) e ess_tail (Effective Sample Size per la coda dell’estimatore) sono relativamente alti per entrambi i parametri, indicando che il campionamento ha fornito una buona approssimazione della distribuzione a posteriori. Inoltre, il valore di <code class="docutils literal notranslate"><span class="pre">r_hat</span></code> vicino a 1.0 per entrambi i parametri suggerisce che il campionamento ha raggiunto la convergenza, indicando che i risultati sono affidabili.</p>
+</section>
+<section id="interpretazione-del-parametro-alpha">
+<h3>Interpretazione del Parametro <code class="docutils literal notranslate"><span class="pre">alpha</span></code><a class="headerlink" href="#interpretazione-del-parametro-alpha" title="Link to this heading">#</a></h3>
+<p>Il parametro <code class="docutils literal notranslate"><span class="pre">alpha</span></code> è una stima del logaritmo del tasso atteso di eventi (frequenze) quando il valore della variabile esplicativa <code class="docutils literal notranslate"><span class="pre">x</span></code> è zero, ossia quando si trova nella sua media, che in questo contesto è stata standardizzata e centrata sull’anno 2019. Il valore medio di <code class="docutils literal notranslate"><span class="pre">alpha</span></code> è 6.934, indicando che il logaritmo naturale del tasso atteso di eventi quando <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">0</span></code> è circa 6.934.</p>
+<p>L’intervallo di alta densità (HDI) del 95% per <code class="docutils literal notranslate"><span class="pre">alpha</span></code> va da 6.912 a 6.954, fornendo un intervallo di stime plausibili per il valore di <code class="docutils literal notranslate"><span class="pre">alpha</span></code> con un alto grado di certezza statistica.</p>
+<p>Per interpretare <code class="docutils literal notranslate"><span class="pre">alpha</span></code> in termini di tasso atteso di eventi, usiamo <code class="docutils literal notranslate"><span class="pre">exp(alpha)</span></code>. Questo trasforma il logaritmo del tasso di eventi nel tasso effettivo. Ad esempio, <code class="docutils literal notranslate"><span class="pre">exp(6.934)</span></code> dà il tasso atteso di eventi per l’anno di riferimento 2019.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">6.934</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1026.5921464104808
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretazione-del-parametro-beta">
+<h3>Interpretazione del Parametro <code class="docutils literal notranslate"><span class="pre">beta</span></code><a class="headerlink" href="#interpretazione-del-parametro-beta" title="Link to this heading">#</a></h3>
+<p>Il parametro <code class="docutils literal notranslate"><span class="pre">beta</span></code> rappresenta la variazione logaritmica attesa nelle frequenze per ogni incremento unitario in <code class="docutils literal notranslate"><span class="pre">x</span></code> (l’anno, in questo caso). Un valore medio di <code class="docutils literal notranslate"><span class="pre">beta</span></code> pari a 0.020, con un HDI del 95% che va da 0.012 a 0.028, suggerisce una tendenza positiva: all’aumentare degli anni, ci si aspetta un incremento nelle frequenze degli eventi.</p>
+<p>Utilizzando il link logaritmico del modello, l’effetto di un incremento di un anno su <code class="docutils literal notranslate"><span class="pre">x</span></code> si traduce in una moltiplicazione del tasso di frequenza per <code class="docutils literal notranslate"><span class="pre">exp(beta)</span></code>. Quindi, un aumento di un anno implica che il tasso di frequenza sarà moltiplicato per <code class="docutils literal notranslate"><span class="pre">exp(0.020)</span></code>, che è approssimativamente 1.02, indicando un aumento previsto del 2% nelle frequenze per ogni anno successivo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">([</span><span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.012</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1.02020134, 1.01207229, 1.02839568])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calcolo-dell-aumento-effettivo-in-frequenza">
+<h3>Calcolo dell’Aumento Effettivo in Frequenza<a class="headerlink" href="#calcolo-dell-aumento-effettivo-in-frequenza" title="Link to this heading">#</a></h3>
+<p>Per calcolare l’aumento effettivo in frequenza per ogni anno, utilizziamo la seguente formula:</p>
+<div class="math notranslate nohighlight">
+\[ \text{Aumento atteso} = \exp(\alpha) \times (\exp(\beta) - 1) \]</div>
+<ol class="arabic simple">
+<li><p><strong>Calcolo del Fattore di Moltiplicazione:</strong> <code class="docutils literal notranslate"><span class="pre">exp(beta)</span></code> è il fattore di moltiplicazione che descrive come cambia il tasso di frequenza con un incremento di un anno. Con <code class="docutils literal notranslate"><span class="pre">beta</span> <span class="pre">=</span> <span class="pre">0.020</span></code>, <code class="docutils literal notranslate"><span class="pre">exp(beta)</span></code> è circa 1.0202.</p></li>
+<li><p><strong>Determinazione dell’Aumento Attuale in Frequenza:</strong> <code class="docutils literal notranslate"><span class="pre">exp(alpha)</span></code> fornisce il tasso di base delle frequenze quando <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">0</span></code>. Moltiplicando questo tasso di base per <code class="docutils literal notranslate"><span class="pre">(\exp(\beta)</span> <span class="pre">-</span> <span class="pre">1)</span></code>, otteniamo l’aumento effettivo in frequenza per ogni anno aggiuntivo. Sottraendo 1 a <code class="docutils literal notranslate"><span class="pre">exp(beta)</span></code>, otteniamo l’incremento percentuale dovuto solamente all’aumento di un anno.</p></li>
+</ol>
+<p>Questa metodologia fornisce un modo intuitivo e statistico per quantificare come le variabili nel tempo influenzano la frequenza degli eventi, permettendo di fare previsioni basate su modelli storici e tendenze osservate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parametri del modello</span>
+<span class="n">alpha_mean</span> <span class="o">=</span> <span class="mf">6.934</span>
+<span class="n">beta_mean</span> <span class="o">=</span> <span class="mf">0.020</span>
+
+<span class="c1"># Calcolo del tasso di frequenza base per l&#39;anno centrato (exp(alpha))</span>
+<span class="n">tasso_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">alpha_mean</span><span class="p">)</span>
+
+<span class="c1"># Calcolo del fattore di moltiplicazione per l&#39;aumento (exp(beta))</span>
+<span class="n">fattore_moltiplicazione</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">beta_mean</span><span class="p">)</span>
+
+<span class="c1"># Aumento atteso in frequenza per un anno</span>
+<span class="n">aumento_atteso</span> <span class="o">=</span> <span class="n">tasso_base</span> <span class="o">*</span> <span class="p">(</span><span class="n">fattore_moltiplicazione</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">aumento_atteso</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20.738537018435174
+</pre></div>
+</div>
+</div>
+</div>
+<p>Basandosi sul modello di regressione di Poisson, si stima un incremento medio di circa 20.74 nel numero di sparatorie fatali da parte della polizia negli Stati Uniti per ogni anno aggiuntivo. In altre parole, il modello prevede che, anno dopo anno, il numero di tali incidenti potrebbe crescere di circa 21 casi. Questa previsione riflette una dinamica esponenziale tra il passare degli anni e l’aumento della frequenza assoluta di sparatorie fatali, come evidenziato dai dati analizzati.</p>
+</section>
+<section id="posterior-predictive-check">
+<h3>Posterior-Predictive Check<a class="headerlink" href="#posterior-predictive-check" title="Link to this heading">#</a></h3>
+<p>Esaminiamo il posterior-predictive check per il modello esaminato:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_observed</span> <span class="o">=</span> <span class="n">stan_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
+
+<span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span>
+    <span class="n">posterior</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span>
+    <span class="n">posterior_predictive</span><span class="o">=</span><span class="s1">&#39;y_pred&#39;</span><span class="p">,</span>
+    <span class="n">observed_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y_observed</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">data_pairs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;y_pred&#39;</span><span class="p">},</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cumulative&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/ff627327e427385d12ecf9e135537f3886decd2a6f8cfdf026cdfff481b63d87.png"><img alt="../_images/ff627327e427385d12ecf9e135537f3886decd2a6f8cfdf026cdfff481b63d87.png" src="../_images/ff627327e427385d12ecf9e135537f3886decd2a6f8cfdf026cdfff481b63d87.png" style="width: 1011px; height: 511px;" /></a>
+</div>
+</div>
+</section>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w -m -p cmdstanpy
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+cmdstanpy: 1.2.3
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.4.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+seaborn   : 0.13.2
+numpy     : 1.26.4
+pandas    : 2.2.2
+matplotlib: 3.8.4
+scipy     : 1.13.1
+arviz     : 0.18.0
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-alla-regressione-di-poisson">Introduzione alla Regressione di Poisson</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fondamenti-del-modello-di-poisson">Fondamenti del Modello di Poisson</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regressione-di-poisson-e-sue-caratteristiche">Regressione di Poisson e sue Caratteristiche</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#procedura-per-costruire-il-modello-di-regressione-di-poisson">Procedura per Costruire il Modello di Regressione di Poisson</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-pratico">Un Esempio Pratico</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-data">Blocco <code class="docutils literal notranslate"><span class="pre">data</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-parameters">Blocco <code class="docutils literal notranslate"><span class="pre">parameters</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-model">Blocco <code class="docutils literal notranslate"><span class="pre">model</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocco-generated-quantities">Blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-del-parametro-alpha">Interpretazione del Parametro <code class="docutils literal notranslate"><span class="pre">alpha</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-del-parametro-beta">Interpretazione del Parametro <code class="docutils literal notranslate"><span class="pre">beta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calcolo-dell-aumento-effettivo-in-frequenza">Calcolo dell’Aumento Effettivo in Frequenza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior-Predictive Check</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

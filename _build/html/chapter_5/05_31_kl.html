@@ -1,0 +1,862 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>La divergenza di Kullback-Leibler &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_5/05_31_kl';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_5/05_31_kl.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="✏️ Esercizi" href="E_kl.html" />
+    <link rel="prev" title="Entropia" href="05_30_entropy.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_5/05_31_kl.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_5/05_31_kl.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>La divergenza di Kullback-Leibler</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler">Confronto di Modelli Utilizzando la Divergenza di Kullback-Leibler</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-alla-distribuzione-predittiva-posteriori">Introduzione alla Distribuzione Predittiva Posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#misurazione-della-divergenza-kl">Misurazione della Divergenza KL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-pratico-tra-modelli">Confronto Pratico tra Modelli</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-termine-mathbb-e-p-log-q-y">Il Termine <span class="math notranslate nohighlight">\( -\mathbb{E}_P[\log Q(y)] \)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collegamento-con-l-expected-log-predictive-density-elpd">Collegamento con l’Expected Log Predictive Density (ELPD)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-di-approssimazione-per-la-stima-dell-expected-log-predictive-density-elpd">Metodi di Approssimazione per la Stima dell’Expected Log Predictive Density (ELPD)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#leave-one-out-cross-validation-loo-cv">Leave-One-Out Cross-Validation (LOO-CV)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#akaike-information-criterion-aic-e-watanabe-akaike-information-criterion-waic">Akaike Information Criterion (AIC) e Watanabe-Akaike Information Criterion (WAIC)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valutazione-comparativa-e-applicazioni-pratiche">Valutazione Comparativa e Applicazioni Pratiche</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-conclusive">Considerazioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="la-divergenza-di-kullback-leibler">
+<span id="kl-notebook"></span><h1>La divergenza di Kullback-Leibler<a class="headerlink" href="#la-divergenza-di-kullback-leibler" title="Link to this heading">#</a></h1>
+<div class="admonition-obiettivi-di-apprendimento admonition">
+<p class="admonition-title">Obiettivi di apprendimento</p>
+<p>Dopo aver completato questo capitolo, acquisirete competenze approfondite e specifiche, che vi permetteranno di:</p>
+<ul class="simple">
+<li><p>Comprendere in modo dettagliato il concetto di Expected Log Predictive Density (ELPD), apprezzandone l’importanza e l’applicabilità nel contesto della valutazione predittiva dei modelli statistici.</p></li>
+<li><p>Esplorare e analizzare la relazione tra il concetto di entropia e la ELPD, identificando come l’entropia possa influenzare o riflettere la capacità predittiva di un modello attraverso la densità logaritmica predittiva prevista.</p></li>
+</ul>
+</div>
+<p>In questo capitolo, esamineremo in modo dettagliato la Divergenza di Kullback-Leibler (<span class="math notranslate nohighlight">\(\mathbb{KL}\)</span>) e l’Expected Log Predictive Density (ELPD). Vedremo come questi concetti possano essere utilizzati per valutare e confrontare modelli statistici diversi all’interno di un contesto bayesiano.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler">
+<h2>Confronto di Modelli Utilizzando la Divergenza di Kullback-Leibler<a class="headerlink" href="#confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler" title="Link to this heading">#</a></h2>
+<section id="introduzione-alla-distribuzione-predittiva-posteriori">
+<h3>Introduzione alla Distribuzione Predittiva Posteriori<a class="headerlink" href="#introduzione-alla-distribuzione-predittiva-posteriori" title="Link to this heading">#</a></h3>
+<p>La distribuzione predittiva posteriori, denotata come <span class="math notranslate nohighlight">\( Q(\tilde{y} \mid y) \)</span>, rappresenta le previsioni su nuovi dati <span class="math notranslate nohighlight">\( \tilde{y} \)</span> basate su un modello statistico <span class="math notranslate nohighlight">\( Q \)</span> e i dati osservati <span class="math notranslate nohighlight">\( y \)</span>. Questa distribuzione combina le previsioni del modello per un dato set di parametri <span class="math notranslate nohighlight">\( \theta \)</span> (cioè <span class="math notranslate nohighlight">\( Q(\tilde{y} \mid \theta) \)</span>) con la distribuzione posteriore di questi parametri dati i dati osservati (cioè <span class="math notranslate nohighlight">\( P(\theta \mid y) \)</span>).</p>
+</section>
+<section id="misurazione-della-divergenza-kl">
+<h3>Misurazione della Divergenza KL<a class="headerlink" href="#misurazione-della-divergenza-kl" title="Link to this heading">#</a></h3>
+<p>L’obiettivo di utilizzare la divergenza di Kullback-Leibler (<span class="math notranslate nohighlight">\( \mathbb{KL} \)</span>) è di quantificare quanto bene la distribuzione predittiva del modello <span class="math notranslate nohighlight">\( Q \)</span> si avvicina alla distribuzione vera <span class="math notranslate nohighlight">\( P \)</span> che ha generato i dati. Matematicamente, ciò è espresso come <span class="math notranslate nohighlight">\( \mathbb{KL}(P \parallel Q) \)</span>. Un valore basso di <span class="math notranslate nohighlight">\( \mathbb{KL} \)</span> indica che <span class="math notranslate nohighlight">\( Q \)</span> è una buona approssimazione di <span class="math notranslate nohighlight">\( P \)</span>, mentre un valore alto indica una maggiore discrepanza.</p>
+</section>
+<section id="confronto-pratico-tra-modelli">
+<h3>Confronto Pratico tra Modelli<a class="headerlink" href="#confronto-pratico-tra-modelli" title="Link to this heading">#</a></h3>
+<p>Data la mancanza di conoscenza diretta di <span class="math notranslate nohighlight">\( P \)</span>, la vera distribuzione che ha generato i dati, utilizziamo la divergenza <span class="math notranslate nohighlight">\( \mathbb{KL} \)</span> per confrontare diversi modelli. La divergenza KL tra due distribuzioni <span class="math notranslate nohighlight">\( P \)</span> e <span class="math notranslate nohighlight">\( Q \)</span> si calcola come:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{KL}(P \parallel Q) = \mathbb{E}_P[\log P] - \mathbb{E}_P[\log Q],
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\( \mathbb{E}_P \)</span> indica il valore atteso calcolato sotto la distribuzione <span class="math notranslate nohighlight">\( P \)</span>.</p>
+<p>Per distribuzioni discrete, questo si esprime come:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{KL}(P \parallel Q) = \sum_{i=1}^n p_i (\log p_i - \log q_i),
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\( p_i \)</span> e <span class="math notranslate nohighlight">\( q_i \)</span> rappresentano le probabilità degli eventi <span class="math notranslate nohighlight">\( i \)</span> per le distribuzioni <span class="math notranslate nohighlight">\( P \)</span> e <span class="math notranslate nohighlight">\( Q \)</span> rispettivamente.</p>
+<p>La divergenza KL può essere riformulata in termini di valore atteso come segue:</p>
+<ul>
+<li><p><strong>Termine <span class="math notranslate nohighlight">\( \log P \)</span></strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+  \mathbb{E}_P[\log P(X)] = \sum_{i=1}^n p_i \log p_i
+  \]</div>
+</li>
+<li><p><strong>Termine <span class="math notranslate nohighlight">\( \log Q \)</span></strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+  \mathbb{E}_P[\log Q(X)] = \sum_{i=1}^n p_i \log q_i
+  \]</div>
+</li>
+</ul>
+<p>Quindi, la divergenza KL si riduce a:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{KL}(P \parallel Q) = \mathbb{E}_P[\log P(X)] - \mathbb{E}_P[\log Q(X)]
+\]</div>
+<p>Per variabili continue, la formula diventa:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{KL}(P \parallel Q) = \int p(x) (\log p(x) - \log q(x)) \, dx.
+\]</div>
+</section>
+<section id="il-termine-mathbb-e-p-log-q-y">
+<h3>Il Termine <span class="math notranslate nohighlight">\( -\mathbb{E}_P[\log Q(y)] \)</span><a class="headerlink" href="#il-termine-mathbb-e-p-log-q-y" title="Link to this heading">#</a></h3>
+<p>Quando confrontiamo modelli diversi, il termine <span class="math notranslate nohighlight">\( \mathbb{E}_P[\log P] \)</span> rimane costante e quindi può essere omesso. Ci concentriamo sul termine:</p>
+<div class="math notranslate nohighlight">
+\[
+-\mathbb{E}_P[\log Q(y)],
+\]</div>
+<p>che misura l’adattabilità del modello ai dati osservati. Questo si calcola come:</p>
+<div class="math notranslate nohighlight">
+\[
+-\int p(y) \log Q(y) \, dy,
+\]</div>
+<p>indicando quale modello <span class="math notranslate nohighlight">\( Q \)</span> rappresenti meglio la distribuzione <span class="math notranslate nohighlight">\( P \)</span> secondo la quantità di informazione che si perderebbe utilizzandolo per descrivere i dati osservati.</p>
+</section>
+<section id="collegamento-con-l-expected-log-predictive-density-elpd">
+<h3>Collegamento con l’Expected Log Predictive Density (ELPD)<a class="headerlink" href="#collegamento-con-l-expected-log-predictive-density-elpd" title="Link to this heading">#</a></h3>
+<p>L’ELPD si focalizza sulla capacità di un modello di predire nuovi dati, offrendo una misura della sua capacità di generalizzazione. L’ELPD è definito come il valore atteso</p>
+<p>del logaritmo della densità predittiva di un modello, calcolato sotto la vera distribuzione dei dati futuri:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{ELPD} = \mathbb{E}_{y \sim p(y)} [\log p(y \mid \theta)]
+\]</div>
+<p>Mentre <span class="math notranslate nohighlight">\( -\int p(y) \log Q(y) \, dy \)</span> quantifica quanto bene un modello descrive la distribuzione attuale dei dati, l’ELPD stima quanto efficacemente il modello può essere utilizzato per prevedere nuovi dati. Questo rende l’ELPD una misura complementare alla <span class="math notranslate nohighlight">\( \mathbb{KL} \)</span>, enfatizzando non solo l’adattabilità ma anche la predittività di un modello.</p>
+<p>Utilizzare l’ELPD come criterio di valutazione tende a favorire modelli che non solo si adattano bene ai dati esistenti ma sono anche robusti contro l’overfitting. Poiché la vera distribuzione <span class="math notranslate nohighlight">\( p(y) \)</span> è sconosciuta, ricorriamo a metodi di approssimazione come la validazione incrociata per stimare questa metrica. Questi metodi simuleranno l’effetto di testare il modello su nuovi dati, fornendo un’indicazione affidabile della sua capacità predittiva.</p>
+<section id="metodi-di-approssimazione-per-la-stima-dell-expected-log-predictive-density-elpd">
+<h4>Metodi di Approssimazione per la Stima dell’Expected Log Predictive Density (ELPD)<a class="headerlink" href="#metodi-di-approssimazione-per-la-stima-dell-expected-log-predictive-density-elpd" title="Link to this heading">#</a></h4>
+<p>Per valutare accuratamente la capacità predittiva di un modello statistico, è essenziale utilizzare metodi di approssimazione che stimino l’Expected Log Predictive Density (ELPD). Tra i metodi più comuni troviamo il <strong>Leave-One-Out Cross-Validation (LOO-CV)</strong>, <strong>Akaike Information Criterion (AIC)</strong>, e <strong>Watanabe-Akaike Information Criterion (WAIC)</strong>. Ognuno di questi metodi offre un approccio diverso per bilanciare la complessità del modello con la sua capacità di adattamento e predizione.</p>
+</section>
+</section>
+<section id="leave-one-out-cross-validation-loo-cv">
+<h3>Leave-One-Out Cross-Validation (LOO-CV)<a class="headerlink" href="#leave-one-out-cross-validation-loo-cv" title="Link to this heading">#</a></h3>
+<p>Il LOO-CV è particolarmente utile in scenari dove il set di dati non è molto ampio. Questo metodo prevede di rimuovere un dato alla volta dal set di addestramento, utilizzare il modello per predire il valore di questo dato escluso, e valutare la bontà di questa predizione. L’approccio massimizza l’utilizzo dei dati disponibili, rendendolo ideale per modelli complessi e campioni di dimensioni ridotte. Attraverso il LOO-CV, si può ottenere una stima dell’ELPD che riflette quanto bene il modello possa comportarsi con nuovi dati non ancora osservati, integrando la log-verosimiglianza predittiva:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{ELPD} = \sum_{i=1}^N \log p(y_i \mid y_{-i}),
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\( y_i \)</span> è il dato escluso e <span class="math notranslate nohighlight">\( y_{-i} \)</span> rappresenta tutti gli altri dati nel set di addestramento.</p>
+</section>
+<section id="akaike-information-criterion-aic-e-watanabe-akaike-information-criterion-waic">
+<h3>Akaike Information Criterion (AIC) e Watanabe-Akaike Information Criterion (WAIC)<a class="headerlink" href="#akaike-information-criterion-aic-e-watanabe-akaike-information-criterion-waic" title="Link to this heading">#</a></h3>
+<p>Sia AIC che WAIC sono criteri informativi che valutano la qualità di un modello basandosi sui dati osservati. Entrambi i criteri cercano di bilanciare la bontà di adattamento del modello con la sua complessità. L’AIC, in particolare, penalizza i modelli in base al numero dei parametri, fornendo una misura che favorisce modelli meno complessi ma altrettanto capaci di adattarsi ai dati:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{AIC} = 2k - 2\ln(L),
+\]</div>
+<p>dove <span class="math notranslate nohighlight">\( k \)</span> è il numero di parametri del modello e <span class="math notranslate nohighlight">\( L \)</span> è la massima verosimiglianza raggiunta dal modello.</p>
+<p>Il WAIC estende questo concetto considerando una forma di media pesata della devianza logaritmica, più robusta nei contesti di dati gerarchici o modelli bayesiani:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{WAIC} = -2 \left( \text{LPD} - \text{penalità di variazione} \right),
+\]</div>
+<p>dove LPD è la log-probabilità predittiva del dato e la penalità di variazione quantifica l’effetto della varianza dei parametri sulle predizioni del modello.</p>
+</section>
+<section id="valutazione-comparativa-e-applicazioni-pratiche">
+<h3>Valutazione Comparativa e Applicazioni Pratiche<a class="headerlink" href="#valutazione-comparativa-e-applicazioni-pratiche" title="Link to this heading">#</a></h3>
+<p>Questi metodi forniscono diverse prospettive sulla stima dell’ELPD, ognuno con i suoi vantaggi a seconda del contesto e della complessità del modello considerato. Il LOO-CV è particolarmente prezioso per modelli complessi o set di dati limitati, mentre AIC e WAIC offrono approcci più rapidi e meno computazionalmente intensivi, adatti per valutazioni preliminari o quando si dispone di grandi set di dati.</p>
+<p>In sintesi, la scelta del metodo di approssimazione dipende dall’obiettivo specifico della valutazione del modello, dalla natura dei dati disponibili e dalle risorse computazionali a disposizione. Attraverso l’uso di questi metodi, possiamo ottenere una stima più accurata e affidabile della capacità di un modello di predire nuovi dati, essenziale per la validazione e la selezione del modello in contesti scientifici e applicativi.</p>
+</section>
+</section>
+<section id="considerazioni-conclusive">
+<h2>Considerazioni Conclusive<a class="headerlink" href="#considerazioni-conclusive" title="Link to this heading">#</a></h2>
+<p>In conclusione, la divergenza di Kullback-Leibler (KL) fornisce una valutazione focalizzata sull’adattamento di un modello ai dati osservati, mentre l’Expected Log Predictive Density (ELPD) e i relativi metodi di approssimazione, quali LOO-CV (Leave-One-Out Cross-Validation), AIC (Akaike Information Criterion) e WAIC (Watanabe-Akaike Information Criterion), si concentrano sulla valutazione della capacità di generalizzazione del modello a dati futuri non ancora osservati. L’impiego combinato di queste metriche consente di ottenere una valutazione olistica della performance di un modello, abbracciando sia la sua precisione nell’adattarsi ai dati attuali sia la sua efficacia predittiva su nuovi dati.</p>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -w
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+numpy: 1.26.4
+
+Watermark: 2.4.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_30_entropy.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Entropia</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="E_kl.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-di-modelli-utilizzando-la-divergenza-di-kullback-leibler">Confronto di Modelli Utilizzando la Divergenza di Kullback-Leibler</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-alla-distribuzione-predittiva-posteriori">Introduzione alla Distribuzione Predittiva Posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#misurazione-della-divergenza-kl">Misurazione della Divergenza KL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confronto-pratico-tra-modelli">Confronto Pratico tra Modelli</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-termine-mathbb-e-p-log-q-y">Il Termine <span class="math notranslate nohighlight">\( -\mathbb{E}_P[\log Q(y)] \)</span></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collegamento-con-l-expected-log-predictive-density-elpd">Collegamento con l’Expected Log Predictive Density (ELPD)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-di-approssimazione-per-la-stima-dell-expected-log-predictive-density-elpd">Metodi di Approssimazione per la Stima dell’Expected Log Predictive Density (ELPD)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#leave-one-out-cross-validation-loo-cv">Leave-One-Out Cross-Validation (LOO-CV)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#akaike-information-criterion-aic-e-watanabe-akaike-information-criterion-waic">Akaike Information Criterion (AIC) e Watanabe-Akaike Information Criterion (WAIC)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valutazione-comparativa-e-applicazioni-pratiche">Valutazione Comparativa e Applicazioni Pratiche</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-conclusive">Considerazioni Conclusive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

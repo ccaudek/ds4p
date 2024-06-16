@@ -1,0 +1,981 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modellazione bayesiana &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/01_intro_bayes';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_4/01_intro_bayes.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="Pensare ad una proporzione in termini soggettivi" href="02_subj_prop.html" />
+    <link rel="prev" title="Inferenza bayesiana" href="introduction_part_4.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/01_intro_bayes.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/01_intro_bayes.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modellazione bayesiana</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inferenza-statistica">Inferenza Statistica</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#i-metodi-bayesiani-in-psicologia">I Metodi Bayesiani in Psicologia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approccio-bayesiano-alla-statistica">Approccio Bayesiano alla Statistica</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elementi-fondamentali-della-modellazione-statistica-bayesiana">Elementi Fondamentali della Modellazione Statistica Bayesiana</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riesame-del-teorema-di-bayes">Riesame del Teorema di Bayes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#costruzione-del-modello-dell-aggiornamento-bayesiano">Costruzione del Modello dell’Aggiornamento Bayesiano</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-flusso-di-lavoro-bayesiano">Il flusso di lavoro bayesiano</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notazione">Notazione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-di-stima-della-distribuzione-a-posteriori">Metodi di Stima della Distribuzione a Posteriori</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-per-determinare-la-distribuzione-a-posteriori">Metodi per determinare la distribuzione a posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linguaggi-di-programmazione-probabilistici">Linguaggi di programmazione probabilistici</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="modellazione-bayesiana">
+<span id="bayes-workflow-notebook"></span><h1>Modellazione bayesiana<a class="headerlink" href="#modellazione-bayesiana" title="Link to this heading">#</a></h1>
+<p>L’obiettivo di questo Capitolo è di introdurre il quadro concettuale dela modellizzazione bayesiana.</p>
+<div class="cell tag_hide-output tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">factorial</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">comb</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">quad</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;retina&#39;
+<span class="n">RANDOM_SEED</span> <span class="o">=</span> <span class="mi">8927</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">RANDOM_SEED</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<section id="inferenza-statistica">
+<h2>Inferenza Statistica<a class="headerlink" href="#inferenza-statistica" title="Link to this heading">#</a></h2>
+<p>L’inferenza statistica si configura come un processo che integra deduzione e induzione, finalizzato all’esame di dati campionari per dedurre le proprietà di una popolazione più ampia. Immaginiamo di analizzare l’altezza di cinque soggetti selezionati casualmente. Un meccanismo sottostante, che chiameremo «processo T», governa la determinazione delle loro altezze. Comprendere o stimare questo processo è l’obiettivo dell’inferenza statistica. La natura di T è spesso avvolta nel mistero, oscurata dalla variabilità dei dati che osserviamo. Questa variabilità può essere scissa in due grandi cause: la variabilità intrinseca del fenomeno sotto osservazione (come differenze genetiche o ambientali) e le limitazioni delle nostre capacità di osservazione e analisi.</p>
+<p><span id="id1">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> nel suo lavoro «Statistical Rethinking» introduce il concetto di «Grande Mondo», che rappresenta l’infinità di processi possibili che potrebbero spiegare le nostre osservazioni. Di fronte a questa infinità, effettuare inferenze dirette su tutte le possibili proprietà del Grande Mondo si rivela impraticabile. Ci orientiamo quindi verso il «Piccolo Mondo», una rappresentazione semplificata che considera un insieme finito di modelli e parametri ritenuti rilevanti per il nostro studio. Per esempio, nell’analisi dell’altezza, potremmo proporre un modello probabilistico in cui l’altezza segue una distribuzione normale, caratterizzata da una media (µ) e una deviazione standard (σ), con l’intento di stimare questi parametri ignoti.</p>
+<p>La collezione di distribuzioni di probabilità derivante dalla variazione dei parametri del modello nel Piccolo Mondo costituisce la funzione di verosimiglianza. Questo insieme, tuttavia, è spesso troppo ampio per essere gestito con facilità. La nostra conoscenza pregressa o le nostre convinzioni riguardo al fenomeno in esame ci assistono nel restringere le possibilità.</p>
+<p>Nell’inferenza bayesiana, queste convinzioni iniziali vengono espresse tramite una densità di probabilità a priori, che attribuisce un peso ai possibili parametri del modello in base alle nostre convinzioni iniziali. La regola di Bayes sta al cuore dell’inferenza bayesiana, permettendoci di aggiornare queste convinzioni alla luce dei nuovi dati osservati. Attraverso questo processo, otteniamo la probabilità a posteriori dei parametri, che fornisce una stima più accurata del processo generativo dei dati, T.</p>
+<p>L’inferenza statistica, dunque, ci avvicina alla comprensione di fenomeni complessi attraverso la modellazione delle osservazioni via processi semplificati nel «Piccolo Mondo». Grazie all’inferenza bayesiana, che integra le conoscenze pregresse ai nuovi dati, perfezioniamo le nostre stime per una comprensione più profonda del vero processo sottostante.</p>
+<p>La nota affermazione di <span id="id2">Box <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id13" title="G. E. Box, A. Luceno, and M. del Carmen Paniagua-Quinones. Statistical control by monitoring and adjustment. John Wiley and Sons, 2011.">BLdelCPQuinones11</a>]</span> «Tutti i modelli sono sbagliati, ma alcuni sono utili» cattura l’essenza dell’inferenza statistica. Non miriamo a un «modello perfetto» che rifletta ogni dettaglio del «Grande Mondo», bensì a individuare modelli del «Piccolo Mondo» che siano efficaci nel fare previsioni sul fenomeno studiato.</p>
+<p>Attraverso la statistica, disponiamo degli strumenti per costruire, valutare e selezionare modelli basati sull’inferenza bayesiana, che ci consentono di aggiornare e rifinire i nostri modelli in risposta a nuove informazioni. Questo processo ci guida verso modelli «utili», che, seppur non perfetti, ci permettono di fare previsioni accurate e di approfondire la nostra comprensione del fenomeno di interesse.</p>
+<section id="i-metodi-bayesiani-in-psicologia">
+<h3>I Metodi Bayesiani in Psicologia<a class="headerlink" href="#i-metodi-bayesiani-in-psicologia" title="Link to this heading">#</a></h3>
+<p>Nell’ambito dell’inferenza statistica, i metodi bayesiani hanno guadagnato sempre popolarità anche in psicologia, dove l’adozione di approcci bayesiani ha visto una crescita esponenziale, grazie anche alla disponibilità di risorse educative e pubblicazioni specializzate. In particolare, diversi testi di rilievo hanno contribuito in modo significativo a fornire agli studiosi gli strumenti necessari per applicare con successo l’inferenza bayesiana all’analisi dei dati psicologici. Tra questi testi spiccano opere come quelle di <span id="id3"></span>, <span id="id4"></span>, <span id="id5">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> e <span id="id6">Kruschke [<a class="reference internal" href="../references/bibliography.html#id12" title="John Kruschke. Doing Bayesian data analysis: A tutorial with R, JAGS, and Stan. Academic Press, 2014.">Kru14</a>]</span>, che hanno svolto un ruolo fondamentale nel facilitare l’integrazione dei metodi bayesiani nella pratica analitica della psicologia.</p>
+</section>
+<section id="approccio-bayesiano-alla-statistica">
+<h3>Approccio Bayesiano alla Statistica<a class="headerlink" href="#approccio-bayesiano-alla-statistica" title="Link to this heading">#</a></h3>
+<p>L’approccio bayesiano alla statistica si distingue non solo per l’uso del Teorema di Bayes, ma anche per il suo modo di gestire l’incertezza e di valutare l’intero spettro di possibili esiti attraverso le distribuzioni di probabilità. Questo approccio rifiuta l’adozione acritica di stime puntuali, favorendo invece una visione probabilistica che accoglie una vasta gamma di esiti, rimanendo fedele alla concezione bayesiana della probabilità.</p>
+</section>
+<section id="elementi-fondamentali-della-modellazione-statistica-bayesiana">
+<h3>Elementi Fondamentali della Modellazione Statistica Bayesiana<a class="headerlink" href="#elementi-fondamentali-della-modellazione-statistica-bayesiana" title="Link to this heading">#</a></h3>
+<p>I fondamenti della modellazione statistica bayesiana includono variabili casuali, distribuzioni di probabilità priori e posteriori, e il processo di aggiornamento bayesiano.</p>
+<ul class="simple">
+<li><p><strong>Variabili casuali</strong> rappresentano elementi chiave nella modellazione bayesiana, consentendoci di esprimere e quantificare relazioni probabilistiche.</p></li>
+<li><p><strong>Distribuzioni di probabilità</strong> sono strumenti cruciali per rappresentare quantitativamente l’incertezza e le conoscenze pregresse. Le distribuzioni priori esprimono le nostre convinzioni iniziali, mentre le distribuzioni posteriori risultano dall’integrazione delle nuove evidenze.</p></li>
+<li><p><strong>L’aggiornamento bayesiano</strong> è il meccanismo che affina le distribuzioni priori alla luce di nuovi dati, riducendo l’incertezza e migliorando le stime dei parametri.</p></li>
+</ul>
+<p>La modellazione bayesiana segue un approccio metodologico strutturato in progettazione del modello, applicazione del teorema di Bayes, e valutazione critica del modello. Questo flusso di lavoro bayesiano <span id="id7">[]</span> costituisce un ciclo di apprendimento e affinamento continuo, che esploreremo nei capitoli successivi per una comprensione approfondita del processo.</p>
+</section>
+</section>
+<section id="riesame-del-teorema-di-bayes">
+<h2>Riesame del Teorema di Bayes<a class="headerlink" href="#riesame-del-teorema-di-bayes" title="Link to this heading">#</a></h2>
+<p>Prima di approfondire il flusso di lavoro bayesiano, è opportuno rivisitare il teorema di Bayes. Quando ci riferiamo ad eventi osservabili discreti, possiamo esprimere la regola nel modo seguente:</p>
+<div class="math notranslate nohighlight">
+\[ P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)} \]</div>
+<p>Dato un vettore di dati <span class="math notranslate nohighlight">\( y \)</span>, il teorema di Bayes ci permette di calcolare le distribuzioni posteriori dei parametri di interesse, che possiamo rappresentare con il vettore dei parametri <span class="math notranslate nohighlight">\( \theta \)</span>. Questo calcolo si realizza riformulando la formula precedente come quella scritta di seguito. La differenza qui consiste nel fatto che il teorema di Bayes è scritto in termini di distribuzioni di probabilità. In questo contesto, <span class="math notranslate nohighlight">\( p(\cdot) \)</span> rappresenta una funzione di densità di probabilità (nel caso continuo) o una funzione di massa di probabilità (nel caso discreto).</p>
+<div class="math notranslate nohighlight">
+\[ p(\theta|y) = \frac{p(y|\theta) \times p(\theta)}{p(y)} \]</div>
+<p>La suddetta affermazione può essere riscritta in parole nel modo seguente:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Posteriore} = \frac{\text{Verosimiglianza × A Priori}}{\text{Verosimiglianza Marginale}}  
+\]</div>
+<p>I termini qui presentati hanno il seguente significato.</p>
+<ul class="simple">
+<li><p>Il Posteriore, <span class="math notranslate nohighlight">\( p(\theta|y) \)</span>, è la distribuzione di probabilità dei parametri condizionata ai dati.</p></li>
+<li><p>La Verosimiglianza, <span class="math notranslate nohighlight">\( p(y|\theta) \)</span>, come descritto nel capitolo <a class="reference internal" href="../chapter_3/09_likelihood.html#notebook-likelihood"><span class="std std-ref">La verosimiglianza</span></a>, è la PMF (nel caso discreto) o la PDF (nel caso continuo) espressa come funzione di <span class="math notranslate nohighlight">\( \theta \)</span>.</p></li>
+<li><p>L’A Priori, <span class="math notranslate nohighlight">\( p(\theta) \)</span>, è la distribuzione di probabilità iniziale dei parametri, prima di osservare i dati.</p></li>
+<li><p>La Verosimiglianza Marginale, <span class="math notranslate nohighlight">\( p(y) \)</span> standardizza la distribuzione posteriore per garantire che l’area sotto la curva della distribuzione sommi a 1, ossia, si assicura che il posteriore sia una distribuzione di probabilità valida.</p></li>
+</ul>
+<p>Nell’ambito bayesiano, si utilizzano le distribuzioni posteriori aggiornate dei parametri per l’inferenza, ad esempio per calcolare la probabilità che un parametro si trovi entro un determinato intervallo.</p>
+<p>Le distribuzioni a priori, indicate con <span class="math notranslate nohighlight">\(p(\theta)\)</span>, sono basate su risultati precedenti, o possono assumere la forma di «distribuzioni di regolarizzazione» non informative. Un vantaggio significativo delle distribuzioni a priori emerge quando si lavora con campioni di dati di piccole dimensioni; in tali contesti, le distribuzioni a priori di regolarizzazione possono esercitare un effetto moderatore, attenuando le fluttuazioni causate dalla limitata numerosità del campione.</p>
+<p>Nel definire il processo di modellazione, consideriamo una variabile casuale <span class="math notranslate nohighlight">\(Y\)</span>, con un valore osservato <span class="math notranslate nohighlight">\(y\)</span>. Ad esempio, il punteggio ottenuto da uno studente in un test di psicometria può essere modellato come <span class="math notranslate nohighlight">\(Y\)</span>, che assume uno specifico valore <span class="math notranslate nohighlight">\(y\)</span> una volta osservato il punteggio. Per spiegare come i dati osservati <span class="math notranslate nohighlight">\(y\)</span> siano generati, specificiamo un modello di probabilità, il cosiddetto <em>processo generatore di dati</em> (DGP).</p>
+<p>Il parametro <span class="math notranslate nohighlight">\(\theta\)</span> caratterizza il modello di probabilità di interesse, potendo essere uno scalare (come media o varianza) o un vettore (ad esempio, coefficienti di regressione). L’obiettivo dell’inferenza statistica è stimare questi parametri sconosciuti a partire dai dati. A differenza dell’inferenza frequentista, che considera <span class="math notranslate nohighlight">\(\theta\)</span> come fisso ma sconosciuto, l’inferenza bayesiana tratta <span class="math notranslate nohighlight">\(\theta\)</span> come una variabile casuale soggetta a una distribuzione di probabilità a priori.</p>
+<p>In questo contesto, la probabilità congiunta di parametri e dati si calcola come funzione della distribuzione condizionale dei dati dati i parametri e della distribuzione a priori dei parametri. La distribuzione posteriore di <span class="math notranslate nohighlight">\(\theta\)</span> dato <span class="math notranslate nohighlight">\(y\)</span> si deriva moltiplicando la funzione di verosimiglianza dei dati <span class="math notranslate nohighlight">\(p(y \mid \theta)\)</span> per la distribuzione a priori <span class="math notranslate nohighlight">\(p(\theta)\)</span>, e normalizzando per <span class="math notranslate nohighlight">\(p(y)\)</span>. Nei modelli complessi con numerosi parametri, l’elaborazione della distribuzione posteriore può richiedere tecniche computazionali avanzate.</p>
+</section>
+<section id="costruzione-del-modello-dell-aggiornamento-bayesiano">
+<h2>Costruzione del Modello dell’Aggiornamento Bayesiano<a class="headerlink" href="#costruzione-del-modello-dell-aggiornamento-bayesiano" title="Link to this heading">#</a></h2>
+<p>Per spiegare il concetto di aggiornamento bayesiano in maniera intuitiva, <span id="id8">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> propone il seguente esempio. Supponiamo di avere un mappamondo e di volere stimare qual è la proporzione coperta d’acqua del globo. Per stimare questa proporzione eseguiamo il seguente esperimento casuale: lanciamo in aria il mappamondo e poi lo afferriamo quando cade. Registriamo se la superficie sotto il nostro indice destro è terra o acqua. Ripetiamo questa procedura un certo numero di volte e calcoliamo la proporzione di volte in cui abbiamo osservato «acqua». In ogni lancio, ogni valore della proporzione sconosciuta <span class="math notranslate nohighlight">\(p\)</span> può essere più o meno plausibile, date le evidenze fornite dai lanci precedenti.</p>
+<p>Un modello bayesiano inizia assegnando un insieme di plausibilità iniziali a ciascuno dei possibili valori <span class="math notranslate nohighlight">\(p\)</span>, dette plausibilità priori. Poi, queste plausibilità vengono aggiornate alla luce dei dati raccolti, producendo le plausibilità posteriori. Questo processo di aggiornamento è una forma di apprendimento, conosciuto come aggiornamento bayesiano.</p>
+<p>Nell’esempio di <span id="id9">McElreath [<a class="reference internal" href="../references/bibliography.html#id11" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span>, supponiamo che il nostro modello bayesiano assegni inizialmente la stessa plausibilità a ogni possibile valore di <span class="math notranslate nohighlight">\(p\)</span> (proporzione di acqua). Ora, osserviamo il primo grafico in alto a sinistra nella figura generata dallo script. La linea tratteggiata orizzontale rappresenta la plausibilità iniziale di ciascun possibile valore di <span class="math notranslate nohighlight">\(p\)</span>. Dopo aver visto il primo lancio, che risulta in “W” (acqua), il modello aggiorna le plausibilità alla linea continua. La plausibilità che <span class="math notranslate nohighlight">\(p\)</span> = 0 scende a zero, indicando che è «impossibile» non avere acqua, dato che abbiamo osservato almeno una traccia di acqua sul globo. Allo stesso modo, la plausibilità che <span class="math notranslate nohighlight">\(p\)</span> &gt; 0.5 aumenta, poiché non c’è ancora evidenza di terra sul globo, quindi le plausibilità iniziali vengono modificate per essere coerenti con questa osservazione. Tuttavia, le differenze nelle plausibilità non sono ancora molto grandi, poiché le evidenze raccolte finora sono limitate. In questo modo, la quantità di evidenza vista finora si riflette nelle plausibilità di ciascun valore di <span class="math notranslate nohighlight">\(p\)</span>: la plausibilità che <span class="math notranslate nohighlight">\(p\)</span> sia 0 è zero e la plausibilità che <span class="math notranslate nohighlight">\(p\)</span> sia 1 è massima. Quindi, la distribuzione a posteriori di <span class="math notranslate nohighlight">\(p\)</span> è rappresentata dalla linea continua che collega questi due estremi.</p>
+<p>Nei grafici successivi, vengono introdotti ulteriori campioni dal globo, uno alla volta. Ogni curva tratteggiata rappresenta la curva continua dal grafico precedente, spostandosi da sinistra a destra e dall’alto in basso. La seconda osservazione è «terra» (L). La distribuzione a priori è la linea tratteggiata del secondo pannello e la distribuzione a postriori è la linea curva. Otteniamo questa curva perché assegniamo una verosimiglianza 0 agli eventi <span class="math notranslate nohighlight">\(p\)</span> = 0 (abbiamo osservato «acqua») e <span class="math notranslate nohighlight">\(p\)</span> = 1 (abbiamo osservato «terra»). In due lanci abbiamo osservato una volta «terra» e una volta «acqua». Dunque la plausibilità che <span class="math notranslate nohighlight">\(p\)</span> = 0.5 è massima. Da cui la curva che abbiamo disegnato.</p>
+<p>Il terzo lancio del mappamondo produce nuovamente «acqua». Quindi a questo punto il valore più plausibile di <span class="math notranslate nohighlight">\(p\)</span> è 0.75. modifichiamo dunque la distribuzione a priori (linea tratteggiata nel terzo pannello) in modo da rappresentare le nostre nuove conoscenze, come indicato dalla linea continua.</p>
+<p>Ogni volta che viene osservato un «W», il picco della curva di plausibilità si sposta a destra, verso valori maggiori di <span class="math notranslate nohighlight">\(p\)</span>. Ogni volta che viene osservato un «L» (terra), si sposta nella direzione opposta. L’altezza massima della curva aumenta con ogni campione, significando che la plausibilità complessiva (1) viene ridistribuita ad un numero minore di valori di <span class="math notranslate nohighlight">\(p\)</span> i quali accumulano una maggiore plausibilità man mano che aumenta la quantità di evidenza. Con l’aggiunta di ogni nuova osservazione, la curva viene aggiornata in modo coerente con tutte le osservazioni precedenti.</p>
+<p>È importante notare che ogni set aggiornato di plausibilità diventa la plausibilità iniziale per l’osservazione successiva. Ogni conclusione è il punto di partenza per l’inferenza futura. Questo processo di aggiornamento funziona anche al contrario: conoscendo l’ultimo set di plausibilità e l’ultima osservazione, è possibile matematicamente dedurre la curva di plausibilità precedente. I dati potrebbero essere presentati al modello in qualsiasi ordine, o anche tutti insieme. Nella maggior parte dei casi, i dati verranno considerati tutti insieme per comodità, ma è importante capire che ciò rappresenta solo l’abbreviazione di un processo di apprendimento iterato.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">factorial</span><span class="p">(</span><span class="n">W</span> <span class="o">+</span> <span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">W</span><span class="p">)</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">L</span><span class="p">))</span> <span class="o">*</span> <span class="n">p</span> <span class="o">**</span> <span class="n">W</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span> <span class="o">**</span> <span class="n">L</span>
+
+
+<span class="k">def</span> <span class="nf">plot_beta_from_observations</span><span class="p">(</span><span class="n">observations</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resolution</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calcualte the posterior for a string of observations&quot;&quot;&quot;</span>
+    <span class="n">n_W</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">observations</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">n_L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_W</span>
+    <span class="n">proportions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+        
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">beta</span><span class="p">(</span><span class="n">n_W</span><span class="p">,</span> <span class="n">n_L</span><span class="p">,</span> <span class="n">proportions</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">proportions</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+    
+
+<span class="c1"># Tossing the globe</span>
+<span class="n">observations</span> <span class="o">=</span> <span class="s2">&quot;WLWWWLWLW&quot;</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">ii</span> <span class="o">//</span> <span class="mi">3</span><span class="p">][</span><span class="n">ii</span> <span class="o">%</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+    <span class="c1"># Plot previous</span>
+    <span class="k">if</span> <span class="n">ii</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">plot_beta_from_observations</span><span class="p">(</span><span class="n">observations</span><span class="p">[:</span><span class="n">ii</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># First observation, no previous data</span>
+        <span class="n">plot_beta_from_observations</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        
+    <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;C1&#39;</span> <span class="k">if</span> <span class="n">observations</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;W&#39;</span> <span class="k">else</span> <span class="s1">&#39;C0&#39;</span>
+    <span class="n">plot_beta_from_observations</span><span class="p">(</span><span class="n">observations</span><span class="p">[:</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ii</span> <span class="o">%</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;posterior probability&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/3fdfacecc335bd1948a13b463d309262ab136aa60003b240ce14bee7200ae17a.png"><img alt="../_images/3fdfacecc335bd1948a13b463d309262ab136aa60003b240ce14bee7200ae17a.png" src="../_images/3fdfacecc335bd1948a13b463d309262ab136aa60003b240ce14bee7200ae17a.png" style="width: 811px; height: 811px;" /></a>
+</div>
+</div>
+<p>Il lettore attento si sarà chiesto se la curva continua dell’ultimo pannello non sia in realtà identica alla funzione di verosimiglianza binomiale con 6 successi in 9 prove – si veda il capitolo <a class="reference internal" href="../chapter_3/09_likelihood.html#notebook-likelihood"><span class="std std-ref">La verosimiglianza</span></a>. In effetti è proprio così. Lo stesso vale, ovviamente, per ciascuno dei pannelli della figura.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">like</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">like</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Funzione di verosimiglianza&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Valore della variabile casuale theta [0, 1]&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Verosimiglianza&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/53489328bef4bfdc655abb5b9517bbf87ee8b87398ed8d889aeb87f7b7c65bec.png"><img alt="../_images/53489328bef4bfdc655abb5b9517bbf87ee8b87398ed8d889aeb87f7b7c65bec.png" src="../_images/53489328bef4bfdc655abb5b9517bbf87ee8b87398ed8d889aeb87f7b7c65bec.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Questo esempio illustra come la funzione di probabilità a posteriori si modifichi progressivamente con l’acquisizione di nuove evidenze. Tale processo avviene in maniera automatica, riflettendo il meccanismo di aggiornamento delle credenze che caratterizza l’inferenza bayesiana. In ogni pannello, la transizione dalla linea tratteggiata alla linea piena simboleggia questo aggiornamento: la linea tratteggiata rappresenta la distribuzione di probabilità a priori, ovvero le nostre credenze iniziali prima dell’osservazione dei nuovi dati; la linea piena, invece, rappresenta la distribuzione di probabilità a posteriori, che integra le nuove evidenze ai preconcetti iniziali. Quest’ultima rispecchia dunque una sintesi ottimizzata delle informazioni pregresse e attuali, offrendo una rappresentazione aggiornata e più accurata della realtà in esame.</p>
+<section id="il-flusso-di-lavoro-bayesiano">
+<h3>Il flusso di lavoro bayesiano<a class="headerlink" href="#il-flusso-di-lavoro-bayesiano" title="Link to this heading">#</a></h3>
+<p>Metaforicamente descritto come «girare la manovella bayesiana», il flusso di lavoro bayesiano è composto da diverse fasi.</p>
+<ol class="arabic simple">
+<li><p><strong>Studio di Simulazione</strong>: Questa fase prevede la generazione di dati sintetici che riproducono il contesto di ricerca. Questo aiuta a valutare la robustezza del disegno sperimentale e ad assicurare che il modello sia adeguato.</p></li>
+<li><p><strong>Raccolta e Identificazione dei Dati</strong>: Qui si acquisiscono e analizzano i dati reali, assicurandosi che siano appropriati per le analisi successive.</p></li>
+<li><p><strong>Selezione del Modello Statistico</strong>: In questa fase si formula un modello statistico che rappresenta le teorie e le ipotesi alla base della ricerca, basandosi su una solida comprensione del fenomeno e su principi statistici.</p></li>
+<li><p><strong>Definizione delle Distribuzioni a Priori</strong>: Si stabiliscono le distribuzioni a priori dei parametri del modello, basandosi su conoscenze pregresse e un ragionamento teorico robusto.</p></li>
+<li><p><strong>Calcolo delle Distribuzioni a Posteriori</strong>: Utilizzando metodi analitici o tecniche di campionamento come le Catene di Markov Monte Carlo (MCMC), si derivano le distribuzioni a posteriori dei parametri.</p></li>
+<li><p><strong>Risoluzione dei Problemi e Diagnostica</strong>: In questa fase si eseguono controlli per assicurare la convergenza del modello e la validità delle inferenze, utilizzando metriche e diagnosi specializzate.</p></li>
+<li><p><strong>Controlli di Coerenza</strong>: Oltre alla diagnostica tecnica, si valuta la coerenza e la plausibilità del modello rispetto ai dati e al contesto teorico, incluso un esame predittivo a posteriori.</p></li>
+<li><p><strong>Interpretazione e Comunicazione dei Risultati</strong>: Infine, i risultati vengono interpretati nel contesto della teoria sottostante e comunicati in modo chiaro, integrandoli nell’ambito più ampio della comprensione del fenomeno in studio.</p></li>
+</ol>
+<p>Questo processo iterativo mira a ottenere inferenze valide, fornendo una base solida per la ricerca scientifica. Una rappresentazione visiva di questo flusso di lavoro bayesiano è illustrata nella figura tratta dall’articolo di <span id="id10"></span>.</p>
+<figure class="align-default" id="bayes-workflow-fig">
+<a class="reference internal image-reference" href="../_images/bayesian_workflow.png"><img alt="../_images/bayesian_workflow.png" src="../_images/bayesian_workflow.png" style="height: 550px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Una rappresentazione abbreviata del flusso di lavoro bayesiano. L’output del modello che non supera il filtro (che rappresenta i necessari controlli computazionali e di coerenza) deve essere respinto. È necessario migliorare la specifica del modello in modo che l’output possa  superare tutti i controlli. Solo allora il modello bayesiano può essere utilizzato come base per l’inferenza. (Figura tratta da <span id="id11"></span>).</span><a class="headerlink" href="#bayes-workflow-fig" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="notazione">
+<h2>Notazione<a class="headerlink" href="#notazione" title="Link to this heading">#</a></h2>
+<p>La costruzione di modelli statistici bayesiani che incorporano questo approccio probabilistico per caratterizzare l’incertezza richiede innanzitutto una familiarizzazione con il linguaggio e le notazioni matematiche utilizzate nella formulazione di questi modelli. Questa conoscenza facilita la comunicazione delle caratteristiche del modello e l’estensione del linguaggio di modellazione a vari domini.</p>
+<p>Nel seguito utilizzeremo <span class="math notranslate nohighlight">\(y\)</span> per rappresentare i dati osservati e <span class="math notranslate nohighlight">\(\theta\)</span> per indicare i parametri sconosciuti di un modello statistico. Entrambi, <span class="math notranslate nohighlight">\(y\)</span> e <span class="math notranslate nohighlight">\(\theta\)</span>, saranno trattati come variabili casuali. Utilizzeremo invece <span class="math notranslate nohighlight">\(x\)</span> per denotare le quantità note, come ad esempio i predittori di un modello lineare.</p>
+<p>Al fine di rappresentare in modo più conciso i modelli probabilistici, adotteremo una notazione specifica. Ad esempio, anziché scrivere la distribuzione di probabilità di <span class="math notranslate nohighlight">\(\theta\)</span> come <span class="math notranslate nohighlight">\(p(\theta) = Beta(1, 1)\)</span>, scriveremo semplicemente <span class="math notranslate nohighlight">\(\theta \sim Beta(1, 1)\)</span>. Il simbolo «<span class="math notranslate nohighlight">\(\sim\)</span>» viene comunemente letto come «segue la distribuzione di». Possiamo anche interpretarlo nel senso che <span class="math notranslate nohighlight">\(\theta\)</span> è un campione casuale estratto dalla distribuzione Beta(1, 1). Analogamente, la verosimiglianza di un modello binomiale sarà espressa come <span class="math notranslate nohighlight">\(y \sim \text{Bin}(n, \theta)\)</span>, dove «<span class="math notranslate nohighlight">\(\sim\)</span>» indica che <span class="math notranslate nohighlight">\(y\)</span> segue una distribuzione binomiale con parametri <span class="math notranslate nohighlight">\(n\)</span> e <span class="math notranslate nohighlight">\(\theta\)</span>. Questa notazione semplifica la rappresentazione dei modelli probabilistici, rendendo più chiara la relazione tra i dati, i parametri e le distribuzioni di probabilità coinvolte nelle analisi statistiche.</p>
+</section>
+<section id="metodi-di-stima-della-distribuzione-a-posteriori">
+<h2>Metodi di Stima della Distribuzione a Posteriori<a class="headerlink" href="#metodi-di-stima-della-distribuzione-a-posteriori" title="Link to this heading">#</a></h2>
+<p>La formulazione completa della distribuzione posteriore è data da:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\theta \mid y) = \frac{p(y \mid \theta) \cdot p(\theta)}{\int_{\Theta} p(y \mid \theta) \cdot p(\theta) \, d\theta}, \quad \text{dove} \quad \theta \in \Theta,
+\]</div>
+<p>in cui <span class="math notranslate nohighlight">\(\Theta\)</span> denota l’insieme di tutti i possibili valori del parametro <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>Il calcolo di <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span> richiede la normalizzazione del prodotto tra la funzione di verosimiglianza <span class="math notranslate nohighlight">\(p(y \mid \theta)\)</span> e la distribuzione a priori <span class="math notranslate nohighlight">\(p(\theta)\)</span> attraverso una costante di normalizzazione. Questa costante, nota come <em>verosimiglianza marginale</em>, assicura che l’integrale di <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span> su tutto lo spazio dei parametri <span class="math notranslate nohighlight">\(\Theta\)</span> sia pari a uno.</p>
+<p>In questa sezione, approfondiremo il concetto di likelihood marginale (che significa semplicemente la verosimiglianza media) attraverso il processo noto come <em>integrazione di un parametro</em>. Tale processo consente il calcolo della likelihood marginale, rimuovendo effettivamente il parametro incognito dalla distribuzione in esame. Per illustrare questo concetto, utilizzeremo la distribuzione binomiale, ma è importante sottolineare che l’applicabilità di questa tecnica si estende ben oltre, coprendo una vasta gamma di distribuzioni.</p>
+<p>Consideriamo una variabile casuale binomiale <span class="math notranslate nohighlight">\(Y\)</span> caratterizzata da una funzione di massa di probabilità (PMF) <span class="math notranslate nohighlight">\(p(Y)\)</span>, definita in relazione a un parametro <span class="math notranslate nohighlight">\(\theta\)</span>. Supponiamo che quest’ultimo può assumere uno di tre valori specifici: 0.1, 0.5, o 0.9, ognuno dei quali ha identica probabilità di verificarsi, ossia <span class="math notranslate nohighlight">\(\frac{1}{3}\)</span>.</p>
+<p>Fissiamo i dati a <span class="math notranslate nohighlight">\(n = 10\)</span> prove e <span class="math notranslate nohighlight">\(k = 7\)</span> successi, ottenendo la seguente funzione di likelihood:</p>
+<div class="math notranslate nohighlight">
+\[
+p(k = 7, n = 10 | \theta) = \binom{10}{7} \theta^7 (1 - \theta)^3.
+\]</div>
+<p>Per calcolare la <em>likelihood marginale</em>, denotata con <span class="math notranslate nohighlight">\(p(k = 7, n = 10)\)</span>, «marginalizziamo» il parametro <span class="math notranslate nohighlight">\(\theta\)</span>. Questo si realizza valutando la likelihood per ciascun valore possibile di <span class="math notranslate nohighlight">\(\theta\)</span>, moltiplicandola per la probabilità/densità di quel particolare valore di <span class="math notranslate nohighlight">\(\theta\)</span> e sommando i risultati ottenuti.</p>
+<p>Dati i valori di <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(\theta_1 = 0.1\)</span>, <span class="math notranslate nohighlight">\(\theta_2 = 0.5\)</span>, e <span class="math notranslate nohighlight">\(\theta_3 = 0.9\)</span>, ciascuno con una probabilità di <span class="math notranslate nohighlight">\(\frac{1}{3}\)</span>, calcoliamo la likelihood marginale nel seguente modo:</p>
+<div class="math notranslate nohighlight">
+\[
+p(k = 7, n = 10) = \sum_{i=1}^{3} p(k = 7, n = 10 | \theta_i) \cdot p(\theta_i).
+\]</div>
+<p>Sostituendo i valori di <span class="math notranslate nohighlight">\(\theta\)</span> e la loro probabilità di <span class="math notranslate nohighlight">\(\frac{1}{3}\)</span>, otteniamo:</p>
+<div class="math notranslate nohighlight">
+\[
+p(k = 7, n = 10) = \frac{1}{3} \binom{10}{7} 0.1^7 (1 - 0.1)^3 + \frac{1}{3} \binom{10}{7} 0.5^7 (1 - 0.5)^3 + \frac{1}{3} \binom{10}{7} 0.9^7 (1 - 0.9)^3.
+\]</div>
+<p>Questa espressione ci consente di calcolare la likelihood marginale, basandoci sui valori discreti di <span class="math notranslate nohighlight">\(\theta\)</span>. Tale processo evidenzia come la marginalizzazione faccia emergere una comprensione globale della likelihood, incorporando tutte le possibili variazioni del parametro <span class="math notranslate nohighlight">\(\theta\)</span> per ottenere una misura complessiva che tenga conto dell’incertezza su <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>In questo esempio abbiamo mostrato come sia possibile applicare la marginalizzazine (ovvero, l’integrazione di un parametro) non solo in contesti continui, tramite l’uso dell’integrale, ma anche in scenari discreti, sommando semplicemente i valori di likelihood moltiplicati per le rispettive probabilità di occorrenza del parametro.</p>
+<p>Per implementare un calcolo analogo in Python, possiamo definire una funzione che calcoli la likelihood per i valori discreti di <span class="math notranslate nohighlight">\(\theta\)</span> e poi sommare i risultati. Per l’integrazione su un intervallo continuo tra 0 e 1, invece, possiamo utilizzare la libreria <code class="docutils literal notranslate"><span class="pre">scipy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Funzione di likelihood</span>
+<span class="k">def</span> <span class="nf">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">theta</span><span class="o">**</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="p">))</span>
+
+<span class="c1"># Likelihood marginale per valori discreti di theta</span>
+<span class="n">theta_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="n">prob_theta</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
+<span class="n">marginal_likelihood_discrete</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">prob_theta</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="n">theta_vals</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Likelihood Marginale (discreta): </span><span class="si">{</span><span class="n">marginal_likelihood_discrete</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Likelihood marginale su un intervallo continuo [0, 1]</span>
+<span class="n">marginal_likelihood_continuous</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">theta</span><span class="p">:</span> <span class="n">likelihood</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Likelihood Marginale (continua): </span><span class="si">{</span><span class="n">marginal_likelihood_continuous</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Likelihood Marginale (discreta): 0.05819729199999999
+Likelihood Marginale (continua): 0.09090909090909091
+</pre></div>
+</div>
+</div>
+</div>
+<p>Il punto da notare, tuttavia, è che il calcolo analitico della verosimiglianza marginale è fattibile solo in circostanze particolari. In generale, è necessario procedere per approssimazione numerica.</p>
+<section id="metodi-per-determinare-la-distribuzione-a-posteriori">
+<h3>Metodi per determinare la distribuzione a posteriori<a class="headerlink" href="#metodi-per-determinare-la-distribuzione-a-posteriori" title="Link to this heading">#</a></h3>
+<p>Per determinare la distribuzione posteriore, dunque, si possono adottare due approcci principali:</p>
+<ol class="arabic simple">
+<li><p><strong>Approccio Analitico</strong>: Questa strategia si applica quando la distribuzione a priori e la funzione di verosimiglianza appartengono alla stessa famiglia di distribuzioni, dette <em>coniugate</em>. In tali circostanze, è possibile calcolare analiticamente la distribuzione posteriore. Questo metodo si distingue per la sua eleganza e efficienza computazionale, ma è limitato alle situazioni in cui esiste una coniugazione tra le distribuzioni a priori e le funzioni di verosimiglianza.</p></li>
+<li><p><strong>Approccio Numerico</strong>: Quando l’approccio analitico non è applicabile, ad esempio a causa dell’assenza di coniugazione tra distribuzioni a priori e funzioni di verosimiglianza, l’integrale al denominatore (la likelihood marginale) della regola di Bayes non può essere risolto con metodi analitici. In questi casi, l’inferenza bayesiana procede attraverso tecniche di approssimazione numerica. Tecniche come le catene di Markov Monte Carlo (MCMC) vengono impiegate per stimare numericamente la distribuzione posteriore. Questo metodo è più versatile e adattabile a un’ampia gamma di problemi, ma richiede un maggiore impegno computazionale e può essere più oneroso in termini di tempo rispetto all’approccio analitico.</p></li>
+</ol>
+</section>
+<section id="linguaggi-di-programmazione-probabilistici">
+<h3>Linguaggi di programmazione probabilistici<a class="headerlink" href="#linguaggi-di-programmazione-probabilistici" title="Link to this heading">#</a></h3>
+<p>L’approccio moderno alla statistica bayesiana si avvale ampiamente di tecniche di approssimazione numerica per stimare le distribuzioni posteriori. In questo contesto, si fa largo uso di linguaggi di programmazione probabilistica, noti come «Probabilistic Programming Languages» (PPL), che facilitano l’implementazione computazionale dell’aggiornamento bayesiano.</p>
+<p>Questo sviluppo ha trasformato radicalmente il modo in cui si effettuano le analisi statistiche bayesiane, democratizzando l’accesso a modelli statistici avanzati. L’introduzione di metodi computazionali ha reso la modellazione bayesiana più accessibile, riducendo le barriere di competenza matematica e computazionale precedentemente necessarie. Questi strumenti hanno inoltre ampliato le possibilità di affrontare questioni analitiche complesse, che prima sarebbero state difficili da gestire. Utilizzando i linguaggi di programmazione probabilistica, gli analisti possono formulare modelli probabilistici con maggiore chiarezza e flessibilità, facilitando l’esplorazione delle distribuzioni posteriori e l’analisi di questioni complesse con tecniche bayesiane. Questo ha aperto nuovi orizzonti nell’analisi bayesiana, permettendo di affrontare e risolvere problemi in modi precedentemente impensabili.</p>
+</section>
+</section>
+<section id="commenti-e-considerazioni-finali">
+<h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
+<p>L’approccio bayesiano rappresenta un modo distintivo di affrontare l’incertezza associata ai parametri di interesse, contrapponendosi in modo significativo alla metodologia classica. Mentre il paradigma classico tratta i parametri come valori fissi e sconosciuti, l’approccio bayesiano li considera come quantità probabilistiche, attribuendo loro una distribuzione a priori che riflette le nostre credenze e intuizioni iniziali prima dell’esperimento. Grazie all’applicazione del teorema di Bayes, queste credenze vengono progressivamente raffinate e aggiornate sulla base dei dati osservati, conducendo alla definizione della distribuzione a posteriori. Tale distribuzione rappresenta una prospettiva aggiornata dell’incertezza, integrando sia l’evidenza empirica che le informazioni pregresse.</p>
+<p>La potenza dell’approccio bayesiano risiede nella sua capacità di amalgamare le conoscenze pregresse con le nuove osservazioni, producendo stime dei parametri di interesse che non solo sono più accurate ma anche più significative dal punto di vista interpretativo. Oltre a essere un semplice strumento statistico, il bayesianesimo si rivela un potente strumento decisionale che favorisce un’interazione dinamica tra teoria ed esperienza.</p>
+<p>Tuttavia, uno svantaggio dell’approccio bayesiano risiede nella sua potenziale lentezza e inefficienza nel trattare dataset molto estesi. Ciò significa che quando si applicano metodi basati sulla teoria bayesiana all’analisi dei dati, potrebbero sorgere problemi di scalabilità e di efficienza computazionale, specialmente di fronte a insiemi di dati di dimensioni considerevoli.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="introduction_part_4.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Inferenza bayesiana</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_subj_prop.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">Pensare ad una proporzione in termini soggettivi</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inferenza-statistica">Inferenza Statistica</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#i-metodi-bayesiani-in-psicologia">I Metodi Bayesiani in Psicologia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#approccio-bayesiano-alla-statistica">Approccio Bayesiano alla Statistica</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elementi-fondamentali-della-modellazione-statistica-bayesiana">Elementi Fondamentali della Modellazione Statistica Bayesiana</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riesame-del-teorema-di-bayes">Riesame del Teorema di Bayes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#costruzione-del-modello-dell-aggiornamento-bayesiano">Costruzione del Modello dell’Aggiornamento Bayesiano</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-flusso-di-lavoro-bayesiano">Il flusso di lavoro bayesiano</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notazione">Notazione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-di-stima-della-distribuzione-a-posteriori">Metodi di Stima della Distribuzione a Posteriori</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-per-determinare-la-distribuzione-a-posteriori">Metodi per determinare la distribuzione a posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linguaggi-di-programmazione-probabilistici">Linguaggi di programmazione probabilistici</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

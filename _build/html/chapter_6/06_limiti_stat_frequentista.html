@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Limiti dell’inferenza frequentista &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_6/06_limiti_stat_frequentista';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_6/06_limiti_stat_frequentista.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="La grandezza dell’effetto" href="07_effect_size.html" />
+    <link rel="prev" title="La crisi della generalizzabilità" href="05_crisis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_4/introduction_part_4.html">Inferenza bayesiana</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_6.html">Inferenza frequentista</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_6/06_limiti_stat_frequentista.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Limiti dell’inferenza frequentista</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-uso-del-valore-p-nel-mondo-della-ricerca">L’uso del valore-<span class="math notranslate nohighlight">\(p\)</span> nel mondo della ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-hacking"><span class="math notranslate nohighlight">\(P\)</span>-hacking</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#critiche-al-valore-p">Critiche al valore-<span class="math notranslate nohighlight">\(p\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-effetto-sperimentale-e-esattamente-nullo">L’effetto sperimentale è esattamente nullo?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attenti-al-valore-p">Attenti al valore-<span class="math notranslate nohighlight">\(p\)</span>!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-crisi-della-riprodicibilita-dei-risultati-della-ricerca">La crisi della riprodicibilità dei risultati della ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="limiti-dell-inferenza-frequentista">
+<span id="limits-freq-inference-notebook"></span><h1>Limiti dell’inferenza frequentista<a class="headerlink" href="#limiti-dell-inferenza-frequentista" title="Link to this heading">#</a></h1>
+<p>In questa sezione della dispensa abbiamo esaminato il metodo «tradizionale» per il test di significatività dell’ipotesi nulla (NHST). Comprendere la logica alla base dell’approccio NHST è essenziale poiché questo è stato l’approccio predominante alla statistica inferenziale fin dalla sua introduzione all’inizio del XX secolo e la maggior parte dei ricercatori ancora si affida a questa procedura per analizzare i dati. Tuttavia, recentemente, l’approccio NHST è stato oggetto di aspre critiche, poiché molti ricercatori hanno iniziato a pensare che questo approccio possa creare più problemi di quanti ne risolva. Pertanto, è importante conoscere le critiche mosse alla procedura inferenziale NHST all’interno della comunità scientifica. In questa sezione esamineremo alcuni dei dubbi sorti riguardo a questo approccio.</p>
+<section id="l-uso-del-valore-p-nel-mondo-della-ricerca">
+<h2>L’uso del valore-<span class="math notranslate nohighlight">\(p\)</span> nel mondo della ricerca<a class="headerlink" href="#l-uso-del-valore-p-nel-mondo-della-ricerca" title="Link to this heading">#</a></h2>
+<p>Nel suo articolo «Statistical Errors» (2014), Nuzzo evidenzia i limiti dell’approccio NHST nella pratica scientifica <span id="id1">[]</span>. Infatti, sebbene il valore-<span class="math notranslate nohighlight">\(p\)</span> sia stato introdotto da Ronald Fisher negli anni “20, egli non lo ha mai concepito come un test formale. Invece, Fisher lo considerava uno strumento informale per valutare se l’evidenza empirica fosse significativa in un senso colloquiale, ovvero meritevole di attenzione. In pratica, Fisher suggeriva di assumere un’ipotesi nulla e di calcolare la probabilità di osservare un risultato altrettanto estremo o più estremo di quello trovato, se il risultato fosse completamente dovuto alla sola variabilità campionaria. Sebbene sia possibile calcolare il valore-<span class="math notranslate nohighlight">\(p\)</span> tramite una procedura matematica, per Fisher esso era solo uno strumento da utilizzare all’interno di un processo decisionale non numerico, in grado di combinare le evidenze empiriche attuali con le conoscenze pregresse del ricercatore. In altre parole, il valore-<span class="math notranslate nohighlight">\(p\)</span> rappresentava uno strumento da utilizzare all’interno del processo decisionale, non la conclusione del processo decisionale stesso.</p>
+<p>Verso la fine degli anni “20, Jerzy Neyman e Egon Pearson, rivali di Fisher, formalizzarono le procedure di decisione statistica con l’obiettivo di renderle «rigorose e oggettive». In particolare, introdussero i concetti di potere statistico e di falso positivo, ma non utilizzarono la nozione di valore-<span class="math notranslate nohighlight">\(p\)</span> come aveva fatto Fisher.</p>
+<p>Le divergenze tra i tre autori portarono a un acceso dibattito, in cui Neyman criticò il lavoro di Fisher come matematicamente «peggiore dell’inutilità», mentre Fisher definì l’approccio di Neyman «infantile» e «orribile per la libertà intellettuale dell’occidente».</p>
+<p>Durante questo dibattito, altri autori iniziarono a scrivere manuali di statistica per fornire uno strumento di lavoro ai ricercatori. Poiché molti di questi autori non erano statistici e avevano solo una comprensione superficiale della distinzione tra i vari approcci, crearono un sistema ibrido che utilizzava il valore-<span class="math notranslate nohighlight">\(p\)</span> proposto da Fisher all’interno del «sistema rigoroso» proposto da Neyman e Pearson. È in questo contesto che la soglia di un valore-<span class="math notranslate nohighlight">\(p\)</span> pari a 0.05 venne definita come «statisticamente significativa».</p>
+<p>Tuttavia, dal punto di vista storico, il valore-<span class="math notranslate nohighlight">\(p\)</span> proposto da Fisher aveva un significato molto diverso da quello che viene attribuito oggi nel mondo della ricerca. Come abbiamo visto, il valore-<span class="math notranslate nohighlight">\(p\)</span> era solo uno strumento informale utilizzato da Fisher all’interno di un processo decisionale più ampio, e il suo uso all’interno del sistema ibrido creato dai manuali di statistica era privo di giustificazione e fondamento.</p>
+<p>Nel 2016 l’American Statistical Association ha pubblicato un articolo nel quale si esprime una grande preoccupazione per l’uso inappropriato che viene fatto del valore-<span class="math notranslate nohighlight">\(p\)</span> nella pratica scientifica odierna <span id="id2">[]</span>:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(P\)</span>-values do not measure the probability that the studied hypothesis is true, or the probability that the data were produced by random chance alone. Researchers often wish to turn a <span class="math notranslate nohighlight">\(p\)</span>-value into a statement about the truth of a null hypothesis, or about the probability that random chance produced the observed data. The <span class="math notranslate nohighlight">\(p\)</span>-value is neither. It is a statement about data in relation to a specified hypothetical explanation, and is not a statement about the explanation itself.</p>
+</div></blockquote>
+<p>L’articolo prosegue affermando che:</p>
+<blockquote>
+<div><p>Scientific conclusions and business or policy decisions should not be based only on whether a <span class="math notranslate nohighlight">\(p\)</span>-value passes a specific threshold. Practices that reduce data analysis or scientific inference to mechanical «bright-line» rules (such as «<span class="math notranslate nohighlight">\(p &lt; 0.05\)</span>») for justifying scientific claims or conclusions can lead to erroneous beliefs and poor decision making. A conclusion does not immediately become “true” on one side of the divide and “false” on the other. Researchers should bring many contextual factors into play to derive scientific inferences, including the design of a study, the quality of the measurements, the external evidence for the phenomenon under study, and the validity of assumptions that underlie the data analysis. Pragmatic considerations often require binary, “yes-no” decisions, but this does not mean that <span class="math notranslate nohighlight">\(p\)</span>-values alone can ensure that a decision is correct or incorrect. The widespread use of «statistical significance» (generally interpreted as \enquote{<span class="math notranslate nohighlight">\(p \leq 0.05\)</span>}) as a license for making a claim of a scientific finding (or implied truth) leads to considerable distortion of the scientific process.</p>
+</div></blockquote>
+</section>
+<section id="p-hacking">
+<h2><span class="math notranslate nohighlight">\(P\)</span>-hacking<a class="headerlink" href="#p-hacking" title="Link to this heading">#</a></h2>
+<p>La pratica del <span class="math notranslate nohighlight">\(P\)</span>-hacking rappresenta la principale fallacia associata all’utilizzo del valore-<span class="math notranslate nohighlight">\(p\)</span> ed è nota anche come «<span class="math notranslate nohighlight">\(P\)</span>-hacking», «<em>data-dredging</em>», «<em>snooping</em>», «<em>fishing</em>», «<em>significance-chasing</em>» o «<em>double-dipping</em>». Secondo Uri Simonsohn, docente presso l’Università della Pennsylvania, il <span class="math notranslate nohighlight">\(P\)</span>-hacking consiste nel tentativo di provare diverse ipotesi finché non si ottiene il risultato desiderato. Ad esempio, si potrebbe dire: «Quel risultato sembra essere stato ottenuto attraverso il <span class="math notranslate nohighlight">\(p\)</span>-hacking, gli autori hanno eliminato una delle condizioni in modo che il valore-<span class="math notranslate nohighlight">\(p\)</span> complessivo fosse inferiore a 0.05» oppure «Lei è una <span class="math notranslate nohighlight">\(p\)</span>-hacker, controlla sempre i dati mentre vengono raccolti».</p>
+<p>Questa pratica ha l’effetto di trasformare uno studio esplorativo, che dovrebbe essere sempre interpretato con cautela, in uno studio (apparentemente) confermativo, il cui risultato appare «robusto», ma che in realtà ha una probabilità pressoché nulla di essere replicato in studi successivi. Secondo le simulazioni di Simonsohn, il cambiamento di poche decisioni nel processo di analisi dei dati può aumentare fino al 60% il tasso di falsi positivi in un singolo studio.</p>
+<p>Il <span class="math notranslate nohighlight">\(P\)</span>-hacking è diffuso soprattutto negli studi che tentano di dimostrare piccoli effetti usando dati molto rumorosi. Un’analisi della letteratura psicologica ha mostrato che i valori-<span class="math notranslate nohighlight">\(p\)</span> riportati dagli psicologi tendono a concentrarsi su valori appena superiori alla soglia minima dello 0.05. Questo risultato può essere interpretato come conseguenza della pratica del <span class="math notranslate nohighlight">\(P\)</span>-hacking: i ricercatori eseguono molteplici test statistici fino a trovare uno che risulta «statisticamente significativo» e poi riportano solo quello. Come mostra la figura seguente, questa pratica non riguarda solo la psicologia, ma è diffusa in tutti i campi della ricerca scientifica.</p>
+<p><img alt="Distribuzione dei valori- nelle pubblicazioni scientifiche di economia, psicologia e biologia." src="../_images/around_05.png" /></p>
+</section>
+<section id="critiche-al-valore-p">
+<h2>Critiche al valore-<span class="math notranslate nohighlight">\(p\)</span><a class="headerlink" href="#critiche-al-valore-p" title="Link to this heading">#</a></h2>
+<p>Il valore-<span class="math notranslate nohighlight">\(p\)</span> è stato paragonato a creature noiose e ostinate come le zanzare, ai vestiti nuovi dell’imperatore, ovvero alla tendenza di non voler riconoscere evidenti problemi, ma preferire di far finta di nulla, o ad un <em>intellectual rake</em> sterile, che non porta alcun frutto. Si è anche ironizzato sul fatto che la procedura di <em>statistical hypothesis inference testing</em> venga chiamata così solo per l’acronimo che produce.</p>
+<p>Il valore-<span class="math notranslate nohighlight">\(p\)</span> incoraggia un modo di pensare errato, spostando l’attenzione dal problema centrale della ricerca, ovvero la forza della manipolazione sperimentale, alla dimostrazione di una falsa ipotesi che si sa a priori essere falsa (l’ipotesi nulla). Ad esempio, uno studio con più di 19.000 individui ha dimostrato che coloro che incontrano il loro partner online hanno una probabilità minore di divorziare (<span class="math notranslate nohighlight">\(p &lt;\)</span> 0,002) e sono più soddisfatti della loro vita matrimoniale (<span class="math notranslate nohighlight">\(p &lt;\)</span> 0,001) rispetto a chi non si è conosciuto online. Questo può sembrare un risultato interessante, ma senza considerare la dimensione dell’effetto, ovvero il tasso di divorzio che scende dal 7.67% al 5.96% e l’aumento dell’indice di soddisfazione matrimoniale da 5.48 a 5.64 su una scala a sette punti, il risultato perde di interesse. In generale, la domanda cruciale non è «c’è un effetto o no?» ma piuttosto «qual è la dimensione dell’effetto?».</p>
+</section>
+<section id="l-effetto-sperimentale-e-esattamente-nullo">
+<h2>L’effetto sperimentale è esattamente nullo?<a class="headerlink" href="#l-effetto-sperimentale-e-esattamente-nullo" title="Link to this heading">#</a></h2>
+<p>Una delle critiche più frequenti alla logica di verifica delle ipotesi statistiche riguarda l’assunzione irrealistica che l’effetto della manipolazione sperimentale sia «esattamente» nullo. Ad esempio, la fisica ci insegna che lo spostamento di un grammo di massa in una stella distante qualche anno luce dalla Terra può influenzare il movimento delle molecole di un gas sulla Terra <span id="id3">[]</span>. Questo ci suggerisce che ogni manipolazione sperimentale produca, in qualche modo, un effetto. Pertanto, secondo Andrew Gelman, il problema non è dimostrare falsa l’ipotesi nulla, ovvero che la manipolazione sperimentale non produca alcun effetto, ma piuttosto valutare se la dimensione dell’effetto è sufficientemente grande da avere un impatto pratico e se l’effetto sia riproducibile. In questo senso, la logica di verifica dell’ipotesi nulla può essere problematica, soprattutto quando si lavora con piccoli campioni e piccoli effetti, come nella maggior parte degli studi in psicologia, poiché può portare ad una sovrastima della dimensione dell’effetto e ad una visione binaria del risultato (vero/falso), invece di concentrarsi sulla stima non distorta della dimensione effettiva dell’effetto.</p>
+</section>
+<section id="attenti-al-valore-p">
+<h2>Attenti al valore-<span class="math notranslate nohighlight">\(p\)</span>!<a class="headerlink" href="#attenti-al-valore-p" title="Link to this heading">#</a></h2>
+<p>Consideriamo il seguente problema. Eseguiamo un <span class="math notranslate nohighlight">\(t\)</span>-test per due campioni indipendenti e sottoponiamo a verifica l’ipotesi nulla dell’eguaglianza delle due medie. Sia <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span>. Otteniamo un valore-<span class="math notranslate nohighlight">\(p\)</span> di <span class="math notranslate nohighlight">\(0.04\)</span>. Qual è la probabilità che i due campioni siano tratti da distribuzioni con la stessa media?</p>
+<p>(a) <span class="math notranslate nohighlight">\(19/20; \quad\)</span> (b) <span class="math notranslate nohighlight">\(1/19; \quad\)</span> (c) <span class="math notranslate nohighlight">\(1/20; \quad\)</span> (d) <span class="math notranslate nohighlight">\(95/100; \quad\)</span> (e) sconosciuta.</p>
+<p>La risposta corretta è: (e) sconosciuta. La statistica frequentista definisce le probabilità dei dati condizionatamente alle ipotesi (assunte come vere). Non consente di stabilire la probabilità di un’ipotesi.</p>
+</section>
+<section id="la-crisi-della-riprodicibilita-dei-risultati-della-ricerca">
+<h2>La crisi della riprodicibilità dei risultati della ricerca<a class="headerlink" href="#la-crisi-della-riprodicibilita-dei-risultati-della-ricerca" title="Link to this heading">#</a></h2>
+<p>Negli ultimi anni, la mancanza di replicabilità dei risultati della ricerca - inclusa la ricerca psicologica - è diventata un tema di grande rilevanza. In questo contesto, è stato evidenziato che alcuni aspetti del metodo scientifico, in particolare il concetto di <em>valore-p</em> e la pratica di verificare la significatività dell’ipotesi nulla (NHST, Null Hypothesis Significance Testing), potrebbero contribuire a questa «crisi della ricerca scientifica». Un’analisi più approfondita di questo problema è stata fornita da <span id="id4"></span>, il quale sostiene che la pratica della NHST sia intrinsecamente problematica. Infatti, essa incoraggia il ricercatore a cercare di rigettare un’ipotesi «fantoccio» (<em>straw-man</em>) che è certamente falsa a priori o, almeno, poco interessante dal punto di vista scientifico, a favore di un’ipotesi alternativa che il ricercatore preferisce. In generale, sembra più ragionevole affermare che la differenza tra due condizioni sia molto piccola, piuttosto che affermare che sia esattamente uguale a zero.</p>
+<p>Spesso nei libri di statistica viene trasmesso il messaggio che la NHST sia una forma di «alchimia» che cerca di trasformare la casualità in una sorta di certezza, con l’uso di termini come «confidenza» e «significatività» <span id="id5">[]</span>. Il processo di raccolta dei dati, analisi e inferenza statistica che ne segue viene poi riassunto in una conclusione espressa in termini di valore-p e di intervallo di confidenza che escludono lo zero. Tuttavia, ciò può dare l’impressione errata che il ricercatore abbia una comprensione completa delle proprietà del fenomeno in questione. Il problema principale della NHST è che spesso produce risultati «statisticamente significativi» in situazioni in cui le caratteristiche del fenomeno non giustificano la conclusione a cui il ricercatore arriva. Questo può portare alla non replicabilità dei risultati della ricerca.</p>
+<p>La comunità degli statistici ha evidenziato come la non replicabilità dei risultati delle ricerche sia particolarmente evidente quando i ricercatori, utilizzando la metodologia NHST, giungono a conclusioni errate basate sull’osservazione di piccoli campioni con effetti di dimensioni ridotte. Queste condizioni, insieme ad altre, rendono estremamente problematica l’applicazione della NHST. Purtroppo, queste situazioni descrivono molte delle ricerche recenti in psicologia.</p>
+<p>La statistica è stata definita come un metodo per prendere decisioni razionali in situazioni di incertezza. Gli statistici consigliano ai ricercatori di non solo diventare esperti nelle tecniche statistiche, ma anche di imparare a convivere con l’incertezza, nonostante la sempre crescente sofisticazione delle tecniche disponibili. Convivere con l’incertezza implica evitare di pensare che ottenere un valore-<span class="math notranslate nohighlight">\(p\)</span> «statisticamente significativo» significhi risolvere un problema scientifico. Come possiamo allora avere fiducia in ciò che abbiamo appreso dai dati? Una possibile strategia è la replicazione e la convalida esterna, ma nella ricerca in psicologia e nelle scienze sociali, questo può spesso essere difficile da perseguire a causa degli oneri elevati che comporta. Il problema di quali strumenti metodologici e metodi statistici siano più appropriati per indagare sui fenomeni psicologici, senza essere ingannati, rimane dunque un problema aperto.</p>
+</section>
+<section id="commenti-e-considerazioni-finali">
+<h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
+<p>Non possiamo concludere senza sottolineare la controversia che circonda la nozione di valore-<span class="math notranslate nohighlight">\(p\)</span>. Pur essendo ancora ampiamente utilizzato e spesso interpretato erroneamente, il valore-<span class="math notranslate nohighlight">\(p\)</span> conferisce solo una patina di legittimità ai risultati di studi dubbi, incoraggia cattive pratiche di ricerca e promuove la produzione di falsi positivi. Inoltre, è difficile comprendere appieno il significato di questa nozione. Anche gli esperti, quando chiamati a fornire una definizione di valore-<span class="math notranslate nohighlight">\(p\)</span>, spesso sbagliano la risposta. Ciò che i ricercatori vogliono sapere è se i risultati della ricerca sono corretti o meno, ma il valore-<span class="math notranslate nohighlight">\(p\)</span> non fornisce questa informazione. Non dice nulla sulla dimensione dell’effetto, sulla forza dell’evidenza o sulla probabilità che il risultato sia stato ottenuto casualmente. Quindi, qual è il suo significato? Stuart Buck risponde così:</p>
+<blockquote>
+<div><p>Imagine that you have a coin that you suspect is weighted toward heads. (Your null hypothesis is then that the coin is fair.) You flip it 100 times and get more heads than tails. The <span class="math notranslate nohighlight">\(p\)</span>-value won’t tell you whether the coin is fair, but it will tell you the probability that you’d get at least as many heads as you did if the coin was fair. That’s it – nothing more.</p>
+</div></blockquote>
+<p>In sintesi, possiamo concludere che il valore-<span class="math notranslate nohighlight">\(p\)</span> risponde a una domanda molto specifica che non ha alcuna rilevanza per la validità scientifica dei risultati della ricerca. In un’epoca in cui la crisi della riproducibilità dei risultati è sempre più evidente <span id="id6">[]</span>, il test dell’ipotesi nulla e gli intervalli di confidenza frequentisti sono stati identificati come una delle principali cause del problema, spingendo molti ricercatori a cercare soluzioni alternative.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_6"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_crisis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">La crisi della generalizzabilità</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="07_effect_size.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">La grandezza dell’effetto</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-uso-del-valore-p-nel-mondo-della-ricerca">L’uso del valore-<span class="math notranslate nohighlight">\(p\)</span> nel mondo della ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p-hacking"><span class="math notranslate nohighlight">\(P\)</span>-hacking</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#critiche-al-valore-p">Critiche al valore-<span class="math notranslate nohighlight">\(p\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-effetto-sperimentale-e-esattamente-nullo">L’effetto sperimentale è esattamente nullo?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attenti-al-valore-p">Attenti al valore-<span class="math notranslate nohighlight">\(p\)</span>!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-crisi-della-riprodicibilita-dei-risultati-della-ricerca">La crisi della riprodicibilità dei risultati della ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
