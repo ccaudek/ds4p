@@ -294,7 +294,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_22_stan_logistic_regr.html">Regressione logistica con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
@@ -647,8 +647,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="introduzione-a-stan">
 <span id="cmdstanpy-notebook"></span><h1>Introduzione a Stan<a class="headerlink" href="#introduzione-a-stan" title="Link to this heading">#</a></h1>
-<p>Nel presente capitolo, presenteremo un linguaggio di programmazione probabilistica denominato <a class="reference external" href="http://mc-stan.org/">Stan</a>. Stan consente di estrarre campioni da distribuzioni di probabilità mediante la costruzione di una catena di Markov, la cui distribuzione di equilibrio (o stazionaria) coincide con la distribuzione desiderata. Il nome del linguaggio deriva da uno dei pionieri del metodo Monte Carlo, Stanislaw Ulam. Un’introduzione dettagliata al linguaggio Stan è fornita in <a class="reference internal" href="../chapter_7/a46_stan.html#appendix-cmdstanpy"><span class="std std-ref">Linguaggio Stan</span></a>. in questo capitolo, utilizzeremo Stan per fare inferenza su una proporzione.</p>
-<p>Il linguaggio di programmazione probabilistica Stan è compatibile con diverse piattaforme e offre varie interfacce (R, Python, Julia). Nel caso presente, useremo <code class="docutils literal notranslate"><span class="pre">cmdstanpy</span></code>, un’interfaccia leggera per Stan pensata per gli utenti di Python. CmdStanPy è un pacchetto puramente in Python3 che è un wrapper di CmdStan, l’interfaccia a riga di comando per Stan scritta in C++. Pertanto, oltre a Python3, CmdStanPy richiede un toolchain C++ per compilare ed eseguire i modelli Stan.</p>
+<p>Nel presente capitolo, presenteremo un linguaggio di programmazione probabilistica denominato <a class="reference external" href="http://mc-stan.org/">Stan</a>. Stan consente di estrarre campioni da distribuzioni di probabilità mediante la costruzione di una catena di Markov, la cui distribuzione di equilibrio (o stazionaria) coincide con la distribuzione desiderata. Il nome del linguaggio deriva da uno dei pionieri del metodo Monte Carlo, Stanislaw Ulam. Un’introduzione dettagliata al linguaggio Stan è fornita in <a class="reference internal" href="../chapter_7/a46_stan.html#appendix-cmdstanpy"><span class="std std-ref">Linguaggio Stan</span></a>. In questo capitolo, utilizzeremo Stan per fare inferenza su una proporzione.</p>
+<p>Il linguaggio di programmazione probabilistica Stan è compatibile con diverse piattaforme e offre varie interfacce (R, Python, Julia). In questo corso, useremo CmdStanPy, un’interfaccia per Stan pensata per gli utenti di Python. CmdStanPy è un pacchetto puramente in Python3 che è un wrapper di CmdStan, l’interfaccia a riga di comando per Stan scritta in C++. Pertanto, oltre a Python3, CmdStanPy richiede un toolchain C++ per compilare ed eseguire i modelli Stan.</p>
 <p>La procedura per <a class="reference external" href="https://mc-stan.org/cmdstanpy/installation.html">installare</a> CmdStanPy e i componenti sottostanti di CmdStan dal repository conda-forge è descritta nel capitolo <a class="reference internal" href="../chapter_7/a04_virtual_env.html#appendix-virtual-env"><span class="std std-ref">Ambienti virtuali</span></a>.</p>
 <section id="preparazione-del-notebook">
 <h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
@@ -679,30 +679,25 @@ document.write(`
 <p>Stan è un linguaggio di programmazione probabilistica (PPL) progettato per definire modelli statistici complessi e fare inferenza su di essi. Un PPL permette di esprimere modelli probabilistici in modo conciso e di utilizzare algoritmi avanzati per eseguire inferenze. Questo è particolarmente utile nell’inferenza bayesiana, dove aggiorniamo le distribuzioni a priori con dati osservati per ottenere distribuzioni a posteriori.</p>
 <section id="struttura-di-un-programma-stan">
 <h4>Struttura di un Programma Stan<a class="headerlink" href="#struttura-di-un-programma-stan" title="Link to this heading">#</a></h4>
-<p>Un programma Stan dichiara variabili e parametri e definisce la densità logaritmica posteriore congiunta. In pratica, ciò significa che un programma Stan descrive come i dati e i parametri interagiscono e quali distribuzioni probabilistiche li governano.</p>
-<ul class="simple">
-<li><p><strong>Variabili e Parametri</strong>: I programmi Stan dichiarano variabili che rappresentano i dati osservati e i parametri del modello.</p></li>
-<li><p><strong>Distribuzioni Probabilistiche</strong>: Stan specifica le distribuzioni probabilistiche che descrivono le relazioni tra variabili e parametri.</p></li>
-<li><p><strong>Inferenza</strong>: Stan inferisce i valori delle variabili casuali non osservate dai dati osservati e dalle distribuzioni a priori.</p></li>
-</ul>
+<p>In Stan è necessario specificare un programma che solitamente è salvato in un file con l’estensione <code class="docutils literal notranslate"><span class="pre">.stan</span></code>. Un programma Stan dichiara variabili e parametri e definisce le distribuzioni a priori dei parametri del modello statistico specificato e la funzione di verosimiglianza. In pratica, ciò significa che un programma Stan descrive come i dati e i parametri interagiscono e quali distribuzioni probabilistiche li governano. Un programma Stan consente di fare inferenza sulle distribuzioni a posteriori dei parametri del modello che vengono inferite dai dati osservati e dalle distribuzioni a priori.</p>
 </section>
 <section id="esecuzione-di-un-programma-stan">
 <h4>Esecuzione di un Programma Stan<a class="headerlink" href="#esecuzione-di-un-programma-stan" title="Link to this heading">#</a></h4>
-<p>Quando eseguiamo un programma Stan, esso genera campioni per le variabili casuali non osservate utilizzando metodi di inferenza avanzati:</p>
+<p>Un programma Stan utilizza metodi di inferenza avanzati:</p>
 <ul class="simple">
 <li><p><strong>Campionamento MCMC</strong>: Stan utilizza metodi come il Monte Carlo a Catena di Markov (MCMC) per generare campioni dalle distribuzioni a posteriori.</p></li>
 <li><p><strong>Inferenza Variazionale</strong>: Un metodo approssimativo che fornisce stime delle distribuzioni a posteriori.</p></li>
 <li><p><strong>Approssimazione di Laplace</strong>: Un altro metodo approssimativo per l’inferenza.</p></li>
 </ul>
-<p>Gli utenti forniscono dati a Stan definendo costanti (come il numero di osservazioni) e valori delle variabili osservate. Stan produce un output costituito da campioni, ognuno dei quali rappresenta un possibile valore per tutte le variabili casuali non osservate nel modello.</p>
 <p>Stan è disponibile attraverso vari linguaggi di programmazione e strumenti di analisi open-source, tra cui Python, R, e Julia, ed è compatibile con gli strumenti di analisi bayesiana integrati in questi linguaggi. Stan è anche disponibile in ambienti come Mathematica, Stata e MATLAB, anche se queste interfacce sono meno complete.</p>
 </section>
 </section>
 <section id="simulazione-avanti-e-problema-inverso">
 <h3>Simulazione Avanti e Problema Inverso<a class="headerlink" href="#simulazione-avanti-e-problema-inverso" title="Link to this heading">#</a></h3>
+<p>Stan genera dei dati attraverso procedure pseudo-casuali e questo può essere fatto per le simulazioni in avanti oppure per risolvere il problema inverso.</p>
 <section id="simulazione-avanti">
 <h4>Simulazione Avanti<a class="headerlink" href="#simulazione-avanti" title="Link to this heading">#</a></h4>
-<p>La simulazione avanti consiste nel generare dati simulati a partire da un insieme di parametri conosciuti di un modello probabilistico. In altre parole, date certe assunzioni sui parametri di un modello, utilizziamo la simulazione avanti per prevedere i possibili risultati che potrebbero verificarsi.</p>
+<p>La simulazione avanti consiste nella generazione di dati simulati a partire da un insieme di parametri conosciuti di un modello probabilistico. In altre parole, date certe assunzioni sui parametri di un modello, utilizziamo la simulazione avanti per prevedere i possibili risultati che potrebbero verificarsi.</p>
 <p>Ad esempio, consideriamo un trial clinico con <span class="math notranslate nohighlight">\(N\)</span> soggetti e una probabilità <span class="math notranslate nohighlight">\(\theta\)</span> di esito positivo per ciascun soggetto. Se conosciamo il valore di <span class="math notranslate nohighlight">\(\theta\)</span> e il numero di soggetti <span class="math notranslate nohighlight">\(N\)</span>, possiamo usare una distribuzione binomiale per simulare il numero di pazienti che avranno un esito positivo. Questo processo ci permette di generare dati che riflettono le nostre assunzioni sui parametri del modello.</p>
 <p>In notazione statistica, questo si esprime come:</p>
 <div class="math notranslate nohighlight">
@@ -723,19 +718,18 @@ p(Y = y \mid N, \theta) = \binom{N}{y} \cdot \theta^y \cdot (1 - \theta)^{N - y}
 <section id="il-problema-inverso">
 <h4>Il Problema Inverso<a class="headerlink" href="#il-problema-inverso" title="Link to this heading">#</a></h4>
 <p>Il problema inverso consiste nello stimare i parametri del modello, come la probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span>, dato un insieme di dati osservati. Supponiamo di avere i seguenti dati: <span class="math notranslate nohighlight">\(N = 100\)</span> soggetti e <span class="math notranslate nohighlight">\(y = 32\)</span> esiti positivi. Vogliamo stimare <span class="math notranslate nohighlight">\(\theta\)</span>, la probabilità di successo.</p>
-<p>In un approccio bayesiano, specifichiamo una distribuzione a priori per <span class="math notranslate nohighlight">\(\theta\)</span>. Supponiamo di utilizzare una distribuzione Beta(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>) come prior per <span class="math notranslate nohighlight">\(\theta\)</span>, dove <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono parametri scelti in base alla conoscenza precedente. La distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> data l’osservazione <span class="math notranslate nohighlight">\(y\)</span> è ancora una distribuzione Beta, ma con parametri aggiornati.</p>
-<p>La distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> è:</p>
+<p>In un approccio bayesiano, iniziamo specificando una distribuzione a priori per <span class="math notranslate nohighlight">\(\theta\)</span>. Supponiamo di utilizzare una distribuzione Beta(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>) come prior per <span class="math notranslate nohighlight">\(\theta\)</span>, dove <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono parametri scelti in base alle nostre conoscenze precedenti. La distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> data l’osservazione <span class="math notranslate nohighlight">\(y\)</span> è ancora una distribuzione Beta, ma con parametri aggiornati, ovvero:</p>
 <div class="math notranslate nohighlight">
 \[
-\theta \mid y \sim \text{Beta}(\alpha + y, \beta + N - y)
+\theta \mid y \sim \text{Beta}(\alpha + y, \beta + N - y).
 \]</div>
-<p>Per esempio, se scegliamo una prior non informativa con <span class="math notranslate nohighlight">\(\alpha = 1\)</span> e <span class="math notranslate nohighlight">\(\beta = 1\)</span>, la distribuzione a posteriori diventa:</p>
+<p>Per esempio, se scegliamo una distribuzione a priori non informativa con <span class="math notranslate nohighlight">\(\alpha = 1\)</span> e <span class="math notranslate nohighlight">\(\beta = 1\)</span>, la distribuzione a posteriori diventa:</p>
 <div class="math notranslate nohighlight">
 \[
-\theta \mid y \sim \text{Beta}(1 + 32, 1 + 100 - 32) = \text{Beta}(33, 69)
+\theta \mid y \sim \text{Beta}(1 + 32, 1 + 100 - 32) = \text{Beta}(33, 69).
 \]</div>
 <p>Questa distribuzione a posteriori ci fornisce una stima aggiornata della probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span> considerando i dati osservati. Utilizzando Stan, possiamo ottenere campioni da questa distribuzione a posteriori per calcolare statistiche riassuntive e fare previsioni.</p>
-<p>In sintesi, la simulazione avanti e il problema inverso sono due approcci complementari: la simulazione avanti genera dati simulati dai parametri conosciuti, mentre il problema inverso stima i parametri del modello dai dati osservati. Questi concetti sono fondamentali per l’inferenza bayesiana e la programmazione probabilistica in Stan.</p>
+<p>In sintesi, la simulazione avanti e il problema inverso sono due approcci complementari: la simulazione avanti genera dati simulati dai parametri conosciuti, mentre il problema inverso stima i parametri del modello dai dati osservati.</p>
 </section>
 </section>
 </section>
