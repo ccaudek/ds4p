@@ -592,30 +592,14 @@ document.write(`
 <p>Il presente tutorial trae ispirazione dall’articolo di <a class="reference external" href="https://elifesciences.org/articles/49547">Wilson &amp; Collins (2019)</a> e utilizza il codice fornito da <a class="reference external" href="https://shawnrhoads.github.io/gu-psyc-347/index.html">Rhoads, S. A. &amp; Gan, L. (2022)</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../_config/config.py # Import the configuration settings
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>  <span class="c1"># finding optimal params in models</span>
-<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">cmdstan_path</span><span class="p">,</span> <span class="n">CmdStanModel</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed to make the results fully reproducible</span>
-<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;rescorla_wagner&quot;</span><span class="p">))</span>
-<span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-
-<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.facecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
-
-<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+<span class="kn">import</span> <span class="nn">cmdstanpy</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
+<span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -836,13 +820,12 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Prove&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Feedback (1=Ricompensa,</span><span class="se">\n</span><span class="s1"> 0=Nessuna ricompensa)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Apprendimento di Rescorla-Wagner&#39;</span><span class="p">)</span>
-<span class="c1"># plt.legend()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/475ac91827d464afa15c6249e0ba03a2cbc5b55b19377a547d73980d7037de46.png"><img alt="../_images/475ac91827d464afa15c6249e0ba03a2cbc5b55b19377a547d73980d7037de46.png" src="../_images/475ac91827d464afa15c6249e0ba03a2cbc5b55b19377a547d73980d7037de46.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/914521cc5b36d63f3883c9e76c9f6a05da08d3b7c682aa91ee6d248d70f1d251.png"><img alt="../_images/914521cc5b36d63f3883c9e76c9f6a05da08d3b7c682aa91ee6d248d70f1d251.png" src="../_images/914521cc5b36d63f3883c9e76c9f6a05da08d3b7c682aa91ee6d248d70f1d251.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Come possiamo osservare, le scelte per la slot machine che produce meno ricompense diventano meno frequenti nel corso delle prove.</p>
@@ -861,7 +844,7 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/20410b6cab2b4ec42d42c7804b02b723806d493c9ae6b1c2cb0ddb5f43bd001a.png"><img alt="../_images/20410b6cab2b4ec42d42c7804b02b723806d493c9ae6b1c2cb0ddb5f43bd001a.png" src="../_images/20410b6cab2b4ec42d42c7804b02b723806d493c9ae6b1c2cb0ddb5f43bd001a.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/263f81310c3ea54f3ba8253a5e61b93b9a870447d237283816aebfc393e42933.png"><img alt="../_images/263f81310c3ea54f3ba8253a5e61b93b9a870447d237283816aebfc393e42933.png" src="../_images/263f81310c3ea54f3ba8253a5e61b93b9a870447d237283816aebfc393e42933.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Si noti come nel corso delle prove i valori delle slot macchine convergano lentamente verso le probabilità di ricompensa (20% e 80%).</p>
@@ -1026,7 +1009,7 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.3 2.5 69.2168375186531
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.3 2.5 68.2432720060257
 </pre></div>
 </div>
 </div>
@@ -1041,7 +1024,7 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.2 1.5 62.43082969860194
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.2 1.5 62.04159854003673
 </pre></div>
 </div>
 </div>
@@ -1070,7 +1053,7 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/45c8238c3f0aafab9192b01526992c38c9a545afd72c00314260ee31b4a3bf09.png"><img alt="../_images/45c8238c3f0aafab9192b01526992c38c9a545afd72c00314260ee31b4a3bf09.png" src="../_images/45c8238c3f0aafab9192b01526992c38c9a545afd72c00314260ee31b4a3bf09.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/81a6c6c963f848935700966a6f7e7b56b50a889fafee66c2bffb8c8ec4aceffc.png"><img alt="../_images/81a6c6c963f848935700966a6f7e7b56b50a889fafee66c2bffb8c8ec4aceffc.png" src="../_images/81a6c6c963f848935700966a6f7e7b56b50a889fafee66c2bffb8c8ec4aceffc.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 </section>
@@ -1107,7 +1090,7 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.25065161 1.94986497]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1.76044404e-03 9.63868119e+00]
 </pre></div>
 </div>
 </div>
@@ -1150,7 +1133,6 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">true_alpha</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="s1">&#39;ob&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span><span class="p">)</span>
-<span class="c1"># plt.plot(range(T), c3, &#39;+&#39;, label=&#39;scelta&#39;)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;True alpha&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Estimated alpha&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ML estimation&#39;</span><span class="p">)</span>
@@ -1159,14 +1141,13 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/c3eb16b915da344d50530879aff14442204acd2f758583b25ce8f1d2e226b8e0.png"><img alt="../_images/c3eb16b915da344d50530879aff14442204acd2f758583b25ce8f1d2e226b8e0.png" src="../_images/c3eb16b915da344d50530879aff14442204acd2f758583b25ce8f1d2e226b8e0.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/54d28a3a2377f9384a6c8c0686d40245ea0e3deb725a8273f146f4b89be4c505.png"><img alt="../_images/54d28a3a2377f9384a6c8c0686d40245ea0e3deb725a8273f146f4b89be4c505.png" src="../_images/54d28a3a2377f9384a6c8c0686d40245ea0e3deb725a8273f146f4b89be4c505.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Un discorso analogo si può fare per theta, anche se in questo caso vi è una migliore corrispondenza tra i valori stimati e i valori veri.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">true_theta</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.4</span><span class="p">)</span>
-<span class="c1"># plt.plot(range(T), c3, &#39;+&#39;, label=&#39;scelta&#39;)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;True theta&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Estimated theta&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ML estimation&#39;</span><span class="p">)</span>
@@ -1175,7 +1156,7 @@ p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/0b05ffefe43375e578d2df6dd2ebb28be6fc7526a097b7c89a0363aa1f1c8abf.png"><img alt="../_images/0b05ffefe43375e578d2df6dd2ebb28be6fc7526a097b7c89a0363aa1f1c8abf.png" src="../_images/0b05ffefe43375e578d2df6dd2ebb28be6fc7526a097b7c89a0363aa1f1c8abf.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/9ebcafe42609482688b9b8ea70015fce882badee7b786a594ef184d73ee24fd7.png"><img alt="../_images/9ebcafe42609482688b9b8ea70015fce882badee7b786a594ef184d73ee24fd7.png" src="../_images/9ebcafe42609482688b9b8ea70015fce882badee7b786a594ef184d73ee24fd7.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>In sintesi, possiamo affermare che il metodo della massima verosimiglianza è in grado di recuperare i valori simulati dei parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\theta\)</span> del modello di Rescorla-Wagner, ma solo quando il numero di osservazioni per soggetto è considerevole. Tuttavia, è importante notare che questo metodo può produrre risultati imprecisi in determinate circostanze.</p>
@@ -1445,7 +1426,7 @@ Supponiamo che <code class="docutils literal notranslate"><span class="pre">thet
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;nTrials&#39;: 300, &#39;choice&#39;: [2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1], &#39;reward&#39;: [1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0]}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;nTrials&#39;: 300, &#39;choice&#39;: [2, 2, 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 1, 1, 1], &#39;reward&#39;: [1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0]}
 </pre></div>
 </div>
 </div>
@@ -1464,35 +1445,6 @@ Supponiamo che <code class="docutils literal notranslate"><span class="pre">thet
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:22 - cmdstanpy - INFO - CmdStan start processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:22 - cmdstanpy - INFO - Chain [1] start processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:22 - cmdstanpy - INFO - Chain [2] start processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:22 - cmdstanpy - INFO - Chain [3] start processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:22 - cmdstanpy - INFO - Chain [4] start processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:24 - cmdstanpy - INFO - Chain [4] done processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:24 - cmdstanpy - INFO - Chain [2] done processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:24 - cmdstanpy - INFO - Chain [1] done processing
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>07:33:24 - cmdstanpy - INFO - Chain [3] done processing
-</pre></div>
-</div>
-</div>
 </div>
 <p>Esaminiamo le distribuzioni a posteriori dei due parametri oggetto dell’inferenza insieme alle loro tracce (cioè i vettori dei campioni dei parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\theta\)</span> prodotti dalla procedura di campionamento MCMC) mediante un <em>trace plot</em> .</p>
 <div class="cell docutils container">
@@ -1502,7 +1454,7 @@ Supponiamo che <code class="docutils literal notranslate"><span class="pre">thet
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/173d0b4197ef5374b31d62958049640979f2b3cb45b5f8fdda34f3e5e312d8a9.png"><img alt="../_images/173d0b4197ef5374b31d62958049640979f2b3cb45b5f8fdda34f3e5e312d8a9.png" src="../_images/173d0b4197ef5374b31d62958049640979f2b3cb45b5f8fdda34f3e5e312d8a9.png" style="width: 1211px; height: 411px;" /></a>
+<a class="reference internal image-reference" href="../_images/f4f2e5a8bb4d0ce6efc6839d68b655a1619f78d89e27e4b98fd8dc64375585b9.png"><img alt="../_images/f4f2e5a8bb4d0ce6efc6839d68b655a1619f78d89e27e4b98fd8dc64375585b9.png" src="../_images/f4f2e5a8bb4d0ce6efc6839d68b655a1619f78d89e27e4b98fd8dc64375585b9.png" style="width: 1211px; height: 411px;" /></a>
 </div>
 </div>
 </section>
@@ -1549,25 +1501,25 @@ Supponiamo che <code class="docutils literal notranslate"><span class="pre">thet
     <tr>
       <th>alpha</th>
       <td>0.13</td>
-      <td>0.09</td>
-      <td>0.01</td>
-      <td>0.31</td>
-      <td>0.00</td>
-      <td>0.00</td>
-      <td>1926.88</td>
-      <td>1308.16</td>
+      <td>0.06</td>
+      <td>0.04</td>
+      <td>0.23</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3866.76</td>
+      <td>3931.39</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>theta</th>
-      <td>2.34</td>
-      <td>0.48</td>
-      <td>1.59</td>
-      <td>3.12</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>2081.25</td>
-      <td>1157.79</td>
+      <td>2.40</td>
+      <td>0.29</td>
+      <td>1.88</td>
+      <td>2.95</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3640.88</td>
+      <td>4084.60</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1593,7 +1545,7 @@ Supponiamo che <code class="docutils literal notranslate"><span class="pre">thet
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 23 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Tue Jun 25 2024
 
 Python implementation: CPython
 Python version       : 3.12.3
@@ -1607,12 +1559,14 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-arviz     : 0.18.0
-pandas    : 2.2.2
+logging   : 0.5.1.2
 seaborn   : 0.13.2
-scipy     : 1.13.1
+pandas    : 2.2.2
 matplotlib: 3.8.4
 numpy     : 1.26.4
+cmdstanpy : 1.2.3
+scipy     : 1.13.1
+arviz     : 0.18.0
 
 Watermark: 2.4.3
 </pre></div>
