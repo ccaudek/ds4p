@@ -534,15 +534,23 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-armed-bandits">Two-armed bandits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-apprendimento-per-rinforzo-imparare-dall-esperienza">L’apprendimento per rinforzo: imparare dall’esperienza</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-meccanismo-alla-base-dell-apprendimento-per-rinforzo">Il meccanismo alla base dell’apprendimento per rinforzo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esplorazione-e-sfruttamento">Esplorazione e sfruttamento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#l-apprendimento-per-rinforzo-nella-ricerca-sull-intelligenza-artificiale">L’apprendimento per rinforzo nella ricerca sull’intelligenza artificiale</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-pratico-il-problema-dei-two-armed-bandits">Un esempio pratico: il problema dei two-armed bandits</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulare-l-apprendimento">Simulare l’Apprendimento</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri-del-problema">Parametri del Problema</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-pratico">Esempio Pratico</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-apprendimento-di-rescorla-wagner">Modello di Apprendimento di Rescorla-Wagner</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-regola-di-apprendimento-delta-rule">La Regola di Apprendimento (<span class="math notranslate nohighlight">\(\delta\)</span>-rule)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#softmax-la-regola-decisionale">Softmax: La Regola Decisionale</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imparare-il-rinforzo-i-componenti-chiave">Imparare il rinforzo: i componenti chiave</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-apprenimento-di-rescorla-wagner">Modello di Apprenimento di Rescorla-Wagner</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aspettativa-di-valore">Aspettativa di Valore</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-regola-di-apprendimento">La Regola di Apprendimento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-regola-decisionale">La Regola Decisionale</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-di-calcolo-della-softmax">Esempio di Calcolo della Softmax</a></li>
 </ul>
 </li>
@@ -604,12 +612,28 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="two-armed-bandits">
-<h2>Two-armed bandits<a class="headerlink" href="#two-armed-bandits" title="Link to this heading">#</a></h2>
-<p>Le nostre aspettative modellano il modo in cui ricordiamo il passato, viviamo il presente e prevediamo il futuro. Queste aspettative sono costruite su esperienze precedenti e sono fortemente influenzate da eventi inaspettati. Gli eventi inaspettati creano errori di previsione, definiti come deviazioni positive o negative dalle aspettative, e guidano l’apprendimento. La misura in cui i singoli errori di previsione influenzano le aspettative è chiamata tasso di apprendimento.</p>
-<p>L’errore di previsione è il meccanismo su cui si basa il modello di apprendimento di Rescorla-Wagner, e il tasso di apprendimento è uno dei suoi parametri fondamentali. Il tipo di apprendimento che il modello di Rescorla-Wagner intende spiegare è quello che descrive il comportamento di un agente di fronte al problema del «two-armed bandits».</p>
-<p>In questo problema, un partecipante deve fare ripetutamente delle scelte tra due opzioni o azioni. Dopo ogni scelta, riceve una ricompensa numerica estratta da una distribuzione di probabilità dipendente dall’azione selezionata. L’obiettivo del partecipante è massimizzare la ricompensa totale attesa durante un certo periodo di tempo, ad esempio, durante 100 scelte.</p>
-<p>Una metafora comune per descrivere questa situazione è quella di un giocatore che deve fare una serie di scelte tra due slot machine (chiamate anche «two-armed bandits») per massimizzare le sue vincite. Se nella scelta <span class="math notranslate nohighlight">\( t \)</span> viene selezionata la slot machine <span class="math notranslate nohighlight">\( k \)</span>, il partecipante ottiene una ricompensa <span class="math notranslate nohighlight">\( r_t \)</span>. Questa ricompensa ha valore <code class="docutils literal notranslate"><span class="pre">1</span></code> con una probabilità di successo <span class="math notranslate nohighlight">\( \mu^k_t \)</span> specifica per quella slot machine, altrimenti ha valore <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<section id="l-apprendimento-per-rinforzo-imparare-dall-esperienza">
+<h2>L’apprendimento per rinforzo: imparare dall’esperienza<a class="headerlink" href="#l-apprendimento-per-rinforzo-imparare-dall-esperienza" title="Link to this heading">#</a></h2>
+<p>Immagina un robot alle prese con un videogioco, privo di istruzioni precise ma con un obiettivo ben chiaro: ottenere il punteggio più alto. Attraverso tentativi ed errori, il robot sperimenta diverse azioni, scoprendo quali lo avvicinano al successo e quali no. Questo è il principio fondamentale dell’apprendimento per rinforzo (RL), un metodo di intelligenza artificiale ispirato al modo in cui gli esseri viventi imparano.</p>
+<section id="il-meccanismo-alla-base-dell-apprendimento-per-rinforzo">
+<h3>Il meccanismo alla base dell’apprendimento per rinforzo<a class="headerlink" href="#il-meccanismo-alla-base-dell-apprendimento-per-rinforzo" title="Link to this heading">#</a></h3>
+<p>Nell’apprendimento per rinforzo, un «agente» (che sia un robot, un modello matematico o una persona) interagisce con un «ambiente». L’agente compie azioni e riceve in cambio «ricompense» positive o negative, a seconda di quanto le sue azioni sono vicine al raggiungimento del suo obiettivo. L’obiettivo dell’agente è imparare a scegliere le azioni che gli permetteranno di ottenere il maggior numero di ricompense positive nel tempo.</p>
+</section>
+<section id="esplorazione-e-sfruttamento">
+<h3>Esplorazione e sfruttamento<a class="headerlink" href="#esplorazione-e-sfruttamento" title="Link to this heading">#</a></h3>
+<p>Uno dei dilemmi principali che gli agenti di apprendimento per rinforzo si trovano ad affrontare è il bilanciamento tra esplorazione e sfruttamento. Da un lato, l’agente ha bisogno di esplorare l’ambiente, provare nuove azioni e scoprire nuove strategie per ottenere ricompense. Dall’altro lato, desidera anche sfruttare la conoscenza già acquisita, scegliendo le azioni che ha già scoperto essere efficaci in passato.</p>
+</section>
+<section id="l-apprendimento-per-rinforzo-nella-ricerca-sull-intelligenza-artificiale">
+<h3>L’apprendimento per rinforzo nella ricerca sull’intelligenza artificiale<a class="headerlink" href="#l-apprendimento-per-rinforzo-nella-ricerca-sull-intelligenza-artificiale" title="Link to this heading">#</a></h3>
+<p>Dalla fine degli anni “60, molti ricercatori nel campo dell’intelligenza artificiale hanno ipotizzato che non esistano principi generali da scoprire, e che l’intelligenza derivi piuttosto dalla conoscenza di un vasto numero di trucchi, procedure ed euristiche specializzati. L’intelligenza artificiale moderna dedica invece molta attenzione alla ricerca di principi generali di apprendimento e processo decisionale. In questo senso, la ricerca sull’apprendimento per rinforzo rappresenta sicuramente un ritorno verso principi di intelligenza artificiale più semplici e universali.</p>
+</section>
+</section>
+<section id="un-esempio-pratico-il-problema-dei-two-armed-bandits">
+<h2>Un esempio pratico: il problema dei two-armed bandits<a class="headerlink" href="#un-esempio-pratico-il-problema-dei-two-armed-bandits" title="Link to this heading">#</a></h2>
+<p>Immaginiamo un giocatore di fronte a due slot machine. Ogni volta che sceglie una slot, può vincere (ottenendo un premio) o perdere (non ottenendo nulla). La probabilità di vincita varia tra le due slot machine, ma il giocatore non le conosce all’inizio. Il suo obiettivo è massimizzare le vincite scegliendo la slot machine con la maggiore probabilità di vincita il più spesso possibile.</p>
+<p>Questo semplice problema illustra il dilemma fondamentale dell’apprendimento per rinforzo: esplorare entrambe le slot machine per scoprire quale è la migliore (esplorazione) o sfruttare la slot machine che ha già scoperto essere la più vincente (sfruttamento)?</p>
+<p>Il modello di apprendimento di Rescorla-Wagner affronta proprio questo problema del «two-armed bandits». In questo scenario, un partecipante deve compiere ripetutamente delle scelte tra due opzioni o azioni. Dopo ogni scelta, riceve una ricompensa numerica estratta da una distribuzione di probabilità che dipende dall’azione selezionata. L’obiettivo del partecipante è massimizzare la ricompensa totale attesa durante un certo periodo di tempo, ad esempio, durante 100 scelte.</p>
+<p>Una metafora comune per descrivere questa situazione è quella di un giocatore che deve fare una serie di scelte tra due slot machine («two-armed bandits») per massimizzare le sue vincite. Se nella scelta <span class="math notranslate nohighlight">\(t\)</span> viene selezionata la slot machine <span class="math notranslate nohighlight">\(k\)</span>, il partecipante ottiene una ricompensa <span class="math notranslate nohighlight">\(r_t\)</span>. Questa ricompensa ha valore <code class="docutils literal notranslate"><span class="pre">1</span></code> con una probabilità di successo <span class="math notranslate nohighlight">\( \mu^k_t \)</span> specifica per quella slot machine, altrimenti ha valore <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
 <p>In altre parole:</p>
 <ul class="simple">
 <li><p>Ogni volta che il partecipante sceglie una slot machine, può vincere (ottenendo una ricompensa di <code class="docutils literal notranslate"><span class="pre">1</span></code>) o perdere (ottenendo una ricompensa di <code class="docutils literal notranslate"><span class="pre">0</span></code>).</p></li>
@@ -642,38 +666,62 @@ document.write(`
 <p>L’obiettivo di questo tutorial è mostrare come si può simulare il processo di apprendimento e come si possono usare modelli come quello di Rescorla-Wagner per capire meglio come le persone prendono decisioni in situazioni di incertezza. Attraverso la simulazione, vedremo come il partecipante può apprendere e adattarsi alle probabilità di ricompensa delle slot machine per massimizzare le sue vincite nel corso del tempo.</p>
 </section>
 </section>
-<section id="modello-di-apprendimento-di-rescorla-wagner">
-<h2>Modello di Apprendimento di Rescorla-Wagner<a class="headerlink" href="#modello-di-apprendimento-di-rescorla-wagner" title="Link to this heading">#</a></h2>
-<p>Il modello di apprendimento di Rescorla-Wagner è stato sviluppato per spiegare come gli organismi apprendono le associazioni tra eventi, ed è particolarmente utile nel modellare l’apprendimento associativo come il condizionamento classico. Il modello propone che l’apprendimento avvenga attraverso l’aggiornamento delle aspettative in base agli errori di previsione, ovvero le discrepanze tra ciò che è atteso e ciò che viene effettivamente osservato.</p>
-<section id="la-regola-di-apprendimento-delta-rule">
-<h3>La Regola di Apprendimento (<span class="math notranslate nohighlight">\(\delta\)</span>-rule)<a class="headerlink" href="#la-regola-di-apprendimento-delta-rule" title="Link to this heading">#</a></h3>
-<p>Secondo il modello di Rescorla-Wagner, il valore atteso di una scelta (<span class="math notranslate nohighlight">\( Q^k_t \)</span>) viene aggiornato dopo ogni tentativo utilizzando la seguente formula:</p>
-<div class="math notranslate nohighlight">
-\[ 
-Q^k_{t+1} = Q^k_t + \alpha (r_t - Q^k_t),
-\]</div>
-<p>dove:</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\( Q^k_t \)</span> è il valore atteso della scelta <span class="math notranslate nohighlight">\( k \)</span> al tempo <span class="math notranslate nohighlight">\( t \)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\( \alpha \)</span> è il tasso di apprendimento, compreso tra 0 e 1, che determina quanto rapidamente si adattano le aspettative.</p></li>
-<li><p><span class="math notranslate nohighlight">\( r_t \)</span> è la ricompensa ottenuta dopo aver fatto la scelta <span class="math notranslate nohighlight">\( k \)</span> al tempo <span class="math notranslate nohighlight">\( t \)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\( r_t - Q^k_t \)</span> rappresenta l’errore di previsione, cioè la differenza tra la ricompensa ottenuta e quella attesa.</p></li>
-</ul>
-<p>Un valore più alto di <span class="math notranslate nohighlight">\( \alpha \)</span> significa che l’aggiornamento delle aspettative è più rapido, mentre un valore più basso implica un aggiornamento più lento.</p>
+<section id="imparare-il-rinforzo-i-componenti-chiave">
+<h2>Imparare il rinforzo: i componenti chiave<a class="headerlink" href="#imparare-il-rinforzo-i-componenti-chiave" title="Link to this heading">#</a></h2>
+<p>L’apprendimento per rinforzo è simile a come gli esseri viventi imparano attraverso l’esperienza: provando e sbagliando, imparano ad associare le loro azioni a conseguenze positive o negative.</p>
+<p>Per comprendere meglio il funzionamento dell’apprendimento per rinforzo, è fondamentale analizzare i suoi quattro componenti chiave.</p>
+<p><strong>1. La politica (o strategia)</strong></p>
+<p>Il robot non agisce a caso. Ha una strategia, un piano d’azione che cambia nel tempo in base ai risultati ottenuti. Inizialmente, potrebbe scegliere le slot casualmente (50% leva A, 50% leva B). Ma con l’esperienza, impara a preferire la leva che gli ha dato più vincite.</p>
+<p>In termini tecnici, la strategia è rappresentata dalla funzione <strong>π (pi)</strong>, che associa le azioni possibili (tirare la leva A o B) ai diversi stati del gioco (vincita, perdita). All’inizio, <strong>π</strong> potrebbe essere casuale. Ma con il tempo, si aggiorna in base alle ricompense ricevute, aumentando la probabilità di scegliere la leva vincente.</p>
+<p><strong>2. La ricompensa</strong></p>
+<p>La ricompensa è un segnale che indica all’agente la bontà o meno delle sue azioni. La ricompensa può essere positiva (rinforzo) se l’azione è stata vantaggiosa, o negativa (punizione) se l’azione è stata dannosa. L’obiettivo dell’agente è massimizzare la ricompensa cumulativa nel lungo periodo.</p>
+<p>In termini tecnici, la funzione di ricompensa <strong>R</strong> assegna un valore numerico a ogni stato del gioco: 1 per la vincita e 0 per la perdita. Il robot è «motivato» a massimizzare la <strong>ricompensa cumulativa</strong>, ovvero la somma totale delle vincite ottenute nel tempo.</p>
+<p><strong>3. La funzione di valore</strong></p>
+<p>Per ogni leva, il robot calcola la ricompensa media che si aspetta di ricevere in futuro. In altre parole, cerca di capire quale slot è più «generosa» nel lungo periodo.</p>
+<p>In termini tecnici, la funzione di valore <strong>Q</strong> stima la ricompensa media attesa per ogni stato del gioco. Il robot utilizza questa stima per scegliere l’azione che lo porterà nello stato con il valore <strong>Q</strong> più alto, ovvero la slot machine che ha maggiori probabilità di fargli ottenere una vincita nel lungo periodo.</p>
+<p><strong>4. Il modello dell’ambiente</strong></p>
+<p>In alcuni casi, il robot può avere un asso nella manica: un <strong>modello dell’ambiente</strong>, ovvero una simulazione dell’ambiente che permette all’agente di prevedere le conseguenze delle sue azioni prima di compierle.</p>
+<p>In termini tecnici, il modello dell’ambiente <strong>M</strong> è una simulazione delle slot machine che permette al robot di prevedere la probabilità di vincita per ogni leva. Il robot può utilizzare questa informazione per aggiornare la sua funzione di valore e scegliere l’azione che massimizza la ricompensa attesa.</p>
 </section>
-<section id="softmax-la-regola-decisionale">
-<h3>Softmax: La Regola Decisionale<a class="headerlink" href="#softmax-la-regola-decisionale" title="Link to this heading">#</a></h3>
-<p>Per decidere quale scelta fare, utilizziamo la regola <em>softmax</em>, che permette ai partecipanti di scegliere più frequentemente l’opzione con il valore atteso più alto, ma anche di esplorare occasionalmente altre opzioni. La regola di scelta <em>softmax</em> converte i valori attesi <span class="math notranslate nohighlight">\( Q \)</span> in probabilità di scelta:</p>
+<section id="modello-di-apprenimento-di-rescorla-wagner">
+<h2>Modello di Apprenimento di Rescorla-Wagner<a class="headerlink" href="#modello-di-apprenimento-di-rescorla-wagner" title="Link to this heading">#</a></h2>
+<p>Il modello di apprendimento di Rescorla-Wagner, sviluppato per comprendere come gli esseri viventi apprendono le associazioni tra eventi, è particolarmente utile nel descrivere l’apprendimento associativo, come il condizionamento classico. Il modello si basa sull’idea che l’apprendimento avvenga attraverso l’aggiornamento continuo delle aspettative sulla base degli <strong>errori di previsione</strong>. In altre parole, la differenza tra ciò che ci si aspetta di ricevere e ciò che viene effettivamente osservato determina come modifichiamo le nostre aspettative per il futuro.</p>
+<section id="aspettativa-di-valore">
+<h3>Aspettativa di Valore<a class="headerlink" href="#aspettativa-di-valore" title="Link to this heading">#</a></h3>
+<p>Immaginiamo un problema con <strong>due bandit a due braccia</strong>: ogni braccio rappresenta un’azione con una specifica ricompensa media associata. Il valore di un’azione corrisponde alla sua ricompensa media attesa.</p>
+<p>Indichiamo con:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A_t\)</span>: l’azione scelta al tempo <span class="math notranslate nohighlight">\(t\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_t\)</span>: la ricompensa ottenuta dopo aver scelto l’azione <span class="math notranslate nohighlight">\(A_t\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(q^{*}(a)\)</span>: il valore atteso dell’azione <span class="math notranslate nohighlight">\(a\)</span> (ovvero la ricompensa media attesa se scegliamo <span class="math notranslate nohighlight">\(a\)</span>).</p></li>
+</ul>
+<p>Se conoscessimo il valore esatto di ogni azione, il problema del bandit a due braccia sarebbe banale: basterebbe scegliere sempre l’azione con il valore più alto. Tuttavia, in realtà, non conosciamo con certezza i valori delle azioni, ma possiamo solo stimarli.</p>
+<p>Indichiamo con <span class="math notranslate nohighlight">\(Q_t(a)\)</span> la stima del valore dell’azione <span class="math notranslate nohighlight">\(a\)</span> al tempo <strong>t</strong>. L’obiettivo è far sì che <span class="math notranslate nohighlight">\(Q_t(a)\)</span> si avvicini il più possibile al valore reale <span class="math notranslate nohighlight">\(q^{*}(a)\)</span>.</p>
+</section>
+<section id="la-regola-di-apprendimento">
+<h3>La Regola di Apprendimento<a class="headerlink" href="#la-regola-di-apprendimento" title="Link to this heading">#</a></h3>
+<p>Secondo il modello Rescorla-Wagner, il valore atteso di un’azione viene aggiornato dopo ogni tentativo usando la seguente regola:</p>
 <div class="math notranslate nohighlight">
-\[
-p^k_t = \frac{\exp(\theta Q^k_t)}{\sum_{i=1}^K \exp(\theta Q^i_t)},
-\]</div>
+\[Q_k(t + 1) = Q_k(t) + \alpha (R_k - Q_k(t))\]</div>
 <p>dove:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\( p^k_t \)</span> è la probabilità di scegliere l’opzione <span class="math notranslate nohighlight">\( k \)</span> al tempo <span class="math notranslate nohighlight">\( t \)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\( \theta \)</span> è un parametro chiamato “temperatura” che controlla il livello di esplorazione rispetto alla scelta deterministica. Valori alti di <span class="math notranslate nohighlight">\( \theta \)</span> portano a scelte più deterministiche (sempre scegliere l’opzione con il valore atteso più alto), mentre valori bassi portano a scelte più casuali.</p></li>
+<li><p><span class="math notranslate nohighlight">\(Q_k(t)\)</span>: valore atteso dell’azione <strong>k</strong> al tempo <strong>t</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span>: <strong>tasso di apprendimento</strong>, un valore compreso tra 0 e 1 che determina la velocità di aggiornamento delle aspettative. Un valore più alto di <strong>α</strong> implica un apprendimento più rapido, mentre uno più basso implica un apprendimento più lento.</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_k\)</span>: ricompensa ottenuta dopo aver scelto l’azione <strong>k</strong> al tempo <strong>t</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(R_k - Q_k(t)\)</span>: <strong>errore di previsione</strong>, la differenza tra la ricompensa ottenuta e quella attesa</p></li>
 </ul>
-<p>Il modello di Rescorla-Wagner, con la sua enfasi sull’errore di previsione, fornisce una spiegazione chiara e matematica di come gli organismi aggiornano le loro aspettative e prendono decisioni basate su esperienze passate e ricompense ricevute.</p>
+<p>In parole semplici, l’errore di previsione guida l’aggiornamento delle nostre aspettative: se la ricompensa è maggiore del previsto, il valore dell’azione viene aumentato; se la ricompensa è minore del previsto, il valore dell’azione viene diminuito.</p>
+</section>
+<section id="la-regola-decisionale">
+<h3>La Regola Decisionale<a class="headerlink" href="#la-regola-decisionale" title="Link to this heading">#</a></h3>
+<p>Per decidere quale azione intraprendere, utilizziamo la regola <strong>softmax</strong>, che bilancia l’esplorazione di nuove opzioni con la scelta dell’azione con il valore atteso più alto. La regola softmax trasforma i valori attesi <strong>Q</strong> in probabilità di scelta:</p>
+<div class="math notranslate nohighlight">
+\[p_k(t) = \frac{exp(\theta Q_k(t))}{\sum_{i=1}^K exp(\theta Q_i(t))}\]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p_k(t)\)</span>: probabilità di scegliere l’azione <strong>k</strong> al tempo <strong>t</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta\)</span>: parametro <strong>temperatura</strong> che controlla il livello di esplorazione. Valori alti di <span class="math notranslate nohighlight">\(\theta\)</span> portano a scelte più deterministiche (quasi sempre l’azione con il valore più alto), mentre valori bassi portano a scelte più casuali.</p></li>
+</ul>
 <section id="esempio-di-calcolo-della-softmax">
 <h4>Esempio di Calcolo della Softmax<a class="headerlink" href="#esempio-di-calcolo-della-softmax" title="Link to this heading">#</a></h4>
 <p>Per capire come funziona la softmax, consideriamo alcuni valori di <span class="math notranslate nohighlight">\(Q\)</span> e <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
@@ -1644,15 +1692,23 @@ Watermark: 2.4.3
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-armed-bandits">Two-armed bandits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#l-apprendimento-per-rinforzo-imparare-dall-esperienza">L’apprendimento per rinforzo: imparare dall’esperienza</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-meccanismo-alla-base-dell-apprendimento-per-rinforzo">Il meccanismo alla base dell’apprendimento per rinforzo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esplorazione-e-sfruttamento">Esplorazione e sfruttamento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#l-apprendimento-per-rinforzo-nella-ricerca-sull-intelligenza-artificiale">L’apprendimento per rinforzo nella ricerca sull’intelligenza artificiale</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-pratico-il-problema-dei-two-armed-bandits">Un esempio pratico: il problema dei two-armed bandits</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulare-l-apprendimento">Simulare l’Apprendimento</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri-del-problema">Parametri del Problema</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-pratico">Esempio Pratico</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-apprendimento-di-rescorla-wagner">Modello di Apprendimento di Rescorla-Wagner</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-regola-di-apprendimento-delta-rule">La Regola di Apprendimento (<span class="math notranslate nohighlight">\(\delta\)</span>-rule)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#softmax-la-regola-decisionale">Softmax: La Regola Decisionale</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imparare-il-rinforzo-i-componenti-chiave">Imparare il rinforzo: i componenti chiave</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-apprenimento-di-rescorla-wagner">Modello di Apprenimento di Rescorla-Wagner</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aspettativa-di-valore">Aspettativa di Valore</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-regola-di-apprendimento">La Regola di Apprendimento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#la-regola-decisionale">La Regola Decisionale</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-di-calcolo-della-softmax">Esempio di Calcolo della Softmax</a></li>
 </ul>
 </li>
