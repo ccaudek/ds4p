@@ -535,8 +535,12 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-la-distribuzione-normale">Perché Usare la Distribuzione Normale?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">Derivazione Analitica della Distribuzione a Posteriori in un Contesto Normale con Varianza Nota</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-sui-risultati">Considerazioni sui Risultati</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
@@ -583,6 +587,12 @@ document.write(`
 </div>
 </div>
 </section>
+<section id="perche-usare-la-distribuzione-normale">
+<h2>Perché Usare la Distribuzione Normale?<a class="headerlink" href="#perche-usare-la-distribuzione-normale" title="Link to this heading">#</a></h2>
+<p>Spesso, quando la distribuzione a posteriori è nota per essere unimodale e simmetrica, possiamo modellarla efficacemente con una distribuzione normale, anche se sappiamo che la sua forma è solo approssimativamente normale. Nei casi in cui il ricercatore abbia un’idea approssimativa di dove sia centrato un parametro sconosciuto, la distribuzione normale fornisce un metodo utile per modellare questa stima, permettendo di descrivere il livello di incertezza tramite il termine di varianza della distribuzione normale. Questa convenienza può offrire buone approssimazioni alla densità a posteriori desiderata, con la consapevolezza che, con l’aumentare dei dati osservati, tali assunzioni perdono di importanza.</p>
+<p>Come dimostrato di seguito, il modello normale bayesiano possiede proprietà frequentiste desiderabili. Sebbene l’enfasi nell’analisi bayesiana non sia sulle stime puntuali, si può dimostrare che, con campioni sempre più grandi, la media della distribuzione a posteriori bayesiana si avvicina alla stima di massima verosimiglianza. Questa proprietà esiste perché la distribuzione a posteriori è un compromesso ponderato tra la distribuzione a priori specificata dall’utente, che in questo capitolo è normale, e la funzione di verosimiglianza derivata dai dati, anch’essa normale in questo capitolo. Con l’aumentare delle dimensioni del campione, la verosimiglianza diventa sempre più dominante in questa ponderazione.</p>
+<p>Nel caso di una media normale, illustrato qui, la varianza della distribuzione di campionamento frequentista diminuisce con l’aumento della dimensione del campione. Nel contesto bayesiano, la riduzione della varianza media dalla funzione di verosimiglianza alla fine prevale anche su una varianza a priori deliberatamente grande. Pertanto, se si prevede che la dimensione del dataset sia grande, i ricercatori possono permettersi di essere liberali nella specificazione della varianza a priori.</p>
+</section>
 <section id="derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">
 <h2>Derivazione Analitica della Distribuzione a Posteriori in un Contesto Normale con Varianza Nota<a class="headerlink" href="#derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota" title="Link to this heading">#</a></h2>
 <p>Esaminiamo un insieme di dati <span class="math notranslate nohighlight">\(y = [Y_1, \ldots, Y_n]\)</span>, che consiste in <span class="math notranslate nohighlight">\(n\)</span> osservazioni indipendenti e identicamente distribuite secondo una distribuzione normale <span class="math notranslate nohighlight">\(\mathcal{N}(\mu, \sigma)\)</span>, dove <span class="math notranslate nohighlight">\(\sigma\)</span> è un valore già noto. L’obiettivo è stimare il parametro <span class="math notranslate nohighlight">\(\mu\)</span>, utilizzando un approccio Bayesiano. Per fare ciò, adottiamo una distribuzione a priori per <span class="math notranslate nohighlight">\(\mu\)</span> che è anch’essa una distribuzione normale. Questo tipo di modello è conosciuto come «normale-normale coniugato».</p>
@@ -619,75 +629,383 @@ p(\mu \mid y) = \frac{1}{{\sigma_p \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_p)^
 </section>
 <section id="un-esempio-concreto">
 <h2>Un esempio concreto<a class="headerlink" href="#un-esempio-concreto" title="Link to this heading">#</a></h2>
-<p>Supponiamo di esaminare i punteggi BDI-II (un indice di depressione) di un gruppo di soggetti clinici <span id="id1">[]</span>. Da questi dati, vogliamo aggiornare le nostre conoscenze sulla media della popolazione di questi punteggi.</p>
-<p>Per illustrare come l’incertezza si riduca passando dalla conoscenza a priori a quella a posteriori, consideriamo:</p>
+<p>I test standard di QI sono progettati per misurare l’intelligenza con una media di 100 e una deviazione standard di 15. Tuttavia, si dice anche che questi test presentino bias culturali che favoriscono alcuni gruppi rispetto ad altri. Un’ulteriore complicazione si verifica quando i punteggi di QI vengono aggregati a livello nazionale, poiché le caratteristiche interne ai paesi vengono mascherate. Questo esempio analizza i dati di QI raccolti a livello internazionale (Lynn e Vanhanen, 2001) per 80 paesi da fonti nazionali pubblicate. L’idea chiave nella descrizione della distribuzione a posteriori è se le differenze tra le nazioni alterano la parametrizzazione prevista.</p>
+<p>I dati di Lynn e Vanhanen (2001) sono forniti di seguito:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Paese</p></th>
+<th class="head"><p>IQ</p></th>
+<th class="head"><p>Paese</p></th>
+<th class="head"><p>IQ</p></th>
+<th class="head"><p>Paese</p></th>
+<th class="head"><p>IQ</p></th>
+<th class="head"><p>Paese</p></th>
+<th class="head"><p>IQ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Argentina</p></td>
+<td><p>96</p></td>
+<td><p>Australia</p></td>
+<td><p>98</p></td>
+<td><p>Austria</p></td>
+<td><p>102</p></td>
+<td><p>Barbados</p></td>
+<td><p>78</p></td>
+</tr>
+<tr class="row-odd"><td><p>Belgium</p></td>
+<td><p>100</p></td>
+<td><p>Brazil</p></td>
+<td><p>87</p></td>
+<td><p>Bulgaria</p></td>
+<td><p>93</p></td>
+<td><p>Canada</p></td>
+<td><p>97</p></td>
+</tr>
+<tr class="row-even"><td><p>China</p></td>
+<td><p>100</p></td>
+<td><p>Congo (Br.)</p></td>
+<td><p>73</p></td>
+<td><p>Congo (Zr.)</p></td>
+<td><p>65</p></td>
+<td><p>Croatia</p></td>
+<td><p>90</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cuba</p></td>
+<td><p>85</p></td>
+<td><p>Czech Repub.</p></td>
+<td><p>97</p></td>
+<td><p>Denmark</p></td>
+<td><p>98</p></td>
+<td><p>Ecuador</p></td>
+<td><p>80</p></td>
+</tr>
+<tr class="row-even"><td><p>Egypt</p></td>
+<td><p>83</p></td>
+<td><p>Eq. Guinea</p></td>
+<td><p>59</p></td>
+<td><p>Ethiopia</p></td>
+<td><p>63</p></td>
+<td><p>Fiji</p></td>
+<td><p>84</p></td>
+</tr>
+<tr class="row-odd"><td><p>Finland</p></td>
+<td><p>97</p></td>
+<td><p>France</p></td>
+<td><p>98</p></td>
+<td><p>Germany</p></td>
+<td><p>102</p></td>
+<td><p>Ghana</p></td>
+<td><p>71</p></td>
+</tr>
+<tr class="row-even"><td><p>Greece</p></td>
+<td><p>92</p></td>
+<td><p>Guatemala</p></td>
+<td><p>79</p></td>
+<td><p>Guinea</p></td>
+<td><p>66</p></td>
+<td><p>Hong Kong</p></td>
+<td><p>107</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hungary</p></td>
+<td><p>99</p></td>
+<td><p>India</p></td>
+<td><p>81</p></td>
+<td><p>Indonesia</p></td>
+<td><p>89</p></td>
+<td><p>Iran</p></td>
+<td><p>84</p></td>
+</tr>
+<tr class="row-even"><td><p>Iraq</p></td>
+<td><p>87</p></td>
+<td><p>Ireland</p></td>
+<td><p>93</p></td>
+<td><p>Israel</p></td>
+<td><p>94</p></td>
+<td><p>Italy</p></td>
+<td><p>102</p></td>
+</tr>
+<tr class="row-odd"><td><p>Jamaica</p></td>
+<td><p>72</p></td>
+<td><p>Japan</p></td>
+<td><p>105</p></td>
+<td><p>Kenya</p></td>
+<td><p>72</p></td>
+<td><p>Korea (S.)</p></td>
+<td><p>106</p></td>
+</tr>
+<tr class="row-even"><td><p>Lebanon</p></td>
+<td><p>86</p></td>
+<td><p>Malaysia</p></td>
+<td><p>92</p></td>
+<td><p>Marshall I.</p></td>
+<td><p>84</p></td>
+<td><p>Mexico</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>Morocco</p></td>
+<td><p>85</p></td>
+<td><p>Nepal</p></td>
+<td><p>78</p></td>
+<td><p>Netherlands</p></td>
+<td><p>102</p></td>
+<td><p>New Zealand</p></td>
+<td><p>100</p></td>
+</tr>
+<tr class="row-even"><td><p>Nigeria</p></td>
+<td><p>67</p></td>
+<td><p>Norway</p></td>
+<td><p>98</p></td>
+<td><p>Peru</p></td>
+<td><p>90</p></td>
+<td><p>Philippines</p></td>
+<td><p>86</p></td>
+</tr>
+<tr class="row-odd"><td><p>Poland</p></td>
+<td><p>99</p></td>
+<td><p>Portugal</p></td>
+<td><p>95</p></td>
+<td><p>Puerto Rico</p></td>
+<td><p>84</p></td>
+<td><p>Qatar</p></td>
+<td><p>78</p></td>
+</tr>
+<tr class="row-even"><td><p>Romania</p></td>
+<td><p>94</p></td>
+<td><p>Russia</p></td>
+<td><p>96</p></td>
+<td><p>Samoa</p></td>
+<td><p>87</p></td>
+<td><p>Sierra Leone</p></td>
+<td><p>64</p></td>
+</tr>
+<tr class="row-odd"><td><p>Singapore</p></td>
+<td><p>103</p></td>
+<td><p>Slovakia</p></td>
+<td><p>96</p></td>
+<td><p>Slovenia</p></td>
+<td><p>95</p></td>
+<td><p>South Africa</p></td>
+<td><p>72</p></td>
+</tr>
+<tr class="row-even"><td><p>Spain</p></td>
+<td><p>97</p></td>
+<td><p>Sudan</p></td>
+<td><p>72</p></td>
+<td><p>Suriname</p></td>
+<td><p>89</p></td>
+<td><p>Sweden</p></td>
+<td><p>101</p></td>
+</tr>
+<tr class="row-odd"><td><p>Switzerland</p></td>
+<td><p>101</p></td>
+<td><p>Taiwan</p></td>
+<td><p>104</p></td>
+<td><p>Tanzania</p></td>
+<td><p>72</p></td>
+<td><p>Thailand</p></td>
+<td><p>91</p></td>
+</tr>
+<tr class="row-even"><td><p>Tonga</p></td>
+<td><p>87</p></td>
+<td><p>Turkey</p></td>
+<td><p>90</p></td>
+<td><p>Uganda</p></td>
+<td><p>73</p></td>
+<td><p>U.K.</p></td>
+<td><p>100</p></td>
+</tr>
+<tr class="row-odd"><td><p>U.S.</p></td>
+<td><p>98</p></td>
+<td><p>Uruguay</p></td>
+<td><p>96</p></td>
+<td><p>Zambia</p></td>
+<td><p>77</p></td>
+<td><p>Zimbabwe</p></td>
+<td><p>66</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Implementiamo le informazioni necessarie in Python.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dati IQ delle 80 nazioni</span>
+<span class="n">iq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="mi">96</span><span class="p">,</span>
+        <span class="mi">100</span><span class="p">,</span>
+        <span class="mi">100</span><span class="p">,</span>
+        <span class="mi">85</span><span class="p">,</span>
+        <span class="mi">83</span><span class="p">,</span>
+        <span class="mi">97</span><span class="p">,</span>
+        <span class="mi">92</span><span class="p">,</span>
+        <span class="mi">99</span><span class="p">,</span>
+        <span class="mi">87</span><span class="p">,</span>
+        <span class="mi">72</span><span class="p">,</span>
+        <span class="mi">86</span><span class="p">,</span>
+        <span class="mi">85</span><span class="p">,</span>
+        <span class="mi">67</span><span class="p">,</span>
+        <span class="mi">99</span><span class="p">,</span>
+        <span class="mi">94</span><span class="p">,</span>
+        <span class="mi">103</span><span class="p">,</span>
+        <span class="mi">97</span><span class="p">,</span>
+        <span class="mi">101</span><span class="p">,</span>
+        <span class="mi">87</span><span class="p">,</span>
+        <span class="mi">98</span><span class="p">,</span>
+        <span class="mi">87</span><span class="p">,</span>
+        <span class="mi">73</span><span class="p">,</span>
+        <span class="mi">97</span><span class="p">,</span>
+        <span class="mi">59</span><span class="p">,</span>
+        <span class="mi">98</span><span class="p">,</span>
+        <span class="mi">79</span><span class="p">,</span>
+        <span class="mi">81</span><span class="p">,</span>
+        <span class="mi">93</span><span class="p">,</span>
+        <span class="mi">105</span><span class="p">,</span>
+        <span class="mi">92</span><span class="p">,</span>
+        <span class="mi">78</span><span class="p">,</span>
+        <span class="mi">98</span><span class="p">,</span>
+        <span class="mi">95</span><span class="p">,</span>
+        <span class="mi">96</span><span class="p">,</span>
+        <span class="mi">72</span><span class="p">,</span>
+        <span class="mi">104</span><span class="p">,</span>
+        <span class="mi">90</span><span class="p">,</span>
+        <span class="mi">96</span><span class="p">,</span>
+        <span class="mi">98</span><span class="p">,</span>
+        <span class="mi">102</span><span class="p">,</span>
+        <span class="mi">78</span><span class="p">,</span>
+        <span class="mi">90</span><span class="p">,</span>
+        <span class="mi">63</span><span class="p">,</span>
+        <span class="mi">84</span><span class="p">,</span>
+        <span class="mi">84</span><span class="p">,</span>
+        <span class="mi">107</span><span class="p">,</span>
+        <span class="mi">86</span><span class="p">,</span>
+        <span class="mi">102</span><span class="p">,</span>
+        <span class="mi">106</span><span class="p">,</span>
+        <span class="mi">94</span><span class="p">,</span>
+        <span class="mi">102</span><span class="p">,</span>
+        <span class="mi">72</span><span class="p">,</span>
+        <span class="mi">101</span><span class="p">,</span>
+        <span class="mi">89</span><span class="p">,</span>
+        <span class="mi">72</span><span class="p">,</span>
+        <span class="mi">101</span><span class="p">,</span>
+        <span class="mi">91</span><span class="p">,</span>
+        <span class="mi">100</span><span class="p">,</span>
+        <span class="mi">100</span><span class="p">,</span>
+        <span class="mi">66</span><span class="p">,</span>
+        <span class="mi">107</span><span class="p">,</span>
+        <span class="mi">86</span><span class="p">,</span>
+        <span class="mi">78</span><span class="p">,</span>
+        <span class="mi">84</span><span class="p">,</span>
+        <span class="mi">78</span><span class="p">,</span>
+        <span class="mi">64</span><span class="p">,</span>
+        <span class="mi">72</span><span class="p">,</span>
+        <span class="mi">101</span><span class="p">,</span>
+        <span class="mi">91</span><span class="p">,</span>
+        <span class="mi">100</span><span class="p">,</span>
+        <span class="mi">67</span><span class="p">,</span>
+        <span class="mi">86</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Numero di osservazioni</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iq</span><span class="p">)</span>
+
+<span class="c1"># Media campionaria</span>
+<span class="n">y_bar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">iq</span><span class="p">)</span>
+
+<span class="c1"># Deviazione standard nota</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">15</span>
+
+<span class="c1"># Parametri a priori</span>
+<span class="n">mu_0</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma_0</span> <span class="o">=</span> <span class="mi">15</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calcoliamo la media a posteriori con la formula discussa in precedenza</p>
+<div class="math notranslate nohighlight">
+\[
+\mu_p = \frac{\frac{1}{\sigma_0^2}\mu_0 + \frac{n}{\sigma^2}\bar{y}}{\frac {1}{\sigma_0^2} + \frac{n}{\sigma^2}}
+\]</div>
+<p>dove:</p>
 <ul class="simple">
-<li><p>Una distribuzione a priori per la media dei punteggi con una media (μ0) di 30 e una deviazione standard (σ0) di 5, che riflette una certa incertezza iniziale sulla media della popolazione.</p></li>
-<li><p>I dati osservati, da cui calcoliamo la media campionaria (<span class="math notranslate nohighlight">\(\bar{y}\)</span>) e la deviazione standard del campione (<span class="math notranslate nohighlight">\(\hat{\sigma}\)</span>).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu_0\)</span> è la media a priori</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_0\)</span> è la deviazione standard a priori</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> è il numero di osservazioni</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span> è la deviazione standard delle osservazioni (nota)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y}\)</span> è la media campionaria</p></li>
 </ul>
-<p>Utilizziamo questi dati per calcolare la media e la deviazione standard a posteriori, che riflettono la nostra conoscenza aggiornata e ridotta incertezza sulla media della popolazione.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dati osservati</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">26.0</span><span class="p">,</span> <span class="mf">35.0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> 
-              <span class="mi">28</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">22</span><span class="p">])</span>
-<span class="n">y_bar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Uso ddof=1 per la deviazione standard campionaria</span>
-<span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Distribuzione a priori</span>
-<span class="n">mu_0</span> <span class="o">=</span> <span class="mi">29</span>
-<span class="n">sigma_0</span> <span class="o">=</span> <span class="mi">5</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calcolo della media e deviazione standard a posteriori</span>
-<span class="n">mu_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">mu_0</span> <span class="o">/</span> <span class="n">sigma_0</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">y_bar</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma_0</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">n</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">sigma_post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma_0</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">n</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualizzazione</span>
-<span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">mu_0</span><span class="p">,</span> <span class="n">sigma_0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Prior&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">mu_post</span><span class="p">,</span> <span class="n">sigma_post</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Posterior&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Media dei punteggi BDI-II&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Densità&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribuzione a Priori vs a Posteriori&#39;</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu_p</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma_0</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu_0</span> <span class="o">+</span> <span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">y_bar</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+    <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma_0</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Media a posteriori (mu_p): </span><span class="si">{</span><span class="n">mu_p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/56114f5a1253214cd93992c2dfcaabe4259e2a9a8d3c28afec51d5ba148878a3.png"><img alt="../_images/56114f5a1253214cd93992c2dfcaabe4259e2a9a8d3c28afec51d5ba148878a3.png" src="../_images/56114f5a1253214cd93992c2dfcaabe4259e2a9a8d3c28afec51d5ba148878a3.png" style="width: 731px; height: 491px;" /></a>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Media a posteriori (mu_p): 89.35616438356165
+</pre></div>
 </div>
 </div>
+</div>
+<p>Calcoliamo la varianza a posteriori</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma_p^2 = \frac{1}{\frac {1}{\sigma_0^2}+ \frac{n}{\sigma^2}}
+\]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Media a priori: </span><span class="si">{</span><span class="n">mu_0</span><span class="si">}</span><span class="s2">, Deviazione standard a priori: </span><span class="si">{</span><span class="n">sigma_0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Media a posteriori: </span><span class="si">{</span><span class="n">mu_post</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, Deviazione standard a posteriori: </span><span class="si">{</span><span class="n">sigma_post</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_p_sq</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma_0</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Varianza a posteriori (sigma_p_sq): </span><span class="si">{</span><span class="n">sigma_p_sq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Media a priori: 29, Deviazione standard a priori: 5
-Media a posteriori: 30.83, Deviazione standard a posteriori: 1.17
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Varianza a posteriori (sigma_p_sq): 3.082191780821918
 </pre></div>
 </div>
 </div>
 </div>
-<p>Questo codice Python visualizza le distribuzioni a priori e a posteriori per la media dei punteggi BDI-II, evidenziando come l’informazione aggiunta dai dati riduca l’incertezza sulla media della popolazione, come dimostrato dalla riduzione della deviazione standard dalla distribuzione a priori a quella a posteriori. Il grafico risultante mostra chiaramente questo effetto: la curva a posteriori è più «stretta» rispetto alla curva a priori, indicando una minore incertezza nella stima della media dopo l’analisi dei dati. Questa riduzione dell’incertezza è uno dei benefici fondamentali dell’approccio bayesiano all’inferenza statistica.</p>
+<p>Generiamo una rappresentazione grafica della distribuzione a posteriori della media del IQ sulla base dei dati osservati e avendo assunto <code class="docutils literal notranslate"><span class="pre">mu_0</span></code> = 100 e <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code> = 15 per la distribuzione a priori.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma_p_sq</span><span class="p">)</span>
+
+<span class="c1"># Definizione dei valori sull&#39;asse x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">mu_p</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">sigma_p</span><span class="p">,</span> <span class="n">mu_p</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">sigma_p</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># Calcolo della densità di probabilità</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu_p</span><span class="p">,</span> <span class="n">sigma_p</span><span class="p">)</span>
+
+<span class="c1"># Creazione del grafico</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pdf</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;N(</span><span class="si">{</span><span class="n">mu_p</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">sigma_p</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pdf</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Distribuzione a Posteriori&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Media del Quoziente di Intelligenza&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Densità di probabilità&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/d159c1d359dd50040b872de59da6f1ed1be382135632f89ae3ec1610de83c290.png"><img alt="../_images/d159c1d359dd50040b872de59da6f1ed1be382135632f89ae3ec1610de83c290.png" src="../_images/d159c1d359dd50040b872de59da6f1ed1be382135632f89ae3ec1610de83c290.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<section id="considerazioni-sui-risultati">
+<h3>Considerazioni sui Risultati<a class="headerlink" href="#considerazioni-sui-risultati" title="Link to this heading">#</a></h3>
+<p>È degno di nota il fatto che la distribuzione di μ sia centrata intorno a 89 anziché 100, con un errore standard di circa 1.8 (ricordiamo che stiamo analizzando le medie non ponderate per paese, il che riduce la varianza). Parte dei risultati può essere attribuita agli effetti di aggregazione che emergono nella media a posteriori. Questo può essere dovuto a un impatto culturale, poiché lo strumento è stato originariamente progettato per l’uso in un paese industrializzato di lingua inglese e successivamente utilizzato in tutto il mondo.</p>
+<p>Questi risultati evidenziano l’importanza di considerare fattori metodologici nell’interpretazione dei dati dei test di intelligenza a livello internazionale. La deviazione osservata dalla media attesa di 100 potrebbe riflettere le differenze nei contesti sanitari, sociologici e politici in cui i test sono stati somministrati, piuttosto che differenze reali nell’intelligenza media tra le nazioni.</p>
+</section>
 </section>
 <section id="commenti-e-considerazioni-finali">
 <h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
@@ -706,7 +1024,7 @@ Media a posteriori: 30.83, Deviazione standard a posteriori: 1.17
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Thu Jul 04 2024
 
 Python implementation: CPython
 Python version       : 3.12.3
@@ -714,16 +1032,16 @@ IPython version      : 8.25.0
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
-Release     : 23.4.0
+Release     : 23.5.0
 Machine     : arm64
 Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
+numpy     : 1.26.4
+scipy     : 1.13.1
 matplotlib: 3.8.4
 arviz     : 0.18.0
-scipy     : 1.13.1
-numpy     : 1.26.4
 
 Watermark: 2.4.3
 </pre></div>
@@ -798,8 +1116,12 @@ Watermark: 2.4.3
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-la-distribuzione-normale">Perché Usare la Distribuzione Normale?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">Derivazione Analitica della Distribuzione a Posteriori in un Contesto Normale con Varianza Nota</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-sui-risultati">Considerazioni sui Risultati</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
