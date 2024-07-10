@@ -535,12 +535,16 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-la-distribuzione-normale">Perché Usare la Distribuzione Normale?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">Derivazione Analitica della Distribuzione a Posteriori in un Contesto Normale con Varianza Nota</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-sui-risultati">Considerazioni sui Risultati</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-la-distribuzione-normale">Perché Usare la Distribuzione Normale?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">Distribuzione a Posteriori in un Contesto Normale con Varianza Nota</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-priori">Distribuzione a Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funzione-di-verosimiglianza">Funzione di Verosimiglianza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema-di-bayes-e-distribuzione-a-posteriori">Teorema di Bayes e Distribuzione a Posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formula-per-la-media-a-posteriori-mu-p">Formula per la Media a Posteriori (<span class="math notranslate nohighlight">\(\mu_p\)</span>)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formula-per-la-varianza-a-posteriori-sigma-p-2">Formula per la Varianza a Posteriori (<span class="math notranslate nohighlight">\(\sigma_p^2\)</span>)</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
@@ -592,40 +596,55 @@ document.write(`
 <p>Spesso, quando la distribuzione a posteriori è nota per essere unimodale e simmetrica, possiamo modellarla efficacemente con una distribuzione normale, anche se sappiamo che la sua forma è solo approssimativamente normale. Nei casi in cui il ricercatore abbia un’idea approssimativa di dove sia centrato un parametro sconosciuto, la distribuzione normale fornisce un metodo utile per modellare questa stima, permettendo di descrivere il livello di incertezza tramite il termine di varianza della distribuzione normale. Questa convenienza può offrire buone approssimazioni alla densità a posteriori desiderata, con la consapevolezza che, con l’aumentare dei dati osservati, tali assunzioni perdono di importanza.</p>
 <p>Come dimostrato di seguito, il modello normale bayesiano possiede proprietà frequentiste desiderabili. Sebbene l’enfasi nell’analisi bayesiana non sia sulle stime puntuali, si può dimostrare che, con campioni sempre più grandi, la media della distribuzione a posteriori bayesiana si avvicina alla stima di massima verosimiglianza. Questa proprietà esiste perché la distribuzione a posteriori è un compromesso ponderato tra la distribuzione a priori specificata dall’utente, che in questo capitolo è normale, e la funzione di verosimiglianza derivata dai dati, anch’essa normale in questo capitolo. Con l’aumentare delle dimensioni del campione, la verosimiglianza diventa sempre più dominante in questa ponderazione.</p>
 <p>Nel caso di una media normale, illustrato qui, la varianza della distribuzione di campionamento frequentista diminuisce con l’aumento della dimensione del campione. Nel contesto bayesiano, la riduzione della varianza media dalla funzione di verosimiglianza alla fine prevale anche su una varianza a priori deliberatamente grande. Pertanto, se si prevede che la dimensione del dataset sia grande, i ricercatori possono permettersi di essere liberali nella specificazione della varianza a priori.</p>
+<section id="distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">
+<h3>Distribuzione a Posteriori in un Contesto Normale con Varianza Nota<a class="headerlink" href="#distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota" title="Link to this heading">#</a></h3>
+<p>Consideriamo un insieme di dati <span class="math notranslate nohighlight">\( y = [y_1, y_2, \ldots, y_n] \)</span>, composto da <span class="math notranslate nohighlight">\( n \)</span> osservazioni indipendenti e identicamente distribuite (i.i.d.) secondo una distribuzione normale <span class="math notranslate nohighlight">\(\mathcal{N}(\mu, \sigma^2)\)</span>. In questo scenario, il nostro obiettivo è stimare il valore del parametro <span class="math notranslate nohighlight">\(\mu\)</span>, che rappresenta la media della popolazione da cui provengono i dati.</p>
 </section>
-<section id="derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">
-<h2>Derivazione Analitica della Distribuzione a Posteriori in un Contesto Normale con Varianza Nota<a class="headerlink" href="#derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota" title="Link to this heading">#</a></h2>
-<p>Esaminiamo un insieme di dati <span class="math notranslate nohighlight">\(y = [Y_1, \ldots, Y_n]\)</span>, che consiste in <span class="math notranslate nohighlight">\(n\)</span> osservazioni indipendenti e identicamente distribuite secondo una distribuzione normale <span class="math notranslate nohighlight">\(\mathcal{N}(\mu, \sigma)\)</span>, dove <span class="math notranslate nohighlight">\(\sigma\)</span> è un valore già noto. L’obiettivo è stimare il parametro <span class="math notranslate nohighlight">\(\mu\)</span>, utilizzando un approccio Bayesiano. Per fare ciò, adottiamo una distribuzione a priori per <span class="math notranslate nohighlight">\(\mu\)</span> che è anch’essa una distribuzione normale. Questo tipo di modello è conosciuto come «normale-normale coniugato».</p>
-<p>La funzione di verosimiglianza <span class="math notranslate nohighlight">\(p(y \mid \mu, \sigma)\)</span> per un insieme di dati indipendenti è data dalla distribuzione normale. Specificamente, definiamo la densità a priori <span class="math notranslate nohighlight">\(p(\mu)\)</span> per <span class="math notranslate nohighlight">\(\mu\)</span> come una distribuzione normale con media <span class="math notranslate nohighlight">\(\mu_0\)</span> e varianza <span class="math notranslate nohighlight">\(\sigma_0^2\)</span>.</p>
-<p>Il nostro obiettivo è calcolare la distribuzione a posteriori <span class="math notranslate nohighlight">\(p(\mu \mid y)\)</span>. La funzione di densità congiunta delle osservazioni <span class="math notranslate nohighlight">\(Y_1, \ldots, Y_n\)</span>, assumendo che sono indipendenti, si scrive come il prodotto delle loro densità individuali:</p>
+<section id="distribuzione-a-priori">
+<h3>Distribuzione a Priori<a class="headerlink" href="#distribuzione-a-priori" title="Link to this heading">#</a></h3>
+<p>Nell’approccio bayesiano, assumiamo una conoscenza iniziale sul parametro <span class="math notranslate nohighlight">\(\mu\)</span> mediante una distribuzione a priori. In questo caso, utilizziamo una distribuzione normale coniugata, ovvero una distribuzione normale con media <span class="math notranslate nohighlight">\(\mu_0\)</span> e varianza <span class="math notranslate nohighlight">\(\sigma_0^2\)</span>. Questa scelta riflette la nostra incertezza iniziale su <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
+</section>
+<section id="funzione-di-verosimiglianza">
+<h3>Funzione di Verosimiglianza<a class="headerlink" href="#funzione-di-verosimiglianza" title="Link to this heading">#</a></h3>
+<p>La funzione di verosimiglianza, denotata da <span class="math notranslate nohighlight">\(p(y | \mu, \sigma)\)</span>, rappresenta la probabilità di osservare i dati <span class="math notranslate nohighlight">\(y\)</span> dato il valore del parametro <span class="math notranslate nohighlight">\(\mu\)</span> e la varianza nota <span class="math notranslate nohighlight">\(\sigma^2\)</span>. Per una distribuzione normale i.i.d., la funzione di verosimiglianza è data da:</p>
 <div class="math notranslate nohighlight">
 \[
-p(y \mid \mu) = \prod_{i=1}^n \frac{1}{{\sigma \sqrt {2\pi}}}\exp\left(-\frac{(y_i - \mu)^2}{2\sigma^2}\right).
+p(y | \mu, \sigma) = \prod_{i=1}^n \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{(y_i - \mu)^2}{2\sigma^2}\right).
 \]</div>
-<p>Analogamente, la densità a priori per <span class="math notranslate nohighlight">\(\mu\)</span> è espressa con la seguente formula:</p>
+</section>
+<section id="teorema-di-bayes-e-distribuzione-a-posteriori">
+<h3>Teorema di Bayes e Distribuzione a Posteriori<a class="headerlink" href="#teorema-di-bayes-e-distribuzione-a-posteriori" title="Link to this heading">#</a></h3>
+<p>Il teorema di Bayes combina la distribuzione a priori con la funzione di verosimiglianza per ottenere la distribuzione a posteriori del parametro <span class="math notranslate nohighlight">\(\mu\)</span>, data l’evidenza osservata <span class="math notranslate nohighlight">\(y\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-p(\mu) = \frac{1}{{\sigma_0 \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_0)^2}{2\sigma_0^2}\right).
+p(\mu | y) = \frac{ p(y | \mu) p(\mu) }{ p(y) }.
 \]</div>
-<p>Con queste distribuzioni, la distribuzione a posteriori di <span class="math notranslate nohighlight">\(\mu\)</span> risulta essere ancora una distribuzione normale:</p>
+<p>Poiché la distribuzione a priori e la funzione di verosimiglianza sono entrambe distribuzioni normali, la distribuzione a posteriori risulterà anch’essa una distribuzione normale con media a posteriori <span class="math notranslate nohighlight">\(\mu_p\)</span> e varianza a posteriori <span class="math notranslate nohighlight">\(\sigma_p^2\)</span>.</p>
+</section>
+<section id="formula-per-la-media-a-posteriori-mu-p">
+<h3>Formula per la Media a Posteriori (<span class="math notranslate nohighlight">\(\mu_p\)</span>)<a class="headerlink" href="#formula-per-la-media-a-posteriori-mu-p" title="Link to this heading">#</a></h3>
+<p>La media a posteriori <span class="math notranslate nohighlight">\(\mu_p\)</span> rappresenta la stima aggiornata del parametro <span class="math notranslate nohighlight">\(\mu\)</span> alla luce delle informazioni contenute nei dati osservati. La sua formula è:</p>
 <div class="math notranslate nohighlight">
 \[
-p(\mu \mid y) = \frac{1}{{\sigma_p \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_p)^2}{2\sigma_p^2}\right),
+\mu_p = \frac{\frac{1}{\sigma_0^2} \mu_0 + \frac{n}{\sigma^2} \bar{y}}{\frac{1}{\sigma_0^2} + \frac{n}{\sigma^2}},
 \]</div>
-<p>dove la media a posteriori <span class="math notranslate nohighlight">\(\mu_p\)</span> e la varianza a posteriori <span class="math notranslate nohighlight">\(\sigma_p^2\)</span> vengono calcolate usando le seguenti formule:</p>
-<div class="math notranslate nohighlight" id="equation-eq-post-norm-mup">
-<span class="eqno">(47)<a class="headerlink" href="#equation-eq-post-norm-mup" title="Link to this equation">#</a></span>\[
-\mu_p = \frac{\frac{1}{\sigma_0^2}\mu_0 + \frac{n}{\sigma^2}\bar{y}}{\frac {1}{\sigma_0^2} + \frac{n}{\sigma^2}}
+<p>dove <span class="math notranslate nohighlight">\(\bar{y}\)</span> rappresenta la media campionaria:</p>
+<div class="math notranslate nohighlight">
+\[
+\bar{y} = \frac{\sum_{i=1}^n y_i}{n}.
 \]</div>
-<div class="math notranslate nohighlight" id="equation-eq-post-norm-taup2">
-<span class="eqno">(48)<a class="headerlink" href="#equation-eq-post-norm-taup2" title="Link to this equation">#</a></span>\[
-\sigma_p^2 = \frac{1}{\frac {1}{\sigma_0^2}+ \frac{n}{\sigma^2}}.
+<p>Osserviamo che <span class="math notranslate nohighlight">\(\mu_p\)</span> è una combinazione ponderata tra la media a priori <span class="math notranslate nohighlight">\(\mu_0\)</span> e la media campionaria <span class="math notranslate nohighlight">\(\bar{y}\)</span>. Il peso di <span class="math notranslate nohighlight">\(\bar{y}\)</span> aumenta con il numero di osservazioni <span class="math notranslate nohighlight">\(n\)</span>, mentre il peso di <span class="math notranslate nohighlight">\(\mu_0\)</span> diminuisce. Questo riflette il fatto che con più dati, la nostra fiducia nella media campionaria cresce, mentre l’incertezza a priori diminuisce.</p>
+</section>
+<section id="formula-per-la-varianza-a-posteriori-sigma-p-2">
+<h3>Formula per la Varianza a Posteriori (<span class="math notranslate nohighlight">\(\sigma_p^2\)</span>)<a class="headerlink" href="#formula-per-la-varianza-a-posteriori-sigma-p-2" title="Link to this heading">#</a></h3>
+<p>La varianza a posteriori <span class="math notranslate nohighlight">\(\sigma_p^2\)</span> rappresenta l’incertezza residua sulla stima del parametro <span class="math notranslate nohighlight">\(\mu\)</span> dopo aver incorporato le informazioni dai dati. La sua formula è:</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma_p^2 = \frac{1}{\frac{1}{\sigma_0^2} + \frac{n}{\sigma^2}}.
 \]</div>
-<ul class="simple">
-<li><p>La media a posteriori <span class="math notranslate nohighlight">\( \mu_p \)</span> rappresenta una combinazione ponderata tra la media a priori <span class="math notranslate nohighlight">\( \mu_0 \)</span> e la media campionaria <span class="math notranslate nohighlight">\( \bar{y} \)</span>. Il peso di <span class="math notranslate nohighlight">\( \bar{y} \)</span> aumenta con il numero di osservazioni <span class="math notranslate nohighlight">\( n \)</span> e diminuisce all’aumentare dell’incertezza a priori <span class="math notranslate nohighlight">\( \sigma_0^2 \)</span>.</p></li>
-<li><p>La varianza a posteriori <span class="math notranslate nohighlight">\( \sigma_p^2 \)</span> è inferiore all’incertezza a priori <span class="math notranslate nohighlight">\( \sigma_0^2 \)</span> e diminuisce con l’aumento del numero di osservazioni <span class="math notranslate nohighlight">\( n \)</span>.</p></li>
-</ul>
-<p>Questo approccio Bayesiano ci permette di aggiornare la nostra conoscenza su <span class="math notranslate nohighlight">\(\mu\)</span> incorporando le informazioni provenienti dalle osservazioni.</p>
+<p>Rispetto alla varianza a priori <span class="math notranslate nohighlight">\(\sigma_0^2\)</span>, la varianza a posteriori <span class="math notranslate nohighlight">\(\sigma_p^2\)</span> è sempre inferiore o uguale. In altre parole, l’incertezza sulla stima di <span class="math notranslate nohighlight">\(\mu\)</span> si riduce con l’aumentare del numero di osservazioni. La varianza a posteriori rappresenta un bilanciamento tra l’incertezza a priori (<span class="math notranslate nohighlight">\(\sigma_0^2\)</span>) e l’informazione derivata dai dati (<span class="math notranslate nohighlight">\(\sigma^2/n\)</span>).</p>
+<p>In sintesi, nel caso normale-normale con varianza nota, la distribuzione a posteriori risulta essere una distribuzione normale con una media e una varianza che riflettono un’integrazione bilanciata tra l’informazione a priori e quella ottenuta dai dati osservati. Questo approccio garantisce una stima aggiornata e affinata del parametro <span class="math notranslate nohighlight">\(\mu\)</span> che migliora con l’aumento del numero di osservazioni.</p>
+</section>
 </section>
 <section id="un-esempio-concreto">
 <h2>Un esempio concreto<a class="headerlink" href="#un-esempio-concreto" title="Link to this heading">#</a></h2>
@@ -975,7 +994,7 @@ p(\mu \mid y) = \frac{1}{{\sigma_p \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_p)^
 </div>
 </div>
 </div>
-<p>Generiamo una rappresentazione grafica della distribuzione a posteriori della media del IQ sulla base dei dati osservati e avendo assunto <code class="docutils literal notranslate"><span class="pre">mu_0</span></code> = 100 e <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code> = 15 per la distribuzione a priori.</p>
+<p>Generiamo una rappresentazione grafica della distribuzione a posteriori della media del IQ sulla base dei dati osservati, avendo assunto <code class="docutils literal notranslate"><span class="pre">mu_0</span></code> = 100 e <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code> = 15 per la distribuzione a priori.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma_p_sq</span><span class="p">)</span>
@@ -1001,11 +1020,15 @@ p(\mu \mid y) = \frac{1}{{\sigma_p \sqrt {2\pi}}}\exp\left(-\frac{(\mu - \mu_p)^
 <a class="reference internal image-reference" href="../_images/d159c1d359dd50040b872de59da6f1ed1be382135632f89ae3ec1610de83c290.png"><img alt="../_images/d159c1d359dd50040b872de59da6f1ed1be382135632f89ae3ec1610de83c290.png" src="../_images/d159c1d359dd50040b872de59da6f1ed1be382135632f89ae3ec1610de83c290.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
-<section id="considerazioni-sui-risultati">
-<h3>Considerazioni sui Risultati<a class="headerlink" href="#considerazioni-sui-risultati" title="Link to this heading">#</a></h3>
-<p>È degno di nota il fatto che la distribuzione di μ sia centrata intorno a 89 anziché 100, con un errore standard di circa 1.8 (ricordiamo che stiamo analizzando le medie non ponderate per paese, il che riduce la varianza). Parte dei risultati può essere attribuita agli effetti di aggregazione che emergono nella media a posteriori. Questo può essere dovuto a un impatto culturale, poiché lo strumento è stato originariamente progettato per l’uso in un paese industrializzato di lingua inglese e successivamente utilizzato in tutto il mondo.</p>
-<p>Questi risultati evidenziano l’importanza di considerare fattori metodologici nell’interpretazione dei dati dei test di intelligenza a livello internazionale. La deviazione osservata dalla media attesa di 100 potrebbe riflettere le differenze nei contesti sanitari, sociologici e politici in cui i test sono stati somministrati, piuttosto che differenze reali nell’intelligenza media tra le nazioni.</p>
-</section>
+<p>L’analisi condotta mediante un modello bayesiano basato sulla distribuzione normale ha prodotto un risultato interessante: la media stimata della distribuzione a posteriori del QI si attesta a 89.36, un valore sensibilmente inferiore ai 100 punti previsti come media standard.</p>
+<p>Tuttavia, per un’interpretazione completa di questo dato, è fondamentale adottare un approccio critico che consideri alcuni aspetti cruciali:</p>
+<ul class="simple">
+<li><p>La media a posteriori è ottenuta aggregando i dati QI di 80 nazioni diverse. Questo processo può innescare un <strong>effetto di aggregazione</strong>, dove la media «smussata» risultante non rispecchia accuratamente la distribuzione del QI a livello individuale in ogni singola nazione. Di conseguenza, le differenze tra le nazioni in termini di QI medio e variabilità potrebbero essere mascherate da questa media aggregata.</p></li>
+<li><p>È importante sottolineare che la media a posteriori viene calcolata utilizzando dati <strong>non ponderati</strong> per ogni nazione. Ciò significa che nazioni con popolazioni più piccole, anche se con punteggi QI mediamente più alti o più bassi, hanno lo stesso impatto sulla media aggregata rispetto a nazioni con popolazioni più grandi. Questo aspetto potrebbe ulteriormente distorcere la rappresentazione della vera distribuzione globale del QI.</p></li>
+<li><p>La deviazione osservata dalla media standard di 100 potrebbe non riflettere esclusivamente differenze nell’intelligenza media tra le nazioni, ma anche <strong>differenze nei contesti sanitari, sociologici e politici</strong> in cui i test sono stati somministrati. Fattori quali l’accesso all’istruzione, la qualità della nutrizione e l’esposizione a stimoli cognitivi possono influenzare i punteggi QI ottenuti e contribuire alla variabilità osservata tra le nazioni.</p></li>
+<li><p>Inoltre, è fondamentale considerare la possibilità di un <strong>bias culturale</strong> intrinseco allo strumento stesso. I test del QI sono stati originariamente progettati per un contesto specifico (paese industrializzato di lingua inglese) e potrebbero non essere adatti o culturalmente sensibili a contesti differenti. Questo potrebbe portare a una sottostima dei punteggi QI in alcune nazioni e influenzare la media a posteriori aggregata.</p></li>
+</ul>
+<p>Questi risultati evidenziano l’importanza di un’attenta considerazione dei fattori metodologici quando si interpretano dati di test del QI a livello trans-culturale. L’effetto di aggregazione, l’utilizzo di medie non ponderate, le differenze nei contesti e il potenziale bias culturale richiedono un’analisi più approfondita che consideri questi fattori e utilizzi metodi statistici più sofisticati per ottenere una comprensione più completa delle differenze nel QI tra le nazioni.</p>
 </section>
 <section id="commenti-e-considerazioni-finali">
 <h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
@@ -1116,12 +1139,16 @@ Watermark: 2.4.3
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-la-distribuzione-normale">Perché Usare la Distribuzione Normale?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-analitica-della-distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">Derivazione Analitica della Distribuzione a Posteriori in un Contesto Normale con Varianza Nota</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#considerazioni-sui-risultati">Considerazioni sui Risultati</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-usare-la-distribuzione-normale">Perché Usare la Distribuzione Normale?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-posteriori-in-un-contesto-normale-con-varianza-nota">Distribuzione a Posteriori in un Contesto Normale con Varianza Nota</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-priori">Distribuzione a Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funzione-di-verosimiglianza">Funzione di Verosimiglianza</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema-di-bayes-e-distribuzione-a-posteriori">Teorema di Bayes e Distribuzione a Posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formula-per-la-media-a-posteriori-mu-p">Formula per la Media a Posteriori (<span class="math notranslate nohighlight">\(\mu_p\)</span>)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formula-per-la-varianza-a-posteriori-sigma-p-2">Formula per la Varianza a Posteriori (<span class="math notranslate nohighlight">\(\sigma_p^2\)</span>)</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-concreto">Un esempio concreto</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>

@@ -36,7 +36,7 @@ Questo percorso didattico è progettato per introdurre gli studenti alla statist
 
 3. **Analisi Esplorativa dei Dati (EDA)**: Gli studenti apprenderanno l'importanza dell'EDA per una comprensione accurata dei dati attraverso l'uso di statistiche descrittive fondamentali come media, moda, deviazione standard e intervallo interquartile, e tecniche di visualizzazione quali istogrammi e grafici a dispersione.
 
-4. **Analisi Bayesiana**: Questo modulo introduce l'analisi bayesiana, fondamentale nella modellazione statistica moderna. Attraverso la programmazione probabilistica in Python con PyMC e Stan, gli studenti svilupperanno la capacità di modellare l'incertezza e aggiornare le inferenze in base a nuove informazioni.
+4. **Analisi Bayesiana**: Questo modulo introduce l'analisi bayesiana, fondamentale nella modellazione statistica moderna. Attraverso la programmazione probabilistica in Python con Stan, gli studenti svilupperanno la capacità di modellare l'incertezza e aggiornare le inferenze in base a nuove informazioni.
 
 5. **Tecniche Avanzate di Modellazione Statistica**: Gli studenti esploreranno metodi computazionali avanzati come i procedimenti di campionamento e gli algoritmi Markov Chain Monte Carlo (MCMC) per affrontare complessi problemi di inferenza.
 
