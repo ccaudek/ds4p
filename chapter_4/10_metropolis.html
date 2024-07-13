@@ -544,15 +544,8 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritmo-di-metropolis">Algoritmo di Metropolis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#passaggi-fondamentali-dell-algoritmo-di-metropolis">Passaggi Fondamentali dell’Algoritmo di Metropolis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versione-di-mcelreath">Versione di McElreath</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritmo-di-metropolis-con-distribuzione-target-nota">Algoritmo di Metropolis con Distribuzione Target Nota</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sintassi-della-funzione">Sintassi della funzione</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri">Parametri</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#valore-di-ritorno">Valore di ritorno</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dettagli-dell-algoritmo">Dettagli dell’algoritmo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritmo-di-metropolis-con-distribuzione-target-incognita">Algoritmo di Metropolis con distribuzione target incognita</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dettagli-dell-algoritmo">Dettagli dell’Algoritmo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementazione-dell-algoritmo-di-metropolis">Implementazione dell’Algoritmo di Metropolis</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aspetti-computazionali">Aspetti computazionali</a><ul class="nav section-nav flex-column">
@@ -613,15 +606,16 @@ document.write(`
 </section>
 <section id="il-denominatore-bayesiano">
 <h2>Il denominatore bayesiano<a class="headerlink" href="#il-denominatore-bayesiano" title="Link to this heading">#</a></h2>
-<p>Nell’approccio bayesiano, il nostro obiettivo primario si concentra sulla determinazione della distribuzione a posteriori <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span> di un parametro <span class="math notranslate nohighlight">\(\theta\)</span> (nel caso più semplice), utilizzando come base sia i dati osservati <span class="math notranslate nohighlight">\(y\)</span> che la distribuzione a priori <span class="math notranslate nohighlight">\(p(\theta)\)</span>. Questo processo si avvale del teorema di Bayes per calcolare tale distribuzione:</p>
+<p>Nell’approccio bayesiano, il nostro obiettivo principale è determinare la distribuzione a posteriori <span class="math notranslate nohighlight">\( p(\theta \mid y) \)</span> di un parametro <span class="math notranslate nohighlight">\(\theta\)</span>, utilizzando sia i dati osservati <span class="math notranslate nohighlight">\( y \)</span> che la distribuzione a priori <span class="math notranslate nohighlight">\( p(\theta) \)</span>. Questo processo si basa sul teorema di Bayes:</p>
 <div class="math notranslate nohighlight">
 \[
 p(\theta \mid y) = \frac{p(y \mid \theta) p(\theta)}{\int p(y \mid \theta) p(\theta) d\theta}.
 \]</div>
-<p>In questa formula, il denominatore <span class="math notranslate nohighlight">\(\int p(y \mid \theta) p(\theta) d\theta\)</span> rappresenta l’integrazione (o la somma, nel caso di variabili discrete) su tutti i possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span>, fornendo così la probabilità marginale di <span class="math notranslate nohighlight">\(y\)</span>. Questo assicura che <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span> sia una distribuzione di probabilità valida che si somma (o integra) a 1.</p>
-<p>Tuttavia, ci imbattiamo spesso in una sfida significativa: il calcolo dell’evidenza <span class="math notranslate nohighlight">\(p(y) = \int p(y \mid \theta) p(\theta) d\theta\)</span> può rivelarsi estremamente complesso, specialmente per modelli più articolati, rendendo difficile ottenere con precisione la distribuzione a posteriori.</p>
-<p>Una soluzione possibile si trova nelle distribuzioni a priori coniugate, che offrono un metodo analitico per determinare la distribuzione a posteriori. Questo però limita la selezione delle distribuzioni a priori e di verosimiglianza. Per superare questa limitazione, soprattutto in modelli dove i metodi di campionamento a griglia non sono applicabili, si utilizzano i Metodi di Catena di Markov a Monte Carlo (MCMC). Questi metodi rappresentano una potente alternativa, consentendo di derivare la distribuzione a posteriori basandosi su presupposti teorici e senza restrizioni nella scelta delle distribuzioni.</p>
-<p>L’approccio Monte Carlo si basa sulla generazione di sequenze di numeri casuali per creare un campione ampio di osservazioni proveniente dalla distribuzione a posteriori. Da questi campioni, possiamo poi stimare empiricamente le proprietà di interesse. Questo approccio richiede l’uso di metodi computazionalmente intensivi, e con la crescente potenza di calcolo dei computer moderni, tali metodi stanno diventando sempre più accessibili e popolari nell’analisi dei dati.</p>
+<p>In questa formula, il denominatore <span class="math notranslate nohighlight">\(\int p(y \mid \theta) p(\theta) d\theta\)</span> rappresenta l’integrazione (o la somma, nel caso di variabili discrete) su tutti i possibili valori di <span class="math notranslate nohighlight">\(\theta\)</span>, fornendo così la probabilità marginale di <span class="math notranslate nohighlight">\( y \)</span>. Questo assicura che <span class="math notranslate nohighlight">\( p(\theta \mid y) \)</span> sia una distribuzione di probabilità valida che si integra (o si somma) a 1.</p>
+<p>Tuttavia, spesso incontriamo una sfida significativa: il calcolo dell’evidenza <span class="math notranslate nohighlight">\( p(y) = \int p(y \mid \theta) p(\theta) d\theta \)</span> può essere estremamente complesso, specialmente per modelli più articolati, rendendo difficile ottenere con precisione la distribuzione a posteriori.</p>
+<p>Una soluzione possibile è rappresentata dalle distribuzioni a priori coniugate, che offrono un metodo analitico per determinare la distribuzione a posteriori. Tuttavia, questo limita la selezione delle distribuzioni a priori e di verosimiglianza.</p>
+<p>Un metodo per superare questa limitazione è ricorrere a soluzioni numeriche, ma i metodi di campionamento a griglia sono applicabili solo nel caso di modelli con un numero di parametri molto piccolo.</p>
+<p>La soluzione generale è utilizzare i Metodi di Monte Carlo a Catena di Markov (MCMC). Questi metodi consentono di derivare la distribuzione a posteriori basandosi su presupposti teorici e senza restrizioni nella scelta delle distribuzioni. L’approccio Monte Carlo si basa sulla generazione di sequenze di numeri casuali per creare un ampio campione di osservazioni dalla distribuzione a posteriori. Da questi campioni, possiamo poi stimare empiricamente le proprietà di interesse. Questo approccio richiede l’uso di metodi computazionalmente intensivi e, con la crescente potenza di calcolo dei computer moderni, tali metodi stanno diventando sempre più accessibili e popolari nell’analisi dei dati.</p>
 </section>
 <section id="il-metodo-di-monte-carlo">
 <h2>Il Metodo di Monte Carlo<a class="headerlink" href="#il-metodo-di-monte-carlo" title="Link to this heading">#</a></h2>
@@ -649,8 +643,7 @@ P(X_{n+1} = j | X_n = i, X_{n-1} = i_{n-1}, \ldots, X_0 = i_0) = P(X_{n+1} = j |
 <p>Nella discussione seguente ci porremo l’obiettivo di comprendere come utilizzare l’algoritmo di Metropolis per approssimare la distribuzione a posteriori <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span>. A questo fine, il capitolo è strutturato in varie sezioni che facilitano la comprensione progressiva del tema.</p>
 <ul class="simple">
 <li><p>Inizieremo discutendo di come la distribuzione a posteriori possa essere approssimata mediante tecniche di simulazione convenzionali. Questa prima parte presuppone che la distribuzione target, o «a posteriori,» sia già conosciuta o disponibile per l’analisi.</p></li>
-<li><p>In seguito, passeremo a illustrare come l’algoritmo di Metropolis possa essere utilizzato per raggiungere lo stesso scopo—l’approssimazione della distribuzione a posteriori—mantenendo la presupposizione che la distribuzione target sia già nota.</p></li>
-<li><p>Concluderemo il capitolo esplorando le modalità con cui l’algoritmo di Metropolis può essere adattato per affrontare situazioni in cui la distribuzione a posteriori non è direttamente nota. In questi casi, spesso abbiamo a disposizione informazioni riguardanti la distribuzione a priori e la funzione di verosimiglianza, che possono essere utilizzate per ottenere un’approssimazione efficace della distribuzione a posteriori.</p></li>
+<li><p>In seguito, passeremo a illustrare come l’algoritmo di Metropolis possa essere utilizzato per affrontare situazioni in cui la distribuzione a posteriori non è direttamente nota. In questi casi, spesso abbiamo a disposizione informazioni riguardanti la distribuzione a priori e la funzione di verosimiglianza, che possono essere utilizzate per ottenere un’approssimazione efficace della distribuzione a posteriori.</p></li>
 </ul>
 <p>A titolo esemplificativo, utilizzeremo il dataset <code class="docutils literal notranslate"><span class="pre">moma_sample.csv</span></code>, il quale costituisce un campione casuale di 100 artisti provenienti dal Museo di Arte Moderna di New York (MoMA) e contiene diverse informazioni relative a ciascun artista.</p>
 <p>Il nostro interesse è focalizzato sulla determinazione della probabilità che un artista presente nel MoMA appartenga alla generazione X o a una generazione successiva (nati dopo il 1965). Questa probabilità sarà indicata come <span class="math notranslate nohighlight">\(\pi\)</span>. Iniziamo importando i dati.</p>
@@ -834,8 +827,8 @@ Name: count, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.15055982 0.11082285 0.12981996 0.14002846 0.17033033 0.1016842
- 0.16416764 0.10067355 0.21453883 0.14023775]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.17914034 0.18051676 0.18183891 0.23576397 0.1644062  0.20051834
+ 0.16250045 0.21091452 0.14887325 0.16704265]
 </pre></div>
 </div>
 </div>
@@ -847,7 +840,7 @@ Name: count, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.14228633744567315
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.18315153909921292
 </pre></div>
 </div>
 </div>
@@ -860,7 +853,7 @@ Name: count, dtype: int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.1633850963306632
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.16387890803818267
 </pre></div>
 </div>
 </div>
@@ -882,422 +875,34 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 <section id="passaggi-fondamentali-dell-algoritmo-di-metropolis">
 <h3>Passaggi Fondamentali dell’Algoritmo di Metropolis<a class="headerlink" href="#passaggi-fondamentali-dell-algoritmo-di-metropolis" title="Link to this heading">#</a></h3>
 <ol class="arabic simple">
-<li><p><strong>Inizio</strong>: Si parte da un valore iniziale casuale per le variabili di interesse.</p></li>
-<li><p><strong>Generazione di Nuovi Punti</strong>: A ogni passo, si propone un nuovo valore («salto») basandosi su una distribuzione proposta, comunemente una distribuzione normale centrata sul punto corrente.</p></li>
-<li><p><strong>Valutazione</strong>: Si calcola la probabilità associata al nuovo punto utilizzando la funzione di densità di probabilità (pdf) della distribuzione che si intende campionare.</p></li>
-<li><p><strong>Decisione di Accettazione</strong>: Se il nuovo punto ha una probabilità maggiore rispetto al precedente (minore «energia»), lo si accetta. Questo favorisce la tendenza a spostarsi verso aree di maggiore probabilità.</p></li>
-<li><p><strong>Accettazione Probabilistica</strong>: Se invece il nuovo punto presenta una probabilità minore, l’accettazione avviene comunque con una certa probabilità, determinata dal rapporto tra le probabilità del nuovo e del vecchio punto. Questo consente di evitare locali ottimalità e di esplorare più ampiamente lo spazio dei parametri.</p></li>
-<li><p><strong>Raccolta dei Punti</strong>: I punti accettati vengono raccolti e costituiscono il campione dalla distribuzione desiderata.</p></li>
+<li><p><strong>Scegli un valore iniziale <span class="math notranslate nohighlight">\(\theta_1\)</span>. Imposta <span class="math notranslate nohighlight">\(t = 1\)</span>.</strong></p></li>
+<li><p><strong>Campiona un possibile nuovo valore <span class="math notranslate nohighlight">\(\theta_p\)</span> basato su una distribuzione di proposta <span class="math notranslate nohighlight">\(g(\theta_p \mid \theta_t)\)</span></strong>. Di solito, si usa una distribuzione normale <span class="math notranslate nohighlight">\(N(\theta_t, \tau)\)</span> come distribuzione di proposta, dove <span class="math notranslate nohighlight">\(\tau\)</span> funge da parametro di regolazione che controlla la dimensione del passo.</p></li>
+<li><p><strong>Calcola il rapporto <span class="math notranslate nohighlight">\(\alpha = \frac{p(\theta_p \mid y)}{p(\theta_t \mid y)}\)</span>.</strong></p></li>
+<li><p><strong>Se <span class="math notranslate nohighlight">\(\alpha \geq 1\)</span>, imposta <span class="math notranslate nohighlight">\(\theta_{t+1} = \theta_p\)</span>.</strong></p></li>
+<li><p><strong>Se <span class="math notranslate nohighlight">\(\alpha &lt; 1\)</span>, imposta <span class="math notranslate nohighlight">\(\theta_{t+1} = \theta_p\)</span> con probabilità <span class="math notranslate nohighlight">\(\alpha\)</span>.</strong> Altrimenti, imposta <span class="math notranslate nohighlight">\(\theta_{t+1} = \theta_t\)</span>.</p></li>
+<li><p><strong>Ripeti dal passo 2 per campionare un nuovo valore <span class="math notranslate nohighlight">\(\theta_p\)</span>.</strong></p></li>
 </ol>
+</section>
+<section id="dettagli-dell-algoritmo">
+<h3>Dettagli dell’Algoritmo<a class="headerlink" href="#dettagli-dell-algoritmo" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Distribuzione di Proposta</strong>: La distribuzione di proposta <span class="math notranslate nohighlight">\(g(\theta_p \mid \theta_t)\)</span> è usata per generare nuovi campioni di <span class="math notranslate nohighlight">\(\theta_p\)</span> basati sul valore corrente <span class="math notranslate nohighlight">\(\theta_t\)</span>. Una scelta comune è la distribuzione normale <span class="math notranslate nohighlight">\(N(\theta_t, \tau)\)</span>, dove <span class="math notranslate nohighlight">\(\tau\)</span> è un parametro di tuning che controlla la dimensione dei passi del campionamento. Un valore di <span class="math notranslate nohighlight">\(\tau\)</span> troppo grande o troppo piccolo può influenzare negativamente l’efficienza del campionamento.</p></li>
+<li><p><strong>Calcolo del Rapporto <span class="math notranslate nohighlight">\(\alpha\)</span></strong>: Il rapporto <span class="math notranslate nohighlight">\(\alpha\)</span> è dato dalla probabilità a posteriori del nuovo valore <span class="math notranslate nohighlight">\(\theta_p\)</span> rispetto alla probabilità a posteriori del valore corrente <span class="math notranslate nohighlight">\(\theta_t\)</span>. Questo rapporto determina l’accettazione o il rifiuto del nuovo campione.</p></li>
+<li><p><strong>Decisione di Accettazione</strong>:</p>
+<ul>
+<li><p>Se <span class="math notranslate nohighlight">\(\alpha \geq 1\)</span>, il nuovo valore <span class="math notranslate nohighlight">\(\theta_p\)</span> è sempre accettato.</p></li>
+<li><p>Se <span class="math notranslate nohighlight">\(\alpha &lt; 1\)</span>, il nuovo valore <span class="math notranslate nohighlight">\(\theta_p\)</span> è accettato con probabilità <span class="math notranslate nohighlight">\(\alpha\)</span>. Se non viene accettato, il valore corrente <span class="math notranslate nohighlight">\(\theta_t\)</span> è mantenuto per il prossimo passo.</p></li>
+</ul>
+</li>
+</ul>
+<p>Questo processo permette di esplorare lo spazio dei parametri <span class="math notranslate nohighlight">\(\theta\)</span> generando una catena di Markov che, nel tempo, converge verso la distribuzione a posteriori <span class="math notranslate nohighlight">\(p(\theta \mid y)\)</span>. Utilizzando questa catena, possiamo stimare empiricamente le proprietà della distribuzione a posteriori.</p>
 <p>La procedura continua con l’iterazione dei passi dal 2 al 5, permettendo alla catena di campioni di convergere alla distribuzione target. Inizialmente, i campioni potrebbero non essere rappresentativi, ma dopo un sufficiente numero di iterazioni (il cosiddetto «burn-in»), la distribuzione dei punti accettati dovrebbe avvicinarsi a quella che si intende esplorare.</p>
 <p>L’efficienza di questo algoritmo deriva dalla sua abilità nel mantenere un equilibrio tra l’esplorazione di nuove possibilità e l’utilizzo di quelle già note. Questo viene realizzato attraverso l’adozione di un meccanismo che accetta i punti suggeriti in modo probabilistico, facilitando così la raccolta di un campione che riflette accuratamente la distribuzione di probabilità complessa sotto indagine.</p>
 <p>Per una visualizzazione del comportamento dell’algoritmo di Metropolis nell’esplorare lo spazio dei parametri, si può consultare <a class="reference external" href="https://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/">questo post</a>. La distinzione tra i diversi metodi MCMC si basa principalmente sul tipo di distribuzione proposta e sul criterio di accettazione dei punti nel campionamento.</p>
 </section>
-<section id="versione-di-mcelreath">
-<h3>Versione di McElreath<a class="headerlink" href="#versione-di-mcelreath" title="Link to this heading">#</a></h3>
-<p><span id="id1">McElreath [<a class="reference internal" href="../references/bibliography.html#id15" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> spiega l’algoritmo di Metropolis nel modo seguente. Re Markov era un autocrate benevolo di un regno insulare, un arcipelago circolare composto da 10 isole. Ogni isola era affiancata da altre due, e l’intero arcipelago formava un anello. Le isole erano di dimensioni diverse e quindi avevano popolazioni di diversa grandezza. La seconda isola aveva una popolazione circa il doppio di quella della prima, la terza circa il triplo della prima, e così via, fino all’isola più grande, che aveva una popolazione 10 volte maggiore della più piccola.</p>
-<p>Il Buon Re aveva anche una serie di obblighi verso il suo popolo. Tra questi, Re Markov si impegnava a visitare ogni tanto ciascuna isola del suo regno. Poiché la gente amava il loro re, ogni isola preferiva che lui la visitasse più spesso. Così tutti concordarono che il re dovesse visitare ogni isola in proporzione alla sua dimensione demografica, visitando per esempio l’isola più grande 10 volte più spesso della più piccola.</p>
-<p>Tuttavia, il Buon Re Markov non era amante delle agende o della contabilità, e quindi desiderava un modo per assolvere ai suoi obblighi senza pianificare i suoi viaggi con mesi di anticipo. Inoltre, poiché l’arcipelago era un anello, il Re insisteva nel muoversi solo tra isole adiacenti, per minimizzare il tempo trascorso sull’acqua.</p>
-<p>Il consigliere del re, un certo Signor Metropolis, ideò una soluzione ingegnosa a queste esigenze. Chiameremo questa soluzione l’algoritmo di Metropolis.</p>
-<ol class="arabic simple">
-<li><p>Lancia una moneta per scegliere se andare all’isola a sinistra o a destra.</p></li>
-<li><p>Determina la popolazione dell’isola proposta.</p></li>
-<li><p>Determina la popolazione dell’isola corrente.</p></li>
-<li><p>Spostati verso l’isola proposta con la probabilità calcolata.</p></li>
-</ol>
-<p>Ripeti i passaggi dal 1 al 4.</p>
-<p>A lungo termine, questo processo porterà a visitare ciascuna isola in proporzione alla sua popolazione. Se utilizziamo la popolazione dell’isola come metafora della densità di probabilità, possiamo impiegare lo stesso algoritmo per campionare da qualsiasi distribuzione di probabilità usando un generatore di numeri casuali.</p>
-<p>Per l’inferenza bayesiana, applichiamo l’algoritmo di Metropolis assumendo:</p>
-<ul class="simple">
-<li><p>Le «isole» come i valori dei parametri.</p></li>
-<li><p>La «dimensione della popolazione» come le probabilità a posteriori.</p></li>
-</ul>
-<p>In questa metafora, l’algoritmo di Metropolis ci aiuta a esplorare lo spazio dei parametri, muovendoci verso valori di parametri con maggior probabilità posteriore (simili a isole con maggior popolazione) e campionando da queste distribuzioni in maniera proporzionale alla loro probabilità.</p>
-<p>L’algoritmo di Metropolis, nella versione di <span id="id2">McElreath [<a class="reference internal" href="../references/bibliography.html#id15" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> è stato implementato da Dustin Stansbury come indicato di seguito.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">simulate_markov_visits</span><span class="p">(</span><span class="n">island_sizes</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">100_000</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;aka Metropolis algorithm&quot;&quot;&quot;</span>
-
-    <span class="c1"># Metropolis algorithm</span>
-    <span class="n">island_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">island_sizes</span><span class="p">))</span>
-    <span class="n">visits</span> <span class="o">=</span> <span class="p">{</span><span class="n">ii</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">island_idx</span><span class="p">}</span>
-    <span class="n">current_island_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">island_idx</span><span class="p">)</span>
-    <span class="n">markov_chain</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># store history</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_steps</span><span class="p">):</span>
-        <span class="c1"># 1. Flip a coin to propose a direction, left or right</span>
-        <span class="n">coin_flip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
-        <span class="n">direction</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">coin_flip</span> <span class="k">else</span> <span class="mi">1</span>
-        <span class="n">proposal_island_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">island_idx</span><span class="p">,</span> <span class="n">direction</span><span class="p">)[</span><span class="n">current_island_idx</span><span class="p">]</span>
-
-        <span class="c1"># 2. Proposal island size</span>
-        <span class="n">proposal_size</span> <span class="o">=</span> <span class="n">island_sizes</span><span class="p">[</span><span class="n">proposal_island_idx</span><span class="p">]</span>
-
-        <span class="c1"># 3. Current island size</span>
-        <span class="n">current_size</span> <span class="o">=</span> <span class="n">island_sizes</span><span class="p">[</span><span class="n">current_island_idx</span><span class="p">]</span>
-
-        <span class="c1"># 4. Go to proposal island if ratio of sizes is greater than another coin flip</span>
-        <span class="n">p_star</span> <span class="o">=</span> <span class="n">proposal_size</span> <span class="o">/</span> <span class="n">current_size</span>
-        <span class="n">move</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">p_star</span>
-        <span class="n">current_island_idx</span> <span class="o">=</span> <span class="n">proposal_island_idx</span> <span class="k">if</span> <span class="n">move</span> <span class="k">else</span> <span class="n">current_island_idx</span>
-
-        <span class="c1"># 5. tally visits and repeat</span>
-        <span class="n">visits</span><span class="p">[</span><span class="n">current_island_idx</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">markov_chain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_island_idx</span><span class="p">)</span>
-
-    <span class="c1"># Visualization</span>
-    <span class="n">island_idx</span> <span class="o">=</span> <span class="n">visits</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-    <span class="n">island_visit_density</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="o">/</span> <span class="n">n_steps</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">visits</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
-    <span class="n">island_size_density</span> <span class="o">=</span> <span class="n">island_sizes</span> <span class="o">/</span> <span class="n">island_sizes</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">island_sizes</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Island Index&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Island Population&quot;</span><span class="p">);</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">island_sizes</span><span class="p">)));</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">island_idx</span><span class="p">,</span> <span class="n">island_size_density</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Population&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">island_idx</span><span class="p">,</span> <span class="n">island_visit_density</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Visits&#39;</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Island Index&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">);</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">island_sizes</span><span class="p">)));</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">markov_chain</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Verifichiamo l’algoritmo con una distribuzione approssimativamente gaussiana.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_steps</span> <span class="o">=</span> <span class="mi">100_000</span>
-<span class="n">island_sizes</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-<span class="n">island_sizes</span> <span class="o">/=</span> <span class="n">island_sizes</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span>
-
-<span class="n">gaussian_markov_chain</span> <span class="o">=</span> <span class="n">simulate_markov_visits</span><span class="p">(</span><span class="n">island_sizes</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/02450ca8f6823e8eaafe0b367ac62029aa166ccc258c924da07fc6c6fbc9def9.png"><img alt="../_images/02450ca8f6823e8eaafe0b367ac62029aa166ccc258c924da07fc6c6fbc9def9.png" src="../_images/02450ca8f6823e8eaafe0b367ac62029aa166ccc258c924da07fc6c6fbc9def9.png" style="width: 1211px; height: 411px;" /></a>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_markov_chain</span><span class="p">(</span><span class="n">markov_chain</span><span class="p">,</span> <span class="o">**</span><span class="n">hist_kwargs</span><span class="p">):</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">markov_chain</span><span class="p">[:</span><span class="mi">500</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;visit number&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;island index&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Metropolis Algorithm Markov Chain</span><span class="se">\n</span><span class="s2">First 500 Steps&quot;</span><span class="p">);</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">markov_chain</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">hist_kwargs</span><span class="p">);</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Resulting Posterior</span><span class="se">\n</span><span class="s2">(horizontal)&quot;</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_markov_chain</span><span class="p">(</span><span class="n">gaussian_markov_chain</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/e395f39f046d5627e15e7d123830de9ae86945019d46045cc8a686504c3c33e3.png"><img alt="../_images/e395f39f046d5627e15e7d123830de9ae86945019d46045cc8a686504c3c33e3.png" src="../_images/e395f39f046d5627e15e7d123830de9ae86945019d46045cc8a686504c3c33e3.png" style="width: 1011px; height: 411px;" /></a>
-</div>
-</div>
-<p>Verifichiamo l’algoritmo con una distribuzione di Poisson.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">island_sizes</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
-<span class="n">island_sizes</span> <span class="o">/=</span> <span class="n">island_sizes</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">/</span> <span class="mi">10</span>
-
-<span class="n">poisson_markov_chain</span> <span class="o">=</span> <span class="n">simulate_markov_visits</span><span class="p">(</span><span class="n">island_sizes</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/51ab14388b2947da8a203dd5df75a2c01ae844cda4ef561a6f2cb18d6f138312.png"><img alt="../_images/51ab14388b2947da8a203dd5df75a2c01ae844cda4ef561a6f2cb18d6f138312.png" src="../_images/51ab14388b2947da8a203dd5df75a2c01ae844cda4ef561a6f2cb18d6f138312.png" style="width: 1211px; height: 411px;" /></a>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_markov_chain</span><span class="p">(</span><span class="n">poisson_markov_chain</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/fd3e2ddee08208d954390a016706c504bb86306d1e35f2a400bd28413aba4f04.png"><img alt="../_images/fd3e2ddee08208d954390a016706c504bb86306d1e35f2a400bd28413aba4f04.png" src="../_images/fd3e2ddee08208d954390a016706c504bb86306d1e35f2a400bd28413aba4f04.png" style="width: 1011px; height: 411px;" /></a>
-</div>
-</div>
-</section>
-<section id="algoritmo-di-metropolis-con-distribuzione-target-nota">
-<h3>Algoritmo di Metropolis con Distribuzione Target Nota<a class="headerlink" href="#algoritmo-di-metropolis-con-distribuzione-target-nota" title="Link to this heading">#</a></h3>
-<p>Torniamo al caso precedentemente esaminato in cui la distribuzione a posteriori è una Beta(18, 92). Ora, useremo una versione più generale dell’algoritmo di Metropolis rispetto a quello precedentemente discusso. Questa nuova versione ci consentirà di generare campioni da questa distribuzione nota in modo più flessibile.</p>
-<p>Per iniziare, definiamo la distribuzione da cui verranno proposti i nuovi campioni. Nel nostro primo esempio, scegliamo una distribuzione proposta molto semplice: una piccola variazione, estratta da una distribuzione uniforme, verrà aggiunta al valore del campione precedente.</p>
-<p>Ora procediamo a descrivere questa nuova implementazione dell’algoritmo di Metropolis.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Proposal distribution</span>
-<span class="k">def</span> <span class="nf">uniprop</span><span class="p">(</span><span class="n">xprev</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">xprev</span> <span class="o">+</span> <span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">loc</span><span class="o">=-</span><span class="n">delta</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">delta</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Metropolis algorithm </span>
-<span class="k">def</span> <span class="nf">metropolis_v1</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">qdraw</span><span class="p">,</span> <span class="n">nsamp</span><span class="p">,</span> <span class="n">xinit</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implements the Metropolis algorithm for MCMC sampling.</span>
-
-<span class="sd">    The function generates `nsamp` samples from a target distribution `p` using </span>
-<span class="sd">    the Metropolis algorithm. The algorithm starts with an initial state `xinit` </span>
-<span class="sd">    and iteratively applies a proposal mechanism governed by `qdraw` to explore </span>
-<span class="sd">    the target distribution.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        p (callable): A function representing the target distribution to sample from.</span>
-<span class="sd">                     Should accept a float or array-like and return the density </span>
-<span class="sd">                     (unnormalized is okay) at that point.</span>
-<span class="sd">                     </span>
-<span class="sd">        qdraw (callable): A function implementing the proposal mechanism. </span>
-<span class="sd">                          Takes the current state (float or array-like) as input </span>
-<span class="sd">                          and returns a proposed next state.</span>
-<span class="sd">                          </span>
-<span class="sd">        nsamp (int): The number of samples to draw from the target distribution.</span>
-<span class="sd">        </span>
-<span class="sd">        xinit (float or array-like): The initial state for the MCMC chain.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        numpy.ndarray: An array of shape (nsamp,) containing samples drawn from the </span>
-<span class="sd">        target distribution `p`.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">        &gt;&gt;&gt; from scipy import stats</span>
-<span class="sd">        &gt;&gt;&gt; target = stats.norm().pdf  # Standard Normal as target</span>
-<span class="sd">        &gt;&gt;&gt; qdraw = lambda x: x + np.random.normal(0, 1)  # Random-walk Metropolis</span>
-<span class="sd">        &gt;&gt;&gt; samples = metropolis_v1(target, qdraw, 10000, 0.0)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsamp</span><span class="p">)</span>
-    <span class="n">x_prev</span> <span class="o">=</span> <span class="n">xinit</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsamp</span><span class="p">):</span>
-        <span class="n">x_star</span> <span class="o">=</span> <span class="n">qdraw</span><span class="p">(</span><span class="n">x_prev</span><span class="p">)</span>
-        <span class="n">p_star</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">x_star</span><span class="p">)</span>
-        <span class="n">p_prev</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">x_prev</span><span class="p">)</span>
-        <span class="n">pdfratio</span> <span class="o">=</span> <span class="n">p_star</span> <span class="o">/</span> <span class="n">p_prev</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pdfratio</span><span class="p">):</span>
-            <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_star</span>
-            <span class="n">x_prev</span> <span class="o">=</span> <span class="n">x_star</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_prev</span>
-    <span class="k">return</span> <span class="n">samples</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="sintassi-della-funzione">
-<h3>Sintassi della funzione<a class="headerlink" href="#sintassi-della-funzione" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">metropolis_v1</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">qdraw</span><span class="p">,</span> <span class="n">nsamp</span><span class="p">,</span> <span class="n">xinit</span><span class="p">):</span>
-</pre></div>
-</div>
-<section id="parametri">
-<h4>Parametri<a class="headerlink" href="#parametri" title="Link to this heading">#</a></h4>
-<ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: Questa è la distribuzione target da cui si desidera campionare. È fornita come una funzione invocabile che prende un valore <code class="docutils literal notranslate"><span class="pre">x</span></code> e restituisce la densità di probabilità (o massa) in quel punto. La distribuzione target potrebbe anche non essere normalizzata.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">qdraw</span></code>: Questa è la distribuzione proposta da cui viene generato un possibile stato successivo (<code class="docutils literal notranslate"><span class="pre">x_star</span></code>), dato lo stato corrente (<code class="docutils literal notranslate"><span class="pre">x_prev</span></code>). Anche questa è una funzione invocabile, che dovrebbe restituire una nuova proposta basata sullo stato corrente.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nsamp</span></code>: Questo è il numero di campioni che si desidera generare dalla distribuzione target. Determina quante iterazioni verranno eseguite dall’algoritmo.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">xinit</span></code>: Questo è lo stato iniziale della catena di Markov. L’algoritmo partirà da questo punto.</p></li>
-</ol>
-</section>
-<section id="valore-di-ritorno">
-<h4>Valore di ritorno<a class="headerlink" href="#valore-di-ritorno" title="Link to this heading">#</a></h4>
-<ul class="simple">
-<li><p>La funzione restituisce un array (<code class="docutils literal notranslate"><span class="pre">samples</span></code>) di dimensione <code class="docutils literal notranslate"><span class="pre">nsamp</span></code>, contenente i campioni estratti dalla distribuzione target.</p></li>
-</ul>
-</section>
-</section>
-<section id="dettagli-dell-algoritmo">
-<h3>Dettagli dell’algoritmo<a class="headerlink" href="#dettagli-dell-algoritmo" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p><strong>Inizializzazione</strong>:</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsamp</span><span class="p">)</span>
-<span class="n">x_prev</span> <span class="o">=</span> <span class="n">xinit</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">samples</span></code>: Un array NumPy vuoto che sarà popolato con i campioni generati dall’algoritmo.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">x_prev</span></code>: Lo stato corrente della catena di Markov. Inizializzato a <code class="docutils literal notranslate"><span class="pre">xinit</span></code>. Iniziamo dunque con un punto arbitrario nello spazio dei parametri. Questo primo valore della catena di Markov può essere scelto casualmente tra i valori possibili del parametro.</p></li>
-</ul>
-<ol class="arabic simple" start="2">
-<li><p><strong>Il ciclo</strong>:</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsamp</span><span class="p">):</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Si itera <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> volte per generare <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> campioni.</p></li>
-</ul>
-<ol class="arabic simple" start="3">
-<li><p><strong>Fase di proposta</strong>:</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x_star</span> <span class="o">=</span> <span class="n">qdraw</span><span class="p">(</span><span class="n">x_prev</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Un nuovo stato (<code class="docutils literal notranslate"><span class="pre">x_star</span></code>) viene proposto sulla base dello stato corrente (<code class="docutils literal notranslate"><span class="pre">x_prev</span></code>) utilizzando la funzione di distribuzione proposta <code class="docutils literal notranslate"><span class="pre">qdraw</span></code>.</p></li>
-</ul>
-<ol class="arabic simple" start="4">
-<li><p><strong>Calcolo della densità</strong>:</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p_star</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">x_star</span><span class="p">)</span>
-<span class="n">p_prev</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">x_prev</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Calcola le densità dei punti proposti (<code class="docutils literal notranslate"><span class="pre">x_star</span></code>) e correnti (<code class="docutils literal notranslate"><span class="pre">x_prev</span></code>) utilizzando la funzione di distribuzione target <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></li>
-</ul>
-<ol class="arabic simple" start="5">
-<li><p><strong>Rapporto tra densità</strong>:</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pdfratio</span> <span class="o">=</span> <span class="n">p_star</span> <span class="o">/</span> <span class="n">p_prev</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Viene calcolato il rapporto tra le densità (<code class="docutils literal notranslate"><span class="pre">p_star</span> <span class="pre">/</span> <span class="pre">p_prev</span></code>). Questo rapporto decide se accettare o meno lo stato proposto.</p></li>
-</ul>
-<ol class="arabic simple" start="6">
-<li><p><strong>Fase di accettazione</strong>:</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pdfratio</span><span class="p">):</span>
-    <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_star</span>
-    <span class="n">x_prev</span> <span class="o">=</span> <span class="n">x_star</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_prev</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Viene estratto un numero casuale dalla distribuzione uniforme tra 0 e 1.</p></li>
-<li><p>Se questo numero è minore del minimo tra 1 e <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code>, lo stato proposto viene accettato e <code class="docutils literal notranslate"><span class="pre">x_prev</span></code> viene aggiornato a <code class="docutils literal notranslate"><span class="pre">x_star</span></code>.</p></li>
-<li><p>Altrimenti, lo stato proposto viene respinto e lo stato corrente (<code class="docutils literal notranslate"><span class="pre">x_prev</span></code>) viene mantenuto per il ciclo successivo.</p></li>
-</ul>
-<p>In sintesi, la decisione di accettare o rifiutare il parametro proposto <code class="docutils literal notranslate"><span class="pre">x_star</span></code> si basa sul valore di <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code>. Se <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code> è maggiore di 1, ciò indica che il parametro proposto è più probabile del parametro corrente <code class="docutils literal notranslate"><span class="pre">x_prev</span></code>; di conseguenza, <code class="docutils literal notranslate"><span class="pre">x_star</span></code> viene sempre accettato. Se, invece, <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code> è minore di 1, il parametro proposto viene accettato con una probabilità che è proporzionale a <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code> stesso. Per esempio, un <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code> di 0.10 implica una probabilità del 10% di accettare <code class="docutils literal notranslate"><span class="pre">x_star</span></code>.</p>
-<p>Questa strategia di accettazione ci consente di generare campioni che sono statisticamente rappresentativi della distribuzione target. Questo perché la probabilità di accettare un candidato è direttamente proporzionale alla sua densità della distribuzione che stiamo cercando di campionare.</p>
-<p>Nella pratica, questo processo decisionale viene implementato confrontando <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code> con un numero casuale <span class="math notranslate nohighlight">\(u\)</span>, estratto da una distribuzione uniforme <span class="math notranslate nohighlight">\(Unif(0, 1)\)</span>. Se <code class="docutils literal notranslate"><span class="pre">pdfratio</span></code> <span class="math notranslate nohighlight">\(&gt; u\)</span>, il parametro proposto <code class="docutils literal notranslate"><span class="pre">x_star</span></code> viene accettato, e la catena di Markov si sposta verso questo nuovo valore. In caso contrario, il valore corrente <code class="docutils literal notranslate"><span class="pre">x_prev</span></code> viene mantenuto come prossimo elemento nella catena.</p>
-<p>Applichiamo ora l’algoritmo di Metropolis usando una Beta(18, 92) quale distribuzione target e una distribuzione uniforme quale distribuzione proposta.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialization</span>
-<span class="n">init_state</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">100_000</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell tag_hide-output docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using Beta(18, 92) as the target distribution</span>
-<span class="n">samps</span> <span class="o">=</span> <span class="n">metropolis_v1</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">92</span><span class="p">),</span> <span class="n">uniprop</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">init_state</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>La ragione per cui è necessario scrivere <code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">x:</span> <span class="pre">stats.beta.pdf(x,</span> <span class="pre">18,</span> <span class="pre">92)</span></code> anziché <code class="docutils literal notranslate"><span class="pre">stats.beta.pdf(x,</span> <span class="pre">18,</span> <span class="pre">92)</span></code> è che la funzione <code class="docutils literal notranslate"><span class="pre">metropolis_v1</span></code> si aspetta una funzione che può essere chiamata all’interno del codice di <code class="docutils literal notranslate"><span class="pre">metropolis_v1</span></code>. Scrivere direttamente <code class="docutils literal notranslate"><span class="pre">stats.beta.pdf(x,</span> <span class="pre">18,</span> <span class="pre">92)</span></code> come argomento causerà un errore di sintassi perché <code class="docutils literal notranslate"><span class="pre">x</span></code> non è definito in quel contesto. La funzione <code class="docutils literal notranslate"><span class="pre">metropolis_v1</span></code> deve poter invocare <code class="docutils literal notranslate"><span class="pre">p</span></code> con differenti valori di <code class="docutils literal notranslate"><span class="pre">x</span></code> durante l’esecuzione. Quindi, ha bisogno di una «funzione» e non di un singolo valore. La funzione lambda <code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">x:</span> <span class="pre">stats.beta.pdf(x,</span> <span class="pre">18,</span> <span class="pre">92)</span></code> è invocabile: dato un <code class="docutils literal notranslate"><span class="pre">x</span></code>, restituirà il valore della PDF della distribuzione Beta in quel punto. Utilizzando la funzione lambda, fissiamo i parametri <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">=</span> <span class="pre">18</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span> <span class="pre">=</span> <span class="pre">92</span></code> nella distribuzione Beta, rendendola una funzione di una sola variabile <code class="docutils literal notranslate"><span class="pre">x</span></code>, che è ciò che la funzione <code class="docutils literal notranslate"><span class="pre">metropolis_v1</span></code> richiede.</p>
-<p>In sostanza, la funzione lambda serve come un «incapsulamento» o «avvolgimento» per la funzione <code class="docutils literal notranslate"><span class="pre">stats.beta.pdf</span></code>, restringendola a specifici parametri e rendendola invocabile con una sola variabile, che è esattamente ciò che l’algoritmo di Metropolis necessita.</p>
-</div>
-<p>Esaminiamo i primi 20 valori ottenuti.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">samps</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">20</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.5        0.5        0.5        0.46609323 0.46609323 0.46609323
- 0.4325139  0.40252421 0.35581839 0.35581839 0.35581839 0.36884884
- 0.33176351 0.29100705 0.24560277 0.25871319 0.25871319 0.25871319
- 0.25871319 0.25871319]
-</pre></div>
-</div>
-</div>
-</div>
-<p>Generiamo ora un istogramma di tutti i 100000 campioni prodotti dall’algoritmo di Metropolis, a cui sovrapponiamo la densità Beta(18, 92).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">samps</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;MCMC distribution&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">92</span><span class="p">),</span> <span class="s2">&quot;C0&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True distribution&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/cd3d7fed5259a4322c6ee58eef5c272b14a4c3265ad96e0c64671b409dcf5dd3.png"><img alt="../_images/cd3d7fed5259a4322c6ee58eef5c272b14a4c3265ad96e0c64671b409dcf5dd3.png" src="../_images/cd3d7fed5259a4322c6ee58eef5c272b14a4c3265ad96e0c64671b409dcf5dd3.png" style="width: 731px; height: 491px;" /></a>
-</div>
-</div>
-<p>Si noti che la procedura di Metropolis genera un insieme di campioni che approssima la distribuzione target desiderata. In altre parole, i campioni ottenuti seguono la distribuzione che stiamo cercando di esplorare, fornendo quindi un modo efficace per ottenere un campionamento casuale da questa distribuzione.</p>
-<p>Ora esaminiamo una diversa funzione di proposta: una distribuzione gaussiana centrata attorno allo stato precedente, con una deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>. In questo caso, ogni nuovo punto candidato <span class="math notranslate nohighlight">\(x^*\)</span> sarà estratto da una gaussiana con media uguale allo stato corrente <span class="math notranslate nohighlight">\(x_{\text{prev}}\)</span> e deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>. Questo introduce un grado di esplorazione randomica attorno al punto attuale, permettendo all’algoritmo di navigare efficacemente nello spazio dei parametri. In pratica, questo significa che, se <span class="math notranslate nohighlight">\(\sigma\)</span> è piccola, il valore candidato <span class="math notranslate nohighlight">\(x^*\)</span> sarà simile al valore corrente <span class="math notranslate nohighlight">\(x_{\text{prev}}\)</span>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Proposal distribution</span>
-<span class="k">def</span> <span class="nf">gaussprop</span><span class="p">(</span><span class="n">xprev</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">xprev</span> <span class="o">+</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Applichiamo nuovamente l’algorimo di Metropolis con questa nuova distribuzione proposta.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">samps</span> <span class="o">=</span> <span class="n">metropolis_v1</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">92</span><span class="p">),</span> <span class="n">gaussprop</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">init_state</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">samps</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">20</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.20090969 0.13346877 0.13346877 0.13346877 0.13346877 0.13346877
- 0.13346877 0.15164492 0.15164492 0.19828971 0.19828971 0.16806675
- 0.16806675 0.16806675 0.16806675 0.16806675 0.16806675 0.22020973
- 0.14820446 0.13045723]
-</pre></div>
-</div>
-</div>
-</div>
-<p>Otteniamo anche in questo caso un campione casuale dalla distribuzione target.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">samps</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;MCMC distribution&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">92</span><span class="p">),</span> <span class="s2">&quot;C0&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True distribution&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/1a2d2e49edaf041aa1474c158345c0517c18bd18daa53922202bea5d8b9680bc.png"><img alt="../_images/1a2d2e49edaf041aa1474c158345c0517c18bd18daa53922202bea5d8b9680bc.png" src="../_images/1a2d2e49edaf041aa1474c158345c0517c18bd18daa53922202bea5d8b9680bc.png" style="width: 731px; height: 491px;" /></a>
-</div>
-</div>
-</section>
-<section id="algoritmo-di-metropolis-con-distribuzione-target-incognita">
-<h3>Algoritmo di Metropolis con distribuzione target incognita<a class="headerlink" href="#algoritmo-di-metropolis-con-distribuzione-target-incognita" title="Link to this heading">#</a></h3>
-<p>Ora andiamo oltre: invece di presupporre che la distribuzione target sia già nota, cosa che si verifica quando utilizziamo distribuzioni coniugate, nel contesto bayesiano la distribuzione target che vogliamo campionare è il prodotto non normalizzato della verosimiglianza e della distribuzione a priori.</p>
-<p>Iniziamo quindi col definire la distribuzione a priori. In questo esempio, la distribuzione a priori è una distribuzione Beta(4, 6).</p>
+<section id="implementazione-dell-algoritmo-di-metropolis">
+<h3>Implementazione dell’Algoritmo di Metropolis<a class="headerlink" href="#implementazione-dell-algoritmo-di-metropolis" title="Link to this heading">#</a></h3>
+<p>Iniziamo col definire la distribuzione a priori. In questo esempio, la distribuzione a priori è una distribuzione Beta(4, 6).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">prior</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -1328,20 +933,19 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 </div>
 </div>
 </div>
-<p>Per la distribuzione proposta, faremo ricorso alla stessa funzione che abbiamo precedentemente definito. Tuttavia, apporteremo alcune modifiche all’algoritmo di Metropolis per adeguarlo a questo nuovo contesto.</p>
 <p>Nell’implementazione di un algoritmo di Metropolis in ambito bayesiano, vi sono diversi aspetti da considerare attentamente. Ecco alcuni punti cruciali:</p>
 <ol class="arabic simple">
 <li><p><strong>Simmetria della Distribuzione Proposta</strong>: È fondamentale che la distribuzione proposta sia simmetrica. Questa è una condizione necessaria per il funzionamento dell’algoritmo di Metropolis, ma non per quello di Metropolis-Hastings.</p></li>
 <li><p><strong>Valore Iniziale</strong>: Il valore iniziale scelto dovrebbe essere plausibile in base alla distribuzione a priori, in modo da facilitare la convergenza dell’algoritmo.</p></li>
 <li><p><strong>Probabilità Zero</strong>: Nel caso in cui la verosimiglianza o il prior assumano un valore di zero, il rapporto tra le densità di probabilità (<code class="docutils literal notranslate"><span class="pre">pdfratio</span></code>) all’interno dell’algoritmo di Metropolis risulterà indefinito. Pertanto, è importante garantire che il valore <code class="docutils literal notranslate"><span class="pre">x_star</span></code>, generato dalla distribuzione proposta, cada sempre entro i limiti del supporto sia del prior che della verosimiglianza.</p></li>
 </ol>
-<p>Di seguito è presentato il codice, rivisto in base a queste considerazioni.</p>
+<p>Di seguito è presentato il codice dell’algoritmo di Metropolis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Definizione della funzione dell&#39;algoritmo di Metropolis.</span>
 <span class="c1"># nsamp: Numero di campioni da generare.</span>
 <span class="c1"># xinit: Valore iniziale da cui iniziare il sampling.</span>
-<span class="k">def</span> <span class="nf">metropolis_v2</span><span class="p">(</span><span class="n">nsamp</span><span class="p">,</span> <span class="n">xinit</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">metropolis</span><span class="p">(</span><span class="n">nsamp</span><span class="p">,</span> <span class="n">xinit</span><span class="p">):</span>
     <span class="c1"># Inizializza un array vuoto per conservare i campioni generati.</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsamp</span><span class="p">)</span>
 
@@ -1382,11 +986,17 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
             <span class="c1"># mentre un punto peggiore ha una possibilità basata sul quanto è peggiore.</span>
             <span class="k">if</span> <span class="n">random_chance</span> <span class="o">&lt;</span> <span class="n">acceptance_probability</span><span class="p">:</span>
                 <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_star</span>  <span class="c1"># Accetta il nuovo punto.</span>
-                <span class="n">x_prev</span> <span class="o">=</span> <span class="n">x_star</span>  <span class="c1"># Aggiorna il punto precedente con il nuovo punto accettato.</span>
+                <span class="n">x_prev</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">x_star</span>  <span class="c1"># Aggiorna il punto precedente con il nuovo punto accettato.</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_prev</span>  <span class="c1"># Mantiene il punto precedente se il nuovo punto non è accettato.</span>
+                <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">x_prev</span>  <span class="c1"># Mantiene il punto precedente se il nuovo punto non è accettato.</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_prev</span>  <span class="c1"># Se x_star non è nel supporto, conserva il punto precedente.</span>
+            <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">x_prev</span>  <span class="c1"># Se x_star non è nel supporto, conserva il punto precedente.</span>
+            <span class="p">)</span>
 
     <span class="c1"># Dopo aver generato il numero desiderato di campioni, ritorna l&#39;array dei campioni.</span>
     <span class="k">return</span> <span class="n">samples</span>
@@ -1438,13 +1048,13 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span> <span class="o">=</span> <span class="mi">100_000</span>
-<span class="n">samps</span> <span class="o">=</span> <span class="n">metropolis_v2</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">samps</span> <span class="o">=</span> <span class="n">metropolis</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <p>In somma, l’algoritmo Metropolis accetta come input il numero <code class="docutils literal notranslate"><span class="pre">nsamp</span></code> di passi da simulare e il punto di partenza. Come output, l’algoritmo restituisce una catena di valori del parametro, specificamente la sequenza <span class="math notranslate nohighlight">\( \theta^{(1)}, \theta^{(2)}, \ldots, \theta^{\text{nsamp}} \)</span>. Uno degli aspetti cruciali per la riuscita dell’algoritmo è il raggiungimento della stazionarietà da parte della catena. In genere, i primi 1000-5000 valori vengono scartati in quanto rappresentano il periodo di «burn-in» della catena. Dopo un determinato numero di passi <span class="math notranslate nohighlight">\( k \)</span>, la catena converge e i valori diventano campioni effettivi dalla distribuzione a posteriori <span class="math notranslate nohighlight">\( p(\theta \mid y) \)</span>.</p>
-<p>Il modello descritto è stato inizialmente proposto da Metropolis et al. nel 1953 <span id="id3"></span>. Hastings nel 1970 introdusse un’estensione nota come algoritmo Metropolis-Hastings <span id="id4"></span>. Altre varianti includono il campionatore di Gibbs, introdotto da Geman e Geman nel 1984 <span id="id5">[]</span>, l’Hamiltonian Monte Carlo <span id="id6"></span>, e il No-U-Turn Sampler (NUTS) utilizzato in pacchetti come PyMC e Stan <span id="id7"></span>. Per un’analisi più dettagliata e intuitiva dell’algoritmo Metropolis, si rimanda a <span id="id8"></span>.</p>
+<p>Il modello descritto è stato inizialmente proposto da Metropolis et al. nel 1953 <span id="id1"></span>. Hastings nel 1970 introdusse un’estensione nota come algoritmo Metropolis-Hastings <span id="id2"></span>. Altre varianti includono il campionatore di Gibbs, introdotto da Geman e Geman nel 1984 <span id="id3">[]</span>, l’Hamiltonian Monte Carlo <span id="id4"></span>, e il No-U-Turn Sampler (NUTS) utilizzato in pacchetti come PyMC e Stan <span id="id5"></span>. Per un’analisi più dettagliata e intuitiva dell’algoritmo Metropolis, si rimanda a <span id="id6"></span>.</p>
 <p>Un elemento chiave da considerare nell’uso dell’algoritmo Metropolis è il tasso di accettazione, che è il rapporto tra il numero di valori del parametro proposti e il numero di quei valori che vengono effettivamente accettati. Un limite di questo algoritmo è la sua inefficienza relativa: rispetto alle sue varianti più moderne, l’algoritmo Metropolis tende ad essere meno efficiente.</p>
 </section>
 </section>
@@ -1478,7 +1088,7 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.16333189691090788
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.16372490447470522
 </pre></div>
 </div>
 </div>
@@ -1491,7 +1101,7 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.03529394100872187
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.035300695437999706
 </pre></div>
 </div>
 </div>
@@ -1507,7 +1117,7 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/4e22b0195357b710f6ef9a5949f66fbfc7e2703827f81ef3390d4b815bebc3bb.png"><img alt="../_images/4e22b0195357b710f6ef9a5949f66fbfc7e2703827f81ef3390d4b815bebc3bb.png" src="../_images/4e22b0195357b710f6ef9a5949f66fbfc7e2703827f81ef3390d4b815bebc3bb.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/3bc6cc75ab9ef98920192b67998e397478444f27421758dc43f86ec0a5fbe013.png"><img alt="../_images/3bc6cc75ab9ef98920192b67998e397478444f27421758dc43f86ec0a5fbe013.png" src="../_images/3bc6cc75ab9ef98920192b67998e397478444f27421758dc43f86ec0a5fbe013.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Il trace plot indica che la catena inizia con un valore casuale per poi spostarsi rapidamente nell’area intorno a 0.16, che è l’area con alta densità a posteriori. Successivamente, oscilla intorno a quel valore per le iterazioni successive.</p>
@@ -1521,7 +1131,7 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/da610ba6c51f45cbdf3fef64ee708df802788ac4e24fc53feca362222e3f1175.png"><img alt="../_images/da610ba6c51f45cbdf3fef64ee708df802788ac4e24fc53feca362222e3f1175.png" src="../_images/da610ba6c51f45cbdf3fef64ee708df802788ac4e24fc53feca362222e3f1175.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/ee09960dc5d84a522e3504058cd2faa42a277b531549bbcf0d18aacaf778f9a1.png"><img alt="../_images/ee09960dc5d84a522e3504058cd2faa42a277b531549bbcf0d18aacaf778f9a1.png" src="../_images/ee09960dc5d84a522e3504058cd2faa42a277b531549bbcf0d18aacaf778f9a1.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>L’istogramma mostrato di seguito, sul quale è stata sovrapposta la distribuzione a posteriori derivata analiticamente – specificamente una <span class="math notranslate nohighlight">\(\text{Beta}(25, 17)\)</span> – dimostra che la catena converge effettivamente alla distribuzione a posteriori desiderata.</p>
@@ -1537,7 +1147,7 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/d8827350b89bc5362c5b532ddf2ad60c559ebe596baee23db64a73b4b2203fc6.png"><img alt="../_images/d8827350b89bc5362c5b532ddf2ad60c559ebe596baee23db64a73b4b2203fc6.png" src="../_images/d8827350b89bc5362c5b532ddf2ad60c559ebe596baee23db64a73b4b2203fc6.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/1acfde58cb171e53a5e2e05e26607d7a82e6d2ad5448d39b263a07308fc191c1.png"><img alt="../_images/1acfde58cb171e53a5e2e05e26607d7a82e6d2ad5448d39b263a07308fc191c1.png" src="../_images/1acfde58cb171e53a5e2e05e26607d7a82e6d2ad5448d39b263a07308fc191c1.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>È possibile usare la funzione <code class="docutils literal notranslate"><span class="pre">summary</span></code> del pacchetto AriviZ per calolare l’intervallo di credibilità, ovvero l’intervallo che contiene la proporzione indicata dei valori estratti a caso dalla distribuzione a posteriori.</p>
@@ -1593,7 +1203,7 @@ p(\theta \mid y) = \frac{\mathrm{e}^{-(\theta - 1 / 2)^2} \theta^y (1 - \theta)^
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/9d06eb2cc9b1864a360b940d1be28f395060a7e2ba602e2440dcbae5fd910530.png"><img alt="../_images/9d06eb2cc9b1864a360b940d1be28f395060a7e2ba602e2440dcbae5fd910530.png" src="../_images/9d06eb2cc9b1864a360b940d1be28f395060a7e2ba602e2440dcbae5fd910530.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/b974cbc5eedcf5144c3e7defbc9c6f98c2974c778cff46e9ec921a5b5a91da2f.png"><img alt="../_images/b974cbc5eedcf5144c3e7defbc9c6f98c2974c778cff46e9ec921a5b5a91da2f.png" src="../_images/b974cbc5eedcf5144c3e7defbc9c6f98c2974c778cff46e9ec921a5b5a91da2f.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>L’HDI è una scelta comune nelle statistiche bayesiane e valori arrotondati come 50% o 95% sono molto popolari. Ma ArviZ utilizza il 94% come valore predefinito. La ragione di questa scelta è che il 94% è vicino al valore ampiamente utilizzato del 95%, ma è anche diverso da questo, così da servire da «amichevole promemoria» che non c’è niente di speciale nella soglia del 5%. Idealmente sarebbe opportuno scegliere un valore che si adatti alle specifiche esigenze dell’analisi statistica che si sta svolgendo, o almeno riconoscere che si sta usando un valore arbitrario.</p>
@@ -1694,7 +1304,7 @@ Length: 15, dtype: Int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/b97f14f879836ad0d00c1d9745c14c0f2b23d1dc22824ea4607b21eca5cb7ccd.png"><img alt="../_images/b97f14f879836ad0d00c1d9745c14c0f2b23d1dc22824ea4607b21eca5cb7ccd.png" src="../_images/b97f14f879836ad0d00c1d9745c14c0f2b23d1dc22824ea4607b21eca5cb7ccd.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/c249a6c5c977c13fc772550e28c80c3181d39b846109adf26d78f9150a9cf6f2.png"><img alt="../_images/c249a6c5c977c13fc772550e28c80c3181d39b846109adf26d78f9150a9cf6f2.png" src="../_images/c249a6c5c977c13fc772550e28c80c3181d39b846109adf26d78f9150a9cf6f2.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Il correlogramma è uno strumento grafico usato per la valutazione della tendenza di una catena di Markov nel tempo. Il correlogramma si costruisce a partire dall’autocorrelazione <span class="math notranslate nohighlight">\(\rho_k\)</span> di una catena di Markov in funzione del ritardo <span class="math notranslate nohighlight">\(k\)</span> con cui l’autocorrelazione è calcolata: nel grafico ogni barretta verticale riporta il valore dell’autocorrelazione (sull’asse delle ordinate) in funzione del ritardo (sull’asse delle ascisse).</p>
@@ -1710,7 +1320,7 @@ Length: 15, dtype: Int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/bb29cfba032bb54a598088b3f481458d033e8928bf2f605dd8a3c3d9f580011f.png"><img alt="../_images/bb29cfba032bb54a598088b3f481458d033e8928bf2f605dd8a3c3d9f580011f.png" src="../_images/bb29cfba032bb54a598088b3f481458d033e8928bf2f605dd8a3c3d9f580011f.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/35fa8f146eb25f2bac8e9bcd65669ef2e5531d0a40df8e47916ef2d40de2fad0.png"><img alt="../_images/35fa8f146eb25f2bac8e9bcd65669ef2e5531d0a40df8e47916ef2d40de2fad0.png" src="../_images/35fa8f146eb25f2bac8e9bcd65669ef2e5531d0a40df8e47916ef2d40de2fad0.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Si può notare come l’autocorrelazione diminuisce molto più rapidamente.</p>
@@ -1825,7 +1435,7 @@ Length: 15, dtype: Int64
 </li>
 <li><p><strong>Salvataggio del Campione</strong>: <code class="docutils literal notranslate"><span class="pre">samples[i]</span> <span class="pre">=</span> <span class="pre">x_prev</span></code> salva il punto corrente (che può essere il nuovo punto accettato o il punto precedente se il nuovo punto è stato rifiutato) nell’array <code class="docutils literal notranslate"><span class="pre">samples</span></code>. Questo processo si ripete fino a quando non si raggiunge il numero desiderato di campioni.</p></li>
 </ol>
-<p>Come dati, usiamo il campione di 30 valori BDI-II ottenuti dai soggetti clinici esaminati da <span id="id9">[]</span>.</p>
+<p>Come dati, usiamo il campione di 30 valori BDI-II ottenuti dai soggetti clinici esaminati da <span id="id7">[]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
@@ -1911,7 +1521,7 @@ Length: 15, dtype: Int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/1683d7349fdccdb4784807d20c03bdc7f00010c9217892d217f5ccce4824b999.png"><img alt="../_images/1683d7349fdccdb4784807d20c03bdc7f00010c9217892d217f5ccce4824b999.png" src="../_images/1683d7349fdccdb4784807d20c03bdc7f00010c9217892d217f5ccce4824b999.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/4adc8de2d0b5fdcadbf83043214a7d418ee8092792ecb590964c773d558a4ff8.png"><img alt="../_images/4adc8de2d0b5fdcadbf83043214a7d418ee8092792ecb590964c773d558a4ff8.png" src="../_images/4adc8de2d0b5fdcadbf83043214a7d418ee8092792ecb590964c773d558a4ff8.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Questo codice mostra come integrare l’analisi MCMC con l’approccio analitico per il caso normale-normale, offrendo sia una visualizzazione dei risultati del sampling che la conferma attraverso la soluzione analitica.</p>
@@ -1931,7 +1541,7 @@ Length: 15, dtype: Int64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Jul 13 2024
 
 Python implementation: CPython
 Python version       : 3.12.3
@@ -1939,18 +1549,18 @@ IPython version      : 8.25.0
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
-Release     : 23.4.0
+Release     : 23.5.0
 Machine     : arm64
 Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-statsmodels: 0.14.2
-pandas     : 2.2.2
+numpy      : 1.26.4
 arviz      : 0.18.0
+pandas     : 2.2.2
 scipy      : 1.13.1
 matplotlib : 3.8.4
-numpy      : 1.26.4
+statsmodels: 0.14.2
 
 Watermark: 2.4.3
 </pre></div>
@@ -2034,15 +1644,8 @@ Watermark: 2.4.3
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritmo-di-metropolis">Algoritmo di Metropolis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#passaggi-fondamentali-dell-algoritmo-di-metropolis">Passaggi Fondamentali dell’Algoritmo di Metropolis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versione-di-mcelreath">Versione di McElreath</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritmo-di-metropolis-con-distribuzione-target-nota">Algoritmo di Metropolis con Distribuzione Target Nota</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sintassi-della-funzione">Sintassi della funzione</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parametri">Parametri</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#valore-di-ritorno">Valore di ritorno</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dettagli-dell-algoritmo">Dettagli dell’algoritmo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritmo-di-metropolis-con-distribuzione-target-incognita">Algoritmo di Metropolis con distribuzione target incognita</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dettagli-dell-algoritmo">Dettagli dell’Algoritmo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementazione-dell-algoritmo-di-metropolis">Implementazione dell’Algoritmo di Metropolis</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aspetti-computazionali">Aspetti computazionali</a><ul class="nav section-nav flex-column">
