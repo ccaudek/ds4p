@@ -12,3 +12,10 @@ model {
   // verosimiglianza
   y ~ normal(alpha + beta * x, sigma);
 }
+generated quantities {
+  vector[N] y_rep; // variabili predette
+  
+  for (n in 1 : N) {
+    y_rep[n] = normal_rng(alpha + beta * x[n], sigma);
+  }
+}

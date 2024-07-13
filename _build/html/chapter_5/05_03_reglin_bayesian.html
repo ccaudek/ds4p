@@ -535,16 +535,20 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modellare-l-associazione-statistica-tra-variabili">Modellare l’associazione statistica tra variabili</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-generativo-dei-dati">Modello Generativo dei Dati</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-bayesiano-della-regressione-bivariata">Modello Bayesiano della Regressione Bivariata</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza">Verosimiglianza</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-priori">Distribuzioni Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-a-priori">Distribuzioni a Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-a-posteriori">Distribuzioni a Posteriori</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#codice-stan">Codice Stan</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dizionario-con-i-dati">Dizionario con i dati</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campionamento-mcmc">Campionamento MCMC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-a-posteriori">Distribuzioni a posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Distribuzioni a posteriori</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione">Interpretazione</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior-predictive check</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#predizione">Predizione</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantificazione-dell-incertezza">Quantificazione dell’incertezza</a></li>
 </ul>
 </li>
@@ -555,6 +559,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribizioni-a-priori-sui-parametri">Distribizioni a priori sui parametri</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-delle-distribuzioni-a-priori">Interpretazione delle Distribuzioni a Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior-predictive check</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
@@ -577,26 +582,50 @@ document.write(`
 <h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../_config/config.py # Import the configuration settings
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">cmdstanpy</span>
 
 <span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">pingouin</span> <span class="k">as</span> <span class="nn">pg</span>
+
+<span class="c1"># set seed to make the results fully reproducible</span>
+<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;ds4p&quot;</span><span class="p">))</span>
+<span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.facecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+
+<span class="c1"># Get the home directory</span>
+<span class="n">home_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+<span class="c1"># Construct the path to the Quarto project directory</span>
+<span class="n">project_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">home_directory</span><span class="p">,</span> <span class="s2">&quot;_repositories&quot;</span><span class="p">,</span> <span class="s2">&quot;ds4p&quot;</span><span class="p">)</span>
+
+<span class="c1"># Configure the inline backend for Jupyter notebooks</span>
+<span class="n">ipython</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">ipython</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ipython</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;InlineBackend.figure_format = &#39;retina&#39;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Per introdurre l’approccio bayesiano, seguiremo la trattazione di <span id="id1">McElreath [<a class="reference internal" href="../references/bibliography.html#id15" title="Richard McElreath. Statistical rethinking: A Bayesian course with examples in R and Stan. CRC Press, Boca Raton, Florida, 2nd edition edition, 2020.">McE20</a>]</span> e analizzeremo nuovamente i dati del censimento dei !Kung San. In precedenza, abbiamo applicato il modello Normale all’altezza. Tuttavia, di solito siamo interessati a modellare come un risultato sia correlato a un’altra variabile, una variabile predittiva. Se la variabile predittiva ha una qualsiasi associazione statistica con la variabile di risultato, possiamo utilizzarla per predire il risultato. Quando la variabile predittiva è integrata nel modello in un modo specifico, otteniamo una regressione lineare.</p>
-<p>Esamineremo un set di <a class="reference external" href="https://www.bgsu.edu/content/dam/BGSU/nwo/documents/COMP-6-8/June21_2016/IcecreamSalesvsTemperature.pdf">dati</a> che riguarda la relazione tra la temperatura media e gli introiti (in dollari) di un particolare negozio di gelati. Sebbene questa possa non sembrare una questione scientifica particolarmente entusiasmante, è un esempio semplice e intuitivo da analizzare. La relazione tra consumo di gelati e temperatura può apparire banale, ma offre una chiara opportunità per comprendere i meccanismi alla base dell’associazione tra due variabili. In questo momento, ci concentreremo esclusivamente sui metodi per stimare tale associazione.</p>
+</section>
+<section id="modellare-l-associazione-statistica-tra-variabili">
+<h2>Modellare l’associazione statistica tra variabili<a class="headerlink" href="#modellare-l-associazione-statistica-tra-variabili" title="Link to this heading">#</a></h2>
+<p>Per introdurre l’approccio bayesiano al modello di regressione, esamineremo un set di <a class="reference external" href="https://www.bgsu.edu/content/dam/BGSU/nwo/documents/COMP-6-8/June21_2016/IcecreamSalesvsTemperature.pdf">dati</a> che riguarda la relazione tra la temperatura media e gli introiti (in dollari) di un particolare negozio di gelati. Sebbene questa possa non sembrare una questione scientifica particolarmente entusiasmante, è un esempio semplice e intuitivo da analizzare. La relazione tra consumo di gelati e temperatura può apparire banale, ma offre una chiara opportunità per comprendere i meccanismi alla base dell’associazione tra due variabili. In questo momento, ci concentreremo esclusivamente sui metodi per stimare tale associazione.</p>
+<p>In precedenza, abbiamo applicato il modello Normale ad una singola variabile. Tuttavia, di solito siamo interessati a modellare come una variabile di esito sia correlata a un’altra variabile predittiva. Se la variabile predittiva ha una qualche associazione statistica con la variabile di esito, possiamo utilizzarla per predire il risultato. Quando la variabile predittiva è integrata nel modello in un modo specifico, otteniamo una regressione lineare.</p>
+<p>I dati dell’esempio sono forniti di seguito.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
@@ -676,6 +705,7 @@ document.write(`
 </table>
 </div></div></div>
 </div>
+<p>L’associazione tra le due variabili (gli introiti derivanti dalla vendita di gelati e la temperatura) è chiaramente visualizzata nel grafico seguente. Il grafico indica che l’associazione tra le due variabili può essere approssimata da una semplice funzione matematica, ovvero una retta. Tuttavia, è evidente che una funzione lineare sia troppo semplice per rappresentare accuratamente questi dati: non è possibile trovare una singola retta che passi per tutti i punti del diagramma di dispersione.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;icecream&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
@@ -693,39 +723,53 @@ document.write(`
 </section>
 <section id="modello-generativo-dei-dati">
 <h2>Modello Generativo dei Dati<a class="headerlink" href="#modello-generativo-dei-dati" title="Link to this heading">#</a></h2>
-<p>Assumiamo il seguente modello generativo dei dati (verosimiglianza):</p>
+<p>Per descrivere la relazione tra introiti e temperatura, utilizzeremo un modello statistico lineare. Assumeremo che la relazione media tra <span class="math notranslate nohighlight">\(x\)</span> (temperatura) e <span class="math notranslate nohighlight">\(y\)</span> (introiti) possa essere rappresentata da una retta, ma influenzata da un certo grado di errore. Supponiamo che questo errore sia costante ai vari livelli di <span class="math notranslate nohighlight">\(x\)</span> e segua una distribuzione Normale. Inoltre, presupponiamo che gli errori attorno alla retta di regressione siano indipendenti tra loro.</p>
+<p>In questo contesto, le nostre assunzioni delineano un modello statistico lineare, formalizzato come segue:</p>
+<div class="math notranslate nohighlight">
+\[ y_i = \alpha + \beta x_i + \epsilon_i \]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> è l’intercetta,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta\)</span> è il coefficiente angolare,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon_i \sim \text{Normale}(0, \sigma^2)\)</span> rappresenta l’errore, con media zero e varianza costante <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p></li>
+</ul>
+<p>Queste assunzioni ci permettono di applicare metodi di regressione lineare per stimare i parametri del modello (<span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>) e quantificare l’incertezza delle predizioni, considerando la variabilità nei dati.</p>
+<p>Il modello lineare descritto sopra costituisce il modello generativo dei dati (verosimiglianza):</p>
 <div class="math notranslate nohighlight">
 \[ y_n = \alpha + \beta x_n + \epsilon_n \]</div>
 <p>o equivalentemente</p>
 <div class="math notranslate nohighlight">
 \[ \epsilon_n \sim \text{Normale}(0, \sigma) \]</div>
-<p>Questo modello descrive come i dati <span class="math notranslate nohighlight">\( y_n \)</span> sono generati. Ogni osservazione <span class="math notranslate nohighlight">\( y_n \)</span> è una combinazione lineare di una costante <span class="math notranslate nohighlight">\( \alpha \)</span> (intercetta), un coefficiente <span class="math notranslate nohighlight">\( \beta \)</span> che moltiplica il valore della variabile <span class="math notranslate nohighlight">\( x_n \)</span> (temperatura), e un termine di errore <span class="math notranslate nohighlight">\( \epsilon_n \)</span> che cattura la variabilità non spiegata dal modello lineare.</p>
-<p>Il termine di errore <span class="math notranslate nohighlight">\( \epsilon_n \)</span> è distribuito secondo una distribuzione normale con media 0 e deviazione standard <span class="math notranslate nohighlight">\( \sigma \)</span>. Questo implica che l’errore è simmetricamente distribuito attorno a zero e ha una variabilità definita da <span class="math notranslate nohighlight">\( \sigma \)</span>.</p>
+<p>Questo modello descrive come i dati <span class="math notranslate nohighlight">\( y_n \)</span> sono generati. Ogni osservazione <span class="math notranslate nohighlight">\( y_n \)</span> è una combinazione lineare di una costante <span class="math notranslate nohighlight">\(\alpha\)</span> (intercetta), un coefficiente <span class="math notranslate nohighlight">\(\beta\)</span> che moltiplica il valore della variabile <span class="math notranslate nohighlight">\( x_n \)</span> (temperatura), e un termine di errore <span class="math notranslate nohighlight">\(\epsilon_n\)</span> che cattura la variabilità non spiegata dal modello lineare.</p>
+<p>Il termine di errore <span class="math notranslate nohighlight">\(\epsilon_n\)</span> è distribuito secondo una distribuzione normale con media 0 e deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>. Questo implica che l’errore è simmetricamente distribuito attorno a zero e ha una variabilità definita da <span class="math notranslate nohighlight">\(\sigma\)</span>.</p>
 <p>L’equazione</p>
 <div class="math notranslate nohighlight">
 \[ y_n \sim \text{Normale}(\alpha + \beta x_n, \sigma) \]</div>
-<p>mostra come il valore osservato <span class="math notranslate nohighlight">\( y_n \)</span> segue una distribuzione normale con media <span class="math notranslate nohighlight">\( \alpha + \beta x_n \)</span> e deviazione standard <span class="math notranslate nohighlight">\( \sigma \)</span>. Questo significa che, dato <span class="math notranslate nohighlight">\( x_n \)</span>, i valori di <span class="math notranslate nohighlight">\( y_n \)</span> sono distribuiti normalmente attorno alla retta di regressione definita da <span class="math notranslate nohighlight">\( \alpha + \beta x_n \)</span>.</p>
+<p>mostra come il valore osservato <span class="math notranslate nohighlight">\( y_n \)</span> segue una distribuzione normale con media <span class="math notranslate nohighlight">\(\alpha + \beta x_n\)</span> e deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>. Questo significa che, dato <span class="math notranslate nohighlight">\( x_n \)</span>, i valori di <span class="math notranslate nohighlight">\( y_n \)</span> sono distribuiti normalmente attorno alla retta di regressione definita da <span class="math notranslate nohighlight">\(\alpha + \beta x_n\)</span>.</p>
 <p>Consideriamo il caso in cui <span class="math notranslate nohighlight">\( y_n \)</span> rappresenta le vendite di gelati e <span class="math notranslate nohighlight">\( x_n \)</span> rappresenta la temperatura media. Secondo il nostro modello:</p>
 <ul class="simple">
 <li><p><strong><span class="math notranslate nohighlight">\(\alpha\)</span></strong> è l’intercetta, ovvero le vendite di gelati previste quando la temperatura è zero.</p></li>
 <li><p><strong><span class="math notranslate nohighlight">\(\beta\)</span></strong> è il coefficiente che indica quanto aumentano (o diminuiscono) le vendite di gelati per ogni aumento di un grado della temperatura.</p></li>
 <li><p><strong><span class="math notranslate nohighlight">\(\sigma\)</span></strong> è la deviazione standard che misura la variabilità delle vendite di gelati attorno alla media prevista dal modello.</p></li>
 </ul>
-<p>Il modello ci permette di stimare l’effetto della temperatura sulle vendite di gelati e di quantificare l’incertezza associata a queste stime.</p>
+<p>Questo modello ci consente di stimare l’effetto della temperatura sulle vendite di gelati e di quantificare l’incertezza associata a queste stime.</p>
 </section>
 <section id="modello-bayesiano-della-regressione-bivariata">
 <h2>Modello Bayesiano della Regressione Bivariata<a class="headerlink" href="#modello-bayesiano-della-regressione-bivariata" title="Link to this heading">#</a></h2>
 <section id="verosimiglianza">
 <h3>Verosimiglianza<a class="headerlink" href="#verosimiglianza" title="Link to this heading">#</a></h3>
-<p>Assumiamo la seguente verosimiglianza:</p>
+<p>Assumiamo la verosimiglianza che abbiamo descritto in precedenza:</p>
 <div class="math notranslate nohighlight">
 \[ y \sim \text{Normale}(\alpha + \beta x, \sigma) \]</div>
 <p>Questo significa che i dati <span class="math notranslate nohighlight">\( y \)</span> seguono una distribuzione normale con media <span class="math notranslate nohighlight">\(\alpha + \beta x\)</span> e deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>. In altre parole, il valore osservato <span class="math notranslate nohighlight">\( y \)</span> è generato come una combinazione lineare di <span class="math notranslate nohighlight">\(\alpha\)</span> (intercetta), <span class="math notranslate nohighlight">\(\beta\)</span> (coefficiente della variabile <span class="math notranslate nohighlight">\( x \)</span>), più un errore che segue una distribuzione normale con deviazione standard <span class="math notranslate nohighlight">\(\sigma\)</span>.</p>
 </section>
-<section id="distribuzioni-priori">
-<h3>Distribuzioni Priori<a class="headerlink" href="#distribuzioni-priori" title="Link to this heading">#</a></h3>
+<section id="distribuzioni-a-priori">
+<h3>Distribuzioni a Priori<a class="headerlink" href="#distribuzioni-a-priori" title="Link to this heading">#</a></h3>
 <p>In una prima versione del modello, useremo delle distribuzioni a priori uniformi per i tre parametri.</p>
-<p>Queste distribuzioni a priori vengono combinate con i dati osservati attraverso il teorema di Bayes per aggiornare le nostre credenze sui parametri del modello. Il risultato è una distribuzione a posteriori per ciascun parametro che riflette sia l’informazione contenuta nei dati che le credenze iniziali incorporate nelle distribuzioni a priori. Questo processo permette di fare inferenze più robuste, specialmente quando i dati sono limitati o rumorosi.</p>
+</section>
+<section id="distribuzioni-a-posteriori">
+<h3>Distribuzioni a Posteriori<a class="headerlink" href="#distribuzioni-a-posteriori" title="Link to this heading">#</a></h3>
+<p>Le distribuzioni a priori vengono combinate con i dati osservati attraverso il teorema di Bayes per aggiornare le nostre credenze sui parametri del modello. Il risultato è una distribuzione a posteriori per ciascun parametro che riflette sia l’informazione contenuta nei dati che le credenze iniziali incorporate nelle distribuzioni a priori. Questo processo permette di fare inferenze più robuste, specialmente quando i dati sono limitati o rumorosi.</p>
 </section>
 <section id="codice-stan">
 <h3>Codice Stan<a class="headerlink" href="#codice-stan" title="Link to this heading">#</a></h3>
@@ -752,13 +796,6 @@ parameters {
 model {
   // verosimiglianza
   y ~ normal(alpha + beta * x, sigma);
-}
-generated quantities {
-  vector[N] y_rep; // variabili predette
-  
-  for (n in 1 : N) {
-    y_rep[n] = normal_rng(alpha + beta * x[n], sigma);
-  }
 }
 </pre></div>
 </div>
@@ -829,8 +866,8 @@ Name: icecream, dtype: int64}
 </div>
 </div>
 </section>
-<section id="distribuzioni-a-posteriori">
-<h3>Distribuzioni a posteriori<a class="headerlink" href="#distribuzioni-a-posteriori" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h3>Distribuzioni a posteriori<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <p>Esaminiamo le distribuzioni a posteriori dei parametri.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -839,7 +876,7 @@ Name: icecream, dtype: int64}
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/9ace0d65442cb0e038f893ad51acb27033736e1d6e6de16b297e574202b62ab4.png"><img alt="../_images/9ace0d65442cb0e038f893ad51acb27033736e1d6e6de16b297e574202b62ab4.png" src="../_images/9ace0d65442cb0e038f893ad51acb27033736e1d6e6de16b297e574202b62ab4.png" style="width: 1211px; height: 611px;" /></a>
+<a class="reference internal image-reference" href="../_images/de74ba19f73a82cad91b87526f70b482e727fab66f8877bbfd9b3b141911889a.png"><img alt="../_images/de74ba19f73a82cad91b87526f70b482e727fab66f8877bbfd9b3b141911889a.png" src="../_images/de74ba19f73a82cad91b87526f70b482e727fab66f8877bbfd9b3b141911889a.png" style="width: 1211px; height: 611px;" /></a>
 </div>
 </div>
 <p>L’oggetto <code class="docutils literal notranslate"><span class="pre">fit</span></code> generato da <code class="docutils literal notranslate"><span class="pre">cmdstanpy</span></code> appartiene alla classe <code class="docutils literal notranslate"><span class="pre">cmdstanpy.stanfit.mcmc.CmdStanMCMC</span></code>. Questo oggetto è funzionalmente equivalente a un oggetto della classe <code class="docutils literal notranslate"><span class="pre">InferenceData</span></code>, permettendo quindi la sua manipolazione tramite le funzioni fornite da ArviZ. Esaminiamo dunque un sommario delle distribuzioni a posteriori dei parametri del modello lineare.</p>
@@ -882,38 +919,38 @@ Name: icecream, dtype: int64}
   <tbody>
     <tr>
       <th>alpha</th>
-      <td>-159.310</td>
-      <td>63.262</td>
-      <td>-283.583</td>
-      <td>-43.010</td>
-      <td>1.355</td>
-      <td>0.958</td>
-      <td>2214.0</td>
-      <td>2475.0</td>
+      <td>-158.315</td>
+      <td>64.516</td>
+      <td>-271.588</td>
+      <td>-28.269</td>
+      <td>1.429</td>
+      <td>1.010</td>
+      <td>2051.0</td>
+      <td>2311.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>beta</th>
-      <td>30.082</td>
-      <td>3.316</td>
-      <td>23.603</td>
-      <td>36.162</td>
-      <td>0.071</td>
-      <td>0.050</td>
-      <td>2229.0</td>
-      <td>2682.0</td>
+      <td>30.032</td>
+      <td>3.372</td>
+      <td>23.574</td>
+      <td>36.268</td>
+      <td>0.074</td>
+      <td>0.053</td>
+      <td>2065.0</td>
+      <td>2329.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>sigma</th>
-      <td>43.808</td>
-      <td>11.481</td>
-      <td>26.009</td>
-      <td>65.358</td>
-      <td>0.232</td>
-      <td>0.168</td>
-      <td>2672.0</td>
-      <td>2973.0</td>
+      <td>44.162</td>
+      <td>12.121</td>
+      <td>25.540</td>
+      <td>66.813</td>
+      <td>0.270</td>
+      <td>0.195</td>
+      <td>2120.0</td>
+      <td>2226.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -998,40 +1035,202 @@ Name: icecream, dtype: int64}
 <li><p>La media a posteriori di <span class="math notranslate nohighlight">\(\beta = 30.09\)</span> suggerisce che ci aspettiamo un aumento medio di 30.09 dollari negli introiti del negozio di gelati per ogni incremento di 1 grado centigrado nella temperatura.</p></li>
 </ul>
 </section>
-<section id="posterior-predictive-check">
-<h3>Posterior-predictive check<a class="headerlink" href="#posterior-predictive-check" title="Link to this heading">#</a></h3>
-<p>Per creare un PPC plot dobbiamo creare un oggetto InferenceData nel quale i dati sono strutturati come si aspetta ArviZ:</p>
+</section>
+<section id="predizione">
+<h2>Predizione<a class="headerlink" href="#predizione" title="Link to this heading">#</a></h2>
+<p>La distribuzione a posteriori non contiene solo informazioni su ciascun parametro singolarmente, ma anche sulle dipendenze tra i parametri. Queste dipendenze sono riflesse nei campioni a posteriori che possono essere trasformati arbitrariamente.</p>
+<p>Ad esempio, supponiamo che <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code> siano vettori di campioni a posteriori.</p>
+<p>Con l’istruzione seguente nel blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code>, possiamo calcolare la predizione a posteriori per 30 gradi Celsius:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pred</span> <span class="pre">=</span> <span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">30;</span></code></p>
+<p>Modifichiamo il modello Stan per aggiungere il blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code> con questa istruzione e compiliamo il modello.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span>
-    <span class="n">posterior</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span>
-    <span class="n">posterior_predictive</span><span class="o">=</span><span class="s1">&#39;y_rep&#39;</span><span class="p">,</span>
-    <span class="n">observed_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;icecream&quot;</span><span class="p">]},</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;icecream_model_2.stan&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=1&gt; N; // numero totale di osservazioni 
+  vector[N] y; // variabile di risposta
+  vector[N] x; // variabile predittore
+}
+parameters {
+  real alpha; // intercetta
+  real beta; // coefficiente angolare
+  real&lt;lower=0&gt; sigma; // deviazione standard residua
+}
+model {
+  // verosimiglianza
+  y ~ normal(alpha + beta * x, sigma);
+}
+generated quantities {
+  real pred; // predizione
+  
+  pred = alpha + beta * 30;
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>In questo modello Stan aggiornato, il blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code> calcola la predizione a posteriori <code class="docutils literal notranslate"><span class="pre">pred</span></code> per una variabile predittore con valore 30. Questa aggiunta consente di ottenere la distribuzione a posteriori della predizione per un determinato valore del predittore.</p>
+<p>Eseguiamo il campionamento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Esaminiamo ora il pp-check.</p>
+<p>Esaminiamo la stima a posteriori dell’introito previsto per il negozio di gelati quando la temperatura raggiunge i 30 gradi Celsius. Questa analisi fornirà sia una stima puntuale dell’introito che una misura dell’incertezza associata, rappresentata dall’intervallo di credibilità al livello di confidenza prescelto.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">data_pairs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;y_rep&#39;</span><span class="p">})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;pred&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/e619463322a9faca928fb3664803a3fcf73543a22dfd41ec3d503c75a307ed92.png"><img alt="../_images/e619463322a9faca928fb3664803a3fcf73543a22dfd41ec3d503c75a307ed92.png" src="../_images/e619463322a9faca928fb3664803a3fcf73543a22dfd41ec3d503c75a307ed92.png" style="width: 731px; height: 491px;" /></a>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>pred</th>
+      <td>742.651</td>
+      <td>40.123</td>
+      <td>664.016</td>
+      <td>816.924</td>
+      <td>0.818</td>
+      <td>0.579</td>
+      <td>2409.0</td>
+      <td>3196.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
-</div>
-</section>
 <section id="quantificazione-dell-incertezza">
 <h3>Quantificazione dell’incertezza<a class="headerlink" href="#quantificazione-dell-incertezza" title="Link to this heading">#</a></h3>
+<p>Per quantificare l’incertezza nelle predizioni del modello, possiamo estendere il metodo esaminato in precedenza per calcolare la distribuzione a posteriori delle predizioni per tutti i valori di <span class="math notranslate nohighlight">\(x\)</span> considerati. Questo ci permette di ottenere non solo le stime puntuali delle predizioni, ma anche una misura dell’incertezza associata a ciascuna predizione.</p>
+<p>Per fare ciò, modifichiamo il blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code> nel seguente modo:</p>
+<div class="highlight-stan notranslate"><div class="highlight"><pre><span></span><span class="kn">generated quantities</span> <span class="p">{</span>
+  <span class="kt">vector</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="n">y_rep</span><span class="p">;</span> <span class="c1">// predizioni a posteriori per ciascun valore di x</span>
+  
+  <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="k">in</span> <span class="mf">1</span><span class="o">:</span><span class="n">N</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">y_rep</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="nb">normal_rng</span><span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">sigma</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Esaminiamo nei dettagli la modifica allo script Stan.</p>
+<ol class="arabic simple">
+<li><p><strong>Dichiarazione del vettore <code class="docutils literal notranslate"><span class="pre">y_rep</span></code></strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vector[N]</span> <span class="pre">y_rep;</span></code>: Questa linea dichiara un vettore <code class="docutils literal notranslate"><span class="pre">y_rep</span></code> di lunghezza <code class="docutils literal notranslate"><span class="pre">N</span></code> che conterrà le predizioni a posteriori per ciascun valore di <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Ciclo <code class="docutils literal notranslate"><span class="pre">for</span></code> per generare le predizioni</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">(n</span> <span class="pre">in</span> <span class="pre">1:N)</span></code>: Questo ciclo iterativo va da <code class="docutils literal notranslate"><span class="pre">1</span></code> a <code class="docutils literal notranslate"><span class="pre">N</span></code>, cioè copre tutte le osservazioni.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y_rep[n]</span> <span class="pre">=</span> <span class="pre">normal_rng(alpha</span> <span class="pre">+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">x[n],</span> <span class="pre">sigma);</span></code>: Per ogni valore di <code class="docutils literal notranslate"><span class="pre">x[n]</span></code>, questa linea genera una predizione dalla distribuzione normale con media <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">x[n]</span></code> e deviazione standard <code class="docutils literal notranslate"><span class="pre">sigma</span></code>. La funzione <code class="docutils literal notranslate"><span class="pre">normal_rng</span></code> è utilizzata per generare numeri casuali dalla distribuzione normale specificata, rappresentando così l’incertezza nelle predizioni.</p></li>
+</ul>
+</li>
+</ol>
+<ul class="simple">
+<li><p>Questo approccio consente di ottenere la distribuzione a posteriori delle predizioni, fornendo una visione completa dell’incertezza associata a ciascuna predizione.</p></li>
+<li><p>Dalla distribuzione a posteriori di <code class="docutils literal notranslate"><span class="pre">y_rep</span></code>, possiamo calcolare sia la stima puntuale (ad esempio, la media o la mediana delle predizioni) sia gli intervalli di credibilità (ad esempio, l’intervallo al 95%) per ogni valore di <code class="docutils literal notranslate"><span class="pre">x</span></code>. Questo offre una misura dell’incertezza delle predizioni, riflettendo la variabilità e l’affidabilità del modello.</p></li>
+</ul>
+<p>In sintesi, questa modifica ci permette di valutare l’incertezza delle predizioni del modello in modo robusto e dettagliato, migliorando la comprensione della performance del modello e della sua capacità predittiva.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;icecream_model_3.stan&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=1&gt; N; // numero totale di osservazioni 
+  vector[N] y; // variabile di risposta
+  vector[N] x; // variabile predittore
+}
+parameters {
+  real alpha; // intercetta
+  real beta; // coefficiente angolare
+  real&lt;lower=0&gt; sigma; // deviazione standard residua
+}
+model {
+  // verosimiglianza
+  y ~ normal(alpha + beta * x, sigma);
+}
+generated quantities {
+  vector[N] y_rep; // variabili predette
+  
+  for (n in 1 : N) {
+    y_rep[n] = normal_rng(alpha + beta * x[n], sigma);
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit3</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>Costruiamo ora un grafico che rappresenta i valori osservati insieme alla linea di regressione stimata tramite il modello bayesiano. Al grafico aggiungeremo diverse linee di regressione, ciascuna orientata in base ai valori campionati casualmente dalla distribuzione a posteriori dei parametri <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract posterior samples</span>
-<span class="n">alpha_samples</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">stan_variable</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">)</span>
-<span class="n">beta_samples</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">stan_variable</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+<span class="n">alpha_samples</span> <span class="o">=</span> <span class="n">fit3</span><span class="o">.</span><span class="n">stan_variable</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">)</span>
+<span class="n">beta_samples</span> <span class="o">=</span> <span class="n">fit3</span><span class="o">.</span><span class="n">stan_variable</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1078,6 +1277,56 @@ Name: icecream, dtype: int64}
 </div>
 </div>
 <p>Le numerose linee di regressione presenti nel grafico visualizzano la nostra incertezza riguardo l’inclinazione esatta della linea di regressione principale. Tuttavia, il grafico mostra chiaramente che questa incertezza è minima.</p>
+<p>Possiamo procedere in un altro modo per descrivere l’incertezza della stima. Anziché utilizzare le distribuzioni a posteriori di <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>, possiamo utilizzare la distribuzione a posteriori di <code class="docutils literal notranslate"><span class="pre">y_rep</span></code>. Procedendo in questo modo otteniamo il grafico mostrato qui sotto.</p>
+<p>In questo plot, la linea rossa rappresenta la media delle predizioni a posteriori, mentre l’area grigia rappresenta l’intervallo di credibilità al 95%, mostrando l’incertezza delle predizioni del modello. Questo approccio fornisce una visione più completa e realistica dell’incertezza nelle predizioni rispetto all’approccio che utilizza solo <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Estrai i campioni posteriori di y_rep</span>
+<span class="n">y_rep_samples</span> <span class="o">=</span> <span class="n">fit3</span><span class="o">.</span><span class="n">stan_variable</span><span class="p">(</span><span class="s2">&quot;y_rep&quot;</span><span class="p">)</span>
+
+<span class="c1"># Calcola la media e l&#39;intervallo di credibilità (ad esempio, 95%) per y_rep</span>
+<span class="n">y_rep_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_rep_samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y_rep_lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">y_rep_samples</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y_rep_upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">y_rep_samples</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Plot y vs x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;icecream&quot;</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Dati&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Plot della media delle predizioni a posteriori</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_rep_mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Media delle predizioni&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot dell&#39;intervallo di credibilità</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">y_rep_lower</span><span class="p">,</span>
+    <span class="n">y_rep_upper</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Intervallo di credibilità 95%&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Formattazione del plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Temperatura (Celsius)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Vendite di gelati&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Incertezza delle predizioni del modello&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/64eebdaba72bcaf4516bdd3238cb858c92bf9903ed67882aeeedfe3b9f8fdf7d.png"><img alt="../_images/64eebdaba72bcaf4516bdd3238cb858c92bf9903ed67882aeeedfe3b9f8fdf7d.png" src="../_images/64eebdaba72bcaf4516bdd3238cb858c92bf9903ed67882aeeedfe3b9f8fdf7d.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Nel primo approccio, calcoliamo l’incertezza delle predizioni utilizzando le distribuzioni a posteriori di <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>. Questo metodo consiste nel generare predizioni lineari per ciascun campione a posteriori di <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>, tracciando quindi le linee di regressione risultanti. Questo ci permette di vedere come varia la linea di regressione in base alle incertezze nei parametri <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>. Questo metodo visualizza come l’incertezza nei parametri del modello si traduce in incertezza nelle predizioni.</p>
+<p>Nel secondo approccio, descriviamo l’incertezza delle predizioni utilizzando direttamente la distribuzione a posteriori di <code class="docutils literal notranslate"><span class="pre">y_rep</span></code>. In questo caso, generiamo predizioni per ciascun valore osservato di <code class="docutils literal notranslate"><span class="pre">x</span></code> nel modello Stan, tenendo conto delle distribuzioni a posteriori dei parametri del modello. Questo metodo visualizza direttamente l’incertezza nelle predizioni, tenendo conto delle variazioni nei dati osservati e delle distribuzioni a posteriori dei parametri.</p>
+<p>Le due descrizioni dell’incertezza delle predizioni del modello sono diverse perché riflettono aspetti differenti della distribuzione a posteriori:</p>
+<ol class="arabic simple">
+<li><p><strong>Distribuzione a posteriori di <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code></strong>: Questo approccio considera solo l’incertezza nei parametri del modello (<code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>). Le linee di regressione tracciate variano in base a questi parametri, ma non tengono conto dell’incertezza residua (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>).</p></li>
+<li><p><strong>Distribuzione a posteriori di <code class="docutils literal notranslate"><span class="pre">y_rep</span></code></strong>: Questo approccio include non solo l’incertezza nei parametri <code class="docutils literal notranslate"><span class="pre">alpha</span></code> e <code class="docutils literal notranslate"><span class="pre">beta</span></code>, ma anche l’incertezza residua (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>). La distribuzione di <code class="docutils literal notranslate"><span class="pre">y_rep</span></code> riflette la variabilità totale nel modello, inclusa la variabilità nei dati osservati. Pertanto, l’incertezza nelle predizioni è maggiore perché tiene conto di tutte le fonti di variabilità.</p></li>
+</ol>
 </section>
 </section>
 <section id="ricodifica-dei-dati">
@@ -1143,7 +1392,7 @@ Name: icecream, dtype: int64}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit4</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
     <span class="n">data</span><span class="o">=</span><span class="n">stan_data2</span><span class="p">,</span>
     <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
     <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
@@ -1157,7 +1406,7 @@ Name: icecream, dtype: int64}
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit4</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1263,7 +1512,7 @@ Name: icecream, dtype: int64}
 <p>Queste distribuzioni a priori rappresentano le credenze iniziali riguardanti i parametri del modello prima di osservare i dati. Le distribuzioni normali per <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> con deviazioni standard ampie permettono una grande flessibilità, mentre la distribuzione Half-Cauchy per <span class="math notranslate nohighlight">\(\sigma\)</span> è scelta per la sua capacità di gestire bene i parametri di scala. Queste scelte garantiscono che il modello sia debolmente informativo, permettendo ai dati osservati di avere un’influenza significativa sulle stime posteriori dei parametri.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;icecream_model_2.stan&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;icecream_model_prior.stan&quot;</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
 </pre></div>
@@ -1295,7 +1544,7 @@ model {
 <p>Adattiamo il nuovo modello ai dati.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit3</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit5</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
     <span class="n">data</span><span class="o">=</span><span class="n">stan_data2</span><span class="p">,</span>
     <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
     <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
@@ -1310,7 +1559,7 @@ model {
 <p>Esaminiamo le distribuzioni a posteriori dei parametri.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit3</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">fit5</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">([</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">]),</span> <span class="n">hdi_prob</span><span class="o">=</span><span class="mf">0.94</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1387,6 +1636,59 @@ model {
 </div>
 <p>Si noti che, utilizzando distribuzioni a priori debolmente informative, le distribuzioni a posteriori dei parametri risultano molto simili a quelle ottenute usando distribuzioni uniformi. Tuttavia, le distribuzioni a priori debolmente informative sono preferibili poiché forniscono una maggiore stabilità numerica e sono generalmente più affidabili e robuste, specialmente quando si lavora con dati reali. L’uso di distribuzioni uniformi è sconsigliato per via delle possibili instabilità numeriche che possono introdurre nei modelli.</p>
 </section>
+<section id="posterior-predictive-check">
+<h3>Posterior-predictive check<a class="headerlink" href="#posterior-predictive-check" title="Link to this heading">#</a></h3>
+<p>Generiamo ora un PPC plot per confrontare le predizioni del modello con i dati osservati.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;icecream_model_3.stan&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit6</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data2</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Per creare un PPC plot dobbiamo creare un oggetto InferenceData nel quale i dati sono strutturati come si aspetta ArviZ:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idata</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_cmdstanpy</span><span class="p">(</span>
+    <span class="n">posterior</span><span class="o">=</span><span class="n">fit6</span><span class="p">,</span>
+    <span class="n">posterior_predictive</span><span class="o">=</span><span class="s2">&quot;y_rep&quot;</span><span class="p">,</span>
+    <span class="n">observed_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;icecream&quot;</span><span class="p">]},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Avendo generato l’oggetto <code class="docutils literal notranslate"><span class="pre">idata</span></code>, possiamo ora creare il pp-check plot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">idata</span><span class="p">,</span> <span class="n">data_pairs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s2">&quot;y_rep&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/anaconda3/envs/cmdstan_env/lib/python3.12/site-packages/IPython/core/events.py:82: UserWarning: Creating legend with loc=&quot;best&quot; can be slow with large amounts of data.
+  func(*args, **kwargs)
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/ff710afc7cc73361ddb2943f8980920b463b5af44063528965cfffb24292ec3d.png"><img alt="../_images/ff710afc7cc73361ddb2943f8980920b463b5af44063528965cfffb24292ec3d.png" src="../_images/ff710afc7cc73361ddb2943f8980920b463b5af44063528965cfffb24292ec3d.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+</section>
 </section>
 <section id="commenti-e-considerazioni-finali">
 <h2>Commenti e considerazioni finali<a class="headerlink" href="#commenti-e-considerazioni-finali" title="Link to this heading">#</a></h2>
@@ -1403,7 +1705,7 @@ model {
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Fri Jul 12 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sat Jul 13 2024
 
 Python implementation: CPython
 Python version       : 3.12.3
@@ -1417,14 +1719,13 @@ Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-numpy     : 1.26.4
 matplotlib: 3.8.4
-arviz     : 0.18.0
-logging   : 0.5.1.2
-pingouin  : 0.5.4
-pandas    : 2.2.2
-seaborn   : 0.13.2
 cmdstanpy : 1.2.3
+arviz     : 0.18.0
+pandas    : 2.2.2
+numpy     : 1.26.4
+pingouin  : 0.5.4
+logging   : 0.5.1.2
 </pre></div>
 </div>
 </div>
@@ -1497,16 +1798,20 @@ cmdstanpy : 1.2.3
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modellare-l-associazione-statistica-tra-variabili">Modellare l’associazione statistica tra variabili</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-generativo-dei-dati">Modello Generativo dei Dati</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-bayesiano-della-regressione-bivariata">Modello Bayesiano della Regressione Bivariata</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verosimiglianza">Verosimiglianza</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-priori">Distribuzioni Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-a-priori">Distribuzioni a Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-a-posteriori">Distribuzioni a Posteriori</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#codice-stan">Codice Stan</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dizionario-con-i-dati">Dizionario con i dati</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#campionamento-mcmc">Campionamento MCMC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzioni-a-posteriori">Distribuzioni a posteriori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Distribuzioni a posteriori</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione">Interpretazione</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior-predictive check</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#predizione">Predizione</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantificazione-dell-incertezza">Quantificazione dell’incertezza</a></li>
 </ul>
 </li>
@@ -1517,6 +1822,7 @@ cmdstanpy : 1.2.3
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribizioni-a-priori-sui-parametri">Distribizioni a priori sui parametri</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretazione-delle-distribuzioni-a-priori">Interpretazione delle Distribuzioni a Priori</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-predictive-check">Posterior-predictive check</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commenti-e-considerazioni-finali">Commenti e considerazioni finali</a></li>
