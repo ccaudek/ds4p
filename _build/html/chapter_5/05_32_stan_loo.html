@@ -302,6 +302,7 @@
 <li class="toctree-l2"><a class="reference internal" href="05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_kl.html">✏️ Esercizi</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Validazione Incrociata Leave-One-Out</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="05_35_missing.html">Dati mancanti</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_40_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
 </ul>
@@ -534,19 +535,24 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminologia">Terminologia</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criteri-d-informazione">Criteri d’Informazione</a><ul class="nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-ai-metodi-bayesiani-valutazione-e-selezione-dei-modelli">Introduzione ai Metodi Bayesiani: Valutazione e Selezione dei Modelli</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-del-sovra-adattamento">Il Problema del Sovra-adattamento</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-il-sovra-adattamento-e-un-problema">Perché il sovra-adattamento è un problema?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tecniche-di-validazione">Tecniche di Validazione</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validazione-incrociata-cross-validation">Validazione Incrociata (Cross-Validation)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criteri-di-informazione">Criteri di Informazione</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errore-quadratico-medio-mse">Errore Quadratico Medio (MSE)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#somma-dei-logaritmi-delle-verosimiglianze">Somma dei Logaritmi delle Verosimiglianze</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relazione-con-il-concetto-di-entropia">Relazione con il Concetto di Entropia</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-di-informazione-di-akaike-aic">Criterio di Informazione di Akaike (AIC)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#widely-applicable-information-criterion-waic">Widely Applicable Information Criterion (WAIC)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validazione-incrociata-e-il-metodo-leave-one-out">Validazione Incrociata e il Metodo Leave-One-Out</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processo-di-validazione-incrociata-k-fold">Processo di Validazione Incrociata K-Fold</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computazione-e-approssimazione-della-validazione-incrociata">Computazione e Approssimazione della Validazione Incrociata</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-per-l-approssimazione">Simulazione per l’Approssimazione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-log-predictive-density-elpd">Expected Log Predictive Density (ELPD)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione">Conclusione</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a></li>
 </ul>
 </li>
@@ -558,6 +564,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -624,85 +633,115 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="terminologia">
-<h2>Terminologia<a class="headerlink" href="#terminologia" title="Link to this heading">#</a></h2>
-<p>Nell’ambito della valutazione dei modelli statistici, è essenziale distinguere tra due tipi principali di accuratezza:</p>
-<ul class="simple">
-<li><p><strong>Accuratezza sul campione interno</strong> (within-sample accuracy): Questa metrica riflette la precisione con cui un modello predice i dati utilizzati per il suo addestramento. L’accuratezza sul campione interno è valutata direttamente sui dati di addestramento e può essere elevata, specialmente se il modello è complesso e tende a sovra-adattarsi a questi dati.</p></li>
-<li><p><strong>Accuratezza sul campione esterno</strong> (out-of-sample accuracy): Indica l’efficacia con cui un modello predice nuovi dati, ovvero quelli non inclusi nel set di addestramento. Questo tipo di accuratezza è particolarmente rilevante per valutare la capacità di generalizzazione del modello.</p></li>
-</ul>
-<p>Generalmente, l’accuratezza sul campione interno è superiore a quella sul campione esterno a causa del fenomeno di sovra-adattamento, che può portare a una sovrastima delle capacità predittive del modello se valutate solo internamente. Per ottenere una valutazione più accurata e realistica delle prestazioni del modello, è consigliabile focalizzarsi sull’accuratezza sul campione esterno. Tuttavia, valutare l’accuratezza esterna implica spesso utilizzare meno dati per l’addestramento, il che può essere problematico quando i dati disponibili sono limitati.</p>
-<p>Per affrontare queste sfide, come indicato in precedenza, sono stati sviluppati due metodi di valutazione:</p>
-<ul class="simple">
-<li><p><strong>Criteri di informazione</strong>: Questi criteri includono formule che cercano di stimare l’accuratezza sul campione esterno. Tipicamente, calcolano l’accuratezza sul campione interno e aggiungono un termine di penalità per la complessità del modello, al fine di mitigare il rischio di sovra-adattamento.</p></li>
-<li><p><strong>Validazione incrociata</strong>: Questo metodo empirico comporta la divisione dei dati in più sottoinsiemi, ciascuno dei quali viene alternativamente utilizzato per addestrare e valutare il modello. Questa tecnica aiuta a garantire che il modello sia robusto e capace di generalizzare bene su dati nuovi, contribuendo a una valutazione più affidabile delle sue prestazioni predittive.</p></li>
-</ul>
 </section>
-<section id="criteri-d-informazione">
-<h2>Criteri d’Informazione<a class="headerlink" href="#criteri-d-informazione" title="Link to this heading">#</a></h2>
-<p>I criteri d’informazione sono strumenti cruciali per la valutazione e il confronto di modelli statistici, poiché bilanciano quanto bene un modello si adatta ai dati con la sua complessità strutturale. Questi criteri sono radicati nella teoria dell’informazione, una branca della matematica che si concentra sulla quantità di informazione che un modello può estrazione dai dati osservati.</p>
+<section class="tex2jax_ignore mathjax_ignore" id="introduzione-ai-metodi-bayesiani-valutazione-e-selezione-dei-modelli">
+<h1>Introduzione ai Metodi Bayesiani: Valutazione e Selezione dei Modelli<a class="headerlink" href="#introduzione-ai-metodi-bayesiani-valutazione-e-selezione-dei-modelli" title="Link to this heading">#</a></h1>
+<section id="il-problema-del-sovra-adattamento">
+<h2>Il Problema del Sovra-adattamento<a class="headerlink" href="#il-problema-del-sovra-adattamento" title="Link to this heading">#</a></h2>
+<p>Quando costruiamo un modello statistico, uno dei problemi più comuni che possiamo incontrare è il <strong>sovra-adattamento</strong> (in inglese, «overfitting»). Ma cosa significa esattamente?</p>
+<p>Immaginate di provare a disegnare una linea che passi attraverso un gruppo di punti su un grafico. Se la linea passa esattamente per ogni singolo punto, potrebbe sembrare perfetta, vero? In realtà, questo potrebbe essere un esempio di sovra-adattamento.</p>
+<p>Il sovra-adattamento si verifica quando un modello si adatta troppo bene ai dati che abbiamo usato per crearlo (chiamati «dati di addestramento»). In questo processo, il modello inizia a catturare non solo le tendenze generali nei dati (il «segnale»), ma anche le fluttuazioni casuali o gli errori (il «rumore»).</p>
+<section id="perche-il-sovra-adattamento-e-un-problema">
+<h3>Perché il sovra-adattamento è un problema?<a class="headerlink" href="#perche-il-sovra-adattamento-e-un-problema" title="Link to this heading">#</a></h3>
+<p>Un modello sovra-adattato funzionerà benissimo con i dati di addestramento, ma avrà prestazioni scarse quando lo useremo con nuovi dati. È come se il modello avesse «imparato a memoria» i dati di addestramento invece di capire le regole generali che li governano.</p>
+<p>Per evitare il sovra-adattamento, dobbiamo trovare un equilibrio tra la capacità del modello di adattarsi ai dati di addestramento e la sua capacità di generalizzare a nuovi dati. Questo è ciò che chiamiamo il «trade-off» tra bias e varianza.</p>
+</section>
+</section>
+<section id="tecniche-di-validazione">
+<h2>Tecniche di Validazione<a class="headerlink" href="#tecniche-di-validazione" title="Link to this heading">#</a></h2>
+<p>Per assicurarci che il nostro modello non stia sovra-adattandosi, usiamo delle tecniche chiamate «tecniche di validazione». Una delle più importanti è la <strong>validazione incrociata</strong> (cross-validation).</p>
+<section id="validazione-incrociata-cross-validation">
+<h3>Validazione Incrociata (Cross-Validation)<a class="headerlink" href="#validazione-incrociata-cross-validation" title="Link to this heading">#</a></h3>
+<p>La validazione incrociata è come fare un «test di realtà» per il nostro modello. Invece di usare tutti i dati per addestrare il modello e poi testarlo, dividiamo i dati in parti e usiamo alcune parti per l’addestramento e altre per il test, in modo ripetuto.</p>
+<p>Ci sono diversi tipi di validazione incrociata, ma vediamo due dei più comuni:</p>
+<ol class="arabic">
+<li><p><strong>K-fold cross-validation</strong>:</p>
+<ul class="simple">
+<li><p>Immaginate di avere un mazzo di carte. Le mescolate e le dividete in K gruppi (chiamate «fold»).</p></li>
+<li><p>Prendete K-1 gruppi per addestrare il modello e usate il gruppo rimanente per testarlo.</p></li>
+<li><p>Ripetete questo processo K volte, ogni volta usando un gruppo diverso per il test.</p></li>
+<li><p>Alla fine, fate la media dei risultati di tutti i test.</p></li>
+</ul>
+<p>Per esempio, se K = 5, dividerete i dati in 5 parti, addestrerete il modello su 4 parti e lo testerete sulla quinta, ripetendo questo processo 5 volte.</p>
+</li>
+<li><p><strong>Leave-one-out cross-validation (LOO-CV)</strong>:</p>
+<ul class="simple">
+<li><p>Questa è una versione estrema della K-fold, dove K è uguale al numero totale di osservazioni.</p></li>
+<li><p>Prendete tutti i dati tranne uno per addestrare il modello, e usate quello lasciato fuori per testarlo.</p></li>
+<li><p>Ripetete questo processo per ogni singola osservazione nel dataset.</p></li>
+</ul>
+<p>È come se steste giocando a «indovina chi» con i vostri dati, cercando di prevedere ogni singola osservazione basandovi su tutte le altre.</p>
+</li>
+</ol>
+<p>Queste tecniche ci aiutano a capire quanto bene il nostro modello si comporterà con dati nuovi, che non ha mai visto prima.</p>
+</section>
+</section>
+<section id="criteri-di-informazione">
+<h2>Criteri di Informazione<a class="headerlink" href="#criteri-di-informazione" title="Link to this heading">#</a></h2>
+<p>Oltre alla validazione incrociata, usiamo anche i «criteri di informazione» per valutare i nostri modelli. Questi criteri ci aiutano a bilanciare due aspetti importanti:</p>
+<ol class="arabic simple">
+<li><p>quanto bene il modello si adatta ai dati;</p></li>
+<li><p>quanto è complesso il modello.</p></li>
+</ol>
+<p>Vediamo alcuni dei criteri più comuni:</p>
 <section id="errore-quadratico-medio-mse">
 <h3>Errore Quadratico Medio (MSE)<a class="headerlink" href="#errore-quadratico-medio-mse" title="Link to this heading">#</a></h3>
-<p>L’Errore Quadratico Medio (MSE) è uno dei criteri di informazione più elementari e ampiamente utilizzati. Esso misura la discrepanza tra i valori reali osservati e quelli predetti da un modello. Si calcola con la formula:</p>
+<p>L’Errore Quadratico Medio (in inglese, Mean Squared Error o MSE) misura quanto le previsioni del nostro modello si discostano dai valori reali. È come misurare la distanza media tra i punti dei nostri dati e la linea (o curva) che il nostro modello ha disegnato.</p>
+<p>La formula matematica è:</p>
 <div class="math notranslate nohighlight">
-\[
-MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2,
-\]</div>
-<p>dove <span class="math notranslate nohighlight">\(y_i\)</span> sono i valori osservati, <span class="math notranslate nohighlight">\(\hat{y}_i = E(y_i \mid \theta)\)</span> sono le stime previste dal modello basate sui parametri <span class="math notranslate nohighlight">\(\theta\)</span>, e <span class="math notranslate nohighlight">\(n\)</span> è il numero totale di osservazioni. Il MSE enfatizza gli errori più grandi, dunque penalizza le previsioni che più si discostano dai valori reali, fornendo una valutazione severa della qualità del modello.</p>
-</section>
-<section id="somma-dei-logaritmi-delle-verosimiglianze">
-<h3>Somma dei Logaritmi delle Verosimiglianze<a class="headerlink" href="#somma-dei-logaritmi-delle-verosimiglianze" title="Link to this heading">#</a></h3>
-<p>Nel contesto probabilistico, si preferisce spesso utilizzare la somma dei logaritmi delle verosimiglianze, che quantifica la probabilità di osservare i dati data una certa configurazione del modello:</p>
-<div class="math notranslate nohighlight">
-\[
-\sum \log p(y_i \mid \theta).
-\]</div>
-<p>Quando i dati seguono una distribuzione normale, questa somma è inversamente correlata al MSE. Questa relazione dimostra che entrambi gli approcci possono essere collegati: minimizzare il MSE in un contesto di errori normalmente distribuiti equivale a massimizzare la somma dei logaritmi delle verosimiglianze.</p>
-</section>
-<section id="relazione-con-il-concetto-di-entropia">
-<h3>Relazione con il Concetto di Entropia<a class="headerlink" href="#relazione-con-il-concetto-di-entropia" title="Link to this heading">#</a></h3>
-<p>L’entropia, un concetto fondamentale nella teoria dell’informazione, misura l’incertezza o la variabilità intrinseca nei dati. Un modello efficace nella predizione riduce questa incertezza. I criteri d’informazione come il MSE o la somma dei logaritmi delle verosimiglianze, valutano indirettamente la capacità di un modello di diminuire l’entropia dei dati osservati. In pratica, un modello che migliora l’adattamento ai dati riducendo il MSE o aumentando la somma dei logaritmi delle verosimiglianze, è efficace nel ridurre l’incertezza e, di conseguenza, nel rappresentare l’informazione contenuta nei dati.</p>
+\[ MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2, \]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span> è il numero totale di osservazioni.</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_i\)</span> sono i valori reali,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{y}_i\)</span> sono i valori previsti dal modello.</p></li>
+</ul>
+<p>Un MSE più basso indica che il modello si adatta meglio ai dati.</p>
 </section>
 <section id="criterio-di-informazione-di-akaike-aic">
 <h3>Criterio di Informazione di Akaike (AIC)<a class="headerlink" href="#criterio-di-informazione-di-akaike-aic" title="Link to this heading">#</a></h3>
-<p>Il Criterio di Informazione di Akaike (AIC) è una misura ampiamente utilizzata per la selezione dei modelli. Come abbiamo già visto in precedenza, equilibra la capacità predittiva del modello con la sua complessità tramite la formula:</p>
+<p>Il Criterio di Informazione di Akaike (AIC) va un passo oltre l’MSE. Non solo guarda quanto bene il modello si adatta ai dati, ma considera anche quanto è complesso il modello.</p>
+<p>La formula dell’AIC è:</p>
 <div class="math notranslate nohighlight">
-\[
-AIC = -2 \sum \log p(y_i \mid \hat{\theta}_{\text{mle}}) + 2k,
-\]</div>
-<p>dove <span class="math notranslate nohighlight">\(\hat{\theta}_{\text{mle}}\)</span> indica la stima di massima verosimiglianza dei parametri del modello e <span class="math notranslate nohighlight">\(k\)</span> è il numero di parametri stimati. L’AIC penalizza i modelli con più parametri, favorirendo la parsimonia. Un valore più basso di AIC indica una migliore capacità predittiva del modello e un migliore adattamento ai dati.</p>
+\[ AIC = -2 \sum \log p(y_i \mid \hat{\theta}_{\text{mle}}) + 2k, \]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{\theta}_{\text{mle}}\)</span> sono i parametri stimati del modello,</p></li>
+<li><p><span class="math notranslate nohighlight">\(k\)</span> è il numero di parametri del modello.</p></li>
+</ul>
+<p>L’idea è che un modello migliore dovrebbe adattarsi bene ai dati (prima parte della formula) senza essere troppo complesso (seconda parte della formula). Un AIC più basso indica un modello migliore.</p>
 </section>
 <section id="widely-applicable-information-criterion-waic">
 <h3>Widely Applicable Information Criterion (WAIC)<a class="headerlink" href="#widely-applicable-information-criterion-waic" title="Link to this heading">#</a></h3>
-<p>Il Widely Applicable Information Criterion (WAIC) è una generalizzazione bayesiana dell’AIC che prende in considerazione l’intera distribuzione a posteriori dei parametri. Si esprime come:</p>
+<p>Il WAIC è una versione più avanzata dell’AIC, particolarmente utile nel contesto bayesiano. Invece di considerare solo la stima puntuale dei parametri, il WAIC tiene conto dell’intera distribuzione a posteriori dei parametri.</p>
+<p>La formula del WAIC è più complessa:</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}
-WAIC = -2\left[ \sum_{i=1}^{n} \log \left( \frac{1}{S} \sum_{s=1}^{S} p(y_i|\theta^{(s)}) \right) - \sum_{i=1}^{n} \text{Var}_{\\\theta^{(s)}} \left( \log p(y_i|\theta^{(s)}) \right) \right],
-\end{aligned}\end{align} \]</div>
-<p>dove <span class="math notranslate nohighlight">\(S\)</span> rappresenta il numero di campioni nella distribuzione a posteriori e <span class="math notranslate nohighlight">\(\text{Var}_{\theta^{(s)}}\)</span> la varianza calcolata sulla log-verosimiglianza. Il primo termine misura la capacità media di adattamento del modello attraverso tutti i campioni, mentre il secondo termine fornisce un aggiustamento per la varianza tra le stime logaritmiche di verosimiglianza, funzionando come un indicatore del numero effettivo di parametri.</p>
-<p>In sintesi, sia l’AIC che il WAIC offrono metriche valide per la selezione di modelli, fornendo un equilibrio tra l’adattamento dei dati e la semplicità del modello. Mentre l’AIC è tipicamente usato in contesti non bayesiani, il WAIC trova maggiore applicazione nei contesti bayesiani, offrendo una valutazione più completa in scenari in cui la distribuzione dei parametri è considerata.</p>
+\[ WAIC = -2\left[ \sum_{i=1}^{n} \log \left( \frac{1}{S} \sum_{s=1}^{S} p(y_i|\theta^{(s)}) \right) - \sum_{i=1}^{n} \text{Var}_{\theta^{(s)}} \left( \log p(y_i|\theta^{(s)}) \right) \right], \]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(S\)</span> è il numero di campioni dalla distribuzione a posteriori,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{Var}_{\theta^{(s)}}\)</span> è la varianza della log-verosimiglianza.</p></li>
+</ul>
+<p>Il WAIC offre una valutazione più completa del modello, considerando l’incertezza nei parametri stimati.</p>
 </section>
 </section>
-<section id="validazione-incrociata-e-il-metodo-leave-one-out">
-<h2>Validazione Incrociata e il Metodo Leave-One-Out<a class="headerlink" href="#validazione-incrociata-e-il-metodo-leave-one-out" title="Link to this heading">#</a></h2>
-<p>La validazione incrociata è una tecnica statistica fondamentale nel campo del machine learning per valutare la capacità di generalizzazione dei modelli. Il metodo Leave-One-Out (LOO) è una forma particolare di validazione incrociata, in cui il numero di segmenti (fold) in cui viene suddiviso il dataset è uguale al numero di osservazioni nel dataset. In pratica, questo significa che per ogni iterazione del processo di validazione, il modello viene addestrato su tutti i dati tranne uno, che viene usato come test. Questo metodo è particolarmente utile per ottenere una stima precisa dell’Expected Log Predictive Density (ELPD), che misura la capacità predittiva del modello su nuovi dati.</p>
-<section id="processo-di-validazione-incrociata-k-fold">
-<h3>Processo di Validazione Incrociata K-Fold<a class="headerlink" href="#processo-di-validazione-incrociata-k-fold" title="Link to this heading">#</a></h3>
-<p>Durante una validazione incrociata K-Fold standard, il dataset è diviso in <span class="math notranslate nohighlight">\(K\)</span> fold, ognuno dei quali serve come set di test in una delle <span class="math notranslate nohighlight">\(K\)</span> iterazioni del processo. In ogni iterazione, il modello è addestrato su <span class="math notranslate nohighlight">\(K-1\)</span> fold e testato sul fold rimanente. La performance del modello è quindi valutata calcolando la media delle prestazioni su ciascun fold. Questo non solo fornisce una valutazione robusta della capacità del modello di generalizzare su nuovi dati, ma permette anche di utilizzare efficientemente l’intero dataset per l’addestramento, senza sacrificare dati per il set di test permanente.</p>
-</section>
-<section id="computazione-e-approssimazione-della-validazione-incrociata">
-<h3>Computazione e Approssimazione della Validazione Incrociata<a class="headerlink" href="#computazione-e-approssimazione-della-validazione-incrociata" title="Link to this heading">#</a></h3>
-<p>Sebbene la validazione incrociata sia estremamente utile, può essere computazionalmente intensiva, soprattutto per dataset grandi o modelli complessi. Un approccio per mitigare questo onere computazionale è l’approssimazione della validazione incrociata attraverso un singolo ciclo completo di addestramento del dataset, il che permette di stimare l’ELPD senza ripetere l’addestramento su molteplici subset. La formula dell’ELPD approssimato è:</p>
+<section id="expected-log-predictive-density-elpd">
+<h2>Expected Log Predictive Density (ELPD)<a class="headerlink" href="#expected-log-predictive-density-elpd" title="Link to this heading">#</a></h2>
+<p>L’ELPD è una misura avanzata usata nei metodi bayesiani per valutare quanto bene un modello può prevedere nuovi dati. È come se stessimo chiedendo al modello: «Quanto sei sicuro delle tue previsioni per dati che non hai mai visto?»</p>
+<p>La formula dell’ELPD è:</p>
 <div class="math notranslate nohighlight">
-\[
-\text{ELPD} \approx \int p(\tilde{y} \mid y) \log p(\tilde{y} \mid y) \, d\tilde{y}
-\]</div>
-<p>Qui, <span class="math notranslate nohighlight">\( \tilde{y} \)</span> rappresenta i dati futuri e <span class="math notranslate nohighlight">\( p(\tilde{y} \mid y) \)</span> è la distribuzione predittiva a posteriori, basata sui dati già osservati <span class="math notranslate nohighlight">\( y \)</span>. Questa distribuzione rappresenta la probabilità di osservare nuovi dati dati i dati esistenti e riflette tutte le incertezze del modello dopo aver osservato <span class="math notranslate nohighlight">\( y \)</span>. Si noti che, in questa approssimazione, si sostituisce la distribuzione <span class="math notranslate nohighlight">\(p(y)\)</span>, che è sconosciuta, con la distribuzione predittiva a posteriori del modello <span class="math notranslate nohighlight">\(p(\tilde{y} \mid y)\)</span>.</p>
+\[ \text{ELPD} = \sum_{i=1}^n \log p(y_i | \mathbf{y}_{-i}), \]</div>
+<p>dove:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(y_i\)</span> è l’i-esima osservazione,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{y}_{-i}\)</span> rappresenta tutte le osservazioni eccetto <span class="math notranslate nohighlight">\(y_i\)</span>.</p></li>
+</ul>
+<p>In pratica, l’ELPD misura quanto bene il modello può prevedere ogni singola osservazione basandosi su tutte le altre. Un ELPD più alto indica un modello con migliori capacità predittive.</p>
 </section>
-<section id="simulazione-per-l-approssimazione">
-<h3>Simulazione per l’Approssimazione<a class="headerlink" href="#simulazione-per-l-approssimazione" title="Link to this heading">#</a></h3>
-<p>Poiché la distribuzione predittiva a posteriori spesso non può essere espressa in forma chiusa, si ricorre a tecniche di simulazione come il campionamento di Monte Carlo. Questo metodo implica il campionamento ripetuto dalla distribuzione <span class="math notranslate nohighlight">\( p(\tilde{y} \mid y) \)</span>, il calcolo del logaritmo di ciascun valore campionato, e la media di questi logaritmi per approssimare il valore dell’integrale. Tale approccio offre una stima efficace dell’ELPD, offrendo un’indicazione su quanto accuratamente il modello possa prevedere nuovi dati, essenziale per la validazione del modello in scenari reali.</p>
-</section>
+<section id="conclusione">
+<h2>Conclusione<a class="headerlink" href="#conclusione" title="Link to this heading">#</a></h2>
+<p>Valutare e selezionare il modello giusto è un’arte tanto quanto una scienza. Utilizzando una combinazione di tecniche di validazione incrociata e criteri di informazione, possiamo costruire modelli che non solo si adattano bene ai nostri dati attuali, ma sono anche in grado di fare previsioni affidabili su nuovi dati.</p>
+<p>Ricordate, l’obiettivo non è creare il modello più complesso o quello che si adatta perfettamente ai dati di addestramento. Piuttosto, cerchiamo di trovare un equilibrio tra semplicità e accuratezza, creando modelli che catturano le tendenze importanti nei dati senza perdersi nel rumore.</p>
 <section id="un-esempio-empirico">
 <h3>Un Esempio Empirico<a class="headerlink" href="#un-esempio-empirico" title="Link to this heading">#</a></h3>
 <p>Generiamo un set di dati artificiali seguendo una distribuzione normale con una media (<code class="docutils literal notranslate"><span class="pre">loc</span></code>) di 5 e una deviazione standard (<code class="docutils literal notranslate"><span class="pre">scale</span></code>) di 2. Scegliamo una dimensione (<code class="docutils literal notranslate"><span class="pre">size</span></code>) del campione di 100.</p>
@@ -1493,19 +1532,24 @@ Watermark: 2.4.3
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminologia">Terminologia</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criteri-d-informazione">Criteri d’Informazione</a><ul class="nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Validazione Incrociata Leave-One-Out</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-ai-metodi-bayesiani-valutazione-e-selezione-dei-modelli">Introduzione ai Metodi Bayesiani: Valutazione e Selezione dei Modelli</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-del-sovra-adattamento">Il Problema del Sovra-adattamento</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perche-il-sovra-adattamento-e-un-problema">Perché il sovra-adattamento è un problema?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tecniche-di-validazione">Tecniche di Validazione</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validazione-incrociata-cross-validation">Validazione Incrociata (Cross-Validation)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criteri-di-informazione">Criteri di Informazione</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#errore-quadratico-medio-mse">Errore Quadratico Medio (MSE)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#somma-dei-logaritmi-delle-verosimiglianze">Somma dei Logaritmi delle Verosimiglianze</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relazione-con-il-concetto-di-entropia">Relazione con il Concetto di Entropia</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-di-informazione-di-akaike-aic">Criterio di Informazione di Akaike (AIC)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#widely-applicable-information-criterion-waic">Widely Applicable Information Criterion (WAIC)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validazione-incrociata-e-il-metodo-leave-one-out">Validazione Incrociata e il Metodo Leave-One-Out</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processo-di-validazione-incrociata-k-fold">Processo di Validazione Incrociata K-Fold</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computazione-e-approssimazione-della-validazione-incrociata">Computazione e Approssimazione della Validazione Incrociata</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-per-l-approssimazione">Simulazione per l’Approssimazione</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-log-predictive-density-elpd">Expected Log Predictive Density (ELPD)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusione">Conclusione</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#un-esempio-empirico">Un Esempio Empirico</a></li>
 </ul>
 </li>
@@ -1517,6 +1561,9 @@ Watermark: 2.4.3
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riflessioni-conclusive">Riflessioni Conclusive</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
 </ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>
