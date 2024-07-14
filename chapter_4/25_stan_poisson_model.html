@@ -1,0 +1,1894 @@
+
+<!DOCTYPE html>
+
+
+<html lang="it" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modello di Poisson &#8212; ds4p</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=8d586cc4"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=0173e136"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-TP2WLBPMS6"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-TP2WLBPMS6');
+            </script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter_4/25_stan_poisson_model';</script>
+    <link rel="canonical" href="https://ccaudek.github.io/ds4p/chapter_4/25_stan_poisson_model.html" />
+    <link rel="icon" href="../_static/increasing.png"/>
+    <link rel="index" title="Indice" href="../genindex.html" />
+    <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="Analisi della regressione" href="../chapter_5/introduction_part_5.html" />
+    <link rel="prev" title="Modello gerarchico beta-binomiale con Stan" href="24_stan_hier_beta_binom.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="it"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Passa ai contenuti principali</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Torna in alto</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Avvertimento sulla versione"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="ds4p - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="ds4p - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Cerca</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Benvenuti
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/02_python_2.html">Python (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_python.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/03_numpy.html">NumPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_numpy.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/04_pandas.html">Pandas (1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/05_pandas_aggregate.html">Pandas (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/06_pandas_functions.html">Pandas (3)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_pandas.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/07_matplotlib.html">Matplotlib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/08_seaborn.html">Seaborn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_1/ex_matplotlib.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_2/introduction_chapter_2.html">Statistica descrittiva</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/00_scientific_method.html">La scienza dei dati e il metodo scientifico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/01_key_notions.html">Concetti chiave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_key_notions.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/02_measurement.html">La misurazione in psicologia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_scales.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/03_freq_distr.html">Dati e frequenze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_sums.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/04_loc_scale.html">Indici di posizione e di scala</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/05_correlation.html">Le relazioni tra variabili</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/06_causality.html">Lo studio delle cause dei fenomeni</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_eda.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_2/E_mehr_song_spelke.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_3/introduction_chapter_3.html">Probabilità</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/01_intro_prob.html">Introduzione al calcolo delle probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/02_conditional_prob.html">Probabilità condizionata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_cond_prob_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_discrete_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/03_bayes_theorem.html">Il teorema di Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_bayes_theorem_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04a_random_var.html">Introduzione alle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04b_expval_var.html">Proprietà delle variabili casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_exp_val_variance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/04c_sampling_distr.html">Stime, stimatori e parametri</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_rv_discrete.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/05_joint_prob.html">Probabilità congiunta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_joint_prob.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_covariance.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/06_density_func.html">La funzione di densità di probabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/07_discr_rv_distr.html">Distribuzioni di v.c. discrete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_binomial.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/08_cont_rv_distr.html">Distribuzioni di v.c. continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_gaussian.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_beta_distr.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/09_likelihood.html">La verosimiglianza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_3/E_likelihood.html">✏️ Esercizi</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_4.html">Inferenza bayesiana</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_intro_bayes.html">Modellazione bayesiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_subj_prop.html">Pensare ad una proporzione in termini soggettivi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_grid_gauss.html">Verosimiglianza Gaussiana: Metodo Basato su Griglia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_conjugate_families_1.html">Distribuzioni coniugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate_families_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_conjugate_families_2.html">Distribuzioni coniugate (2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_summary_posterior.html">Sintesi a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="E_conjugate.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_balance-prior-post.html">L’influenza della distribuzione a priori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_stan_beta_binomial.html">Introduzione a Stan</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="E_stan_beta_binomial.html">✏️ Esercizio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_stan_prediction.html">La predizione bayesiana</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="19_stan_odds_ratio.html">Analisi bayesiana dell’odds-ratio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_stan_two_groups.html">Confronto tra due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Modello di Poisson</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_1.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_04_synt_sugar.html">Zucchero sintattico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_2.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_3.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_reglin_4.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_06_hier_regr.html">Il modello lineare gerarchico</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_07_robust_regr.html">Regressione robusta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_08_specification_error.html">Errore di specificazione</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_09_causal_inference.html">Inferenza causale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_22_stan_logistic_regr.html">Regressione logistica con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_30_entropy.html">Entropia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_31_kl.html">La divergenza di Kullback-Leibler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/E_kl.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_32_stan_loo.html">Validazione Incrociata Leave-One-Out</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_35_missing.html">Dati mancanti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_5/05_40_rescorla_wagner.html">Apprendimento per rinforzo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_6/introduction_part_6.html">Inferenza frequentista</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/01_intro_frequentist.html">Introduzione all’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_estimation.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/02_conf_interv.html">Intervallo di confidenza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_conf_interv.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/03_test_ipotesi.html">Significatività statistica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_t_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_interpretation_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_significato_test.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/04_two_ind_samples.html">Test t di Student per campioni indipendenti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_test_media_pop.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_ampie.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_medie_pop_piccoli.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_campioni_appaiati.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/E_confronto_proporzioni.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/05_crisis.html">La crisi della generalizzabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/06_limiti_stat_frequentista.html">Limiti dell’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/07_effect_size.html">La grandezza dell’effetto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/09_s_m_errors.html">Crisi della replicabilità</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_6/10_integrity.html">Integrità della ricerca</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/bibliography.html">Bibliografia</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_7/introduction_appendix.html">Appendici</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a00_installation.html">Ambiente di lavoro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a01_markdown.html">Jupyter Notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a02_shell.html">La Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a03_colab_tutorial.html">Colab: un breve tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a04_virtual_env.html">Ambienti virtuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a10_math_symbols.html">Simbologia di base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a11_numbers.html">Numeri binari, interi, razionali, irrazionali e reali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a12_sum_notation.html">Simbolo di somma (sommatorie)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13_sets.html">Insiemi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a13a_probability.html">Sigma algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a14_combinatorics.html">Calcolo combinatorio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a15_calculus.html">Per liberarvi dai terrori preliminari</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a20_kde_plot.html">Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a30_prob_tutorial.html">Esercizi di probabilità discreta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a40_rng.html">Generazione di numeri casuali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a44_montecarlo.html">Simulazione Monte Carlo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a45_mcmc.html">Catene di Markov</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a46_stan.html">Linguaggio Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_lin_fun.html">La funzione lineare</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a50_reglin_ml.html">Modello di Regressione Bivariato e ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a51_reglin_1.html">Regressione lineare bivariata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a60_ttest_exercises.html">Esercizi sull’inferenza frequentista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_7/a70_predict_counts.html">La predizione delle frequenze</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/ccaudek/ds4p/blob/main/docs/chapter_4/25_stan_poisson_model.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Scarica questa pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/chapter_4/25_stan_poisson_model.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Scarica il file sorgente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Stampa in PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modalità schermo intero"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="chiaro/scuro" aria-label="chiaro/scuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Cerca" aria-label="Cerca" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modello di Poisson</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenuti </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domanda-della-ricerca">Domanda della ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importazione-e-pre-processing-dei-dati">Importazione e pre-processing dei dati</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Modello di Poisson</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-priori">Distribuzione a priori</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-poisson-con-pymc">Modello di Poisson con PyMC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-analitica">Derivazione analitica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vittime-non-armate">Vittime non armate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-combinato-per-i-due-gruppi">Modello combinato per i due gruppi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="modello-di-poisson">
+<span id="poisson-model-notebook"></span><h1>Modello di Poisson<a class="headerlink" href="#modello-di-poisson" title="Link to this heading">#</a></h1>
+<p>Nel capitolo precedente abbiamo esaminato il processo di derivazione della distribuzione a posteriori per i parametri della distribuzione Gamma, la quale viene impiegata quando si adotta un prior Gamma per una verosimiglianza di Poisson. In questo capitolo, useremo tale metodo per affrontare una questione relativa all’analisi di un set di dati reali.</p>
+<section id="preparazione-del-notebook">
+<h2>Preparazione del Notebook<a class="headerlink" href="#preparazione-del-notebook" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PROJECT SETUP</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">cmdstanpy</span>
+<span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
+
+<span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set seed to make the results fully reproducible</span>
+<span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="s2">&quot;stan_poisson_model&quot;</span><span class="p">))</span>
+<span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;arviz-darkgrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.facecolor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+
+<span class="c1"># Get the home directory</span>
+<span class="n">home_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+<span class="c1"># Construct the path to the Quarto project directory </span>
+<span class="n">project_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">home_directory</span><span class="p">,</span> <span class="s1">&#39;_repositories&#39;</span><span class="p">,</span> <span class="s1">&#39;ds4p&#39;</span><span class="p">)</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="domanda-della-ricerca">
+<h2>Domanda della ricerca<a class="headerlink" href="#domanda-della-ricerca" title="Link to this heading">#</a></h2>
+<p>Come spiegato <a class="reference external" href="https://github.com/washingtonpost/data-police-shootings">qui</a>, i dati che esamineremo sono raccolti dal Washington Post con lo scopo di registrare ogni sparatoria mortale negli Stati Uniti ad opera di agenti di polizia, a partire dal 1° gennaio 2015. Il Washington Post ha adottato un approccio sistematico e accurato nella raccolta di queste informazioni, fornendo dati che possono essere utili per valutare i problemi legati alla violenza delle forze di polizia negli Stati Uniti.</p>
+<p>Lo scopo della presente analisi dei dati è determinare il tasso di sparatorie fatali da parte della polizia negli Stati Uniti per ogni anno, e fornire una stima dell’incertezza associata a questo valore.</p>
+</section>
+<section id="importazione-e-pre-processing-dei-dati">
+<h2>Importazione e pre-processing dei dati<a class="headerlink" href="#importazione-e-pre-processing-dei-dati" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/washingtonpost/data-police-shootings/master/v2/fatal-police-shootings-data.csv&quot;</span>
+<span class="n">fps_dat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">fps_dat</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>date</th>
+      <th>threat_type</th>
+      <th>flee_status</th>
+      <th>armed_with</th>
+      <th>city</th>
+      <th>county</th>
+      <th>state</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>location_precision</th>
+      <th>name</th>
+      <th>age</th>
+      <th>gender</th>
+      <th>race</th>
+      <th>race_source</th>
+      <th>was_mental_illness_related</th>
+      <th>body_camera</th>
+      <th>agency_ids</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>2015-01-02</td>
+      <td>point</td>
+      <td>not</td>
+      <td>gun</td>
+      <td>Shelton</td>
+      <td>Mason</td>
+      <td>WA</td>
+      <td>47.246826</td>
+      <td>-123.121592</td>
+      <td>not_available</td>
+      <td>Tim Elliot</td>
+      <td>53.0</td>
+      <td>male</td>
+      <td>A</td>
+      <td>not_available</td>
+      <td>True</td>
+      <td>False</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>2015-01-02</td>
+      <td>point</td>
+      <td>not</td>
+      <td>gun</td>
+      <td>Aloha</td>
+      <td>Washington</td>
+      <td>OR</td>
+      <td>45.487421</td>
+      <td>-122.891696</td>
+      <td>not_available</td>
+      <td>Lewis Lee Lembke</td>
+      <td>47.0</td>
+      <td>male</td>
+      <td>W</td>
+      <td>not_available</td>
+      <td>False</td>
+      <td>False</td>
+      <td>70</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>2015-01-03</td>
+      <td>move</td>
+      <td>not</td>
+      <td>unarmed</td>
+      <td>Wichita</td>
+      <td>Sedgwick</td>
+      <td>KS</td>
+      <td>37.694766</td>
+      <td>-97.280554</td>
+      <td>not_available</td>
+      <td>John Paul Quintero</td>
+      <td>23.0</td>
+      <td>male</td>
+      <td>H</td>
+      <td>not_available</td>
+      <td>False</td>
+      <td>False</td>
+      <td>238</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>8</td>
+      <td>2015-01-04</td>
+      <td>point</td>
+      <td>not</td>
+      <td>replica</td>
+      <td>San Francisco</td>
+      <td>San Francisco</td>
+      <td>CA</td>
+      <td>37.762910</td>
+      <td>-122.422001</td>
+      <td>not_available</td>
+      <td>Matthew Hoffman</td>
+      <td>32.0</td>
+      <td>male</td>
+      <td>W</td>
+      <td>not_available</td>
+      <td>True</td>
+      <td>False</td>
+      <td>196</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9</td>
+      <td>2015-01-04</td>
+      <td>point</td>
+      <td>not</td>
+      <td>other</td>
+      <td>Evans</td>
+      <td>Weld</td>
+      <td>CO</td>
+      <td>40.383937</td>
+      <td>-104.692261</td>
+      <td>not_available</td>
+      <td>Michael Rodriguez</td>
+      <td>39.0</td>
+      <td>male</td>
+      <td>H</td>
+      <td>not_available</td>
+      <td>False</td>
+      <td>False</td>
+      <td>473</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</details>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert date</span>
+<span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+
+<span class="c1"># Create a new column &#39;year&#39; to store the year information from the &#39;date&#39; column</span>
+<span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+<span class="n">fps_dat</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;id&#39;, &#39;date&#39;, &#39;threat_type&#39;, &#39;flee_status&#39;, &#39;armed_with&#39;, &#39;city&#39;,
+       &#39;county&#39;, &#39;state&#39;, &#39;latitude&#39;, &#39;longitude&#39;, &#39;location_precision&#39;,
+       &#39;name&#39;, &#39;age&#39;, &#39;gender&#39;, &#39;race&#39;, &#39;race_source&#39;,
+       &#39;was_mental_illness_related&#39;, &#39;body_camera&#39;, &#39;agency_ids&#39;, &#39;year&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Filter out rows with year equal to 2024</span>
+<span class="n">fps</span> <span class="o">=</span> <span class="n">fps_dat</span><span class="p">[</span><span class="n">fps_dat</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2024</span><span class="p">]</span>
+
+<span class="c1"># Count occurrences of each year in fps</span>
+<span class="n">year_counts</span> <span class="o">=</span> <span class="n">fps</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">year_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>year
+2023    1161
+2022    1095
+2021    1050
+2020    1020
+2019     996
+2015     995
+2018     992
+2017     984
+2016     959
+Name: count, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Creiamo un DataFrame con i dati necessari per PyMC.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">year_counts</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1161, 1095, 1050, 1020,  996,  995,  992,  984,  959])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert year_counts Series to a DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">year_counts</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>  <span class="c1"># This converts the index (year) to a column and resets the index of the DataFrame</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;events&#39;</span><span class="p">]</span>  <span class="c1"># Renaming the columns to &#39;year&#39; and &#39;events&#39;</span>
+
+<span class="c1"># Now, df is the DataFrame you wanted, with &#39;year&#39; and &#39;events&#39; columns</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   year  events
+0  2023    1161
+1  2022    1095
+2  2021    1050
+3  2020    1020
+4  2019     996
+5  2015     995
+6  2018     992
+7  2017     984
+8  2016     959
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h2>Modello di Poisson<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>Il nostro interesse riguarda il tasso di occorrenza di sparatorie fatali da parte della polizia per anno. Indicheremo questo tasso come <span class="math notranslate nohighlight">\(\theta\)</span>, e il suo intervallo di valori possibili è <span class="math notranslate nohighlight">\([0, \infty)\)</span>. Un modello di Poisson rappresenta tipicamente il punto di partenza per l’analisi di dati relativi alle frequenze assolute di un evento in un intervallo di tempo fissato. Il modello presuppone che i dati seguano una distribuzione di Poisson con un parametro di tasso <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+P(Y = y \mid \lambda) = \frac{\lambda^y \cdot e^{-\lambda}}{y!}, \quad \text{per} \quad y = 0, 1, 2, \ldots
+\]</div>
+</section>
+<section id="distribuzione-a-priori">
+<h2>Distribuzione a priori<a class="headerlink" href="#distribuzione-a-priori" title="Link to this heading">#</a></h2>
+<p>Come distribuzione a priori per il parametro <span class="math notranslate nohighlight">\(\lambda\)</span> nel modello di Poisson possiamo usare la distribuzione Gamma, poiché è una scelta coniugata. Ciò significa che, quando viene combinata con la distribuzione di Poisson come verosimiglianza dei dati, la distribuzione Gamma produce una distribuzione a posteriori con una forma analitica semplice. Questa caratteristica semplifica il processo di inferenza bayesiana.</p>
+<p>Nel nostro caso, il parametro <span class="math notranslate nohighlight">\(\lambda\)</span> rappresenta il tasso di occorrenza di sparatorie fatali per anno negli Stati Uniti. Prima di osservare i dati effettivi riportati dal Washington Post, abbiamo una conoscenza limitata su tale fenomeno. Pertanto, dobbiamo specificare una distribuzione a priori per <span class="math notranslate nohighlight">\(\lambda\)</span> che rifletta la nostra incertezza iniziale. As esempio, possiamo ipotizzare che ci sia, in media, una sparatoria mortale per stato al mese, quindi 12 sparatorie mortali all’anno per stato. Questo ci porta a una stima iniziale di 600 sparatorie fatali negli Stati Uniti ogni anno. Dato che non siamo molto sicuri di questa ipotesi, vogliamo specificare una distribuzione a priori con un certo grado di incertezza. Imponiamo dunque una deviazione standard pari a 200.</p>
+<p>Per visualizzare la distribuzione a priori per il parametro <span class="math notranslate nohighlight">\(\lambda\)</span>, creiamo un istogramma della distribuzione Gamma con i parametri specificati usando PyMC.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters for the Gamma distribution</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mi">600</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">200</span>
+
+<span class="c1"># Convert mu and sigma to shape (k) and scale (theta) parameters</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">mu</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">/</span> <span class="n">theta</span>
+
+<span class="c1"># Draw samples from the Gamma distribution</span>
+<span class="n">x_draws</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Plot the histogram of the drawn samples</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x_draws</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Add labels and title</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Tasso di occorrenza (anno)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequenza&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Distribuzione Gamma con mu = 600 e sigma = 200&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/0adbe46307fbd8d8b1d03adb736fb7a61baec5c9517f3d1b68d50ade81cc656b.png"><img alt="../_images/0adbe46307fbd8d8b1d03adb736fb7a61baec5c9517f3d1b68d50ade81cc656b.png" src="../_images/0adbe46307fbd8d8b1d03adb736fb7a61baec5c9517f3d1b68d50ade81cc656b.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+</section>
+<section id="modello-di-poisson-con-pymc">
+<h2>Modello di Poisson con PyMC<a class="headerlink" href="#modello-di-poisson-con-pymc" title="Link to this heading">#</a></h2>
+<p>Formuliamo il modello di Poisson usando questi iper-parametri per la distribuzione a priori del parametro <span class="math notranslate nohighlight">\(\lambda\)</span> (<code class="docutils literal notranslate"><span class="pre">rate</span></code>) della distribuzione di Poisson.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;poisson_model.stan&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N; // numero di osservazioni
+  real&lt;lower=0&gt; mu; // parametro mu per la distribuzione Gamma
+  real&lt;lower=0&gt; sigma; // parametro sigma per la distribuzione Gamma
+  array[N] int&lt;lower=0&gt; y; // dati osservati  
+}
+parameters {
+  real&lt;lower=0&gt; rate; // parametro rate per la distribuzione Poisson
+}
+model {
+  // Priori
+  rate ~ gamma(mu ^ 2 / sigma ^ 2, mu / sigma ^ 2);
+  
+  // Likelihood
+  y ~ poisson(rate);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Caricare i dati</span>
+<span class="n">stan_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1161</span><span class="p">,</span> <span class="mi">1095</span><span class="p">,</span> <span class="mi">1050</span><span class="p">,</span> <span class="mi">1020</span><span class="p">,</span> <span class="mi">996</span><span class="p">,</span> <span class="mi">995</span><span class="p">,</span> <span class="mi">992</span><span class="p">,</span> <span class="mi">984</span><span class="p">,</span> <span class="mi">959</span><span class="p">],</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">600</span><span class="p">,</span>
+    <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">200</span>
+<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stan_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;y&#39;: [1161, 1095, 1050, 1020, 996, 995, 992, 984, 959], &#39;N&#39;: 9, &#39;mu&#39;: 600, &#39;sigma&#39;: 200}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo la distribuzione a posteriori del parametro <code class="docutils literal notranslate"><span class="pre">rate</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">combined</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;rank_bars&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/a8e2378a7db5f96469f82e3b9f9fae01ab17ac0a5a8d9c2e563136bac089a53e.png"><img alt="../_images/a8e2378a7db5f96469f82e3b9f9fae01ab17ac0a5a8d9c2e563136bac089a53e.png" src="../_images/a8e2378a7db5f96469f82e3b9f9fae01ab17ac0a5a8d9c2e563136bac089a53e.png" style="width: 911px; height: 311px;" /></a>
+</div>
+</div>
+<p>Il modello converge rapidamente e i grafici delle tracce sembrano ben mescolati.</p>
+<p>Generiamo un sommario numerico della distribuzione a posteriori.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>rate</th>
+      <td>1027.83</td>
+      <td>10.819</td>
+      <td>1007.71</td>
+      <td>1048.01</td>
+      <td>0.21</td>
+      <td>0.149</td>
+      <td>2650.0</td>
+      <td>3735.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N; // numero di osservazioni
+  real&lt;lower=0&gt; mu; // parametro mu per la distribuzione Gamma
+  real&lt;lower=0&gt; sigma; // parametro sigma per la distribuzione Gamma
+  array[N] int&lt;lower=0&gt; y; // dati osservati  
+}
+parameters {
+  real&lt;lower=0&gt; rate; // parametro rate per la distribuzione Poisson
+}
+model {
+  // Priori
+  rate ~ gamma(mu ^ 2 / sigma ^ 2, mu / sigma ^ 2);
+  
+  // Likelihood
+  y ~ poisson(rate);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Usiamo ArviZ per generare l’intervallo di credibilità al 94% per la distribuzione a posteriori del parametro <code class="docutils literal notranslate"><span class="pre">rate</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/5d43aec5597a94f4b16b2ebedeff092fe593b79adfbe5146e94dcaaf8dd51023.png"><img alt="../_images/5d43aec5597a94f4b16b2ebedeff092fe593b79adfbe5146e94dcaaf8dd51023.png" src="../_images/5d43aec5597a94f4b16b2ebedeff092fe593b79adfbe5146e94dcaaf8dd51023.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>In sintesi, analizzando i dati compresi tra il 2015 e il 2023 e basandoci su una distribuzione a priori che presuppone una sparatoria mortale al mese per stato, possiamo concludere con un grado di certezza soggettivo del 94% che il tasso stimato di sparatorie fatali da parte della polizia negli Stati Uniti sia di 1028 casi all’anno, con un intervallo di credibilità compreso tra 1008 e 1048.</p>
+</section>
+<section id="derivazione-analitica">
+<h2>Derivazione analitica<a class="headerlink" href="#derivazione-analitica" title="Link to this heading">#</a></h2>
+<p>Per derivare i parametri della distribuzione Gamma (<span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>) conoscendo la media (<span class="math notranslate nohighlight">\(\mu\)</span>) e la deviazione standard (<span class="math notranslate nohighlight">\(\sigma\)</span>), possiamo utilizzare le seguenti relazioni:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha = (\frac{\mu}{\sigma})^2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta = \frac{\mu}{\sigma^2}\)</span></p></li>
+</ol>
+<p>Queste formule si basano sul fatto che la media della distribuzione Gamma è data da <span class="math notranslate nohighlight">\(\frac{\alpha}{\beta}\)</span>, mentre la varianza è <span class="math notranslate nohighlight">\(\frac{\alpha}{\beta^2}\)</span>. Inoltre, la deviazione standard è la radice quadrata della varianza.</p>
+<p>La distribuzione a posteriori per <span class="math notranslate nohighlight">\(\lambda\)</span>, data una verosimiglianza di Poisson e una distribuzione a priori gamma, è ancora una distribuzione gamma con parametri aggiornati. Possiamo calcolare i parametri della distribuzione a posteriori nel modo seguente:</p>
+<ul class="simple">
+<li><p>Parametro di forma a posteriori (α_post) = α_prior + Σ(y_i), dove Σ(y_i) rappresenta la somma dei dati osservati.</p></li>
+<li><p>Parametro di tasso a posteriori (β_post) = β_prior + n, dove n è il numero di punti dati.</p></li>
+</ul>
+<p>Con questi parametri aggiornati, possiamo poi calcolare la media a posteriori della distribuzione gamma e l’intervallo di credibilità.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">]</span>
+
+<span class="c1"># Prior hyperparameters</span>
+<span class="n">alpha_prior</span> <span class="o">=</span> <span class="p">(</span><span class="n">mu</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">beta_prior</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1"># Data summary</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">])</span>
+<span class="n">sum_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">])</span>
+
+<span class="c1"># Posterior hyperparameters</span>
+<span class="n">alpha_post</span> <span class="o">=</span> <span class="n">alpha_prior</span> <span class="o">+</span> <span class="n">sum_y</span>
+<span class="n">beta_post</span> <span class="o">=</span> <span class="n">beta_prior</span> <span class="o">+</span> <span class="n">n</span>
+
+<span class="c1"># Posterior distribution (Gamma)</span>
+<span class="n">posterior_gamma</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">alpha_post</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">beta_post</span><span class="p">)</span>
+
+<span class="c1"># Calculate the mean and credibility interval (94%)</span>
+<span class="n">posterior_mean</span> <span class="o">=</span> <span class="n">posterior_gamma</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">credible_interval</span> <span class="o">=</span> <span class="n">posterior_gamma</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="mf">0.94</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Estimated Rate (Posterior Mean):&quot;</span><span class="p">,</span> <span class="n">posterior_mean</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Credibility Interval (94%):&quot;</span><span class="p">,</span> <span class="n">credible_interval</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Estimated Rate (Posterior Mean): 1027.287853577371
+Credibility Interval (94%): (1007.3046264976574, 1047.4587209661117)
+</pre></div>
+</div>
+</div>
+</div>
+<p>L’output delle istruzioni precedenti fornisce il tasso stimato a posteriori e l’intervallo di credibilità al 94%. A causa di approssimazioni numeriche, i valori non coincidono esattamente con i risultati ottenuti con PyMC, ma sono molto simili.</p>
+</section>
+<section id="vittime-non-armate">
+<h2>Vittime non armate<a class="headerlink" href="#vittime-non-armate" title="Link to this heading">#</a></h2>
+<p>Consideriamo ora uno studio di <span id="id2">Ross <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id10" title="Cody T Ross, Bruce Winterhalder, and Richard McElreath. Racial disparities in police use of deadly force against unarmed individuals persist after appropriately benchmarking shooting data on violent crime rates. Social Psychological and Personality Science, 12(3):323–332, 2021.">RWM21</a>]</span>. Nell’introduzione allo studio, gli autori affermano che studi precedenti hanno dimostrato che la polizia negli Stati Uniti uccide cittadini neri rispetto a cittadini bianchi a tassi più elevati di quanto ci si potrebbe aspettare secondo un modello generativo in cui la polizia incontra e uccide cittadini neri e bianchi in proporzione alle loro dimensioni relative della popolazione (ad esempio, Gabrielson et al., 2014; The Guardian, 2016; Takagi, 1981). Tuttavia, l’utilità di questi studi nel rilevare disparità razziali ingiustificabili nel comportamento della polizia è stata messa in discussione (Cesario et al., 2019; Fryer, 2017; Selby et al., 2016; Tregle et al., 2019) perché la polizia uccide principalmente individui - neri o bianchi - che erano <em>armati</em> e impegnati in attività criminali al momento dell’interazione (Ross, 2015; Selby et al., 2016). Le differenze sottostanti nei tassi di attività criminale armata specifici per la razza, piuttosto che - o oltre a - pregiudizi e/o bias stereotipati non intenzionali (Payne, 2006) da parte della polizia, sono state quindi citate come possibili cause dell’aumento dei tassi di sparatorie della polizia contro gli afroamericani. Tuttavia, <span id="id3">Ross <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id10" title="Cody T Ross, Bruce Winterhalder, and Richard McElreath. Racial disparities in police use of deadly force against unarmed individuals persist after appropriately benchmarking shooting data on violent crime rates. Social Psychological and Personality Science, 12(3):323–332, 2021.">RWM21</a>]</span> fanno notare che le disparità a discapito degli individui afro-americani nell’uso della forza da parte della polizia statunitense persistono nel caso di individui disarmati sia a livello non letale (Fryer, 2016) che letale (Ross, 2015).</p>
+<p>Per verificare questa affermazione di <span id="id4">Ross <em>et al.</em> [<a class="reference internal" href="../references/bibliography.html#id10" title="Cody T Ross, Bruce Winterhalder, and Richard McElreath. Racial disparities in police use of deadly force against unarmed individuals persist after appropriately benchmarking shooting data on violent crime rates. Social Psychological and Personality Science, 12(3):323–332, 2021.">RWM21</a>]</span>, usiamo i dati forniti dal Washington Post. Iniziamo a considerare il numero di sparatorie fatali da parte delle polizia statunitense nei confronti di un individuo disarmato caucasico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Filter the dataframe to include only rows where the individual was unarmed</span>
+<span class="n">unarmed_events</span> <span class="o">=</span> <span class="n">fps</span><span class="p">[</span><span class="n">fps</span><span class="p">[</span><span class="s2">&quot;armed_with&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;unarmed&quot;</span><span class="p">]</span>
+
+<span class="c1"># Filter the dataframe to create two separate dataframes for white and non-white races</span>
+<span class="n">white_df</span> <span class="o">=</span> <span class="n">unarmed_events</span><span class="p">[</span><span class="n">unarmed_events</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">]</span>
+<span class="n">non_white_df</span> <span class="o">=</span> <span class="n">unarmed_events</span><span class="p">[</span><span class="n">unarmed_events</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;W&quot;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">White Race DataFrame:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">white_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>White Race DataFrame:
+      id       date threat_type flee_status armed_with         city  \
+8     16 2015-01-06    accident         not    unarmed   Burlington   
+72   342 2015-01-29        move        foot    unarmed   Stillwater   
+76   114 2015-02-02        flee        foot    unarmed  Hummelstown   
+119  159 2015-02-17        flee        foot    unarmed  Springfield   
+136  371 2015-02-23        move         not    unarmed        Omaha   
+
+         county state   latitude  longitude location_precision  \
+8    Des Moines    IA  40.809250 -91.118875      not_available   
+72        Payne    OK  36.121177 -97.050127      not_available   
+76      Dauphin    PA  40.273404 -76.712841      not_available   
+119      Greene    MO  37.225250 -93.319432      not_available   
+136     Douglas    NE  41.244051 -95.933308      not_available   
+
+                name   age  gender race    race_source  \
+8      Autumn Steele  34.0  female    W  not_available   
+72      Ralph Willis  42.0    male    W  not_available   
+76     David Kassick  59.0    male    W  not_available   
+119  Michael Ireland  31.0    male    W  not_available   
+136     Daniel Elrod  39.0    male    W  not_available   
+
+     was_mental_illness_related  body_camera agency_ids  year  
+8                         False         True        287  2015  
+72                        False        False        164  2015  
+76                        False        False        303  2015  
+119                       False        False        350  2015  
+136                       False        False        158  2015  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Non-White Race DataFrame:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">non_white_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Non-White Race DataFrame:
+     id       date threat_type flee_status armed_with         city    county  \
+2     5 2015-01-03        move         not    unarmed      Wichita  Sedgwick   
+17   36 2015-01-08      attack         not    unarmed       Strong     Union   
+62  352 2015-01-26        flee         car    unarmed       Tahoka      Lynn   
+83  116 2015-02-04      attack         not    unarmed  Tallahassee      Leon   
+86  125 2015-02-04    accident         not    unarmed        Tempe  Maricopa   
+
+   state   latitude   longitude location_precision                 name   age  \
+2     KS  37.694766  -97.280554      not_available   John Paul Quintero  23.0   
+17    AR  33.111333  -92.358981      not_available  Artago Damon Howard  36.0   
+62    TX  33.166180 -101.666311      not_available   Joshua Omar Garcia  24.0   
+83    FL  30.465764  -84.330427      not_available          Jeremy Lett  28.0   
+86    AZ  33.378178 -111.978345      not_available    Joaquin Hernandez  28.0   
+
+   gender race    race_source  was_mental_illness_related  body_camera  \
+2    male    H  not_available                       False        False   
+17   male    B  not_available                       False        False   
+62   male    H  not_available                       False        False   
+83   male    B  not_available                       False        False   
+86   male    H  not_available                       False        False   
+
+          agency_ids  year  
+2                238  2015  
+17               249  2015  
+62               179  2015  
+83               311  2015  
+86  247;195;2267;319  2015  
+</pre></div>
+</div>
+</div>
+</div>
+<p>Di seguito sono riportate le frequenze assolute di vittime disarmate di razza caucasica.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Filter the dataframe to include only rows where the individual was unarmed and identified as white</span>
+<span class="n">unarmed_white_events</span> <span class="o">=</span> <span class="n">white_df</span><span class="p">[</span><span class="n">white_df</span><span class="p">[</span><span class="s2">&quot;armed_with&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;unarmed&quot;</span><span class="p">]</span>
+
+<span class="c1"># Group the filtered dataframe by year and count the occurrences</span>
+<span class="n">events_by_year_white_race</span> <span class="o">=</span> <span class="n">unarmed_white_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_count&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">events_by_year_white_race</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   year  event_count
+0  2015           31
+1  2016           29
+2  2017           29
+3  2018           26
+4  2019           26
+5  2020           27
+6  2021            7
+7  2022           23
+8  2023           17
+</pre></div>
+</div>
+</div>
+</div>
+<p>Per gli stessi anni, qui sotto sono riportate le frequenze assolute delle vittime di razza non caucasica.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Filter the dataframe to include only rows where the individual was unarmed and identified as non-white</span>
+<span class="n">unarmed_non_white_events</span> <span class="o">=</span> <span class="n">non_white_df</span><span class="p">[</span><span class="n">non_white_df</span><span class="p">[</span><span class="s2">&quot;armed_with&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;unarmed&quot;</span><span class="p">]</span>
+
+<span class="c1"># Group the filtered dataframe by year and count the occurrences</span>
+<span class="n">events_by_year_non_white_race</span> <span class="o">=</span> <span class="n">unarmed_non_white_events</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;event_count&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">events_by_year_non_white_race</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   year  event_count
+0  2015           63
+1  2016           35
+2  2017           40
+3  2018           33
+4  2019           28
+5  2020           34
+6  2021           26
+7  2022           29
+8  2023           34
+</pre></div>
+</div>
+</div>
+</div>
+<p>Come distribuzione a priori per il tasso di morti, usiamo la media dei due campioni.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">events_by_year_non_white_race</span><span class="o">.</span><span class="n">event_count</span><span class="p">)</span> <span class="o">+</span> 
+<span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">events_by_year_white_race</span><span class="o">.</span><span class="n">event_count</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>29.833333333333336
+</pre></div>
+</div>
+</div>
+</div>
+<p>Utilizziamo una deviazione standard piuttosto grande per esprimere la nostra incertezza.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters for the Gamma distribution</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># Convert mu and sigma to shape (k) and scale (theta) parameters</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">mu</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">/</span> <span class="n">theta</span>
+
+<span class="c1"># Draw samples from the Gamma distribution</span>
+<span class="n">x_draws</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Plot the histogram of the drawn samples</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x_draws</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Add labels and title</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Tasso di occorrenza (anno)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequenza&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Distribuzione Gamma con mu = 30 e sigma = 10&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/75f6e522ae1475a7bd612cccbab59e3c6ee4738cd93aa436192e0bed30521889.png"><img alt="../_images/75f6e522ae1475a7bd612cccbab59e3c6ee4738cd93aa436192e0bed30521889.png" src="../_images/75f6e522ae1475a7bd612cccbab59e3c6ee4738cd93aa436192e0bed30521889.png" style="width: 731px; height: 491px;" /></a>
+</div>
+</div>
+<p>Eseguiamo il campionamento per i dati del campione caucasico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gruppo caucasico</span>
+<span class="n">stan_data_white</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">events_by_year_white_race</span><span class="p">[</span><span class="s2">&quot;event_count&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace_white</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data_white</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo la distribuzione a posteriori della frequenze di vittime di razza caucasica.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">trace_white</span><span class="p">,</span> <span class="n">combined</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;rank_bars&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/dfcb23da8aa493c9cb0cba732c2c510ea112e6f2c9d04bd6ab1074237e798486.png"><img alt="../_images/dfcb23da8aa493c9cb0cba732c2c510ea112e6f2c9d04bd6ab1074237e798486.png" src="../_images/dfcb23da8aa493c9cb0cba732c2c510ea112e6f2c9d04bd6ab1074237e798486.png" style="width: 911px; height: 311px;" /></a>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">trace_white</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>rate</th>
+      <td>24.141</td>
+      <td>1.583</td>
+      <td>21.246</td>
+      <td>27.201</td>
+      <td>0.03</td>
+      <td>0.021</td>
+      <td>2864.0</td>
+      <td>3732.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Eseguiamo il campionamento per i dati del campione caucasico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gruppo non caucasico</span>
+<span class="n">stan_data_non_white</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">events_by_year_non_white_race</span><span class="p">[</span><span class="s2">&quot;event_count&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace_non_white</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_data_non_white</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo la distribuzione a posteriori della frequenze di vittime di razza noln caucasica.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">trace_non_white</span><span class="p">,</span> <span class="n">combined</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;rank_bars&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/a93b74bfc50ea2b0af66ab35c2641bc46b3b6a9e5a710764258602f75f2c3850.png"><img alt="../_images/a93b74bfc50ea2b0af66ab35c2641bc46b3b6a9e5a710764258602f75f2c3850.png" src="../_images/a93b74bfc50ea2b0af66ab35c2641bc46b3b6a9e5a710764258602f75f2c3850.png" style="width: 911px; height: 311px;" /></a>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">trace_non_white</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>rate</th>
+      <td>35.615</td>
+      <td>1.954</td>
+      <td>32.06</td>
+      <td>39.396</td>
+      <td>0.036</td>
+      <td>0.026</td>
+      <td>2920.0</td>
+      <td>4095.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Il confronto tra i due intervalli di credibilità suggerisce che le frequenze attese del modello di Poisson risultano maggiori nel gruppo non caucasico rispetto al gruppo caucasico. È importante considerare anche che la popolazione caucasica negli Stati Uniti è numericamente superiore rispetto agli individui non caucasici.</p>
+</section>
+<section id="modello-combinato-per-i-due-gruppi">
+<h2>Modello combinato per i due gruppi<a class="headerlink" href="#modello-combinato-per-i-due-gruppi" title="Link to this heading">#</a></h2>
+<p>In alternativa, possiamo creare un modello Stan unico che valuti direttamente la differenza a posteriori delle frequenze attese dal modello di Poisson per i due gruppi. Per fare questo, possiamo estendere il modello per includere due rate, uno per ogni gruppo, e calcolare la differenza a posteriori delle frequenze attese.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_directory</span><span class="p">,</span> <span class="s2">&quot;stan&quot;</span><span class="p">,</span> <span class="s2">&quot;poisson_diff_model.stan&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CmdStanModel</span><span class="p">(</span><span class="n">stan_file</span><span class="o">=</span><span class="n">stan_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data {
+  int&lt;lower=0&gt; N; // numero di osservazioni per ogni gruppo
+  real&lt;lower=0&gt; mu; // parametro mu per la distribuzione Gamma
+  real&lt;lower=0&gt; sigma; // parametro sigma per la distribuzione Gamma
+  array[N] int&lt;lower=0&gt; y_white; // dati osservati per il gruppo caucasico
+  array[N] int&lt;lower=0&gt; y_non_white; // dati osservati per il gruppo non caucasico
+}
+parameters {
+  real&lt;lower=0&gt; rate_white; // parametro rate per la distribuzione Poisson per il gruppo caucasico
+  real&lt;lower=0&gt; rate_non_white; // parametro rate per la distribuzione Poisson per il gruppo non caucasico
+}
+model {
+  // Priori
+  rate_white ~ gamma(mu ^ 2 / sigma ^ 2, mu / sigma ^ 2);
+  rate_non_white ~ gamma(mu ^ 2 / sigma ^ 2, mu / sigma ^ 2);
+  
+  // Likelihood
+  y_white ~ poisson(rate_white);
+  y_non_white ~ poisson(rate_non_white);
+}
+generated quantities {
+  real diff_rate = rate_non_white - rate_white; // differenza tra le frequenze attese
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Nel blocco <code class="docutils literal notranslate"><span class="pre">generated</span> <span class="pre">quantities</span></code> calcoliamo la distribuzione a posteriori della differenza tra i tassi di occorrenza stimati per i gruppi non caucasici e caucasici. Questa differenza permette di quantificare direttamente il confronto tra i tassi di incidenza dei due gruppi.</p>
+<p>Generiamo il dizionario appropriato per il modello.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stan_groups_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;y_white&quot;</span><span class="p">:</span> <span class="n">events_by_year_white_race</span><span class="p">[</span><span class="s2">&quot;event_count&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;y_non_white&quot;</span><span class="p">:</span> <span class="n">events_by_year_non_white_race</span><span class="p">[</span><span class="s2">&quot;event_count&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stan_groups_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 9, &#39;mu&#39;: 30, &#39;sigma&#39;: 10, &#39;y_white&#39;: 0    31
+1    29
+2    29
+3    26
+4    26
+5    27
+6     7
+7    23
+8    17
+Name: event_count, dtype: int64, &#39;y_non_white&#39;: 0    63
+1    35
+2    40
+3    33
+4    28
+5    34
+6    26
+7    29
+8    34
+Name: event_count, dtype: int64}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Eseguiamo il campionamento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace_groups</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">stan_groups_data</span><span class="p">,</span>
+    <span class="n">iter_warmup</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
+    <span class="n">iter_sampling</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+    <span class="n">show_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_console</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Esaminiamo la distribuzione a posteriori del parametro di interesse.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">trace_groups</span><span class="p">,</span> <span class="n">combined</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;diff_rate&quot;</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/28e4144fc3afc59df1835b2c711ae1965ee497c76935f3c8ececaf7e5d3b1376.png"><img alt="../_images/28e4144fc3afc59df1835b2c711ae1965ee497c76935f3c8ececaf7e5d3b1376.png" src="../_images/28e4144fc3afc59df1835b2c711ae1965ee497c76935f3c8ececaf7e5d3b1376.png" style="width: 911px; height: 311px;" /></a>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">az</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">trace_groups</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>diff_rate</th>
+      <td>11.508</td>
+      <td>2.586</td>
+      <td>6.792</td>
+      <td>16.443</td>
+      <td>0.033</td>
+      <td>0.023</td>
+      <td>6263.0</td>
+      <td>5254.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>rate_non_white</th>
+      <td>35.577</td>
+      <td>1.946</td>
+      <td>31.978</td>
+      <td>39.260</td>
+      <td>0.023</td>
+      <td>0.016</td>
+      <td>7282.0</td>
+      <td>5576.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>rate_white</th>
+      <td>24.069</td>
+      <td>1.627</td>
+      <td>21.098</td>
+      <td>27.285</td>
+      <td>0.021</td>
+      <td>0.015</td>
+      <td>5931.0</td>
+      <td>4896.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Sulla base dei risultati ottenuti dal modello di Poisson, possiamo trarre le seguenti conclusioni:</p>
+<p>Il tasso stimato di incidenza delle vittime disarmate uccise dalla polizia negli Stati Uniti è più alto per il gruppo non caucasico rispetto al gruppo caucasico. La differenza media stimata tra i due tassi di incidenza è di 11.508, con una deviazione standard di 2.586. Questo significa che, in media, il tasso per il gruppo non caucasico è di circa 11.5 punti superiore rispetto al tasso per il gruppo caucasico.</p>
+<p>L’intervallo di credibilità al 94% per questa differenza va da 6.792 a 16.443, indicando che è molto probabile che la vera differenza tra i tassi di incidenza dei due gruppi si trovi all’interno di questo intervallo. Questo intervallo di credibilità non include lo zero, il che fornisce ulteriore evidenza che il tasso di incidenza per il gruppo non caucasico è effettivamente più alto rispetto al gruppo caucasico.</p>
+<p>Inoltre, i tassi di incidenza stimati per ciascun gruppo sono i seguenti:</p>
+<ul class="simple">
+<li><p><strong>Gruppo non caucasico:</strong> tasso medio di 35.577 con un intervallo di credibilità al 94% tra 31.978 e 39.260.</p></li>
+<li><p><strong>Gruppo caucasico:</strong> tasso medio di 24.069 con un intervallo di credibilità al 94% tra 21.098 e 27.285.</p></li>
+</ul>
+<p>Questi risultati indicano chiaramente che il gruppo non caucasico ha un tasso di incidenza più alto di vittime disarmate uccise dalla polizia rispetto al gruppo caucasico. L’intervallo di credibilità per ciascun tasso fornisce una stima robusta e credibile della variabilità di questi tassi.</p>
+<p>In sintesi, il modello di Poisson fornisce una forte evidenza che esiste una differenza robusta tra i tassi di incidenza dei due gruppi, con il gruppo non caucasico che presenta un tasso più elevato di vittime disarmate uccise dalla polizia rispetto al gruppo caucasico.</p>
+</section>
+<section id="informazioni-sull-ambiente-di-sviluppo">
+<h2>Informazioni sull’Ambiente di Sviluppo<a class="headerlink" href="#informazioni-sull-ambiente-di-sviluppo" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -n -u -v -iv -m 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jul 14 2024
+
+Python implementation: CPython
+Python version       : 3.12.4
+IPython version      : 8.26.0
+
+Compiler    : Clang 16.0.6 
+OS          : Darwin
+Release     : 23.5.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 8
+Architecture: 64bit
+
+scipy     : 1.14.0
+pandas    : 2.2.2
+cmdstanpy : 1.2.4
+numpy     : 1.26.4
+seaborn   : 0.13.2
+matplotlib: 3.9.1
+logging   : 0.5.1.2
+arviz     : 0.18.0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./chapter_4"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="24_stan_hier_beta_binom.html"
+       title="pagina precedente">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Modello gerarchico beta-binomiale con Stan</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../chapter_5/introduction_part_5.html"
+       title="pagina seguente">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">Analisi della regressione</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenuti
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domanda-della-ricerca">Domanda della ricerca</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importazione-e-pre-processing-dei-dati">Importazione e pre-processing dei dati</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Modello di Poisson</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuzione-a-priori">Distribuzione a priori</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-di-poisson-con-pymc">Modello di Poisson con PyMC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivazione-analitica">Derivazione analitica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vittime-non-armate">Vittime non armate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modello-combinato-per-i-due-gruppi">Modello combinato per i due gruppi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#informazioni-sull-ambiente-di-sviluppo">Informazioni sull’Ambiente di Sviluppo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Di Corrado Caudek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
