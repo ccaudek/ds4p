@@ -80,6 +80,8 @@
     <link rel="icon" href="../_static/increasing.png"/>
     <link rel="index" title="Indice" href="../genindex.html" />
     <link rel="search" title="Cerca" href="../search.html" />
+    <link rel="next" title="✏️ Esercizi" href="E_reglin_2.html" />
+    <link rel="prev" title="Confronto tra le medie di due gruppi" href="05_05_two_means.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="it"/>
   </head>
@@ -142,8 +144,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -199,7 +199,7 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_1/introduction_chapter_1.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_1/00_prelims.html">Preliminari</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_1/01_python_1.html">Python (1)</a></li>
@@ -272,6 +272,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/15_stan_beta_binomial.html">Introduzione a Stan</a></li>
 
+
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/E_stan_beta_binomial.html">✏️ Esercizio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
@@ -281,13 +282,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/23_stan_two_groups.html">Confronto tra due gruppi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chapter_4/24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter_4/25_stan_poisson_model.html">Modello di Poisson</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="introduction_part_5.html">Analisi della regressione</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="05_03_reglin_bayesian.html">Analisi bayesiana del modello di regressione lineare bivariato</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_reglin_1.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_04_synt_sugar.html">Zucchero sintattico</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_05_two_means.html">Confronto tra le medie di due gruppi</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Regressione multipla con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_reglin_2.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_reglin_3.html">✏️ Esercizi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_reglin_4.html">✏️ Esercizi</a></li>
@@ -296,7 +299,9 @@
 <li class="toctree-l2"><a class="reference internal" href="05_08_specification_error.html">Errore di specificazione</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_09_causal_inference.html">Inferenza causale</a></li>
 <li class="toctree-l2"><a class="reference internal" href="E_causal_inference.html">✏️ Esercizi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_21_stan_binomial_regr.html">Regressione binomiale con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_22_stan_logistic_regr.html">Regressione logistica con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_23_stan_poisson_regr.html">Regressione di Poisson con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_24_stan_mixed_models.html">Modelli misti con Stan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_25_stan_rct.html">Incorporare dati storici di controllo in una RCT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_26_stan_mediation.html">Modello di mediazione con Stan</a></li>
@@ -567,110 +572,12 @@ document.write(`
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">cmdstanpy</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
 
 <span class="n">cmdstanpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">cmdstanpy</span> <span class="kn">import</span> <span class="n">CmdStanModel</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
 <span class="kn">import</span> <span class="nn">pingouin</span> <span class="k">as</span> <span class="nn">pg</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matplotlib is building the font cache; this may take a moment.
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">File</span> <span class="o">~/</span><span class="n">_repositories</span><span class="o">/</span><span class="n">ds4p</span><span class="o">/</span><span class="n">_config</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">arviz</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">34</span>
-<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="n">_log</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="s2">&quot;arviz&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="ne">---&gt; </span><span class="mi">34</span> <span class="kn">from</span> <span class="nn">.plots</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="kn">from</span> <span class="nn">.plots.backends</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="kn">from</span> <span class="nn">.stats</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">arviz</span><span class="o">/</span><span class="n">plots</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Plotting functions.&quot;&quot;&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">.autocorrplot</span> <span class="kn">import</span> <span class="n">plot_autocorr</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">.bpvplot</span> <span class="kn">import</span> <span class="n">plot_bpv</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">.bfplot</span> <span class="kn">import</span> <span class="n">plot_bf</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">arviz</span><span class="o">/</span><span class="n">plots</span><span class="o">/</span><span class="n">autocorrplot</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">8</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">..rcparams</span> <span class="kn">import</span> <span class="n">rcParams</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">_var_names</span>
-<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">.plot_utils</span> <span class="kn">import</span> <span class="n">default_grid</span><span class="p">,</span> <span class="n">filter_plotters_list</span><span class="p">,</span> <span class="n">get_plotting_function</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="k">def</span> <span class="nf">plot_autocorr</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">data</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="n">var_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="n">show</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">27</span><span class="w">     </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Bar plot of the autocorrelation function (ACF) for a sequence of data.</span>
-<span class="g g-Whitespace">     </span><span class="mi">28</span><span class="sd"> </span>
-<span class="g g-Whitespace">     </span><span class="mi">29</span><span class="sd">     The ACF plots are helpful as a convergence diagnostic for posteriors from MCMC</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">118</span><span class="sd">         &gt;&gt;&gt; az.plot_autocorr(data, var_names=[&#39;mu&#39;, &#39;tau&#39;], max_lag=200, combined=True)</span>
-<span class="g g-Whitespace">    </span><span class="mi">119</span><span class="sd">     &quot;&quot;&quot;</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">arviz</span><span class="o">/</span><span class="n">plots</span><span class="o">/</span><span class="n">plot_utils</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">11</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">packaging</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">to_hex</span>
-<span class="ne">---&gt; </span><span class="mi">11</span> <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">mode</span><span class="p">,</span> <span class="n">rankdata</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">CubicSpline</span>
-<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="kn">from</span> <span class="nn">..rcparams</span> <span class="kn">import</span> <span class="n">rcParams</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">scipy</span><span class="o">/</span><span class="n">stats</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">636</span>
-<span class="g g-Whitespace">    </span><span class="mi">634</span> <span class="kn">from</span> <span class="nn">._sensitivity_analysis</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">    </span><span class="mi">635</span> <span class="kn">from</span> <span class="nn">._survival</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="ne">--&gt; </span><span class="mi">636</span> <span class="kn">from</span> <span class="nn">._mgc</span> <span class="kn">import</span> <span class="n">multiscale_graphcorr</span>
-<span class="g g-Whitespace">    </span><span class="mi">639</span> <span class="c1"># Deprecated namespaces, to be removed in v2.0.0</span>
-<span class="g g-Whitespace">    </span><span class="mi">640</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">641</span>     <span class="n">biasedurn</span><span class="p">,</span> <span class="n">kde</span><span class="p">,</span> <span class="n">morestats</span><span class="p">,</span> <span class="n">mstats_basic</span><span class="p">,</span> <span class="n">mstats_extras</span><span class="p">,</span> <span class="n">mvn</span><span class="p">,</span> <span class="n">stats</span>
-<span class="g g-Whitespace">    </span><span class="mi">642</span> <span class="p">)</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">scipy</span><span class="o">/</span><span class="n">stats</span><span class="o">/</span><span class="n">_mgc</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">scipy._lib._bunch</span> <span class="kn">import</span> <span class="n">_make_tuple_bunch</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">_measurements</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">._stats</span> <span class="kn">import</span> <span class="n">_local_correlations</span>  <span class="c1"># type: ignore[import-not-found]</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">distributions</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">scipy</span><span class="o">/</span><span class="n">ndimage</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">155</span>
-<span class="g g-Whitespace">    </span><span class="mi">153</span> <span class="kn">from</span> <span class="nn">._fourier</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">    </span><span class="mi">154</span> <span class="kn">from</span> <span class="nn">._interpolation</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="ne">--&gt; </span><span class="mi">155</span> <span class="kn">from</span> <span class="nn">._measurements</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">    </span><span class="mi">156</span> <span class="kn">from</span> <span class="nn">._morphology</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">    </span><span class="mi">158</span> <span class="c1"># Deprecated namespaces, to be removed in v2.0.0</span>
-
-<span class="n">File</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">cmdstan_env</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.12</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">scipy</span><span class="o">/</span><span class="n">ndimage</span><span class="o">/</span><span class="n">_measurements</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">33</span>
-<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">     </span><span class="mi">32</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_ni_support</span>
-<span class="ne">---&gt; </span><span class="mi">33</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_ni_label</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_nd_image</span>
-<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_morphology</span>
-
-<span class="nn">File &lt;frozen importlib._bootstrap&gt;:645,</span> in <span class="ni">parent</span><span class="nt">(self)</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;male&quot;</span><span class="p">]]</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
-<span class="c1"># Perform linear regression using pingouin</span>
-<span class="n">lm</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">linear_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-
-<span class="c1"># Round the results to 2 decimal places</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -758,6 +665,76 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>kid_score</th>
+      <th>mom_hs</th>
+      <th>mom_iq</th>
+      <th>mom_work</th>
+      <th>mom_age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>65</td>
+      <td>1.0</td>
+      <td>121.117529</td>
+      <td>4</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>98</td>
+      <td>1.0</td>
+      <td>89.361882</td>
+      <td>4</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>85</td>
+      <td>1.0</td>
+      <td>115.443165</td>
+      <td>4</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>83</td>
+      <td>1.0</td>
+      <td>99.449639</td>
+      <td>3</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>115</td>
+      <td>1.0</td>
+      <td>92.745710</td>
+      <td>4</td>
+      <td>27</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>Stampiamo il modello Stan di regressione multipla per questi dati. Il modello assume che i dati siano standardizzati.</p>
 <div class="cell docutils container">
@@ -957,7 +934,7 @@ generated quantities {
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/9f4f01040d4ae0d531a890d1e928ceb3947a48a8c7e7f845df367b151370ae56.png"><img alt="../_images/9f4f01040d4ae0d531a890d1e928ceb3947a48a8c7e7f845df367b151370ae56.png" src="../_images/9f4f01040d4ae0d531a890d1e928ceb3947a48a8c7e7f845df367b151370ae56.png" style="width: 1211px; height: 611px;" /></a>
+<a class="reference internal image-reference" href="../_images/37692c5912d5fd3601e90997d4518a0768429694e53ead049d6cfc6d1899155f.png"><img alt="../_images/37692c5912d5fd3601e90997d4518a0768429694e53ead049d6cfc6d1899155f.png" src="../_images/37692c5912d5fd3601e90997d4518a0768429694e53ead049d6cfc6d1899155f.png" style="width: 1211px; height: 611px;" /></a>
 </div>
 </div>
 <div class="cell docutils container">
@@ -973,7 +950,7 @@ generated quantities {
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/ea4eba298890452f278d6be076c4815df93d46f741ceb3c1bc671987dd31dddd.png"><img alt="../_images/ea4eba298890452f278d6be076c4815df93d46f741ceb3c1bc671987dd31dddd.png" src="../_images/ea4eba298890452f278d6be076c4815df93d46f741ceb3c1bc671987dd31dddd.png" style="width: 1211px; height: 211px;" /></a>
+<a class="reference internal image-reference" href="../_images/9996aed11c11cd1bfef40acda6d8920f5a63ab932c61521837dc7b82592eb2fc.png"><img alt="../_images/9996aed11c11cd1bfef40acda6d8920f5a63ab932c61521837dc7b82592eb2fc.png" src="../_images/9996aed11c11cd1bfef40acda6d8920f5a63ab932c61521837dc7b82592eb2fc.png" style="width: 1211px; height: 211px;" /></a>
 </div>
 </div>
 <p>Anche nel caso della regressione multipla, i risultati ottenuti con l’approccio bayesiano sono molto simili a quelli prodotti dall’approccio basato sulla massima verosimiglianza.</p>
@@ -1202,7 +1179,7 @@ generated quantities {
 </div>
 </div>
 <div class="cell_output docutils container">
-<a class="reference internal image-reference" href="../_images/115c032487022593986e3453b7cff89a819f442172683f3f7303a61ead62f13c.png"><img alt="../_images/115c032487022593986e3453b7cff89a819f442172683f3f7303a61ead62f13c.png" src="../_images/115c032487022593986e3453b7cff89a819f442172683f3f7303a61ead62f13c.png" style="width: 731px; height: 491px;" /></a>
+<a class="reference internal image-reference" href="../_images/1056ffe374c81ec105c62605f8eeed7b9ccee6221c2ed182f862fb373987f12f.png"><img alt="../_images/1056ffe374c81ec105c62605f8eeed7b9ccee6221c2ed182f862fb373987f12f.png" src="../_images/1056ffe374c81ec105c62605f8eeed7b9ccee6221c2ed182f862fb373987f12f.png" style="width: 731px; height: 491px;" /></a>
 </div>
 </div>
 <p>Per fare un esercizio, riscriviamo il modello senza usare l’algebra matriciale.</p>
@@ -1344,62 +1321,62 @@ generated quantities {
   <tbody>
     <tr>
       <th>alpha</th>
-      <td>0.000</td>
+      <td>-0.000</td>
       <td>0.043</td>
-      <td>-0.077</td>
-      <td>0.084</td>
+      <td>-0.082</td>
+      <td>0.080</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>8977.0</td>
-      <td>5942.0</td>
+      <td>0.001</td>
+      <td>9553.0</td>
+      <td>5261.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>beta1</th>
       <td>0.114</td>
-      <td>0.046</td>
-      <td>0.026</td>
-      <td>0.198</td>
+      <td>0.045</td>
+      <td>0.031</td>
+      <td>0.201</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>9573.0</td>
-      <td>6486.0</td>
+      <td>0.000</td>
+      <td>9409.0</td>
+      <td>6308.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>beta2</th>
-      <td>0.413</td>
+      <td>0.414</td>
       <td>0.044</td>
-      <td>0.334</td>
-      <td>0.499</td>
+      <td>0.330</td>
+      <td>0.496</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>9730.0</td>
-      <td>6090.0</td>
+      <td>0.000</td>
+      <td>9556.0</td>
+      <td>6280.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>beta3</th>
-      <td>0.030</td>
-      <td>0.044</td>
-      <td>-0.053</td>
-      <td>0.113</td>
+      <td>0.029</td>
+      <td>0.043</td>
+      <td>-0.050</td>
+      <td>0.112</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>9154.0</td>
-      <td>6239.0</td>
+      <td>0.000</td>
+      <td>9647.0</td>
+      <td>6545.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>sigma</th>
-      <td>0.893</td>
+      <td>0.891</td>
       <td>0.031</td>
-      <td>0.837</td>
-      <td>0.954</td>
+      <td>0.835</td>
+      <td>0.949</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>8242.0</td>
-      <td>5824.0</td>
+      <td>0.000</td>
+      <td>9403.0</td>
+      <td>5961.0</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1448,6 +1425,12 @@ generated quantities {
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Coefficient from full model for X1: 1.9782
+Coefficient from regression of residuals: 1.9782
+</pre></div>
+</div>
+</div>
 </div>
 <p>Questo esempio illustra il concetto di <em>coefficiente parziale di regressione</em>. Questo coefficiente quantifica l’effetto della variabile esplicativa <span class="math notranslate nohighlight">\(X_j\)</span> sulla variabile dipendente <span class="math notranslate nohighlight">\(Y\)</span>, depurando l’effetto di <span class="math notranslate nohighlight">\(X_j\)</span> dall’influenza degli altri predittori nel modello. In sostanza, il coefficiente parziale di regressione valuta l’impiego di <span class="math notranslate nohighlight">\(X_j\)</span> su <span class="math notranslate nohighlight">\(Y\)</span> quando <span class="math notranslate nohighlight">\(X_j\)</span> è considerata <em>linearmente indipendente</em> rispetto agli altri predittori <span class="math notranslate nohighlight">\(X\)</span>. L’effetto misurato è quindi quello della sola componente di <span class="math notranslate nohighlight">\(X_j\)</span> che non è spiegata linearmente dai restanti predittori <span class="math notranslate nohighlight">\(X\)</span> sulla parte di <span class="math notranslate nohighlight">\(Y\)</span> che è anch’essa indipendente dai medesimi predittori.</p>
 <p>Per chiarire ulteriormente, questo approccio statistico si focalizza sull’analizzare l’effetto di <span class="math notranslate nohighlight">\(X_j\)</span> eliminando l’influenza lineare degli altri predittori <span class="math notranslate nohighlight">\(X\)</span>. È simile a valutare la relazione tra <span class="math notranslate nohighlight">\(Y\)</span> e <span class="math notranslate nohighlight">\(X_j\)</span> in un contesto ideale dove tutti gli individui presentano livelli identici per le altre variabili <span class="math notranslate nohighlight">\(X\)</span>. Tale metodo non eguaglia gli effetti non lineari che possono essere presenti tra le variabili, limitandosi a correggere solo per le associazioni lineari. In questo modo, il controllo statistico tenta di approssimare una condizione di omogeneità tra i soggetti rispetto alle altre variabili <span class="math notranslate nohighlight">\(X\)</span>, consentendo di isolare e valutare più precisamente l’effetto puro di <span class="math notranslate nohighlight">\(X_j\)</span> su <span class="math notranslate nohighlight">\(Y\)</span>.</p>
@@ -1477,28 +1460,29 @@ generated quantities {
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Sun Jun 16 2024
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Last updated: Wed Jul 17 2024
 
 Python implementation: CPython
-Python version       : 3.12.3
-IPython version      : 8.25.0
+Python version       : 3.12.4
+IPython version      : 8.26.0
 
 Compiler    : Clang 16.0.6 
 OS          : Darwin
-Release     : 23.4.0
+Release     : 23.5.0
 Machine     : arm64
 Processor   : arm
 CPU cores   : 8
 Architecture: 64bit
 
-pandas    : 2.2.2
-matplotlib: 3.8.4
-logging   : 0.5.1.2
-numpy     : 1.26.4
-cmdstanpy : 1.2.3
-scipy     : 1.13.1
-pingouin  : 0.5.4
-arviz     : 0.18.0
+statsmodels: 0.14.2
+cmdstanpy  : 1.2.4
+pandas     : 2.2.2
+logging    : 0.5.1.2
+pingouin   : 0.5.4
+arviz      : 0.18.0
+matplotlib : 3.9.1
+scipy      : 1.14.0
+numpy      : 1.26.4
 
 Watermark: 2.4.3
 </pre></div>
@@ -1538,6 +1522,24 @@ Watermark: 2.4.3
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="05_05_two_means.html"
+       title="pagina precedente">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">precedente</p>
+        <p class="prev-next-title">Confronto tra le medie di due gruppi</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="E_reglin_2.html"
+       title="pagina seguente">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">successivo</p>
+        <p class="prev-next-title">✏️ Esercizi</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
