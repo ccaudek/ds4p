@@ -272,6 +272,7 @@
 <li class="toctree-l2"><a class="reference internal" href="10_metropolis.html">Monte Carlo a Catena di Markov</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Introduzione a Stan</a></li>
 
+
 <li class="toctree-l2"><a class="reference internal" href="E_stan_beta_binomial.html">✏️ Esercizio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="16_stan_summary_posterior.html">Metodi di sintesi della distribuzione a posteriori</a></li>
 <li class="toctree-l2"><a class="reference internal" href="17_stan_diagnostics.html">Diagnostica delle catene markoviane</a></li>
@@ -281,6 +282,7 @@
 <li class="toctree-l2"><a class="reference internal" href="22_stan_normal_normal.html">Inferenza bayesiana su una media</a></li>
 <li class="toctree-l2"><a class="reference internal" href="23_stan_two_groups.html">Confronto tra due gruppi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="24_stan_hier_beta_binom.html">Modello gerarchico beta-binomiale con Stan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_stan_poisson_model.html">Modello di Poisson</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter_5/introduction_part_5.html">Analisi della regressione</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -539,19 +541,21 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduzione a Stan</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Introduzione a Stan</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-monte-carlo-a-catena-di-markov-mcmc">Metodi Monte Carlo a Catena di Markov (MCMC)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stan-e-la-programmazione-probabilistica">Stan e la Programmazione Probabilistica</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#struttura-di-un-programma-stan">Struttura di un Programma Stan</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esecuzione-di-un-programma-stan">Esecuzione di un Programma Stan</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-avanti-e-problema-inverso">Simulazione Avanti e Problema Inverso</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-avanti">Simulazione Avanti</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-di-simulazione-avanti">Esempio di Simulazione Avanti</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-inverso">Il Problema Inverso</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-a-stan-e-ai-metodi-monte-carlo-a-catena-di-markov">Introduzione a Stan e ai Metodi Monte Carlo a Catena di Markov</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inferenza-bayesiana-e-metodi-monte-carlo-a-catena-di-markov-mcmc">Inferenza Bayesiana e Metodi Monte Carlo a Catena di Markov (MCMC)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stan-e-la-programmazione-probabilistica">Stan e la Programmazione Probabilistica</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#struttura-di-un-programma-stan">Struttura di un Programma Stan</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esecuzione-di-un-programma-stan">Esecuzione di un Programma Stan</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-in-avanti-e-problema-inverso">Simulazione in Avanti e Problema Inverso</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-in-avanti">Simulazione in Avanti</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-di-simulazione-in-avanti">Esempio di Simulazione in Avanti</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-inverso">Il Problema Inverso</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-primo-programma-in-stan">Un Primo Programma in Stan</a><ul class="nav section-nav flex-column">
@@ -671,70 +675,70 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="id1">
-<h2>Introduzione a Stan<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<section id="metodi-monte-carlo-a-catena-di-markov-mcmc">
-<h3>Metodi Monte Carlo a Catena di Markov (MCMC)<a class="headerlink" href="#metodi-monte-carlo-a-catena-di-markov-mcmc" title="Link to this heading">#</a></h3>
-<p>L’inferenza bayesiana, utilizzata per la stima dei parametri, la previsione e la valutazione della probabilità di eventi, si basa sulle aspettative posteriori. Queste aspettative sono integrali ad alta dimensione sullo spazio dei parametri. Stan, un software avanzato per l’analisi statistica, utilizza il metodo Monte Carlo per risolvere questi integrali complessi. I metodi Monte Carlo si basano sul campionamento casuale per affrontare integrali ad alta dimensione.</p>
-<p>Tuttavia, per la maggior parte dei problemi bayesiani, non è possibile usare i metodi Monte Carlo standard poiché non possiamo generare campioni indipendenti dalla densità posteriore di interesse, tranne che per modelli molto semplici con priors coniugati. Pertanto, dobbiamo usare i metodi Monte Carlo a Catena di Markov (MCMC), che producono campioni correlati tra loro. Stan utilizza il Monte Carlo Hamiltoniano (HMC), il metodo MCMC più efficiente e scalabile per le densità target. Altri metodi, come il Metropolis-Hastings e il campionamento Gibbs, sono più semplici ma meno efficienti dell’HMC.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="introduzione-a-stan-e-ai-metodi-monte-carlo-a-catena-di-markov">
+<h1>Introduzione a Stan e ai Metodi Monte Carlo a Catena di Markov<a class="headerlink" href="#introduzione-a-stan-e-ai-metodi-monte-carlo-a-catena-di-markov" title="Link to this heading">#</a></h1>
+<section id="inferenza-bayesiana-e-metodi-monte-carlo-a-catena-di-markov-mcmc">
+<h2>Inferenza Bayesiana e Metodi Monte Carlo a Catena di Markov (MCMC)<a class="headerlink" href="#inferenza-bayesiana-e-metodi-monte-carlo-a-catena-di-markov-mcmc" title="Link to this heading">#</a></h2>
+<p>L’inferenza bayesiana, impiegata per la stima dei parametri, la previsione e la valutazione della probabilità di eventi, si basa sulle aspettative a posteriori. Queste aspettative si configurano come integrali multidimensionali nello spazio dei parametri. Stan, un software all’avanguardia per l’analisi statistica, si avvale del metodo Monte Carlo per risolvere questi integrali complessi. I metodi Monte Carlo sfruttano il campionamento casuale per affrontare integrali ad alta dimensionalità.</p>
+<p>Tuttavia, per la maggior parte dei problemi bayesiani, non è possibile utilizzare i metodi Monte Carlo standard, poiché non è fattibile generare campioni indipendenti dalla densità a posteriori di interesse, fatta eccezione per modelli estremamente semplici con prior coniugati. Di conseguenza, è necessario ricorrere ai metodi Monte Carlo a Catena di Markov (MCMC), che producono campioni correlati tra loro. Stan implementa il Monte Carlo Hamiltoniano (HMC), il metodo MCMC più efficiente e scalabile per le densità target. Altri metodi, come il Metropolis-Hastings e il campionamento di Gibbs, risultano più semplici ma meno efficienti dell’HMC.</p>
 </section>
 <section id="stan-e-la-programmazione-probabilistica">
-<h3>Stan e la Programmazione Probabilistica<a class="headerlink" href="#stan-e-la-programmazione-probabilistica" title="Link to this heading">#</a></h3>
-<p>Stan è un linguaggio di programmazione probabilistica (PPL) progettato per definire modelli statistici complessi e fare inferenza su di essi. Un PPL permette di esprimere modelli probabilistici in modo conciso e di utilizzare algoritmi avanzati per eseguire inferenze. Questo è particolarmente utile nell’inferenza bayesiana, dove aggiorniamo le distribuzioni a priori con dati osservati per ottenere distribuzioni a posteriori.</p>
+<h2>Stan e la Programmazione Probabilistica<a class="headerlink" href="#stan-e-la-programmazione-probabilistica" title="Link to this heading">#</a></h2>
+<p>Stan si configura come un linguaggio di programmazione probabilistica (PPL) concepito per definire modelli statistici complessi e effettuare inferenze su di essi. Un PPL consente di esprimere modelli probabilistici in modo conciso e di utilizzare algoritmi avanzati per l’inferenza. Ciò risulta particolarmente utile nell’inferenza bayesiana, dove si aggiornano le distribuzioni a priori con dati osservati per ottenere distribuzioni a posteriori.</p>
 <section id="struttura-di-un-programma-stan">
-<h4>Struttura di un Programma Stan<a class="headerlink" href="#struttura-di-un-programma-stan" title="Link to this heading">#</a></h4>
-<p>In Stan è necessario specificare un programma che solitamente è salvato in un file con l’estensione <code class="docutils literal notranslate"><span class="pre">.stan</span></code>. Un programma Stan dichiara variabili e parametri e definisce le distribuzioni a priori dei parametri del modello statistico specificato e la funzione di verosimiglianza. In pratica, ciò significa che un programma Stan descrive come i dati e i parametri interagiscono e quali distribuzioni probabilistiche li governano. Un programma Stan consente di fare inferenza sulle distribuzioni a posteriori dei parametri del modello che vengono inferite dai dati osservati e dalle distribuzioni a priori.</p>
+<h3>Struttura di un Programma Stan<a class="headerlink" href="#struttura-di-un-programma-stan" title="Link to this heading">#</a></h3>
+<p>Un programma Stan richiede la specificazione di variabili e parametri, definendo le distribuzioni a priori dei parametri del modello statistico e la funzione di verosimiglianza. In sostanza, un programma Stan descrive l’interazione tra dati e parametri e le distribuzioni probabilistiche che li governano. Questo consente di effettuare inferenze sulle distribuzioni a posteriori dei parametri del modello, dedotte dai dati osservati e dalle distribuzioni a priori.</p>
 </section>
 <section id="esecuzione-di-un-programma-stan">
-<h4>Esecuzione di un Programma Stan<a class="headerlink" href="#esecuzione-di-un-programma-stan" title="Link to this heading">#</a></h4>
+<h3>Esecuzione di un Programma Stan<a class="headerlink" href="#esecuzione-di-un-programma-stan" title="Link to this heading">#</a></h3>
 <p>Un programma Stan utilizza metodi di inferenza avanzati:</p>
 <ul class="simple">
-<li><p><strong>Campionamento MCMC</strong>: Stan utilizza metodi come il Monte Carlo a Catena di Markov (MCMC) per generare campioni dalle distribuzioni a posteriori.</p></li>
+<li><p><strong>Campionamento MCMC</strong>: Stan impiega metodi come il Monte Carlo a Catena di Markov per generare campioni dalle distribuzioni a posteriori.</p></li>
 <li><p><strong>Inferenza Variazionale</strong>: Un metodo approssimativo che fornisce stime delle distribuzioni a posteriori.</p></li>
-<li><p><strong>Approssimazione di Laplace</strong>: Un altro metodo approssimativo per l’inferenza.</p></li>
+<li><p><strong>Approssimazione di Laplace</strong>: Un ulteriore metodo approssimativo per l’inferenza.</p></li>
 </ul>
-<p>Stan è disponibile attraverso vari linguaggi di programmazione e strumenti di analisi open-source, tra cui Python, R, e Julia, ed è compatibile con gli strumenti di analisi bayesiana integrati in questi linguaggi. Stan è anche disponibile in ambienti come Mathematica, Stata e MATLAB, anche se queste interfacce sono meno complete.</p>
+<p>Stan è accessibile attraverso vari linguaggi di programmazione e strumenti di analisi open-source, tra cui Python, R e Julia, ed è compatibile con gli strumenti di analisi bayesiana integrati in questi linguaggi. È inoltre disponibile in ambienti come Mathematica, Stata e MATLAB, sebbene queste interfacce siano meno complete.</p>
 </section>
 </section>
-<section id="simulazione-avanti-e-problema-inverso">
-<h3>Simulazione Avanti e Problema Inverso<a class="headerlink" href="#simulazione-avanti-e-problema-inverso" title="Link to this heading">#</a></h3>
-<p>Stan genera dei dati attraverso procedure pseudo-casuali e questo può essere fatto per le simulazioni in avanti oppure per risolvere il problema inverso.</p>
-<section id="simulazione-avanti">
-<h4>Simulazione Avanti<a class="headerlink" href="#simulazione-avanti" title="Link to this heading">#</a></h4>
-<p>La simulazione avanti consiste nella generazione di dati simulati a partire da un insieme di parametri conosciuti di un modello probabilistico. In altre parole, date certe assunzioni sui parametri di un modello, utilizziamo la simulazione avanti per prevedere i possibili risultati che potrebbero verificarsi.</p>
-<p>Ad esempio, consideriamo un trial clinico con <span class="math notranslate nohighlight">\(N\)</span> soggetti e una probabilità <span class="math notranslate nohighlight">\(\theta\)</span> di esito positivo per ciascun soggetto. Se conosciamo il valore di <span class="math notranslate nohighlight">\(\theta\)</span> e il numero di soggetti <span class="math notranslate nohighlight">\(N\)</span>, possiamo usare una distribuzione binomiale per simulare il numero di pazienti che avranno un esito positivo. Questo processo ci permette di generare dati che riflettono le nostre assunzioni sui parametri del modello.</p>
+<section id="simulazione-in-avanti-e-problema-inverso">
+<h2>Simulazione in Avanti e Problema Inverso<a class="headerlink" href="#simulazione-in-avanti-e-problema-inverso" title="Link to this heading">#</a></h2>
+<p>Stan genera dati attraverso procedure pseudo-casuali, applicabili sia per simulazioni in avanti che per risolvere il problema inverso.</p>
+<section id="simulazione-in-avanti">
+<h3>Simulazione in Avanti<a class="headerlink" href="#simulazione-in-avanti" title="Link to this heading">#</a></h3>
+<p>La simulazione in avanti consiste nella generazione di dati simulati a partire da un insieme di parametri noti di un modello probabilistico. In altri termini, date determinate assunzioni sui parametri di un modello, si utilizza la simulazione in avanti per prevedere i possibili risultati.</p>
+<p>Ad esempio, consideriamo uno studio clinico con <span class="math notranslate nohighlight">\(N\)</span> soggetti e una probabilità <span class="math notranslate nohighlight">\(\theta\)</span> di esito positivo per ciascun soggetto. Conoscendo il valore di <span class="math notranslate nohighlight">\(\theta\)</span> e il numero di soggetti <span class="math notranslate nohighlight">\(N\)</span>, possiamo impiegare una distribuzione binomiale per simulare il numero di pazienti che avranno un esito positivo. Questo processo ci consente di generare dati che riflettono le nostre assunzioni sui parametri del modello.</p>
 <p>In notazione statistica, questo si esprime come:</p>
 <div class="math notranslate nohighlight">
 \[
 Y \sim \text{Binomiale}(N, \theta)
 \]</div>
 <p>dove <span class="math notranslate nohighlight">\(Y\)</span> rappresenta il numero di esiti positivi su <span class="math notranslate nohighlight">\(N\)</span> pazienti, con probabilità <span class="math notranslate nohighlight">\(\theta\)</span> di esito positivo per ciascun paziente.</p>
-</section>
-<section id="esempio-di-simulazione-avanti">
-<h4>Esempio di Simulazione Avanti<a class="headerlink" href="#esempio-di-simulazione-avanti" title="Link to this heading">#</a></h4>
-<p>Supponiamo di avere <span class="math notranslate nohighlight">\(N = 100\)</span> soggetti in un trial clinico e un tasso di successo <span class="math notranslate nohighlight">\(\theta = 0.3\)</span>. Possiamo simulare un risultato <span class="math notranslate nohighlight">\(Y\)</span> generando casualmente il numero di soggetti con esito positivo. Utilizzando una distribuzione binomiale, possiamo calcolare la probabilità di ottenere esattamente <span class="math notranslate nohighlight">\(y\)</span> esiti positivi su <span class="math notranslate nohighlight">\(N\)</span> tentativi:</p>
+<section id="esempio-di-simulazione-in-avanti">
+<h4>Esempio di Simulazione in Avanti<a class="headerlink" href="#esempio-di-simulazione-in-avanti" title="Link to this heading">#</a></h4>
+<p>Supponiamo di avere <span class="math notranslate nohighlight">\(N = 100\)</span> soggetti in uno studio clinico e un tasso di successo <span class="math notranslate nohighlight">\(\theta = 0.3\)</span>. Possiamo simulare un risultato <span class="math notranslate nohighlight">\(Y\)</span> generando casualmente il numero di soggetti con esito positivo. Utilizzando una distribuzione binomiale, possiamo calcolare la probabilità di ottenere esattamente <span class="math notranslate nohighlight">\(y\)</span> esiti positivi su <span class="math notranslate nohighlight">\(N\)</span> tentativi:</p>
 <div class="math notranslate nohighlight">
 \[
 p(Y = y \mid N, \theta) = \binom{N}{y} \cdot \theta^y \cdot (1 - \theta)^{N - y}
 \]</div>
 <p>Questa espressione ci permette di calcolare la probabilità di ottenere un certo numero di successi, dato il numero di soggetti e la probabilità di successo.</p>
 </section>
-<section id="il-problema-inverso">
-<h4>Il Problema Inverso<a class="headerlink" href="#il-problema-inverso" title="Link to this heading">#</a></h4>
-<p>Il problema inverso consiste nello stimare i parametri del modello, come la probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span>, dato un insieme di dati osservati. Supponiamo di avere i seguenti dati: <span class="math notranslate nohighlight">\(N = 100\)</span> soggetti e <span class="math notranslate nohighlight">\(y = 32\)</span> esiti positivi. Vogliamo stimare <span class="math notranslate nohighlight">\(\theta\)</span>, la probabilità di successo.</p>
-<p>In un approccio bayesiano, iniziamo specificando una distribuzione a priori per <span class="math notranslate nohighlight">\(\theta\)</span>. Supponiamo di utilizzare una distribuzione Beta(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>) come prior per <span class="math notranslate nohighlight">\(\theta\)</span>, dove <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono parametri scelti in base alle nostre conoscenze precedenti. La distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> data l’osservazione <span class="math notranslate nohighlight">\(y\)</span> è ancora una distribuzione Beta, ma con parametri aggiornati, ovvero:</p>
-<div class="math notranslate nohighlight">
-\[
-\theta \mid y \sim \text{Beta}(\alpha + y, \beta + N - y).
-\]</div>
-<p>Per esempio, se scegliamo una distribuzione a priori non informativa con <span class="math notranslate nohighlight">\(\alpha = 1\)</span> e <span class="math notranslate nohighlight">\(\beta = 1\)</span>, la distribuzione a posteriori diventa:</p>
-<div class="math notranslate nohighlight">
-\[
-\theta \mid y \sim \text{Beta}(1 + 32, 1 + 100 - 32) = \text{Beta}(33, 69).
-\]</div>
-<p>Questa distribuzione a posteriori ci fornisce una stima aggiornata della probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span> considerando i dati osservati. Utilizzando Stan, possiamo ottenere campioni da questa distribuzione a posteriori per calcolare statistiche riassuntive e fare previsioni.</p>
-<p>In sintesi, la simulazione avanti e il problema inverso sono due approcci complementari: la simulazione avanti genera dati simulati dai parametri conosciuti, mentre il problema inverso stima i parametri del modello dai dati osservati.</p>
 </section>
+<section id="il-problema-inverso">
+<h3>Il Problema Inverso<a class="headerlink" href="#il-problema-inverso" title="Link to this heading">#</a></h3>
+<p>Il problema inverso consiste nella stima dei parametri del modello, come la probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span>, dato un insieme di dati osservati. Supponiamo di avere i seguenti dati: <span class="math notranslate nohighlight">\(N = 100\)</span> soggetti e <span class="math notranslate nohighlight">\(y = 32\)</span> esiti positivi. L’obiettivo è stimare <span class="math notranslate nohighlight">\(\theta\)</span>, la probabilità di successo.</p>
+<p>Nell’approccio bayesiano, si inizia specificando una distribuzione a priori per <span class="math notranslate nohighlight">\(\theta\)</span>. Supponiamo di utilizzare una distribuzione Beta(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>) come prior per <span class="math notranslate nohighlight">\(\theta\)</span>, dove <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> sono parametri scelti in base alle conoscenze precedenti. La distribuzione a posteriori di <span class="math notranslate nohighlight">\(\theta\)</span> data l’osservazione <span class="math notranslate nohighlight">\(y\)</span> è ancora una distribuzione Beta, ma con parametri aggiornati:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta \mid y \sim \text{Beta}(\alpha + y, \beta + N - y)
+\]</div>
+<p>Ad esempio, scegliendo una distribuzione a priori non informativa con <span class="math notranslate nohighlight">\(\alpha = 1\)</span> e <span class="math notranslate nohighlight">\(\beta = 1\)</span>, la distribuzione a posteriori diventa:</p>
+<div class="math notranslate nohighlight">
+\[
+\theta \mid y \sim \text{Beta}(1 + 32, 1 + 100 - 32) = \text{Beta}(33, 69)
+\]</div>
+<p>Questa distribuzione a posteriori fornisce una stima aggiornata della probabilità di successo <span class="math notranslate nohighlight">\(\theta\)</span> considerando i dati osservati. Utilizzando Stan, è possibile ottenere campioni da questa distribuzione a posteriori per calcolare statistiche riassuntive e effettuare previsioni.</p>
+<p>In sintesi, la simulazione in avanti e il problema inverso rappresentano due approcci complementari: la simulazione in avanti genera dati simulati da parametri noti, mentre il problema inverso stima i parametri del modello dai dati osservati.</p>
 </section>
 </section>
 <section id="un-primo-programma-in-stan">
@@ -1837,19 +1841,21 @@ Watermark: 2.4.3
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduzione a Stan</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparazione-del-notebook">Preparazione del Notebook</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Introduzione a Stan</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metodi-monte-carlo-a-catena-di-markov-mcmc">Metodi Monte Carlo a Catena di Markov (MCMC)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stan-e-la-programmazione-probabilistica">Stan e la Programmazione Probabilistica</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#struttura-di-un-programma-stan">Struttura di un Programma Stan</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esecuzione-di-un-programma-stan">Esecuzione di un Programma Stan</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-avanti-e-problema-inverso">Simulazione Avanti e Problema Inverso</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-avanti">Simulazione Avanti</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-di-simulazione-avanti">Esempio di Simulazione Avanti</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-inverso">Il Problema Inverso</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduzione-a-stan-e-ai-metodi-monte-carlo-a-catena-di-markov">Introduzione a Stan e ai Metodi Monte Carlo a Catena di Markov</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inferenza-bayesiana-e-metodi-monte-carlo-a-catena-di-markov-mcmc">Inferenza Bayesiana e Metodi Monte Carlo a Catena di Markov (MCMC)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stan-e-la-programmazione-probabilistica">Stan e la Programmazione Probabilistica</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#struttura-di-un-programma-stan">Struttura di un Programma Stan</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#esecuzione-di-un-programma-stan">Esecuzione di un Programma Stan</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-in-avanti-e-problema-inverso">Simulazione in Avanti e Problema Inverso</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulazione-in-avanti">Simulazione in Avanti</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#esempio-di-simulazione-in-avanti">Esempio di Simulazione in Avanti</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#il-problema-inverso">Il Problema Inverso</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-primo-programma-in-stan">Un Primo Programma in Stan</a><ul class="nav section-nav flex-column">
